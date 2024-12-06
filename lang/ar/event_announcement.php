@@ -1,0 +1,50 @@
+<?php
+
+return [
+    'resource' => [
+        'label' => 'إعلان الفعالية',
+        'plural_label' => 'إعلانات الفعاليات',
+    ],
+    'fields' => [
+        'event' => 'الحدث',
+        'title' => 'العنوان',
+        'content' => 'المحتوى',
+        'description' => 'الوصف',
+        'start_date' => 'تاريخ البداية',
+        'end_date' => 'تاريخ النهاية',
+        'location' => 'الموقع',
+        'status' => 'الحالة',
+        'publish_at' => 'تاريخ النشر',
+        'image_path' => 'الصورة',
+        'is_pinned' => 'مثبت',
+        'max_exhibitors' => 'الحد الأقصى للعارضين',
+        'max_visitors' => 'الحد الأقصى للزوار',
+        'is_featured' => 'مميز',
+        'created_at' => 'تاريخ الإنشاء',
+        'updated_at' => 'تاريخ التحديث',
+        'deleted_at' => 'تاريخ الحذف',
+    ],
+    'filters' => [
+        'status' => 'الحالة',
+        'published' => 'منشور',
+        'draft' => 'مسودة',
+        'archived' => 'مؤرشف',
+        'pinned' => 'مثبت',
+        'featured' => 'مميز',
+        'trashed' => 'محذوف',
+    ],
+    'actions' => [
+        'create' => 'إنشاء إعلان',
+        'edit' => 'تعديل الإعلان',
+        'delete' => 'حذف الإعلان',
+        'view' => 'عرض الإعلان',
+        'restore' => 'استعادة الإعلان',
+        'force_delete' => 'حذف الإعلان نهائياً',
+    ],
+    'messages' => [
+        'created' => 'تم إنشاء الإعلان بنجاح',
+        'updated' => 'تم تحديث الإعلان بنجاح',
+        'deleted' => 'تم حذف الإعلان بنجاح',
+        'restored' => 'تم استعادة الإعلان بنجاح',
+    ],
+];

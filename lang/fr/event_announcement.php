@@ -1,0 +1,45 @@
+<?php
+
+return [
+    'resource' => [
+        'label' => 'Annonce d\'événement',
+        'plural_label' => 'Annonces d\'événements',
+    ],
+    'fields' => [
+        'title' => 'Titre',
+        'description' => 'Description',
+        'start_date' => 'Date de début',
+        'end_date' => 'Date de fin',
+        'location' => 'Lieu',
+        'status' => 'Statut',
+        'image_path' => 'Image',
+        'max_exhibitors' => 'Nombre maximum d\'exposants',
+        'max_visitors' => 'Nombre maximum de visiteurs',
+        'is_featured' => 'Mis en avant',
+        'created_at' => 'Créé le',
+        'updated_at' => 'Modifié le',
+        'deleted_at' => 'Supprimé le',
+    ],
+    'filters' => [
+        'status' => 'Statut',
+        'published' => 'Publié',
+        'draft' => 'Brouillon',
+        'archived' => 'Archivé',
+        'featured' => 'Mis en avant',
+        'trashed' => 'Supprimé',
+    ],
+    'actions' => [
+        'create' => 'Créer une annonce',
+        'edit' => 'Modifier l\'annonce',
+        'delete' => 'Supprimer l\'annonce',
+        'view' => 'Voir l\'annonce',
+        'restore' => 'Restaurer l\'annonce',
+        'force_delete' => 'Supprimer définitivement l\'annonce',
+    ],
+    'messages' => [
+        'created' => 'Annonce créée avec succès',
+        'updated' => 'Annonce mise à jour avec succès',
+        'deleted' => 'Annonce supprimée avec succès',
+        'restored' => 'Annonce restaurée avec succès',
+    ],
+];

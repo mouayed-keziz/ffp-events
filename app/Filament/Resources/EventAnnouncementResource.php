@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EventAnnouncementResource\Pages;
-use App\Filament\Resources\EventAnnouncementResource\RelationManagers;
 use App\Models\EventAnnouncement;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -12,18 +11,75 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Support\Enums\FontWeight;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Infolists;
+use Filament\Infolists\Infolist;
 
 class EventAnnouncementResource extends Resource
 {
     protected static ?string $model = EventAnnouncement::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-megaphone';
+
+    protected static ?string $navigationGroup = 'Event Management';
+
+    protected static ?int $navigationSort = 2;
+
+    public static function getModelLabel(): string
+    {
+        return __('event_announcement.resource.label');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('event_announcement.resource.plural_label');
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                //
+                // Forms\Components\Select::make('event_id')
+                //     ->relationship('event', 'title')
+                //     ->required()
+                //     ->searchable()
+                //     ->preload()
+                //     ->translateLabel(),
+
+                Forms\Components\TextInput::make('title')
+                    ->required()
+                    ->maxLength(255)
+                    ->translateLabel(),
+
+                Forms\Components\RichEditor::make('content')
+                    ->required()
+                    ->columnSpanFull()
+                    ->translateLabel(),
+
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'draft' => __('event_announcement.filters.draft'),
+                        'published' => __('event_announcement.filters.published'),
+                        'archived' => __('event_announcement.filters.archived'),
+                    ])
+                    ->required()
+                    ->default('draft')
+                    ->translateLabel(),
+
+                Forms\Components\DateTimePicker::make('publish_at')
+                    ->nullable()
+                    ->translateLabel(),
+
+                Forms\Components\FileUpload::make('image_path')
+                    ->image()
+                    ->directory('event-announcements')
+                    ->nullable()
+                    ->translateLabel(),
+
+                Forms\Components\Toggle::make('is_pinned')
+                    ->default(false)
+                    ->translateLabel(),
             ]);
     }
 
@@ -31,10 +87,101 @@ class EventAnnouncementResource extends Resource
     {
         return $table
             ->columns([
-                //
+                Tables\Columns\TextColumn::make('title')
+                    ->label(__('event_announcement.fields.title'))
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+
+                Tables\Columns\TextColumn::make('description')
+                    ->label(__('event_announcement.fields.description'))
+                    ->searchable()
+                    ->toggleable()
+                    ->limit(50),
+
+                Tables\Columns\TextColumn::make('location')
+                    ->label(__('event_announcement.fields.location'))
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+
+                Tables\Columns\TextColumn::make('start_date')
+                    ->label(__('event_announcement.fields.start_date'))
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(),
+
+                Tables\Columns\TextColumn::make('end_date')
+                    ->label(__('event_announcement.fields.end_date'))
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(),
+
+                Tables\Columns\ImageColumn::make('image_path')
+                    ->label(__('event_announcement.fields.image_path'))
+                    ->circular()
+                    ->toggleable(),
+
+                Tables\Columns\TextColumn::make('max_exhibitors')
+                    ->label(__('event_announcement.fields.max_exhibitors'))
+                    ->badge()
+                    ->sortable()
+                    ->toggleable(),
+
+                Tables\Columns\TextColumn::make('max_visitors')
+                    ->label(__('event_announcement.fields.max_visitors'))
+                    ->badge()
+                    ->sortable()
+                    ->toggleable(),
+
+                Tables\Columns\IconColumn::make('is_featured')
+                    ->label(__('event_announcement.fields.is_featured'))
+                    ->boolean()
+                    ->sortable()
+                    ->toggleable(),
+
+                Tables\Columns\SelectColumn::make('status')
+                    ->label(__('event_announcement.fields.status'))
+                    ->options([
+                        'draft' => __('event_announcement.filters.draft'),
+                        'published' => __('event_announcement.filters.published'),
+                        'archived' => __('event_announcement.filters.archived'),
+                    ])
+                    ->sortable()
+                    ->toggleable(),
+
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label(__('event_announcement.fields.created_at'))
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label(__('event_announcement.fields.updated_at'))
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\TextColumn::make('deleted_at')
+                    ->label(__('event_announcement.fields.deleted_at'))
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('status')
+                    ->label(__('event_announcement.filters.status'))
+                    ->options([
+                        'draft' => __('event_announcement.filters.draft'),
+                        'published' => __('event_announcement.filters.published'),
+                        'archived' => __('event_announcement.filters.archived'),
+                    ]),
+
+                Tables\Filters\TernaryFilter::make('is_featured')
+                    ->label(__('event_announcement.filters.featured')),
+
+                Tables\Filters\TrashedFilter::make()
+                    ->label(__('event_announcement.filters.trashed')),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -42,8 +189,56 @@ class EventAnnouncementResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->label(__('event_announcement.actions.delete')),
+                    Tables\Actions\ForceDeleteBulkAction::make()
+                        ->label(__('event_announcement.actions.force_delete')),
+                    Tables\Actions\RestoreBulkAction::make()
+                        ->label(__('event_announcement.actions.restore')),
                 ]),
+            ]);
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                Infolists\Components\TextEntry::make('event.title')
+                    ->translateLabel(),
+
+                Infolists\Components\TextEntry::make('title')
+                    ->translateLabel(),
+
+                Infolists\Components\TextEntry::make('content')
+                    ->html()
+                    ->columnSpanFull()
+                    ->translateLabel(),
+
+                Infolists\Components\ImageEntry::make('image_path')
+                    ->translateLabel(),
+
+                Infolists\Components\TextEntry::make('status')
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'draft' => 'gray',
+                        'published' => 'success',
+                        'archived' => 'danger',
+                    })
+                    ->translateLabel(),
+
+                Infolists\Components\IconEntry::make('is_pinned')
+                    ->boolean()
+                    ->translateLabel(),
+
+                Infolists\Components\TextEntry::make('publish_at')
+                    ->dateTime()
+                    ->translateLabel(),
+
+                Infolists\Components\TextEntry::make('created_at')
+                    ->dateTime(),
+
+                Infolists\Components\TextEntry::make('updated_at')
+                    ->dateTime(),
             ]);
     }
 
@@ -62,5 +257,13 @@ class EventAnnouncementResource extends Resource
             'view' => Pages\ViewEventAnnouncement::route('/{record}'),
             'edit' => Pages\EditEventAnnouncement::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }
