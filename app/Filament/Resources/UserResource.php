@@ -19,7 +19,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     public static function getNavigationGroup(): ?string
     {
@@ -45,11 +45,13 @@ class UserResource extends Resource
                         ->label(__('users.form.name'))
                         ->required()
                         ->maxLength(255),
+
                     Forms\Components\TextInput::make('email')
                         ->label(__('users.form.email'))
                         ->email()
                         ->required()
                         ->maxLength(255),
+
                     Forms\Components\TextInput::make('password')
                         ->label(__('users.form.password'))
                         ->password()
@@ -64,26 +66,44 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label(__('users.columns.name'))
+                    ->toggleable()
+                    ->sortable()
                     ->searchable()
-                    ->default(__('users.empty_states.name')),
+                    ->label(__('users.columns.name'))
+                    ->default(__('users.empty_states.name'))
+                    ->wrap(),
+
                 Tables\Columns\TextColumn::make('email')
                     ->label(__('users.columns.email'))
                     ->searchable()
-                    ->default(__('users.empty_states.email')),
+                    ->sortable()
+                    ->default(__('users.empty_states.email'))
+                    ->wrap(),
+
                 Tables\Columns\TextColumn::make('roles.name')
+                    ->toggleable()
+                    ->sortable()
+                    ->searchable()
                     ->label(__('users.columns.roles'))
                     ->badge()
-
                     ->default(__('users.empty_states.roles')),
+
                 Tables\Columns\TextColumn::make('created_at')
+                    ->toggleable()
+                    ->sortable()
                     ->label(__('users.columns.created_at'))
                     ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->label(__('users.columns.updated_at'))
-                    ->dateTime()
-                    ->sortable(),
+                    ->formatStateUsing(fn($state) => $state ? $state->diffForHumans() : null)
+                    ->tooltip(fn($state) => $state ? $state->format('Y-m-d H:i:s') : null),
+
+                Tables\Columns\ToggleColumn::make('verified_at')
+                    ->toggleable()
+                    ->toggledHiddenByDefault()
+                    ->sortable()
+                    ->label(__('users.columns.verified_at'))
+                    ->afterStateUpdated(function ($state, $record) {
+                        $record->update(['verified_at' => $state ? now() : null]);
+                    }),
             ])
             ->emptyStateHeading(__('users.empty_states.title'))
             ->emptyStateDescription(__('users.empty_states.description'))
@@ -109,9 +129,11 @@ class UserResource extends Resource
                     Infolists\Components\TextEntry::make('name')
                         ->label(__('users.form.name'))
                         ->default(__('users.empty_states.name')),
+
                     Infolists\Components\TextEntry::make('email')
                         ->label(__('users.form.email'))
                         ->default(__('users.empty_states.email')),
+
                     Infolists\Components\TextEntry::make('roles.name')
                         ->label(__('users.columns.roles'))
                         ->badge()
@@ -120,8 +142,9 @@ class UserResource extends Resource
                     Infolists\Components\TextEntry::make('created_at')
                         ->label(__('users.columns.created_at'))
                         ->dateTime(),
-                    Infolists\Components\TextEntry::make('updated_at')
-                        ->label(__('users.columns.updated_at'))
+
+                    Infolists\Components\TextEntry::make('verified_at')
+                        ->label(__('users.columns.verified_at'))
                         ->dateTime(),
                 ])
             ]);

@@ -13,6 +13,7 @@ return [
         'roles' => 'Rôles',
         'created_at' => 'Créé le',
         'updated_at' => 'Mis à jour le',
+        'verified_at' => 'Vérifié le',
     ],
     'form' => [
         'name' => 'Nom',
