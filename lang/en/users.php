@@ -12,7 +12,7 @@ return [
         'email' => 'Email',
         'created_at' => 'Created At',
         'updated_at' => 'Updated At',
-        'verified_at' => 'Verified At',
+        'verified_at' => 'Verified',
         'roles' => 'Roles',
     ],
     'form' => [

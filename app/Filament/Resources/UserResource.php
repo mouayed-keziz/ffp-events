@@ -95,13 +95,7 @@ class UserResource extends Resource
                     ->searchable()
                     ->label(__('users.columns.name'))
                     ->default(__('users.empty_states.name'))
-                    ->wrap(),
-
-                Tables\Columns\TextColumn::make('email')
-                    ->label(__('users.columns.email'))
-                    ->searchable()
-                    ->sortable()
-                    ->default(__('users.empty_states.email'))
+                    ->description(fn(User $record): string => $record->email)
                     ->wrap(),
 
                 Tables\Columns\TextColumn::make('roles.name')
@@ -157,20 +151,17 @@ class UserResource extends Resource
                     }),
             ])
             ->actions([
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\ViewAction::make(),
-                    Tables\Actions\EditAction::make(),
-                    Tables\Actions\ActionGroup::make([
-                        Tables\Actions\DeleteAction::make(),
-                        Tables\Actions\ForceDeleteAction::make(),
-                        Tables\Actions\RestoreAction::make(),
-                    ])
-                        ->dropdown(false)
-                        ->label('Danger Zone')
-                        ->color('danger')
-                        ->icon('heroicon-m-exclamation-triangle'),
-                ])->color('gray')
-
+                Tables\Actions\ViewAction::make()->iconButton(),
+                // ->iconButton(),
+                Tables\Actions\EditAction::make()->iconButton(),
+                // ->iconButton(),
+                // Tables\Actions\ActionGroup::make([
+                Tables\Actions\DeleteAction::make()->iconButton(),
+                Tables\Actions\ForceDeleteAction::make()->iconButton(),
+                Tables\Actions\RestoreAction::make()->iconButton(),
+                // ])
+                //     ->icon('heroicon-m-ellipsis-vertical')
+                //     ->color('gray')
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
