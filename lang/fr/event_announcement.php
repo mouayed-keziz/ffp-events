@@ -51,4 +51,10 @@ return [
         'photo' => 'Aucune photo téléchargée',
         'deleted_at' => 'Non supprimé',
     ],
+    'tabs' => [
+        'general' => 'Informations Générales',
+        'dates_location' => 'Dates et Lieu',
+        'details' => 'Détails de l\'événement',
+        'media' => 'Médias',
+    ],
 ];

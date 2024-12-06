@@ -51,4 +51,10 @@ return [
         'photo' => 'No photo uploaded',
         'deleted_at' => 'Not deleted',
     ],
+    'tabs' => [
+        'general' => 'General Information',
+        'dates_location' => 'Dates & Location',
+        'details' => 'Event Details',
+        'media' => 'Media',
+    ],
 ];

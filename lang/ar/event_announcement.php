@@ -15,7 +15,6 @@ return [
         'end_date' => 'إلى',
         'location' => 'الموقع',
         'status' => 'الحالة',
-        'publish_at' => 'تاريخ النشر',
         'image_path' => 'الصورة',
         'is_pinned' => 'مثبت',
         'max_exhibitors' => 'الحد الأقصى للعارضين',
@@ -54,5 +53,11 @@ return [
         'location' => 'لم يتم تحديد الموقع',
         'photo' => 'لم يتم رفع صورة',
         'deleted_at' => 'غير محذوف',
+    ],
+    'tabs' => [
+        'general' => 'معلومات عامة',
+        'dates_location' => 'التواريخ والموقع',
+        'details' => 'تفاصيل الفعالية',
+        'media' => 'الوسائط',
     ],
 ];

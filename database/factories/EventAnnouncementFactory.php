@@ -21,7 +21,7 @@ class EventAnnouncementFactory extends Factory
     {
         $startDate = $this->faker->dateTimeBetween('now', '+2 years');
         $endDate = $this->faker->dateTimeBetween($startDate, '+3 years');
-        
+
         return [
             'title' => $this->faker->sentence(3),
             'description' => $this->faker->paragraph(),
@@ -30,7 +30,7 @@ class EventAnnouncementFactory extends Factory
             'end_date' => $endDate,
             'location' => $this->faker->city(),
             'status' => $this->faker->randomElement(['draft', 'published', 'archived']),
-            'image_path' => $this->faker->imageUrl(640, 480),
+            // 'image_path' => $this->faker->imageUrl(),
             'max_exhibitors' => $this->faker->numberBetween(10, 100),
             'max_visitors' => $this->faker->numberBetween(100, 1000),
             'is_featured' => $this->faker->boolean(20),
