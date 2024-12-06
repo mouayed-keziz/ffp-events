@@ -27,4 +27,23 @@ return [
         'email' => 'لم يتم توفير بريد إلكتروني',
         'roles' => 'لم يتم تعيين أي دور',
     ],
+    'filters' => [
+        'roles' => [
+            'label' => 'الأدوار',
+            'placeholder' => 'اختر الأدوار',
+        ],
+        'verification' => [
+            'label' => 'حالة التحقق',
+            'placeholder' => 'اختر الحالة',
+            'verified' => 'تم التحقق',
+            'unverified' => 'غير متحقق',
+        ],
+        'trashed' => [
+            'label' => 'المستخدمون المحذوفون',
+            'placeholder' => 'اختر حالة الحذف',
+            'with_trashed' => 'مع المحذوف',
+            'only_trashed' => 'المحذوف فقط',
+            'without_trashed' => 'بدون المحذوف',
+        ],
+    ],
 ];

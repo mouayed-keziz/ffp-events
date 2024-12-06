@@ -17,10 +17,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::factory(10)->create();
 
 
-        $faker = Faker::create();
+        $faker = Faker::create('ar_SA');
 
         $admin = User::factory()->create([
             'name' => 'Admin',
@@ -31,26 +31,50 @@ class DatabaseSeeder extends Seeder
         $role = Role::firstOrCreate(['name' => 'super_admin']);
         $admin->assignRole($role);
 
+        $arabicTitles = [
+            'مرحباً بك في النظام',
+            'تم تحديث البيانات بنجاح',
+            'إشعار جديد',
+            'تنبيه هام',
+            'معلومات النظام',
+            'تحديث الحالة'
+        ];
+
+        $arabicBodies = [
+            'نرحب بك في نظام إدارة المحتوى الخاص بنا. نتمنى لك تجربة ممتعة.',
+            'تم تحديث بيانات النظام بنجاح. يرجى مراجعة التغييرات.',
+            'لديك إشعار جديد يحتاج إلى مراجعة.',
+            'يرجى الانتباه إلى هذا التنبيه الهام.',
+            'تم تحديث معلومات النظام. يرجى الاطلاع على التفاصيل.',
+            'تم تغيير حالة النظام. يرجى التحقق من التحديثات.'
+        ];
+
         foreach (range(1, 6) as $index) {
-            $admin->notify(
-                Notification::make()
-                    ->title($faker->sentence)
-                    ->body($faker->paragraph)
-                    ->success()
-                    ->actions([
-                        Action::make('view')
-                            ->button()
-                            ->markAsRead(),
-                        Action::make('markAsUnread')
-                            ->button()
-                            ->markAsUnread()
-                            ->tooltip("Mark as unread"),
-                        Action::make('ddHelloWorld')
-                            ->button()
-                            ->action(fn() => dd('Hello World')),
-                    ])
-                    ->toDatabase()
-            );
+            $isSuccess = $index % 2 === 0;
+
+            $notification = Notification::make()
+                ->title($arabicTitles[$index - 1])
+                ->body($arabicBodies[$index - 1])
+                ->actions([
+                    Action::make('عرض')
+                        ->button()
+                        ->color($isSuccess ? 'success' : 'danger')
+                        ->markAsRead(),
+                    Action::make('وضع كغير مقروء')
+                        ->button()
+                        ->color($isSuccess ? 'success' : 'danger')
+                        ->markAsUnread()
+                        ->tooltip("وضع كغير مقروء"),
+                    Action::make('اختبار')
+                        ->button()
+                        ->color($isSuccess ? 'success' : 'danger')
+                        ->action(function () {
+                            throw new \Exception('مرحبا بالعالم');
+                        }),
+                ])
+                ->toDatabase();
+
+            $admin->notify($notification);
         }
     }
 }

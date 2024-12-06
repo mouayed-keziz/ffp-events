@@ -27,4 +27,23 @@ return [
         'email' => 'No email provided',
         'roles' => 'No roles assigned',
     ],
+    'filters' => [
+        'roles' => [
+            'label' => 'Roles',
+            'placeholder' => 'Select roles',
+        ],
+        'verification' => [
+            'label' => 'Verification Status',
+            'placeholder' => 'Select status',
+            'verified' => 'Verified',
+            'unverified' => 'Unverified',
+        ],
+        'trashed' => [
+            'label' => 'Deleted Users',
+            'placeholder' => 'Select deleted status',
+            'with_trashed' => 'With deleted',
+            'only_trashed' => 'Only deleted',
+            'without_trashed' => 'Without deleted',
+        ],
+    ],
 ];

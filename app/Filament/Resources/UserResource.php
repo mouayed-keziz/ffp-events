@@ -2,17 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class UserResource extends Resource
@@ -20,6 +20,10 @@ class UserResource extends Resource
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
+
+    protected static ?string $recordTitleAttribute = 'name';
+
+    protected static bool $shouldRegisterNavigation = true;
 
     public static function getNavigationGroup(): ?string
     {
@@ -34,6 +38,11 @@ class UserResource extends Resource
     public static function getPluralModelLabel(): string
     {
         return __('users.resource.plural');
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'email'];
     }
 
     public static function form(Form $form): Form
@@ -105,20 +114,49 @@ class UserResource extends Resource
                         $record->update(['verified_at' => $state ? now() : null]);
                     }),
             ])
-            ->emptyStateHeading(__('users.empty_states.title'))
-            ->emptyStateDescription(__('users.empty_states.description'))
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make()
+                    ->label(__('users.filters.trashed.label'))
+                    ->placeholder(__('users.filters.trashed.placeholder')),
+                SelectFilter::make('roles')
+                    ->label(__('users.filters.roles.label'))
+                    ->placeholder(__('users.filters.roles.placeholder'))
+                    ->multiple()
+                    ->relationship('roles', 'name')
+                    ->preload()
+                    ->searchable(),
+                SelectFilter::make('verified')
+                    ->label(__('users.filters.verification.label'))
+                    ->placeholder(__('users.filters.verification.placeholder'))
+                    ->options([
+                        'verified' => __('users.filters.verification.verified'),
+                        'unverified' => __('users.filters.verification.unverified'),
+                    ])
+                    ->attribute('verified_at')
+                    ->query(function (Builder $query, array $data): Builder {
+                        return match ($data['value']) {
+                            'verified' => $query->whereNotNull('verified_at'),
+                            'unverified' => $query->whereNull('verified_at'),
+                            default => $query,
+                        };
+                    }),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->emptyStateHeading(__('users.empty_states.title'))
+            ->emptyStateDescription(__('users.empty_states.description'));
     }
 
     public static function infolist(Infolist $infolist): Infolist
@@ -165,5 +203,13 @@ class UserResource extends Resource
             'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }
