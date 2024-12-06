@@ -6,6 +6,7 @@ use App\Models\User;
 use EightyNine\FilamentAdvancedWidget\AdvancedStatsOverviewWidget as BaseWidget;
 use EightyNine\FilamentAdvancedWidget\AdvancedStatsOverviewWidget\Stat;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\HtmlString;
 
 class UserStats extends BaseWidget
 {
@@ -13,6 +14,9 @@ class UserStats extends BaseWidget
     {
         $isArabic = App::getLocale() === 'ar';
         $descriptionIconPosition = $isArabic ? 'after' : 'before';
+        $margin = $isArabic ? 'margin-right: 50px !important' : '';
+
+        $description = new HtmlString('<span style="' . $margin . '">' . __('users.stats.last_30_days') . '</span>');
 
         return [
             Stat::make(__('users.stats.total_users'), User::count())
@@ -24,10 +28,11 @@ class UserStats extends BaseWidget
                 now()->subDays(30),
                 now()
             ])->count())
-                ->description(__('users.stats.last_30_days'))
+                ->description($description)
                 ->descriptionIcon('heroicon-o-arrow-trending-up', $descriptionIconPosition)
                 ->descriptionColor('success')
                 ->icon('heroicon-o-user-plus')
+                ->iconPosition("end")
                 ->iconColor('success')
                 ->chartColor('success')
                 ->chart([
@@ -44,7 +49,7 @@ class UserStats extends BaseWidget
                     now()->subDays(30),
                     now()
                 ])->count())
-                ->description(__('users.stats.last_30_days'))
+                ->description($description)
                 ->descriptionIcon('heroicon-o-check-badge', $descriptionIconPosition)
                 ->descriptionColor('warning')
                 ->icon('heroicon-o-shield-check')
