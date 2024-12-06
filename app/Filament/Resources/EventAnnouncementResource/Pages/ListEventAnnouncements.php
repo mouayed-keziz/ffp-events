@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 
 use App\Filament\Resources\EventAnnouncementResource;
+use App\Filament\Resources\EventAnnouncementResource\Widgets\EventAnnouncementAdvancedStats;
 use App\Filament\Resources\EventAnnouncementResource\Widgets\EventAnnouncementStats;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
@@ -15,6 +16,7 @@ class ListEventAnnouncements extends ListRecords
     {
         return [
             EventAnnouncementStats::class,
+            EventAnnouncementAdvancedStats::class
         ];
     }
 
