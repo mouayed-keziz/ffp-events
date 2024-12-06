@@ -21,6 +21,21 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
+    // protected static ?string $navigationBadgeTooltip = 'Total number of users';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        // $count = static::getModel()::count();
+        // if ($count > 1000) return 'danger';
+        // if ($count > 500) return 'warning';
+        return 'primary';
+    }
+
     protected static ?string $recordTitleAttribute = 'name';
 
     protected static bool $shouldRegisterNavigation = true;
@@ -142,18 +157,29 @@ class UserResource extends Resource
                     }),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ForceDeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\ActionGroup::make([
+                        Tables\Actions\DeleteAction::make(),
+                        Tables\Actions\ForceDeleteAction::make(),
+                        Tables\Actions\RestoreAction::make(),
+                    ])
+                        ->dropdown(false)
+                        ->label('Danger Zone')
+                        ->color('danger')
+                        ->icon('heroicon-m-exclamation-triangle'),
+                ])->color('gray')
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
-                ]),
+                ])
+                    // ->icon('heroicon-m-archive-box')
+                    ->color('gray'),
             ])
             ->emptyStateHeading(__('users.empty_states.title'))
             ->emptyStateDescription(__('users.empty_states.description'));

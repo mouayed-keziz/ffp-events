@@ -62,7 +62,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentDeveloperLoginsPlugin::make()
-                    ->enabled()
+                    ->enabled(env('APP_DEBUG', false))
                     ->users([
                         'Admin' => 'admin@admin.dev'
                     ])

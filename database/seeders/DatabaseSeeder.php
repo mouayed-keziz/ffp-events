@@ -17,9 +17,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create();
-
-
         $faker = Faker::create('ar_SA');
 
         $admin = User::factory()->create([
@@ -56,25 +53,26 @@ class DatabaseSeeder extends Seeder
                 ->title($arabicTitles[$index - 1])
                 ->body($arabicBodies[$index - 1])
                 ->actions([
-                    Action::make('عرض')
-                        ->button()
-                        ->color($isSuccess ? 'success' : 'danger')
-                        ->markAsRead(),
-                    Action::make('وضع كغير مقروء')
-                        ->button()
-                        ->color($isSuccess ? 'success' : 'danger')
-                        ->markAsUnread()
-                        ->tooltip("وضع كغير مقروء"),
-                    Action::make('اختبار')
-                        ->button()
-                        ->color($isSuccess ? 'success' : 'danger')
-                        ->action(function () {
-                            throw new \Exception('مرحبا بالعالم');
-                        }),
+                    // Action::make('عرض')
+                    //     ->button()
+                    //     ->color($isSuccess ? 'success' : 'danger')
+                    //     ->markAsRead(),
+                    // Action::make('وضع كغير مقروء')
+                    //     ->button()
+                    //     ->color($isSuccess ? 'success' : 'danger')
+                    //     ->markAsUnread()
+                    //     ->tooltip("وضع كغير مقروء"),
+                    // Action::make('اختبار')
+                    //     ->button()
+                    //     ->color($isSuccess ? 'success' : 'danger')
+                    //     ->action(function () {
+                    //         throw new \Exception('مرحبا بالعالم');
+                    //     }),
                 ])
                 ->toDatabase();
 
             $admin->notify($notification);
         }
+        User::factory(500)->create();
     }
 }
