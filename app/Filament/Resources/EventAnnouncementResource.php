@@ -43,42 +43,78 @@ class EventAnnouncementResource extends Resource
     {
         return $form
             ->schema([
-                // Forms\Components\Select::make('event_id')
-                //     ->relationship('event', 'title')
-                //     ->required()
-                //     ->searchable()
-                //     ->preload()
-                //     ->translateLabel(),
+                Forms\Components\Tabs::make('Event Announcement')
+                    ->tabs([
+                        Forms\Components\Tabs\Tab::make(__('event_announcement.tabs.general'))
+                            ->schema([
+                                Forms\Components\TextInput::make('title')
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->translateLabel(),
 
-                Forms\Components\TextInput::make('title')
-                    ->required()
-                    ->maxLength(255)
-                    ->translateLabel(),
+                                Forms\Components\Textarea::make('description')
+                                    ->maxLength(65535)
+                                    ->translateLabel(),
 
-                Forms\Components\RichEditor::make('content')
-                    ->required()
-                    ->columnSpanFull()
-                    ->translateLabel(),
+                                Forms\Components\RichEditor::make('content')
+                                    ->required()
+                                    ->translateLabel(),
+                            ])->columns(1),
 
-                Forms\Components\Select::make('status')
-                    ->options([
-                        'draft' => __('event_announcement.filters.draft'),
-                        'published' => __('event_announcement.filters.published'),
-                        'archived' => __('event_announcement.filters.archived'),
+                        Forms\Components\Tabs\Tab::make(__('event_announcement.tabs.dates_location'))
+                            ->schema([
+                                Forms\Components\DateTimePicker::make('start_date')
+                                    ->required()
+                                    ->translateLabel(),
+
+                                Forms\Components\DateTimePicker::make('end_date')
+                                    ->required()
+                                    ->translateLabel(),
+
+                                Forms\Components\TextInput::make('location')
+                                    ->maxLength(255)
+                                    ->translateLabel(),
+                            ])->columns(3),
+
+                        Forms\Components\Tabs\Tab::make(__('event_announcement.tabs.details'))
+                            ->schema([
+                                Forms\Components\Select::make('status')
+                                    ->options([
+                                        'draft' => __('event_announcement.filters.draft'),
+                                        'published' => __('event_announcement.filters.published'),
+                                        'archived' => __('event_announcement.filters.archived'),
+                                    ])
+                                    ->required()
+                                    ->default('draft')
+                                    ->translateLabel(),
+
+                                Forms\Components\Toggle::make('is_featured')
+                                    ->default(false)
+                                    ->translateLabel(),
+
+                                Forms\Components\Grid::make(3)
+                                    ->schema([
+                                        Forms\Components\TextInput::make('max_exhibitors')
+                                            ->numeric()
+                                            ->minValue(0)
+                                            ->translateLabel(),
+
+                                        Forms\Components\TextInput::make('max_visitors')
+                                            ->numeric()
+                                            ->minValue(0)
+                                            ->translateLabel(),
+                                    ]),
+                            ]),
+
+                        Forms\Components\Tabs\Tab::make(__('event_announcement.tabs.media'))
+                            ->schema([
+                                Forms\Components\FileUpload::make('image_path')
+                                    ->image()
+                                    ->directory('event-announcements')
+                                    ->translateLabel(),
+                            ])->columns(1),
                     ])
-                    ->required()
-                    ->default('draft')
-                    ->translateLabel(),
-
-                Forms\Components\FileUpload::make('image_path')
-                    ->image()
-                    ->directory('event-announcements')
-                    ->nullable()
-                    ->translateLabel(),
-
-                Forms\Components\Toggle::make('is_pinned')
-                    ->default(false)
-                    ->translateLabel(),
+                    ->columnSpanFull()
             ]);
     }
 
