@@ -3,32 +3,61 @@
 namespace App\Filament\Resources\UserResource\Widgets;
 
 use App\Models\User;
-use Filament\Widgets\StatsOverviewWidget as BaseWidget;
-use Filament\Widgets\StatsOverviewWidget\Stat;
-use Spatie\FilamentSimpleStats\SimpleStat;
+use EightyNine\FilamentAdvancedWidget\AdvancedStatsOverviewWidget as BaseWidget;
+use EightyNine\FilamentAdvancedWidget\AdvancedStatsOverviewWidget\Stat;
+use Illuminate\Support\Facades\App;
 
 class UserStats extends BaseWidget
 {
     protected function getStats(): array
     {
+        $isArabic = App::getLocale() === 'ar';
+        $descriptionIconPosition = $isArabic ? 'after' : 'before';
+
         return [
-            Stat::make('number of users', '192.1k'),
+            Stat::make(__('users.stats.total_users'), User::count())
+                ->icon('heroicon-o-users')
+                ->iconColor('info')
+                ->chartColor('info'),
 
-            SimpleStat::make(User::class)
-                ->label('New Users')
-                ->last30Days()
-                ->dailyCount(),
+            Stat::make(__('users.stats.new_users'), User::whereBetween('created_at', [
+                now()->subDays(30),
+                now()
+            ])->count())
+                ->description(__('users.stats.last_30_days'))
+                ->descriptionIcon('heroicon-o-arrow-trending-up', $descriptionIconPosition)
+                ->descriptionColor('success')
+                ->icon('heroicon-o-user-plus')
+                ->iconColor('success')
+                ->chartColor('success')
+                ->chart([
+                    User::whereBetween('created_at', [now()->subDays(30), now()->subDays(25)])->count(),
+                    User::whereBetween('created_at', [now()->subDays(25), now()->subDays(20)])->count(),
+                    User::whereBetween('created_at', [now()->subDays(20), now()->subDays(15)])->count(),
+                    User::whereBetween('created_at', [now()->subDays(15), now()->subDays(10)])->count(),
+                    User::whereBetween('created_at', [now()->subDays(10), now()->subDays(5)])->count(),
+                    User::whereBetween('created_at', [now()->subDays(5), now()])->count(),
+                ]),
 
-            SimpleStat::make(User::class)
-                ->label('Verified Users')
-                ->where('verified_at', '!=', null)
-                ->last30Days()
-                ->dailyCount(),
-
-            // SimpleStat::make(User::class)
-            //     ->label('Active Users')
-            //     ->where('verified_at', '!=', null)
-            // // ->count(),
+            Stat::make(__('users.stats.verified_users'), User::whereNotNull('verified_at')
+                ->whereBetween('verified_at', [
+                    now()->subDays(30),
+                    now()
+                ])->count())
+                ->description(__('users.stats.last_30_days'))
+                ->descriptionIcon('heroicon-o-check-badge', $descriptionIconPosition)
+                ->descriptionColor('warning')
+                ->icon('heroicon-o-shield-check')
+                ->iconColor('warning')
+                ->chartColor('warning')
+                ->chart([
+                    User::whereNotNull('verified_at')->whereBetween('verified_at', [now()->subDays(30), now()->subDays(25)])->count(),
+                    User::whereNotNull('verified_at')->whereBetween('verified_at', [now()->subDays(25), now()->subDays(20)])->count(),
+                    User::whereNotNull('verified_at')->whereBetween('verified_at', [now()->subDays(20), now()->subDays(15)])->count(),
+                    User::whereNotNull('verified_at')->whereBetween('verified_at', [now()->subDays(15), now()->subDays(10)])->count(),
+                    User::whereNotNull('verified_at')->whereBetween('verified_at', [now()->subDays(10), now()->subDays(5)])->count(),
+                    User::whereNotNull('verified_at')->whereBetween('verified_at', [now()->subDays(5), now()])->count(),
+                ]),
         ];
     }
 }

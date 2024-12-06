@@ -46,4 +46,10 @@ return [
             'without_trashed' => 'Without deleted',
         ],
     ],
+    'stats' => [
+        'total_users' => 'Total Users',
+        'new_users' => 'New Users',
+        'verified_users' => 'Verified Users',
+        'last_30_days' => 'Last 30 days',
+    ],
 ];

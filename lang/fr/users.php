@@ -59,4 +59,10 @@ return [
             'without_trashed' => 'Sans supprimés',
         ],
     ],
+    'stats' => [
+        'total_users' => 'Total Utilisateurs',
+        'new_users' => 'Nouveaux Utilisateurs',
+        'verified_users' => 'Utilisateurs Vérifiés',
+        'last_30_days' => 'Les 30 derniers jours',
+    ],
 ];

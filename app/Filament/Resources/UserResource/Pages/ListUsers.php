@@ -19,8 +19,8 @@ class ListUsers extends ListRecords
     {
         return [
             UserStats::class,
-            Widgets\AccountWidget::class,
-            Widgets\FilamentInfoWidget::class,
+            // Widgets\AccountWidget::class,
+            // Widgets\FilamentInfoWidget::class,
         ];
     }
 

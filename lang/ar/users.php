@@ -46,4 +46,10 @@ return [
             'without_trashed' => 'بدون المحذوف',
         ],
     ],
+    'stats' => [
+        'total_users' => 'إجمالي المستخدمين',
+        'new_users' => 'المستخدمين الجدد',
+        'verified_users' => 'المستخدمين الموثقين',
+        'last_30_days' => 'آخر 30 يوم',
+    ],
 ];
