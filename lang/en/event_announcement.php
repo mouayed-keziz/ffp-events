@@ -8,8 +8,10 @@ return [
     'fields' => [
         'title' => 'Title',
         'description' => 'Description',
-        'start_date' => 'Start Date',
-        'end_date' => 'End Date',
+        'content' => 'Content',
+        'event_dates' => 'Dates',
+        'start_date' => 'From',
+        'end_date' => 'To',
         'location' => 'Location',
         'status' => 'Status',
         'image_path' => 'Image',
@@ -41,5 +43,12 @@ return [
         'updated' => 'Announcement updated successfully',
         'deleted' => 'Announcement deleted successfully',
         'restored' => 'Announcement restored successfully',
+    ],
+    'empty_states' => [
+        'description' => 'No description provided',
+        'content' => 'No content provided',
+        'location' => 'No location specified',
+        'photo' => 'No photo uploaded',
+        'deleted_at' => 'Not deleted',
     ],
 ];

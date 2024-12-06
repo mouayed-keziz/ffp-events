@@ -91,45 +91,62 @@ class EventAnnouncementResource extends Resource
                     ->label(__('event_announcement.fields.title'))
                     ->searchable()
                     ->sortable()
-                    ->toggleable(),
+                    ->toggleable()
+                    ->limit(40),
 
                 Tables\Columns\TextColumn::make('description')
                     ->label(__('event_announcement.fields.description'))
+                    ->limit(40)
+                    ->placeholder(__('event_announcement.empty_states.description'))
                     ->searchable()
-                    ->toggleable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->limit(50),
+
+                Tables\Columns\TextColumn::make('dates')
+                    ->label(__('event_announcement.fields.event_dates'))
+                    ->state(function ($record): string {
+                        $startDate = \Carbon\Carbon::parse($record->start_date)->format('d/m/y H:i');
+                        $endDate = \Carbon\Carbon::parse($record->end_date)->format('d/m/y H:i');
+
+                        return __('event_announcement.fields.start_date') . ' ' . $startDate .
+                            '<br>' .
+                            __('event_announcement.fields.end_date') . ' ' . $endDate;
+                    })
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        return $query->where('start_date', 'like', "%{$search}%")
+                            ->orWhere('end_date', 'like', "%{$search}%");
+                    })
+                    ->sortable(query: function (Builder $query, string $direction): Builder {
+                        return $query->orderBy('start_date', $direction);
+                    })
+                    ->toggleable()
+                    ->html()
+                    ->alignment(\Filament\Support\Enums\Alignment::Center),
 
                 Tables\Columns\TextColumn::make('location')
                     ->label(__('event_announcement.fields.location'))
+                    ->placeholder(__('event_announcement.empty_states.location'))
                     ->searchable()
-                    ->sortable()
-                    ->toggleable(),
-
-                Tables\Columns\TextColumn::make('start_date')
-                    ->label(__('event_announcement.fields.start_date'))
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(),
-
-                Tables\Columns\TextColumn::make('end_date')
-                    ->label(__('event_announcement.fields.end_date'))
-                    ->dateTime()
                     ->sortable()
                     ->toggleable(),
 
                 Tables\Columns\ImageColumn::make('image_path')
                     ->label(__('event_announcement.fields.image_path'))
+                    ->placeholder(__('event_announcement.empty_states.photo'))
                     ->circular()
                     ->toggleable(),
 
-                Tables\Columns\TextColumn::make('max_exhibitors')
+                Tables\Columns\BadgeColumn::make('max_exhibitors')
                     ->label(__('event_announcement.fields.max_exhibitors'))
+                    ->alignment(\Filament\Support\Enums\Alignment::Center)
                     ->badge()
                     ->sortable()
                     ->toggleable(),
 
-                Tables\Columns\TextColumn::make('max_visitors')
+                Tables\Columns\BadgeColumn::make('max_visitors')
                     ->label(__('event_announcement.fields.max_visitors'))
+                    ->alignment(\Filament\Support\Enums\Alignment::Center)
                     ->badge()
                     ->sortable()
                     ->toggleable(),
@@ -137,6 +154,7 @@ class EventAnnouncementResource extends Resource
                 Tables\Columns\IconColumn::make('is_featured')
                     ->label(__('event_announcement.fields.is_featured'))
                     ->boolean()
+                    ->alignment(\Filament\Support\Enums\Alignment::Center)
                     ->sortable()
                     ->toggleable(),
 
@@ -166,6 +184,7 @@ class EventAnnouncementResource extends Resource
                     ->label(__('event_announcement.fields.deleted_at'))
                     ->dateTime()
                     ->sortable()
+                    ->placeholder(__('event_announcement.empty_states.deleted_at'))
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([

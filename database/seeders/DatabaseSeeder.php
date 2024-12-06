@@ -73,6 +73,6 @@ class DatabaseSeeder extends Seeder
 
             $admin->notify($notification);
         }
-        User::factory(500)->create();
+        User::factory(100)->create();
     }
 }

@@ -13,15 +13,17 @@ return new class extends Migration {
         Schema::create('event_announcements', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description');
+            $table->text('description')->nullable();
+            $table->longText('content')->nullable();
             $table->dateTime('start_date');
             $table->dateTime('end_date');
-            $table->string('location');
+            $table->string('location')->nullable();
             $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
             $table->string('image_path')->nullable();
             $table->integer('max_exhibitors')->nullable();
             $table->integer('max_visitors')->nullable();
             $table->boolean('is_featured')->default(false);
+            $table->timestamp('publish_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

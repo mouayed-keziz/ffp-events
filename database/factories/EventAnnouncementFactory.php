@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\EventAnnouncement;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\EventAnnouncement>
@@ -19,21 +19,22 @@ class EventAnnouncementFactory extends Factory
      */
     public function definition(): array
     {
+        $startDate = $this->faker->dateTimeBetween('now', '+2 years');
+        $endDate = $this->faker->dateTimeBetween($startDate, '+3 years');
+        
         return [
-            'title' => $this->faker->sentence(4),
-            'description' => $this->faker->paragraphs(3, true),
-            'start_date' => $this->faker->dateTimeBetween('now', '+2 months'),
-            'end_date' => $this->faker->dateTimeBetween('+2 months', '+4 months'),
-            'location' => $this->faker->city() . ', ' . $this->faker->country(),
+            'title' => $this->faker->sentence(3),
+            'description' => $this->faker->paragraph(),
+            'content' => $this->faker->randomHtml(),
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+            'location' => $this->faker->city(),
             'status' => $this->faker->randomElement(['draft', 'published', 'archived']),
-            'image_path' => null, // You might want to implement actual image generation if needed
+            'image_path' => $this->faker->imageUrl(640, 480),
             'max_exhibitors' => $this->faker->numberBetween(10, 100),
             'max_visitors' => $this->faker->numberBetween(100, 1000),
-            'is_featured' => $this->faker->boolean(20), // 20% chance of being featured
-            'created_at' => $this->faker->dateTimeBetween('-1 month', 'now'),
-            'updated_at' => function (array $attributes) {
-                return $this->faker->dateTimeBetween($attributes['created_at'], 'now');
-            },
+            'is_featured' => $this->faker->boolean(20),
+            'publish_at' => $this->faker->dateTimeBetween('-1 month', '+1 month'),
         ];
     }
 
@@ -42,19 +43,12 @@ class EventAnnouncementFactory extends Factory
      */
     public function published(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'status' => 'published',
-        ]);
-    }
-
-    /**
-     * Indicate that the announcement is featured.
-     */
-    public function featured(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'is_featured' => true,
-        ]);
+        return $this->state(function (array $attributes) {
+            return [
+                'status' => 'published',
+                'publish_at' => $this->faker->dateTimeBetween('-1 month', 'now'),
+            ];
+        });
     }
 
     /**
@@ -62,8 +56,36 @@ class EventAnnouncementFactory extends Factory
      */
     public function draft(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'status' => 'draft',
-        ]);
+        return $this->state(function (array $attributes) {
+            return [
+                'status' => 'draft',
+                'publish_at' => null,
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the announcement is archived.
+     */
+    public function archived(): static
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'status' => 'archived',
+                'publish_at' => $this->faker->dateTimeBetween('-6 months', '-1 month'),
+            ];
+        });
+    }
+
+    /**
+     * Indicate that the announcement is featured.
+     */
+    public function featured(): static
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_featured' => true,
+            ];
+        });
     }
 }

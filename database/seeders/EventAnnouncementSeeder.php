@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\EventAnnouncement;
+use Illuminate\Database\Seeder;
 
 class EventAnnouncementSeeder extends Seeder
 {
@@ -19,7 +19,7 @@ class EventAnnouncementSeeder extends Seeder
             ->featured()
             ->create();
 
-        // Create 10 published but not featured announcements
+        // Create 10 published announcements
         EventAnnouncement::factory()
             ->count(10)
             ->published()
@@ -31,10 +31,10 @@ class EventAnnouncementSeeder extends Seeder
             ->draft()
             ->create();
 
-        // Create 2 archived announcements
+        // Create 3 archived announcements
         EventAnnouncement::factory()
-            ->count(2)
-            ->state(['status' => 'archived'])
+            ->count(3)
+            ->archived()
             ->create();
     }
 }
