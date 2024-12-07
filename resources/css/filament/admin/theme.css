@@ -27,3 +27,12 @@
 .fi-panel-dashboard {
     @apply bg-[#eceff2] dark:bg-[#000000] !important;
 }
+
+/* Add proper styling for the progress bar container */
+.fi-wi-stats-overview-stat .bg-gray-200 {
+    @apply mr-0 mt-8;
+}
+
+.fi-layout {
+    /* @apply bg-red-300; */
+}
