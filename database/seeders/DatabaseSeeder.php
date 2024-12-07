@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(AdvancedEventAnnouncementSeeder::class);
         $faker = Faker::create('ar_SA');
 
         $admin = User::factory()->create([

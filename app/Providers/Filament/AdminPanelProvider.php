@@ -33,7 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotificationsPolling("30s")
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
-                'primary' => Color::Teal,
+                'primary' => Color::Blue,
             ])
             ->font("Inter")
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')

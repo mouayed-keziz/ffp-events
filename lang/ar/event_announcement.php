@@ -60,4 +60,13 @@ return [
         'details' => 'تفاصيل الفعالية',
         'media' => 'الوسائط',
     ],
+    'stats' => [
+        'total_events' => 'إجمالي الفعاليات',
+        'active_events' => 'الفعاليات النشطة',
+        'upcoming_events' => 'الفعاليات القادمة',
+        'featured_events' => 'الفعاليات المميزة',
+        'events_to_start' => 'فعاليات لم تبدأ بعد',
+        'highlighted_events' => 'الفعاليات المميزة',
+        'last_7_days' => 'آخر 7 أيام',
+    ],
 ];

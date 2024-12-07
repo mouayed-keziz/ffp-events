@@ -57,4 +57,13 @@ return [
         'details' => 'Détails de l\'événement',
         'media' => 'Médias',
     ],
+    'stats' => [
+        'total_events' => 'Total des événements',
+        'active_events' => 'Événements actifs',
+        'upcoming_events' => 'Événements à venir',
+        'featured_events' => 'Événements en vedette',
+        'events_to_start' => 'Événements à débuter',
+        'highlighted_events' => 'Événements mis en avant',
+        'last_7_days' => 'Les 7 derniers jours',
+    ],
 ];

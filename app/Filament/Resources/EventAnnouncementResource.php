@@ -43,37 +43,38 @@ class EventAnnouncementResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Tabs::make('Event Announcement')
+                Forms\Components\Tabs::make(__('event_announcement.resource.label'))
                     ->tabs([
                         Forms\Components\Tabs\Tab::make(__('event_announcement.tabs.general'))
                             ->schema([
                                 Forms\Components\TextInput::make('title')
                                     ->required()
                                     ->maxLength(255)
-                                    ->translateLabel(),
+                                    ->label(__('event_announcement.fields.title')),
 
                                 Forms\Components\Textarea::make('description')
                                     ->maxLength(65535)
-                                    ->translateLabel(),
+                                    ->label(__('event_announcement.fields.description')),
 
                                 Forms\Components\RichEditor::make('content')
                                     ->required()
-                                    ->translateLabel(),
+                                    ->label(__('event_announcement.fields.content')),
                             ])->columns(1),
 
                         Forms\Components\Tabs\Tab::make(__('event_announcement.tabs.dates_location'))
                             ->schema([
                                 Forms\Components\DateTimePicker::make('start_date')
                                     ->required()
-                                    ->translateLabel(),
+                                    ->label(__('event_announcement.fields.start_date')),
 
                                 Forms\Components\DateTimePicker::make('end_date')
                                     ->required()
-                                    ->translateLabel(),
+                                    ->label(__('event_announcement.fields.end_date')),
 
                                 Forms\Components\TextInput::make('location')
                                     ->maxLength(255)
-                                    ->translateLabel(),
+                                    ->label(__('event_announcement.fields.location'))
+                                    ->placeholder(__('event_announcement.empty_states.location')),
                             ])->columns(3),
 
                         Forms\Components\Tabs\Tab::make(__('event_announcement.tabs.details'))
@@ -86,23 +87,23 @@ class EventAnnouncementResource extends Resource
                                     ])
                                     ->required()
                                     ->default('draft')
-                                    ->translateLabel(),
+                                    ->label(__('event_announcement.fields.status')),
 
                                 Forms\Components\Toggle::make('is_featured')
                                     ->default(false)
-                                    ->translateLabel(),
+                                    ->label(__('event_announcement.fields.is_featured')),
 
                                 Forms\Components\Grid::make(3)
                                     ->schema([
                                         Forms\Components\TextInput::make('max_exhibitors')
                                             ->numeric()
                                             ->minValue(0)
-                                            ->translateLabel(),
+                                            ->label(__('event_announcement.fields.max_exhibitors')),
 
                                         Forms\Components\TextInput::make('max_visitors')
                                             ->numeric()
                                             ->minValue(0)
-                                            ->translateLabel(),
+                                            ->label(__('event_announcement.fields.max_visitors')),
                                     ]),
                             ]),
 
@@ -111,7 +112,8 @@ class EventAnnouncementResource extends Resource
                                 Forms\Components\FileUpload::make('image_path')
                                     ->image()
                                     ->directory('event-announcements')
-                                    ->translateLabel(),
+                                    ->label(__('event_announcement.fields.image_path'))
+                                    ->placeholder(__('event_announcement.empty_states.photo')),
                             ])->columns(1),
                     ])
                     ->columnSpanFull()

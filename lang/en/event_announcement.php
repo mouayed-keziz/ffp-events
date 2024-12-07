@@ -57,4 +57,13 @@ return [
         'details' => 'Event Details',
         'media' => 'Media',
     ],
+    'stats' => [
+        'total_events' => 'Total Events',
+        'active_events' => 'Active Events',
+        'upcoming_events' => 'Upcoming Events',
+        'featured_events' => 'Featured Events',
+        'events_to_start' => 'Events yet to start',
+        'highlighted_events' => 'Highlighted events',
+        'last_7_days' => 'Last 7 days',
+    ],
 ];
