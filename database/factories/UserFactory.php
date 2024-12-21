@@ -72,4 +72,11 @@ class UserFactory extends Factory
             $user->assignRole('exhibitor');
         });
     }
+
+    public function visitor(): static
+    {
+        return $this->afterCreating(function ($user) {
+            $user->assignRole('visitor');
+        });
+    }
 }

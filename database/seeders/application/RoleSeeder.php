@@ -17,10 +17,11 @@ class RoleSeeder extends Seeder
             'super_admin',
             'admin',
             'exhibitor',
+            'visitor',
         ];
 
         foreach ($roles as $role) {
-            Role::create(['name' => $role]);
+            Role::firstOrCreate(['name' => $role]);
         }
     }
 }

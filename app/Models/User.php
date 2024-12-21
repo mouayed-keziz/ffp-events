@@ -46,9 +46,11 @@ class User extends Authenticatable
         'verified_at' => 'datetime',
     ];
 
-    public function scopeNormalUsers($query)
+    public function scopeVisitors($query)
     {
-        return $query->whereDoesntHave('roles');
+        return $query->whereHas('roles', function ($q) {
+            $q->where('name', 'visitor');
+        });
     }
 
     public function scopeExhibitors($query)
@@ -64,9 +66,9 @@ class User extends Authenticatable
         });
     }
 
-    public function getUserTitleAttribute()
+    public function getVisitorTitleAttribute()
     {
-        return __("users.resource.single") . " - {$this->name}";
+        return __("visitors.resource.single") . " - {$this->name}";
     }
     public function getExhibitorTitleAttribute()
     {

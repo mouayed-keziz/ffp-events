@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\Resource;
+namespace App\Filament\Resources\VisitorResource\Resource;
 
 use Filament\Forms;
 use Filament\Forms\Form;
 
-class UserForm
+class VisitorForm
 {
     public static function form(Form $form): Form
     {
@@ -13,18 +13,18 @@ class UserForm
             ->schema([
                 Forms\Components\Section::make([
                     Forms\Components\TextInput::make('name')
-                        ->label(__('users.form.name'))
+                        ->label(__('visitors.form.name'))
                         ->required()
                         ->maxLength(255),
 
                     Forms\Components\TextInput::make('email')
-                        ->label(__('users.form.email'))
+                        ->label(__('visitors.form.email'))
                         ->email()
                         ->required()
                         ->maxLength(255),
 
                     Forms\Components\TextInput::make('password')
-                        ->label(__('users.form.password'))
+                        ->label(__('visitors.form.password'))
                         ->password()
                         ->required()
                         ->maxLength(255),

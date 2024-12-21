@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\Widgets;
+namespace App\Filament\Resources\VisitorResource\Widgets;
 
 use App\Models\User;
 use EightyNine\FilamentAdvancedWidget\AdvancedStatsOverviewWidget as BaseWidget;
@@ -17,7 +17,7 @@ class UserStats extends BaseWidget
         $descriptionIconPosition = $isArabic ? 'after' : 'before';
         $margin = $isArabic ? 'margin-right: 50px !important' : '';
 
-        $description = new HtmlString('<span style="' . $margin . '">' . __('users.stats.last_30_days') . '</span>');
+        $description = new HtmlString('<span style="' . $margin . '">' . __('visitors.stats.last_30_days') . '</span>');
 
         return [
             // SimpleStat::make(User::class)
@@ -28,12 +28,12 @@ class UserStats extends BaseWidget
             //     // ->iconColor('info')
             //     ->chartColor("success"),
 
-            Stat::make(__('users.stats.total_users'), User::count())
+            Stat::make(__('visitors.stats.total_users'), User::count())
                 ->icon('heroicon-o-users')
                 ->iconColor('info')
                 ->chartColor('info'),
 
-            Stat::make(__('users.stats.new_users'), User::whereBetween('created_at', [
+            Stat::make(__('visitors.stats.new_users'), User::whereBetween('created_at', [
                 now()->subDays(30),
                 now()
             ])->count())
@@ -53,7 +53,7 @@ class UserStats extends BaseWidget
                     User::whereBetween('created_at', [now()->subDays(5), now()])->count(),
                 ]),
 
-            Stat::make(__('users.stats.verified_users'), User::whereNotNull('verified_at')
+            Stat::make(__('visitors.stats.verified_users'), User::whereNotNull('verified_at')
                 ->whereBetween('verified_at', [
                     now()->subDays(30),
                     now()

@@ -5,7 +5,7 @@ namespace App\Providers\Filament;
 use App\Filament\Resources\EventAnnouncementResource\Widgets\EventAnnouncementAdvancedStats;
 use App\Filament\Resources\EventAnnouncementResource\Widgets\EventAnnouncementStats;
 use App\Filament\Resources\UserResource\Widgets\ExhibitorStats;
-use App\Filament\Resources\UserResource\Widgets\UserStats;
+use App\Filament\Resources\VisitorResource\Widgets\UserStats;
 use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -22,6 +22,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Navigation\NavigationGroup;
+use Filament\Facades\Filament;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -80,5 +82,16 @@ class AdminPanelProvider extends PanelProvider
                         "SUPER ADMIN " => 'admin@admin.dev'
                     ])
             ]);
+    }
+
+    public function boot(): void
+    {
+        Filament::serving(function () {
+            Filament::registerNavigationGroups([
+                NavigationGroup::make()
+                    ->label(__('nav.groups.users'))
+                    ->icon('heroicon-o-users'),
+            ]);
+        });
     }
 }

@@ -35,7 +35,7 @@ class AdminResource extends Resource
     }
     public static function getNavigationGroup(): ?string
     {
-        return __('nav.groups.management');
+        return __('nav.groups.users');
     }
 
     public static function getModelLabel(): string

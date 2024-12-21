@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\Resource;
+namespace App\Filament\Resources\VisitorResource\Resource;
 
 use App\Models\User;
 use Filament\Tables;
@@ -8,7 +8,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Filters\SelectFilter;
 
-class UserTable
+class VisitorTable
 {
     public static function table(Table $table): Table
     {
@@ -19,8 +19,8 @@ class UserTable
                     ->toggleable()
                     ->sortable()
                     ->searchable()
-                    ->label(__('users.columns.name'))
-                    ->default(__('users.empty_states.name'))
+                    ->label(__('visitors.columns.name'))
+                    ->default(__('visitors.empty_states.name'))
                     ->description(fn(User $record): string => $record->email)
                     ->wrap(),
 
@@ -28,14 +28,14 @@ class UserTable
                     ->toggleable()
                     ->sortable()
                     ->searchable()
-                    ->label(__('users.columns.roles'))
+                    ->label(__('visitors.columns.roles'))
                     ->badge()
-                    ->default(__('users.empty_states.roles')),
+                    ->default(__('visitors.empty_states.roles')),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->toggleable()
                     ->sortable()
-                    ->label(__('users.columns.created_at'))
+                    ->label(__('visitors.columns.created_at'))
                     ->dateTime()
                     ->formatStateUsing(fn($state) => $state ? $state->diffForHumans() : null)
                     ->tooltip(fn($state) => $state ? $state->format('Y-m-d H:i:s') : null),
@@ -44,30 +44,30 @@ class UserTable
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable()
-                    ->label(__('users.columns.verified_at'))
+                    ->label(__('visitors.columns.verified_at'))
                     ->afterStateUpdated(function ($state, $record) {
                         $record->update(['verified_at' => $state ? now() : null]);
                     }),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make()
-                    ->label(__('users.filters.trashed.label'))
-                    ->placeholder(__('users.filters.trashed.placeholder')),
+                    ->label(__('visitors.filters.trashed.label'))
+                    ->placeholder(__('visitors.filters.trashed.placeholder')),
 
                 // SelectFilter::make('roles')
-                //     ->label(__('users.filters.roles.label'))
-                //     ->placeholder(__('users.filters.roles.placeholder'))
+                //     ->label(__('visitors.filters.roles.label'))
+                //     ->placeholder(__('visitors.filters.roles.placeholder'))
                 //     ->multiple()
                 //     ->relationship('roles', 'name')
                 //     ->preload()
                 //     ->searchable(),
 
                 SelectFilter::make('verified')
-                    ->label(__('users.filters.verification.label'))
-                    ->placeholder(__('users.filters.verification.placeholder'))
+                    ->label(__('visitors.filters.verification.label'))
+                    ->placeholder(__('visitors.filters.verification.placeholder'))
                     ->options([
-                        'verified' => __('users.filters.verification.verified'),
-                        'unverified' => __('users.filters.verification.unverified'),
+                        'verified' => __('visitors.filters.verification.verified'),
+                        'unverified' => __('visitors.filters.verification.unverified'),
                     ])
                     ->attribute('verified_at')
                     ->query(function (Builder $query, array $data): Builder {
@@ -84,7 +84,7 @@ class UserTable
                 Tables\Actions\DeleteAction::make()->iconButton(),
                 Tables\Actions\ForceDeleteAction::make()->iconButton(),
                 Tables\Actions\RestoreAction::make()->iconButton(),
-                UserActions::regeneratePasswordTableAction()
+                VisitorActions::regeneratePasswordTableAction()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -93,7 +93,7 @@ class UserTable
                     Tables\Actions\RestoreBulkAction::make(),
                 ])->color('gray'),
             ])
-            ->emptyStateHeading(__('users.empty_states.title'))
-            ->emptyStateDescription(__('users.empty_states.description'));
+            ->emptyStateHeading(__('visitors.empty_states.title'))
+            ->emptyStateDescription(__('visitors.empty_states.description'));
     }
 }

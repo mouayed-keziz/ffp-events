@@ -29,8 +29,8 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('adminadmin'),
         ]);
 
-        User::factory(30)->exhibitor()->create();
-        User::factory(10)->admin()->create();
-        User::factory(1000)->create();
+        User::factory(16)->exhibitor()->create();
+        User::factory(4)->admin()->create();
+        User::factory(count: 852)->visitor()->create();
     }
 }

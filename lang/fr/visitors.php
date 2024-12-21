@@ -2,8 +2,8 @@
 
 return [
     'resource' => [
-        'single' => 'Utilisateur',
-        'plural' => 'Utilisateurs',
+        'single' => 'Visiteur',
+        'plural' => 'Visiteurs',
     ],
     'columns' => [
         'id' => 'ID',
@@ -20,8 +20,8 @@ return [
         'password' => 'Mot de passe',
     ],
     'empty_states' => [
-        'title' => 'Aucun utilisateur',
-        'description' => 'Commencez par créer un utilisateur.',
+        'title' => 'Aucun visiteur',
+        'description' => 'Commencez par créer un visiteur.',
         'name' => 'Aucun nom fourni',
         'email' => 'Aucun email fourni',
         'roles' => 'Aucun rôle assigné',
@@ -51,7 +51,7 @@ return [
             'unverified' => 'Non vérifié',
         ],
         'trashed' => [
-            'label' => 'Utilisateurs supprimés',
+            'label' => 'Visiteurs supprimés',
             'placeholder' => 'Sélectionner le statut de suppression',
             'with_trashed' => 'Avec supprimés',
             'only_trashed' => 'Uniquement supprimés',
@@ -59,18 +59,18 @@ return [
         ],
     ],
     'stats' => [
-        'total_users' => 'Total Utilisateurs',
-        'new_users' => 'Nouveaux Utilisateurs',
-        'verified_users' => 'Utilisateurs Vérifiés',
+        'total_users' => 'Total Visiteurs',
+        'new_users' => 'Nouveaux Visiteurs',
+        'verified_users' => 'Visiteurs Vérifiés',
         'last_30_days' => 'Les 30 derniers jours',
     ],
     'actions' => [
         "regenerate_password" => [
             "label" => "Régénérer le mot de passe",
             "modal_heading" => "Régénérer le mot de passe",
-            "modal_description" => "Êtes-vous sûr de vouloir régénérer le mot de passe de cet utilisateur ? Il recevra un email avec son nouveau mot de passe.",
+            "modal_description" => "Êtes-vous sûr de vouloir régénérer le mot de passe de ce visiteur ? Il recevra un email avec son nouveau mot de passe.",
             "success_title" => "Mot de passe régénéré",
-            "success_body" => "L'utilisateur recevra un email avec son nouveau mot de passe.",
+            "success_body" => "Le visiteur recevra un email avec son nouveau mot de passe.",
             "error_title" => "Échec de la régénération du mot de passe",
             "error_body" => "Une erreur s'est produite lors de la régénération du mot de passe."
         ]

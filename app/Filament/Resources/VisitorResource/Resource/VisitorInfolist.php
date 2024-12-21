@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\Resource;
+namespace App\Filament\Resources\VisitorResource\Resource;
 
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
 
-class UserInfolist
+class VisitorInfolist
 {
     public static function infolist(Infolist $infolist): Infolist
     {
@@ -13,26 +13,26 @@ class UserInfolist
             ->schema([
                 Infolists\Components\Section::make([
                     Infolists\Components\TextEntry::make('name')
-                        ->label(__('users.form.name'))
-                        ->default(__('users.empty_states.name')),
+                        ->label(__('visitors.form.name'))
+                        ->default(__('visitors.empty_states.name')),
 
                     Infolists\Components\TextEntry::make('email')
-                        ->label(__('users.form.email'))
-                        ->default(__('users.empty_states.email')),
+                        ->label(__('visitors.form.email'))
+                        ->default(__('visitors.empty_states.email')),
 
                     Infolists\Components\TextEntry::make('roles.name')
-                        ->label(__('users.columns.roles'))
+                        ->label(__('visitors.columns.roles'))
                         ->badge()
                         ->color("gray")
-                        ->default(__('users.empty_states.roles')),
+                        ->default(__('visitors.empty_states.roles')),
 
                     Infolists\Components\TextEntry::make('created_at')
-                        ->label(__('users.columns.created_at'))
+                        ->label(__('visitors.columns.created_at'))
                         ->dateTime(),
 
                     Infolists\Components\TextEntry::make('verified_at')
-                        ->label(__('users.columns.verified_at'))
-                        ->default(__('users.empty_states.verification'))
+                        ->label(__('visitors.columns.verified_at'))
+                        ->default(__('visitors.empty_states.verification'))
                     // ->dateTime(),
                 ])
             ]);
