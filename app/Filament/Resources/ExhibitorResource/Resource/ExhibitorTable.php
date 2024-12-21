@@ -21,8 +21,8 @@ class ExhibitorTable
                     ->toggleable()
                     ->sortable()
                     ->searchable()
-                    ->label(__('exhibitor.columns.name'))
-                    ->default(__('exhibitor.empty_states.name'))
+                    ->label(__('exhibitors.columns.name'))
+                    ->default(__('exhibitors.empty_states.name'))
                     ->description(fn(User $record): string => $record->email)
                     ->wrap(),
 
@@ -30,14 +30,14 @@ class ExhibitorTable
                     ->toggleable()
                     ->sortable()
                     ->searchable()
-                    ->label(__('exhibitor.columns.roles'))
+                    ->label(__('exhibitors.columns.roles'))
                     ->badge()
-                    ->default(__('exhibitor.empty_states.roles')),
+                    ->default(__('exhibitors.empty_states.roles')),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->toggleable()
                     ->sortable()
-                    ->label(__('exhibitor.columns.created_at'))
+                    ->label(__('exhibitors.columns.created_at'))
                     ->dateTime()
                     ->formatStateUsing(fn($state) => $state ? $state->diffForHumans() : null)
                     ->tooltip(fn($state) => $state ? $state->format('Y-m-d H:i:s') : null),
@@ -46,26 +46,26 @@ class ExhibitorTable
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable()
-                    ->label(__('exhibitor.columns.verified_at'))
+                    ->label(__('exhibitors.columns.verified_at'))
                     ->afterStateUpdated(function ($state, $record) {
                         $record->update(['verified_at' => $state ? now() : null]);
                     }),
             ])
             ->filters([
                 // SelectFilter::make('roles')
-                //     ->label(__('exhibitor.filters.roles.label'))
-                //     ->placeholder(__('exhibitor.filters.roles.placeholder'))
+                //     ->label(__('exhibitors.filters.roles.label'))
+                //     ->placeholder(__('exhibitors.filters.roles.placeholder'))
                 //     ->multiple()
                 //     ->relationship('roles', 'name')
                 //     ->preload()
                 //     ->searchable(),
 
                 SelectFilter::make('verified')
-                    ->label(__('exhibitor.filters.verification.label'))
-                    ->placeholder(__('exhibitor.filters.verification.placeholder'))
+                    ->label(__('exhibitors.filters.verification.label'))
+                    ->placeholder(__('exhibitors.filters.verification.placeholder'))
                     ->options([
-                        'verified' => __('exhibitor.filters.verification.verified'),
-                        'unverified' => __('exhibitor.filters.verification.unverified'),
+                        'verified' => __('exhibitors.filters.verification.verified'),
+                        'unverified' => __('exhibitors.filters.verification.unverified'),
                     ])
                     ->attribute('verified_at')
                     ->query(function (Builder $query, array $data): Builder {
@@ -77,8 +77,8 @@ class ExhibitorTable
                     }),
 
                 Tables\Filters\TrashedFilter::make()
-                    ->label(__('exhibitor.filters.trashed.label'))
-                    ->placeholder(__('exhibitor.filters.trashed.placeholder')),
+                    ->label(__('exhibitors.filters.trashed.label'))
+                    ->placeholder(__('exhibitors.filters.trashed.placeholder')),
             ])
             // ->filtersFormColumns(3)
             // ->filtersLayout(FiltersLayout::Modal)
@@ -97,7 +97,7 @@ class ExhibitorTable
                     Tables\Actions\RestoreBulkAction::make(),
                 ])->color('gray'),
             ])
-            ->emptyStateHeading(__('exhibitor.empty_states.title'))
-            ->emptyStateDescription(__('exhibitor.empty_states.description'));
+            ->emptyStateHeading(__('exhibitors.empty_states.title'))
+            ->emptyStateDescription(__('exhibitors.empty_states.description'));
     }
 }

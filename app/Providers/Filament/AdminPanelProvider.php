@@ -30,7 +30,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->spa()
-            // ->topNavigation()
+            ->topNavigation()
             ->id('admin')
             ->path('admin')
             ->login()

@@ -65,6 +65,6 @@ class User extends Authenticatable
     }
     public function getExhibitorTitleAttribute()
     {
-        return __("exhibitor.resource.single") . " - {$this->name}";
+        return __("exhibitors.resource.single") . " - {$this->name}";
     }
 }

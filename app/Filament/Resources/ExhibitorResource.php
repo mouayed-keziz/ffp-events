@@ -32,19 +32,19 @@ class ExhibitorResource extends Resource
     }
     protected static ?string $recordTitleAttribute = 'exhibitorTitle';
     protected static bool $shouldRegisterNavigation = true;
-    public static function getNavigationGroup(): ?string
-    {
-        return __('nav.groups.management');
-    }
+    // public static function getNavigationGroup(): ?string
+    // {
+    //     return __('nav.groups.management');
+    // }
 
     public static function getModelLabel(): string
     {
-        return __('exhibitor.resource.single');
+        return __('exhibitors.resource.single');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('exhibitor.resource.plural');
+        return __('exhibitors.resource.plural');
     }
 
     public static function getGloballySearchableAttributes(): array

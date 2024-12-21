@@ -33,10 +33,10 @@ class UserResource extends Resource
 
     protected static bool $shouldRegisterNavigation = true;
 
-    public static function getNavigationGroup(): ?string
-    {
-        return __('nav.groups.management');
-    }
+    // public static function getNavigationGroup(): ?string
+    // {
+    //     return __('nav.groups.management');
+    // }
 
     public static function getModelLabel(): string
     {
