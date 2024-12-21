@@ -14,9 +14,6 @@ class UserTable
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make("something")
-                    ->badge()
-                    ->color("primary"),
                 Tables\Columns\TextColumn::make('name')
                     ->toggleable()
                     ->sortable()

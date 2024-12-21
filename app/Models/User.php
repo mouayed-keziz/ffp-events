@@ -47,14 +47,6 @@ class User extends Authenticatable
         'verified_at' => 'datetime',
     ];
 
-    public function getSomethingAttribute()
-    {
-        $first = 'mouayed';
-        $second = "keziz";
-        return $first . " and " . $second;
-    }
-
-    // add scope called normalusers and it returns useers without roles, and then another scope for exhibitor
     public function scopeNormalUsers($query)
     {
         return $query->whereDoesntHave('roles');
