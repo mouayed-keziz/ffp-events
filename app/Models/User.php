@@ -42,7 +42,6 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'verified_at' => 'datetime',
     ];
@@ -58,6 +57,12 @@ class User extends Authenticatable
             $q->where('name', 'exhibitor');
         });
     }
+    public function scopeAdmins($query)
+    {
+        return $query->whereHas('roles', function ($q) {
+            $q->where('name', 'admin');
+        });
+    }
 
     public function getUserTitleAttribute()
     {
@@ -66,5 +71,9 @@ class User extends Authenticatable
     public function getExhibitorTitleAttribute()
     {
         return __("exhibitors.resource.single") . " - {$this->name}";
+    }
+    public function getAdminTitleAttribute()
+    {
+        return __("admins.resource.single") . " - {$this->name}";
     }
 }

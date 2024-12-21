@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\ExhibitorResource\Pages;
 
 use App\Filament\Resources\ExhibitorResource;
-use App\Filament\Resources\UserResource\Resource\ExhibitorActions;
+use App\Filament\Resources\ExhibitorResource\Resource\ExhibitorActions;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 

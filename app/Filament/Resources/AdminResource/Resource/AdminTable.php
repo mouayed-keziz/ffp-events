@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\ExhibitorResource\Resource;
+namespace App\Filament\Resources\AdminResource\Resource;
 
-use App\Filament\Resources\ExhibitorResource\Resource\ExhibitorActions;
+use App\Filament\Resources\AdminResource\Resource\AdminActions;
 use App\Models\User;
 use Filament\Tables;
 use Filament\Tables\Enums\FiltersLayout;
@@ -10,7 +10,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Filters\SelectFilter;
 
-class ExhibitorTable
+class AdminTable
 {
     public static function table(Table $table): Table
     {
@@ -88,7 +88,7 @@ class ExhibitorTable
                 Tables\Actions\DeleteAction::make()->iconButton(),
                 Tables\Actions\ForceDeleteAction::make()->iconButton(),
                 Tables\Actions\RestoreAction::make()->iconButton(),
-                ExhibitorActions::regeneratePasswordTableAction()
+                AdminActions::regeneratePasswordTableAction()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

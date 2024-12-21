@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\ExhibitorResource\Resource;
+namespace App\Filament\Resources\AdminResource\Resource;
 
 use Filament\Tables;
 use App\Models\User;
 use App\Actions\UserActions as UserActionsService;
 use Filament\Notifications\Notification;
 
-class ExhibitorActions
+class AdminActions
 {
     public static function regeneratePasswordTableAction()
     {

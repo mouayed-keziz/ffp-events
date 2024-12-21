@@ -18,8 +18,10 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
-
+    // protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static ?int $navigationSort = 1;
+    protected static ?string $recordTitleAttribute = 'userTitle';
+    protected static bool $shouldRegisterNavigation = true;
     public static function getNavigationBadge(): ?string
     {
         return User::normalUsers()->count();
@@ -29,9 +31,6 @@ class UserResource extends Resource
     {
         return 'primary';
     }
-    protected static ?string $recordTitleAttribute = 'userTitle';
-
-    protected static bool $shouldRegisterNavigation = true;
 
     public static function getNavigationGroup(): ?string
     {

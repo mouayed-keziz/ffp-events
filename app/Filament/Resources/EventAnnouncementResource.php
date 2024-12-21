@@ -17,9 +17,9 @@ use Filament\Infolists\Infolist;
 class EventAnnouncementResource extends Resource
 {
     protected static ?string $model = EventAnnouncement::class;
+    protected static ?int $navigationSort = 4;
     protected static ?string $navigationIcon = 'heroicon-o-megaphone';
     protected static ?string $recordTitleAttribute = 'title';
-    protected static ?int $navigationSort = 2;
     public static function getNavigationGroup(): ?string
     {
         return __('nav.groups.event_management');
