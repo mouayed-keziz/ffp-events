@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -8,5 +9,5 @@ Route::get('/', function () {
 
 
 Route::get("/zoo", function () {
-    redirect("/admin/login");
+    return redirect("/admin/login");
 })->name("login");

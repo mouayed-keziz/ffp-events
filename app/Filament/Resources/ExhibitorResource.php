@@ -30,7 +30,7 @@ class ExhibitorResource extends Resource
     {
         return 'primary';
     }
-    protected static ?string $recordTitleAttribute = 'name';
+    protected static ?string $recordTitleAttribute = 'exhibitorTitle';
     protected static bool $shouldRegisterNavigation = true;
     public static function getNavigationGroup(): ?string
     {

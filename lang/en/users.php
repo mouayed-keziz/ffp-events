@@ -51,4 +51,15 @@ return [
         'verified_users' => 'Verified Users',
         'last_30_days' => 'Last 30 days',
     ],
+    'actions' => [
+        "regenerate_password" => [
+            "label" => "Regenerate password",
+            "modal_heading" => "Regenerate password",
+            "modal_description" => "Are you sure you want to regenerate this user's password? They will receive an email with their new password.",
+            "success_title" => "Password regenerated",
+            "success_body" => "The user will receive an email with their new password.",
+            "error_title" => "Password regeneration failed",
+            "error_body" => "An error occurred while regenerating the password."
+        ]
+    ]
 ];

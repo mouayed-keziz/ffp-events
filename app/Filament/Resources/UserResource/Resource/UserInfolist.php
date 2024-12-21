@@ -32,7 +32,8 @@ class UserInfolist
 
                     Infolists\Components\TextEntry::make('verified_at')
                         ->label(__('users.columns.verified_at'))
-                        ->dateTime(),
+                        ->default(__('users.empty_states.verification'))
+                    // ->dateTime(),
                 ])
             ]);
     }

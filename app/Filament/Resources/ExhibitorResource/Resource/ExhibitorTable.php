@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ExhibitorResource\Resource;
 
+use App\Filament\Resources\UserResource\Resource\ExhibitorActions;
 use App\Models\User;
 use Filament\Tables;
 use Filament\Tables\Enums\FiltersLayout;
@@ -14,6 +15,7 @@ class ExhibitorTable
     public static function table(Table $table): Table
     {
         return $table
+            ->striped()
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->toggleable()
@@ -86,6 +88,7 @@ class ExhibitorTable
                 Tables\Actions\DeleteAction::make()->iconButton(),
                 Tables\Actions\ForceDeleteAction::make()->iconButton(),
                 Tables\Actions\RestoreAction::make()->iconButton(),
+                ExhibitorActions::regeneratePasswordTableAction()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

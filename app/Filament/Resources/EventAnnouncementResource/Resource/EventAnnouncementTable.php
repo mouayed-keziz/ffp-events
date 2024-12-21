@@ -11,6 +11,7 @@ class EventAnnouncementTable
     public static function table(Table $table): Table
     {
         return $table
+            ->striped()
             ->columns([
                 Tables\Columns\TextColumn::make('title')
                     ->label(__('event_announcement.fields.title'))
@@ -62,14 +63,14 @@ class EventAnnouncementTable
                     ->circular()
                     ->toggleable(),
 
-                Tables\Columns\BadgeColumn::make('max_exhibitors')
+                Tables\Columns\TextColumn::make('max_exhibitors')
                     ->label(__('event_announcement.fields.max_exhibitors'))
                     ->alignment(\Filament\Support\Enums\Alignment::Center)
                     ->badge()
                     ->sortable()
                     ->toggleable(),
 
-                Tables\Columns\BadgeColumn::make('max_visitors')
+                Tables\Columns\TextColumn::make('max_visitors')
                     ->label(__('event_announcement.fields.max_visitors'))
                     ->alignment(\Filament\Support\Enums\Alignment::Center)
                     ->badge()

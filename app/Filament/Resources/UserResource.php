@@ -29,8 +29,7 @@ class UserResource extends Resource
     {
         return 'primary';
     }
-
-    protected static ?string $recordTitleAttribute = 'name';
+    protected static ?string $recordTitleAttribute = 'userTitle';
 
     protected static bool $shouldRegisterNavigation = true;
 

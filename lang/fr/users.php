@@ -2,7 +2,7 @@
 
 return [
     'resource' => [
-        'label' => 'Utilisateur',
+        'single' => 'Utilisateur',
         'plural' => 'Utilisateurs',
     ],
     'columns' => [
@@ -64,4 +64,15 @@ return [
         'verified_users' => 'Utilisateurs Vérifiés',
         'last_30_days' => 'Les 30 derniers jours',
     ],
+    'actions' => [
+        "regenerate_password" => [
+            "label" => "Régénérer le mot de passe",
+            "modal_heading" => "Régénérer le mot de passe",
+            "modal_description" => "Êtes-vous sûr de vouloir régénérer le mot de passe de cet utilisateur ? Il recevra un email avec son nouveau mot de passe.",
+            "success_title" => "Mot de passe régénéré",
+            "success_body" => "L'utilisateur recevra un email avec son nouveau mot de passe.",
+            "error_title" => "Échec de la régénération du mot de passe",
+            "error_body" => "Une erreur s'est produite lors de la régénération du mot de passe."
+        ]
+    ]
 ];

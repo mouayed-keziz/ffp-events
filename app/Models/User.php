@@ -58,4 +58,13 @@ class User extends Authenticatable
             $q->where('name', 'exhibitor');
         });
     }
+
+    public function getUserTitleAttribute()
+    {
+        return __("users.resource.single") . " - {$this->name}";
+    }
+    public function getExhibitorTitleAttribute()
+    {
+        return __("exhibitor.resource.single") . " - {$this->name}";
+    }
 }

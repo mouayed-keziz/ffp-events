@@ -23,8 +23,8 @@ class EventAnnouncementFactory extends Factory
         $endDate = $this->faker->dateTimeBetween($startDate, '+3 years');
 
         return [
-            'title' => $this->faker->sentence(3),
-            'description' => $this->faker->paragraph(),
+            'title' => $this->faker->realText(30),
+            'description' => $this->faker->realText(200),
             'content' => $this->faker->randomHtml(),
             'start_date' => $startDate,
             'end_date' => $endDate,

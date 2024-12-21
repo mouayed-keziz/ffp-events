@@ -13,6 +13,7 @@ class UserTable
     public static function table(Table $table): Table
     {
         return $table
+            ->striped()
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->toggleable()
@@ -83,6 +84,7 @@ class UserTable
                 Tables\Actions\DeleteAction::make()->iconButton(),
                 Tables\Actions\ForceDeleteAction::make()->iconButton(),
                 Tables\Actions\RestoreAction::make()->iconButton(),
+                UserActions::regeneratePasswordTableAction()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

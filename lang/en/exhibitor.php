@@ -45,4 +45,15 @@ return [
             'without_trashed' => 'Without deleted',
         ],
     ],
+    'actions' => [
+        "regenerate_password" => [
+            "label" => "Regenerate password",
+            "modal_heading" => "Regenerate password",
+            "modal_description" => "Are you sure you want to regenerate this exhibitor's password? They will receive an email with their new password.",
+            "success_title" => "Password regenerated",
+            "success_body" => "The exhibitor will receive an email with their new password.",
+            "error_title" => "Failed to regenerate password",
+            "error_body" => "An error occurred while regenerating the password."
+        ]
+    ]
 ];

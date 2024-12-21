@@ -13,7 +13,9 @@ class ViewEventAnnouncement extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\EditAction::make(),
+            Actions\EditAction::make()->icon("heroicon-o-pencil"),
+            Actions\ForceDeleteAction::make()->icon("heroicon-o-trash"),
+            Actions\RestoreAction::make()->icon("heroicon-o-arrow-path"),
         ];
     }
 }
