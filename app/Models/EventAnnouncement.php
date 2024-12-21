@@ -32,6 +32,7 @@ class EventAnnouncement extends Model
         'is_featured' => 'boolean',
     ];
 
+
     public function scopePublished($query)
     {
         return $query->where('status', 'published')

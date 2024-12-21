@@ -34,5 +34,5 @@
 }
 
 .fi-layout {
-    /* @apply bg-red-300; */
+    @apply bg-[#efeff4] dark:bg-[#000000];
 }

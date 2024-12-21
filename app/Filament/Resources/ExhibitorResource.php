@@ -2,19 +2,21 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Resources\ExhibitorResource\Pages;
+use App\Filament\Resources\ExhibitorResource\RelationManagers;
+use App\Filament\Resources\ExhibitorResource\Resource\ExhibitorForm;
+use App\Filament\Resources\ExhibitorResource\Resource\ExhibitorInfolist;
+use App\Filament\Resources\ExhibitorResource\Resource\ExhibitorTable;
+use App\Filament\Resources\UserResource\Resource\UserTable;
 use App\Models\User;
 use Filament\Forms\Form;
-use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
+use Filament\Infolists\Infolist;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use App\Filament\Resources\UserResource\Resource\UserForm;
-use App\Filament\Resources\UserResource\Resource\UserTable;
-use App\Filament\Resources\UserResource\Resource\UserInfolist;
 
-class UserResource extends Resource
+class ExhibitorResource extends Resource
 {
     protected static ?string $model = User::class;
 
@@ -22,18 +24,14 @@ class UserResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return User::normalUsers()->count();
+        return User::exhibitors()->count();
     }
-
     public static function getNavigationBadgeColor(): ?string
     {
         return 'primary';
     }
-
     protected static ?string $recordTitleAttribute = 'name';
-
     protected static bool $shouldRegisterNavigation = true;
-
     public static function getNavigationGroup(): ?string
     {
         return __('nav.groups.management');
@@ -41,12 +39,12 @@ class UserResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return __('users.resource.single');
+        return __('exhibitor.resource.single');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('users.resource.plural');
+        return __('exhibitor.resource.plural');
     }
 
     public static function getGloballySearchableAttributes(): array
@@ -56,38 +54,40 @@ class UserResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return UserForm::form($form);
+        return ExhibitorForm::form($form);
     }
 
     public static function table(Table $table): Table
     {
-        return UserTable::table($table);
+        return ExhibitorTable::table($table);
     }
 
     public static function infolist(Infolist $infolist): Infolist
     {
-        return UserInfolist::infolist($infolist);
+        return ExhibitorInfolist::infolist($infolist);
     }
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            //
+        ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'view' => Pages\ViewUser::route('/{record}'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => Pages\ListExhibitors::route('/'),
+            'create' => Pages\CreateExhibitor::route('/create'),
+            'view' => Pages\ViewExhibitor::route('/{record}'),
+            'edit' => Pages\EditExhibitor::route('/{record}/edit'),
         ];
     }
 
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->normalUsers()
+            ->exhibitors()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);

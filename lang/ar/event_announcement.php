@@ -2,7 +2,7 @@
 
 return [
     'resource' => [
-        'label' => 'إعلان الفعالية',
+        'label' => 'إعلان فعالية',
         'plural_label' => 'إعلانات الفعاليات',
     ],
     'fields' => [

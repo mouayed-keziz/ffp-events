@@ -2,6 +2,10 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Resources\EventAnnouncementResource\Widgets\EventAnnouncementAdvancedStats;
+use App\Filament\Resources\EventAnnouncementResource\Widgets\EventAnnouncementStats;
+use App\Filament\Resources\UserResource\Widgets\ExhibitorStats;
+use App\Filament\Resources\UserResource\Widgets\UserStats;
 use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -26,6 +30,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->spa()
+            // ->topNavigation()
             ->id('admin')
             ->path('admin')
             ->login()
@@ -43,7 +48,11 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                Widgets\AccountWidget::class,
+                EventAnnouncementStats::class,
+                UserStats::class,
+                ExhibitorStats::class,
+                EventAnnouncementAdvancedStats::class,
+                // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
@@ -64,7 +73,7 @@ class AdminPanelProvider extends PanelProvider
                 FilamentDeveloperLoginsPlugin::make()
                     ->enabled(env('APP_DEBUG', false))
                     ->users([
-                        'Admin' => 'admin@admin.dev'
+                        "SUPER ADMIN " => 'admin@admin.dev'
                     ])
             ]);
     }

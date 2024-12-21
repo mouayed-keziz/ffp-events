@@ -15,7 +15,7 @@ class ListEventAnnouncements extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
-            EventAnnouncementStats::class,
+            // EventAnnouncementStats::class,
             // EventAnnouncementAdvancedStats::class,
         ];
     }

@@ -1,28 +1,26 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\Resource;
+namespace App\Filament\Resources\ExhibitorResource\Resource;
 
 use App\Models\User;
 use Filament\Tables;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Filters\SelectFilter;
 
-class UserTable
+class ExhibitorTable
 {
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make("something")
-                    ->badge()
-                    ->color("primary"),
                 Tables\Columns\TextColumn::make('name')
                     ->toggleable()
                     ->sortable()
                     ->searchable()
-                    ->label(__('users.columns.name'))
-                    ->default(__('users.empty_states.name'))
+                    ->label(__('exhibitor.columns.name'))
+                    ->default(__('exhibitor.empty_states.name'))
                     ->description(fn(User $record): string => $record->email)
                     ->wrap(),
 
@@ -30,14 +28,14 @@ class UserTable
                     ->toggleable()
                     ->sortable()
                     ->searchable()
-                    ->label(__('users.columns.roles'))
+                    ->label(__('exhibitor.columns.roles'))
                     ->badge()
-                    ->default(__('users.empty_states.roles')),
+                    ->default(__('exhibitor.empty_states.roles')),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->toggleable()
                     ->sortable()
-                    ->label(__('users.columns.created_at'))
+                    ->label(__('exhibitor.columns.created_at'))
                     ->dateTime()
                     ->formatStateUsing(fn($state) => $state ? $state->diffForHumans() : null)
                     ->tooltip(fn($state) => $state ? $state->format('Y-m-d H:i:s') : null),
@@ -46,30 +44,26 @@ class UserTable
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable()
-                    ->label(__('users.columns.verified_at'))
+                    ->label(__('exhibitor.columns.verified_at'))
                     ->afterStateUpdated(function ($state, $record) {
                         $record->update(['verified_at' => $state ? now() : null]);
                     }),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make()
-                    ->label(__('users.filters.trashed.label'))
-                    ->placeholder(__('users.filters.trashed.placeholder')),
-
                 // SelectFilter::make('roles')
-                //     ->label(__('users.filters.roles.label'))
-                //     ->placeholder(__('users.filters.roles.placeholder'))
+                //     ->label(__('exhibitor.filters.roles.label'))
+                //     ->placeholder(__('exhibitor.filters.roles.placeholder'))
                 //     ->multiple()
                 //     ->relationship('roles', 'name')
                 //     ->preload()
                 //     ->searchable(),
 
                 SelectFilter::make('verified')
-                    ->label(__('users.filters.verification.label'))
-                    ->placeholder(__('users.filters.verification.placeholder'))
+                    ->label(__('exhibitor.filters.verification.label'))
+                    ->placeholder(__('exhibitor.filters.verification.placeholder'))
                     ->options([
-                        'verified' => __('users.filters.verification.verified'),
-                        'unverified' => __('users.filters.verification.unverified'),
+                        'verified' => __('exhibitor.filters.verification.verified'),
+                        'unverified' => __('exhibitor.filters.verification.unverified'),
                     ])
                     ->attribute('verified_at')
                     ->query(function (Builder $query, array $data): Builder {
@@ -79,7 +73,13 @@ class UserTable
                             default => $query,
                         };
                     }),
+
+                Tables\Filters\TrashedFilter::make()
+                    ->label(__('exhibitor.filters.trashed.label'))
+                    ->placeholder(__('exhibitor.filters.trashed.placeholder')),
             ])
+            // ->filtersFormColumns(3)
+            // ->filtersLayout(FiltersLayout::Modal)
             ->actions([
                 Tables\Actions\ViewAction::make()->iconButton(),
                 Tables\Actions\EditAction::make()->iconButton(),
@@ -94,7 +94,7 @@ class UserTable
                     Tables\Actions\RestoreBulkAction::make(),
                 ])->color('gray'),
             ])
-            ->emptyStateHeading(__('users.empty_states.title'))
-            ->emptyStateDescription(__('users.empty_states.description'));
+            ->emptyStateHeading(__('exhibitor.empty_states.title'))
+            ->emptyStateDescription(__('exhibitor.empty_states.description'));
     }
 }

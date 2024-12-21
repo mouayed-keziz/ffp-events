@@ -7,6 +7,7 @@ use EightyNine\FilamentAdvancedWidget\AdvancedStatsOverviewWidget as BaseWidget;
 use EightyNine\FilamentAdvancedWidget\AdvancedStatsOverviewWidget\Stat;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\HtmlString;
+use Spatie\FilamentSimpleStats\SimpleStat;
 
 class UserStats extends BaseWidget
 {
@@ -19,6 +20,14 @@ class UserStats extends BaseWidget
         $description = new HtmlString('<span style="' . $margin . '">' . __('users.stats.last_30_days') . '</span>');
 
         return [
+            // SimpleStat::make(User::class)
+            //     ->last30Days()
+            //     ->dailyCount()
+            //     ->color('success')
+            //     ->icon('heroicon-o-users')
+            //     // ->iconColor('info')
+            //     ->chartColor("success"),
+
             Stat::make(__('users.stats.total_users'), User::count())
                 ->icon('heroicon-o-users')
                 ->iconColor('info')

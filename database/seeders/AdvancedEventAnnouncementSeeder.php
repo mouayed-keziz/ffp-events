@@ -36,7 +36,7 @@ class AdvancedEventAnnouncementSeeder extends Seeder
                         'created_at' => $date,
                         'updated_at' => $date,
                         'start_date' => $date->copy()->addDays(rand(1, 14)),
-                        'end_date' => $date->copy()->addDays(15, 28),
+                        'end_date' => $date->copy()->addDays(15),
                     ])
                     ->create();
             }
@@ -59,7 +59,7 @@ class AdvancedEventAnnouncementSeeder extends Seeder
                     'created_at' => $date,
                     'updated_at' => $date,
                     'start_date' => $date->copy()->subDays(rand(1, 14)),
-                    'end_date' => $date->copy()->subDays(15, 28),
+                    'end_date' => $date->copy()->subDays(15),
                 ])
                 ->create();
         }

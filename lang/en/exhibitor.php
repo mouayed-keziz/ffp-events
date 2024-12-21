@@ -2,8 +2,8 @@
 
 return [
     'resource' => [
-        'single' => 'User',
-        'plural' => 'Users',
+        'single' => 'Exhibitor',
+        'plural' => 'Exhibitors',
     ],
     'columns' => [
         'id' => 'ID',
@@ -20,8 +20,8 @@ return [
         'password' => 'Password',
     ],
     'empty_states' => [
-        'title' => 'No users yet',
-        'description' => 'Create a user to get started',
+        'title' => 'No exhibitors yet',
+        'description' => 'Create an exhibitor to get started',
         'name' => 'No name provided',
         'email' => 'No email provided',
         'roles' => 'No roles assigned',
@@ -38,17 +38,11 @@ return [
             'unverified' => 'Unverified',
         ],
         'trashed' => [
-            'label' => 'Deleted Users',
+            'label' => 'Deleted Exhibitors',
             'placeholder' => 'Select deleted status',
             'with_trashed' => 'With deleted',
             'only_trashed' => 'Only deleted',
             'without_trashed' => 'Without deleted',
         ],
-    ],
-    'stats' => [
-        'total_users' => 'Total Users',
-        'new_users' => 'New Users',
-        'verified_users' => 'Verified Users',
-        'last_30_days' => 'Last 30 days',
     ],
 ];

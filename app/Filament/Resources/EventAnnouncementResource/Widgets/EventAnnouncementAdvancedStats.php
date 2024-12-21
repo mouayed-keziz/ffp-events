@@ -54,6 +54,6 @@ class EventAnnouncementAdvancedStats extends AdvancedChartWidget
 
     protected function getColumns(): int
     {
-        return 12; // Full width
+        return 24; // Full width
     }
 }
