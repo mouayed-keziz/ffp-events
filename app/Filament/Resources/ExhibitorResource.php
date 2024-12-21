@@ -32,10 +32,10 @@ class ExhibitorResource extends Resource
     }
     protected static ?string $recordTitleAttribute = 'exhibitorTitle';
     protected static bool $shouldRegisterNavigation = true;
-    // public static function getNavigationGroup(): ?string
-    // {
-    //     return __('nav.groups.management');
-    // }
+    public static function getNavigationGroup(): ?string
+    {
+        return __('nav.groups.management');
+    }
 
     public static function getModelLabel(): string
     {

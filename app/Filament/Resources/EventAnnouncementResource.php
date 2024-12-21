@@ -17,17 +17,13 @@ use Filament\Infolists\Infolist;
 class EventAnnouncementResource extends Resource
 {
     protected static ?string $model = EventAnnouncement::class;
-
     protected static ?string $navigationIcon = 'heroicon-o-megaphone';
     protected static ?string $recordTitleAttribute = 'title';
-
-    // public static function getNavigationGroup(): ?string
-    // {
-    //     return __('nav.groups.event_management');
-    // }
-
     protected static ?int $navigationSort = 2;
-
+    public static function getNavigationGroup(): ?string
+    {
+        return __('nav.groups.event_management');
+    }
     public static function getModelLabel(): string
     {
         return __('event_announcement.resource.label');

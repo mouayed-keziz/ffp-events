@@ -30,11 +30,14 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->spa()
-            ->topNavigation()
+            // ->topNavigation()
             ->id('admin')
             ->path('admin')
             ->login()
             ->databaseNotifications()
+            ->brandLogo(fn() => view('panel.brand-logo'))
+            ->darkModeBrandLogo(fn() => view('panel.brand-logo'))
+            ->brandLogoHeight('2rem')
             ->databaseNotificationsPolling("30s")
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
