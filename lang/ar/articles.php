@@ -38,6 +38,7 @@ return [
         "created_at" => "غير منشئ",
         "updated_at" => "غير محدث",
         'slug' => "بدون مسار",
+        'image' =>  'بدون صورة',
     ],
     'placeholders' => [
         'title' => 'أدخل العنوان',

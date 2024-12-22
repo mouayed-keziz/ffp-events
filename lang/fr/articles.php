@@ -38,6 +38,7 @@ return [
         'published_at' => "Non publié",
         "created_at" => "Non créé",
         "updated_at" => "Non mis à jour",
+        'image' =>  'Sans image',
     ],
     'placeholders' => [
         'title' => 'Entrez le titre',

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ArticleResource\Resource;
 use App\Enums\ArticleStatus;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 
 class ArticleTable
 {
@@ -13,6 +14,12 @@ class ArticleTable
         return $table
             ->striped()
             ->columns([
+                SpatieMediaLibraryImageColumn::make('image')
+                    ->toggleable()
+                    ->collection('image')
+                    ->circular()
+                    ->placeholder(__('articles.empty_states.image')),
+
                 Tables\Columns\TextColumn::make('title')
                     ->label(trans('articles.columns.title'))
                     ->limit(25)

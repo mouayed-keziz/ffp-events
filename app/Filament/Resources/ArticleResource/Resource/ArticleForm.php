@@ -7,6 +7,7 @@ use Filament\Forms\Form;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Group;
 use Illuminate\Support\Str;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 
 class ArticleForm
 {
@@ -64,10 +65,10 @@ class ArticleForm
                     ->schema([
                         Section::make(__('articles.form.sections.featured_image'))
                             ->schema([
-                                Forms\Components\FileUpload::make('image')
+                                SpatieMediaLibraryFileUpload::make('image')
                                     ->label("")
                                     ->image()
-                                    ->directory('articles')
+                                    ->collection('image')
                                     ->columnSpanFull(),
                             ]),
 

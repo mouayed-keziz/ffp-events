@@ -38,6 +38,7 @@ return [
         'created_at' => "Not created",
         'updated_at' => "Not updated",
         'slug' => "None",
+        'image' => 'No image',
     ],
     'placeholders' => [
         'title' => 'Enter title',
