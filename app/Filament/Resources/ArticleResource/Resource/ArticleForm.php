@@ -17,33 +17,38 @@ class ArticleForm
                 Group::make()
                     ->columnSpan(['lg' => 2])
                     ->schema([
-                        Section::make('Article Information')
-                            ->columns(2)
-                            ->schema([
-                                Forms\Components\TextInput::make('title')
-                                    ->required()
-                                    ->maxLength(255)
-                                    ->live(onBlur: true)
-                                    ->afterStateUpdated(fn(string $state, Forms\Set $set) => $set('slug', Str::slug($state))),
+                        Forms\Components\Tabs::make('Article')
+                            ->tabs([
+                                Forms\Components\Tabs\Tab::make('Information')
+                                    ->schema([
+                                        Forms\Components\TextInput::make('title')
+                                            ->required()
+                                            ->maxLength(255)
+                                            ->live(onBlur: true)
+                                            ->afterStateUpdated(fn(string $state, Forms\Set $set) => $set('slug', Str::slug($state))),
 
-                                Forms\Components\TextInput::make('slug')
-                                    ->disabled()
-                                    ->dehydrated()
-                                    ->required(),
+                                        Forms\Components\TextInput::make('slug')
+                                            ->disabled()
+                                            ->dehydrated()
+                                            ->required(),
 
-                                Forms\Components\Textarea::make('description')
-                                    ->required()
-                                    ->rows(4)
-                                    ->columnSpanFull(),
+                                        Forms\Components\Textarea::make('description')
+                                            ->required()
+                                            ->columnSpanFull()
+                                            ->rows(4),
 
-                                Forms\Components\RichEditor::make('content')
-                                    ->required()
-                                    ->columnSpanFull(),
+                                        Forms\Components\DateTimePicker::make('published_at')
+                                            ->columnSpanFull()
+                                            ->label(__('articles.form.published_date')),
+                                    ])->columns(2),
 
-                                Forms\Components\DateTimePicker::make('published_at')
-                                    ->label(__('articles.form.published_date'))
-                                    ->columnSpanFull(),
-                            ]),
+                                Forms\Components\Tabs\Tab::make('Content')
+                                    ->schema([
+                                        Forms\Components\RichEditor::make('content')
+                                            ->required(),
+                                    ]),
+                            ])
+                            ->columnSpanFull(),
                     ]),
 
                 Group::make()
