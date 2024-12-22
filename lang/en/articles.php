@@ -13,12 +13,14 @@ return [
         'created_at' => 'Created at',
         'updated_at' => 'Updated at',
         'deleted_at' => 'Deleted at',
+        'slug' => 'Slug',
     ],
     'form' => [
         'title' => 'Title',
         'description' => 'Description',
         'content' => 'Content',
         "published_date" => "Publication date",
+        'slug' => 'Slug',
     ],
     'empty_states' => [
         'title' => "None",
@@ -28,11 +30,13 @@ return [
         'published_at' => "Not published",
         'created_at' => "Not created",
         'updated_at' => "Not updated",
+        'slug' => "None",
     ],
     'placeholders' => [
         'title' => 'Enter title',
         'description' => 'Enter description',
         'content' => 'Enter content',
+        'slug' => 'Enter slug',
     ],
     'status' => [
         "all" => "All",
@@ -41,5 +45,14 @@ return [
         "published" => "Published",
         "deleted" => "Deleted",
     ],
-    'actions' => []
+    'actions' => [],
+    "categories" => [
+        "single" => "Category",
+        "plural" => "Categories",
+        "articles" => "Articles",
+        "fields" => [
+            "name" => "Name",
+            "slug" => "Slug",
+        ],
+    ]
 ];

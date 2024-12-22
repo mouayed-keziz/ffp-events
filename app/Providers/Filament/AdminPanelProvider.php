@@ -97,8 +97,6 @@ class AdminPanelProvider extends PanelProvider
                     ->label(__('nav.groups.articles'))
                     ->icon('heroicon-o-document-duplicate'),
                 NavigationGroup::make()
-                    ->label(__("nav.groups.settings")),
-                NavigationGroup::make()
                     ->collapsible(true)
                     ->label(__('nav.groups.users'))
                     ->icon('heroicon-o-users'),
@@ -106,6 +104,8 @@ class AdminPanelProvider extends PanelProvider
                     ->collapsible(true)
                     ->label(__('nav.groups.event_management'))
                     ->icon('heroicon-o-calendar'),
+                NavigationGroup::make()
+                    ->label(__("nav.groups.settings")),
 
             ]);
         });

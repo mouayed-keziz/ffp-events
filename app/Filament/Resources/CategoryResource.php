@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\RelationManagers;
+use App\Filament\Resources\CategoryResource\Resource\CategoryForm;
+use App\Filament\Resources\CategoryResource\Resource\CategoryTable;
 use App\Models\Category;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -34,29 +36,12 @@ class CategoryResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                //
-            ]);
+        return CategoryForm::form($form);
     }
 
     public static function table(Table $table): Table
     {
-        return $table
-            ->columns([
-                //
-            ])
-            ->filters([
-                //
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
-            ]);
+        return CategoryTable::table($table);
     }
 
     public static function getRelations(): array
