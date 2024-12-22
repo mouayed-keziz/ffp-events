@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Article;
 use App\Models\User;
 use Database\Seeders\application\RoleSeeder;
 use Spatie\Permission\Models\Role;
@@ -32,5 +33,7 @@ class DatabaseSeeder extends Seeder
         User::factory(16)->exhibitor()->create();
         User::factory(4)->admin()->create();
         User::factory(count: 852)->visitor()->create();
+        Article::factory(10)->published()->create();
+        Article::factory(5)->unpublished()->create();
     }
 }
