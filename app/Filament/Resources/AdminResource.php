@@ -81,7 +81,6 @@ class AdminResource extends Resource
             'edit' => Pages\EditAdmin::route('/{record}/edit'),
         ];
     }
-
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()

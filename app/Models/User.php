@@ -45,7 +45,6 @@ class User extends Authenticatable
         'password' => 'hashed',
         'verified_at' => 'datetime',
     ];
-
     public function scopeVisitors($query)
     {
         return $query->whereHas('roles', function ($q) {
@@ -68,14 +67,14 @@ class User extends Authenticatable
 
     public function getVisitorTitleAttribute()
     {
-        return __("visitors.resource.single") . " - {$this->name}";
+        return __("visitors.resource.single") . " - " . $this->name;
     }
     public function getExhibitorTitleAttribute()
     {
-        return __("exhibitors.resource.single") . " - {$this->name}";
+        return __("exhibitors.resource.single") . " - " . $this->name;
     }
     public function getAdminTitleAttribute()
     {
-        return __("admins.resource.single") . " - {$this->name}";
+        return __("admins.resource.single") . " - " . $this->name;
     }
 }
