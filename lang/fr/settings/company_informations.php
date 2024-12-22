@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'title' => 'Informations de l\'entreprise',
+    'description' => 'Gérez les informations de votre entreprise.',
     'navigation_label' => 'Informations de l\'entreprise',
     'navigation_group' => 'Paramètres',
     'tabs' => [
