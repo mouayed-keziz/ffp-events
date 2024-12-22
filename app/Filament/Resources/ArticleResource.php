@@ -21,6 +21,7 @@ class ArticleResource extends Resource
     // protected static ?string $navigationIcon = 'heroicon-o-document-duplicate';
     protected static ?int $navigationSort = 6;
     protected static ?string $recordTitleAttribute = 'articleTitle';
+
     public static function getNavigationGroup(): ?string
     {
         return __('nav.groups.articles');

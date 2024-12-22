@@ -21,6 +21,13 @@ return [
         'content' => 'المحتوى',
         "published_date" => "تاريخ النشر",
         'slug' => 'المسار',
+        'tabs' => [
+            'information' => 'المعلومات',
+            'content' => 'المحتوى',
+        ],
+        'sections' => [
+            'featured_image' => 'الصورة المميزة',
+        ],
     ],
     'empty_states' => [
         'title' => "بدون عنوان",

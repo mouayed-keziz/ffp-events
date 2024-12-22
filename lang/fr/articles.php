@@ -21,6 +21,13 @@ return [
         'description' =>  'Description',
         'content' => 'Contenu',
         "published_date" => "Date de publication",
+        'tabs' => [
+            'information' => 'Informations',
+            'content' => 'Contenu',
+        ],
+        'sections' => [
+            'featured_image' => 'Image à la une',
+        ],
     ],
     'empty_states' => [
         'title' =>  "Sans titre",

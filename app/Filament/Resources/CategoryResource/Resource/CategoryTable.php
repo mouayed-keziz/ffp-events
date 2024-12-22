@@ -19,7 +19,9 @@ class CategoryTable
                 TextColumn::make('slug')
                     ->label(__('articles.categories.fields.slug'))
                     ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->badge()
+                    ->color("gray"),
                 TextColumn::make('articles_count')
                     ->label(__('articles.categories.articles'))
                     ->counts('articles')

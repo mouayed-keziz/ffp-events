@@ -19,20 +19,26 @@ class ArticleForm
                     ->schema([
                         Forms\Components\Tabs::make('Article')
                             ->tabs([
-                                Forms\Components\Tabs\Tab::make('Information')
+                                Forms\Components\Tabs\Tab::make(__('articles.form.tabs.information'))
                                     ->schema([
                                         Forms\Components\TextInput::make('title')
+                                            ->label(__('articles.form.title'))
+                                            ->placeholder(__('articles.placeholders.title'))
                                             ->required()
                                             ->maxLength(255)
                                             ->live(onBlur: true)
                                             ->afterStateUpdated(fn(string $state, Forms\Set $set) => $set('slug', Str::slug($state))),
 
                                         Forms\Components\TextInput::make('slug')
+                                            ->label(__('articles.form.slug'))
+                                            ->placeholder(__('articles.placeholders.slug'))
                                             ->disabled()
                                             ->dehydrated()
                                             ->required(),
 
                                         Forms\Components\Textarea::make('description')
+                                            ->label(__('articles.form.description'))
+                                            ->placeholder(__('articles.placeholders.description'))
                                             ->required()
                                             ->columnSpanFull()
                                             ->rows(4),
@@ -42,9 +48,11 @@ class ArticleForm
                                             ->label(__('articles.form.published_date')),
                                     ])->columns(2),
 
-                                Forms\Components\Tabs\Tab::make('Content')
+                                Forms\Components\Tabs\Tab::make(__('articles.form.tabs.content'))
                                     ->schema([
                                         Forms\Components\RichEditor::make('content')
+                                            ->label(__('articles.form.content'))
+                                            ->placeholder(__('articles.placeholders.content'))
                                             ->required(),
                                     ]),
                             ])
@@ -54,9 +62,10 @@ class ArticleForm
                 Group::make()
                     ->columnSpan(['lg' => 1])
                     ->schema([
-                        Section::make('Featured Image')
+                        Section::make(__('articles.form.sections.featured_image'))
                             ->schema([
                                 Forms\Components\FileUpload::make('image')
+                                    ->label("")
                                     ->image()
                                     ->directory('articles')
                                     ->columnSpanFull(),
@@ -65,6 +74,7 @@ class ArticleForm
                         Section::make(__('articles.categories.plural'))
                             ->schema([
                                 Forms\Components\Select::make('categories')
+                                    ->label("")
                                     ->multiple()
                                     ->relationship('categories', 'name')
                                     ->createOptionForm([
@@ -80,6 +90,9 @@ class ArticleForm
                                             ->required(),
                                     ])
                                     ->columnSpanFull(),
+
+                                // Forms\Components\CheckboxList::make('categories')
+                                //     ->relationship('categories', 'name')
                             ]),
                     ]),
             ])

@@ -21,6 +21,13 @@ return [
         'content' => 'Content',
         "published_date" => "Publication date",
         'slug' => 'Slug',
+        'tabs' => [
+            'information' => 'Information',
+            'content' => 'Content',
+        ],
+        'sections' => [
+            'featured_image' => 'Featured Image',
+        ],
     ],
     'empty_states' => [
         'title' => "None",
