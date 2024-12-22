@@ -37,6 +37,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->databaseNotifications()
+            ->databaseTransactions()
             ->brandLogo(fn() => view('panel.brand-logo'))
             ->darkModeBrandLogo(fn() => view('panel.brand-logo'))
             ->brandLogoHeight('2rem')

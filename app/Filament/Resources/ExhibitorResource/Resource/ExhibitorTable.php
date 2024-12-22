@@ -83,12 +83,14 @@ class ExhibitorTable
             // ->filtersFormColumns(3)
             // ->filtersLayout(FiltersLayout::Modal)
             ->actions([
-                Tables\Actions\ViewAction::make()->iconButton(),
-                Tables\Actions\EditAction::make()->iconButton(),
-                Tables\Actions\DeleteAction::make()->iconButton(),
-                Tables\Actions\ForceDeleteAction::make()->iconButton(),
-                Tables\Actions\RestoreAction::make()->iconButton(),
-                ExhibitorActions::regeneratePasswordTableAction()
+                Tables\Actions\ViewAction::make()->button(),
+                ExhibitorActions::regeneratePasswordTableAction(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\ForceDeleteAction::make(),
+                    Tables\Actions\RestoreAction::make()->iconButton(),
+                ]),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

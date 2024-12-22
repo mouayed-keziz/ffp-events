@@ -1,3 +1,1 @@
--   main langauge of the platform
--   regenerate password for users (custom or random or what)
 -   in delete users : can you restore users ?

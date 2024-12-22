@@ -12,7 +12,8 @@ class VisitorActions
     public static function regeneratePasswordTableAction()
     {
         return Tables\Actions\Action::make('regeneratePassword')
-            ->iconButton()
+            ->button()
+            ->outlined()
             ->label(__('visitors.actions.regenerate_password.label'))
             ->icon('heroicon-o-key')
             ->requiresConfirmation()
