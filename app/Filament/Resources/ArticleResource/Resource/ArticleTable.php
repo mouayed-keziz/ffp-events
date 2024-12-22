@@ -90,9 +90,12 @@ class ArticleTable
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ForceDeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->visible(fn($livewire) => ! $livewire->isDeletedTab()),
+                    Tables\Actions\ForceDeleteBulkAction::make()
+                        ->visible(fn($livewire) => $livewire->isDeletedTab()),
+                    Tables\Actions\RestoreBulkAction::make()
+                        ->visible(fn($livewire) => $livewire->isDeletedTab()),
                 ]),
             ]);
     }

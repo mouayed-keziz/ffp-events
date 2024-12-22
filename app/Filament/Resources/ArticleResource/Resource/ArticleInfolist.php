@@ -3,7 +3,12 @@
 namespace App\Filament\Resources\ArticleResource\Resource;
 
 use Filament\Infolists;
+use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
 use Filament\Infolists\Infolist;
+use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\Tabs;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\IconEntry;
 
 class ArticleInfolist
 {
@@ -11,15 +16,58 @@ class ArticleInfolist
     {
         return $infolist
             ->schema([
-                Infolists\Components\TextEntry::make('title'),
-                Infolists\Components\TextEntry::make('description')
+                Tabs::make('Article')
+                    ->tabs([
+                        Tabs\Tab::make(__('articles.form.tabs.information'))
+                            ->schema([
+                                Section::make()
+                                    ->schema([
+                                        TextEntry::make('title')
+                                            ->label(__('articles.form.title')),
+                                        TextEntry::make('status')
+                                            ->badge()
+                                            ->label("articles.form.status")
+                                        // ->color(fn(string $state): string => match ($state) {
+                                        //     'published' => 'success',
+                                        //     'draft' => 'gray',
+                                        //     'pending' => 'warning',
+                                        //     'deleted' => 'danger',
+                                        // }),
+                                        ,
+                                        TextEntry::make('description')
+                                            ->label(__('articles.form.description'))
+                                            ->columnSpanFull(),
+                                        TextEntry::make('published_at')
+                                            ->label(__('articles.form.published_date'))
+                                            ->dateTime(),
+                                        TextEntry::make('categories.name')
+                                            ->label(__('articles.categories.plural'))
+                                            ->badge()
+                                            ->columnSpanFull(),
+                                    ])
+                                    ->columns(2),
+                            ]),
+
+                        Tabs\Tab::make(__('articles.form.tabs.content'))
+                            ->schema([
+                                Section::make()
+                                    ->schema([
+                                        Infolists\Components\ViewEntry::make('banner')
+                                            ->view('components.article-banner')
+                                            ->columnSpanFull(),
+                                        // SpatieMediaLibraryImageEntry::make('image')
+                                        //     ->label("")
+                                        //     ->collection('image')
+                                        //     ->square()
+                                        //     ->columnSpanFull(),
+
+                                        TextEntry::make('content')
+                                            ->html()
+                                            ->columnSpanFull(),
+                                    ]),
+                            ]),
+                    ])
                     ->columnSpanFull(),
-                Infolists\Components\TextEntry::make('content')
-                    ->columnSpanFull(),
-                Infolists\Components\TextEntry::make('published_at')
-                    ->dateTime(),
-                Infolists\Components\IconEntry::make('published')
-                    ->boolean(),
             ]);
     }
 }

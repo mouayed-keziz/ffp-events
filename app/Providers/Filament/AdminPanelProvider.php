@@ -32,14 +32,15 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            ->spa()
             // ->topNavigation()
             // ->sidebarWidth('20rem')
             // ->sidebarFullyCollapsibleOnDesktop()
             // ->sidebarCollapsibleOnDesktop()
             ->id('admin')
             ->path('admin')
+            ->spa()
             ->login()
+            ->profile()
             ->databaseNotifications()
             ->databaseTransactions()
             ->brandLogo(fn() => view('panel.brand-logo'))

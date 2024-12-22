@@ -68,4 +68,9 @@ class ListArticles extends ListRecords
     {
         return 'all';
     }
+
+    public function isDeletedTab(): bool
+    {
+        return $this->activeTab === 'deleted';
+    }
 }
