@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use App\Enums\ArticleStatus;
 
 class Article extends Model implements HasMedia
 {
@@ -15,13 +16,15 @@ class Article extends Model implements HasMedia
 
     protected $fillable = [
         'title',
+        'slug',
         'description',
         'content',
-        'published_at'
+        'published_at',
     ];
 
     protected $casts = [
         'published_at' => 'datetime',
+        'status' => ArticleStatus::class,
     ];
 
     public function registerMediaCollections(): void
@@ -30,14 +33,40 @@ class Article extends Model implements HasMedia
             ->singleFile();
     }
 
+    public function scopeDraft(Builder $query): Builder
+    {
+        return $query->whereNull('published_at');
+    }
+
+    public function scopePending(Builder $query): Builder
+    {
+        return $query->whereNotNull('published_at')->where('published_at', '>', now());
+    }
+
     public function scopePublished(Builder $query): Builder
     {
         return $query->whereNotNull('published_at')->where('published_at', '<=', now());
     }
 
-    public function scopeUnpublished(Builder $query): Builder
+    public function getArticleTitleAttribute()
     {
-        return $query->whereNull('published_at')->orWhere('published_at', '>', now());
+        return __("articles.resource.single") . " - " . $this->title;
+    }
+    public function getStatusAttribute(): ArticleStatus
+    {
+        if ($this->trashed()) {
+            return ArticleStatus::Deleted;
+        }
+
+        if ($this->published_at === null) {
+            return ArticleStatus::Draft;
+        }
+
+        if ($this->published_at > now()) {
+            return ArticleStatus::Pending;
+        }
+
+        return ArticleStatus::Published;
     }
 
     public function categories()

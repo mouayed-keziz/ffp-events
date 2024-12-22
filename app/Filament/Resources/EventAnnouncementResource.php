@@ -18,7 +18,7 @@ class EventAnnouncementResource extends Resource
 {
     protected static ?string $model = EventAnnouncement::class;
     protected static ?int $navigationSort = 4;
-    protected static ?string $navigationIcon = 'heroicon-o-megaphone';
+    // protected static ?string $navigationIcon = 'heroicon-o-megaphone';
     protected static ?string $recordTitleAttribute = 'title';
     public static function getNavigationGroup(): ?string
     {

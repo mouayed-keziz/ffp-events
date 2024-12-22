@@ -10,6 +10,7 @@ use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -33,6 +34,8 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->spa()
             // ->topNavigation()
+            ->sidebarFullyCollapsibleOnDesktop()
+            // ->sidebarCollapsibleOnDesktop()
             ->id('admin')
             ->path('admin')
             ->login()
@@ -76,7 +79,7 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
-                \RickDBCN\FilamentEmail\FilamentEmail::make(),
+                // \RickDBCN\FilamentEmail\FilamentEmail::make(),
                 FilamentDeveloperLoginsPlugin::make()
                     ->enabled(env('APP_DEBUG', false))
                     ->users([
@@ -90,8 +93,20 @@ class AdminPanelProvider extends PanelProvider
         Filament::serving(function () {
             Filament::registerNavigationGroups([
                 NavigationGroup::make()
+                    ->collapsible(true)
+                    ->label(__('nav.groups.articles'))
+                    ->icon('heroicon-o-document-duplicate'),
+                NavigationGroup::make()
+                    ->label(__("nav.groups.settings")),
+                NavigationGroup::make()
+                    ->collapsible(true)
                     ->label(__('nav.groups.users'))
                     ->icon('heroicon-o-users'),
+                NavigationGroup::make()
+                    ->collapsible(true)
+                    ->label(__('nav.groups.event_management'))
+                    ->icon('heroicon-o-calendar'),
+
             ]);
         });
     }

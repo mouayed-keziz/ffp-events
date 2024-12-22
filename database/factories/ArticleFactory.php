@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Article>
@@ -16,25 +17,27 @@ class ArticleFactory extends Factory
      */
     public function definition(): array
     {
+        $title = $this->faker->sentence();
         return [
-            'title' => $this->faker->sentence(),
+            'title' => $title,
+            'slug' => Str::slug($title),
             'description' => $this->faker->paragraph(),
             'content' => $this->faker->randomHtml(),
-            'published' => $this->faker->boolean(20), // 20% chance of being published
+            'published_at' => $this->faker->boolean(20) ? $this->faker->dateTimeBetween('-1 year') : null,
         ];
     }
 
     public function published(): static
     {
         return $this->state(fn(array $attributes) => [
-            'published' => true,
+            'published_at' => $this->faker->dateTimeBetween('-1 year'),
         ]);
     }
 
     public function unpublished(): static
     {
         return $this->state(fn(array $attributes) => [
-            'published' => false,
+            'published_at' => null,
         ]);
     }
 }

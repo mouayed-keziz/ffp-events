@@ -6,5 +6,6 @@ return [
         'management' => 'Management',
         "event_management" => "Event Management",
         'settings' =>  'Settings',
+        "articles" =>  "Articles",
     ],
 ];

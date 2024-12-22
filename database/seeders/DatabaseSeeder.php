@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Article;
+use App\Models\Category;
 use App\Models\User;
 use Database\Seeders\application\RoleSeeder;
 use Spatie\Permission\Models\Role;
@@ -24,6 +25,7 @@ class DatabaseSeeder extends Seeder
             AdvancedEventAnnouncementSeeder::class,
         ]);
 
+        // Create admin and other users
         User::factory()->superAdmin()->create([
             'name' => 'Admin',
             'email' => 'admin@admin.dev',
@@ -32,8 +34,22 @@ class DatabaseSeeder extends Seeder
 
         User::factory(16)->exhibitor()->create();
         User::factory(4)->admin()->create();
-        User::factory(count: 852)->visitor()->create();
-        Article::factory(10)->published()->create();
-        Article::factory(5)->unpublished()->create();
+        User::factory(count: 50)->visitor()->create();
+
+        // Create categories
+        $categories = Category::factory(5)->create();
+
+        // Create articles and attach random categories
+        Article::factory(15)->published()->create()->each(function ($article) use ($categories) {
+            $article->categories()->attach(
+                $categories->random(rand(1, 3))->pluck('id')->toArray()
+            );
+        });
+
+        Article::factory(5)->unpublished()->create()->each(function ($article) use ($categories) {
+            $article->categories()->attach(
+                $categories->random(rand(1, 3))->pluck('id')->toArray()
+            );
+        });
     }
 }
