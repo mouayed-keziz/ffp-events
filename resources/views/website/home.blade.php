@@ -18,7 +18,7 @@
 </head>
 
 <body class="w-full min-h-screen flex justify-center items-center">
-    <h1 class="text-2xl font-bold px-6 py-4  rounded-lg text-center">
+    <h1 class="btn btn-primary">
         {{ env('APP_NAME', 'Laravel') }}
     </h1>
 
