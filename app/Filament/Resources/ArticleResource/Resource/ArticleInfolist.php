@@ -50,21 +50,23 @@ class ArticleInfolist
 
                         Tabs\Tab::make(__('articles.form.tabs.content'))
                             ->schema([
-                                Section::make()
-                                    ->schema([
-                                        Infolists\Components\ViewEntry::make('banner')
-                                            ->view('components.article-banner')
-                                            ->columnSpanFull(),
-                                        // SpatieMediaLibraryImageEntry::make('image')
-                                        //     ->label("")
-                                        //     ->collection('image')
-                                        //     ->square()
-                                        //     ->columnSpanFull(),
 
-                                        TextEntry::make('content')
-                                            ->html()
-                                            ->columnSpanFull(),
-                                    ]),
+                                Infolists\Components\ViewEntry::make('banner')
+                                    ->view('components.article-banner')
+                                    ->columnSpanFull(),
+
+                                // SpatieMediaLibraryImageEntry::make('image')
+                                //     ->label("")
+                                //     ->collection('image')
+                                //     ->square()
+                                //     ->columnSpanFull(),
+
+                                // TextEntry::make('content')
+                                //     ->label("")
+                                //     ->html()
+                                //     ->extraAttributes(["class" => "prose"])
+                                //     ->columnSpanFull(),
+
                             ]),
                     ])
                     ->columnSpanFull(),

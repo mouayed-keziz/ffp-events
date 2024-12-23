@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Filament\Support\Enums\MaxWidth;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
