@@ -9,26 +9,26 @@ Route::get('/', function () {
 });
 
 Route::get('/blog', function () {
-    return view('website.blog.index', [
+    return view('website.pages.blog.index', [
         'articles' => Article::published()->latest()->paginate(9)
     ]);
 })->name('blog.index');
 
 Route::get('/categories', function () {
-    return view('website.blog.categories', [
+    return view('website.pages.blog.categories', [
         'categories' => Category::withCount('articles')->get()
     ]);
 })->name('blog.categories');
 
 Route::get('/category/{category:slug}', function (Category $category) {
-    return view('website.blog.category', [
+    return view('website.pages.blog.category', [
         'category' => $category,
         'articles' => $category->articles()->published()->latest()->paginate(9)
     ]);
 })->name('blog.category');
 
 Route::get('/blog/{article:slug}', function (Article $article) {
-    return view('website.blog.show', [
+    return view('website.pages.blog.show', [
         'article' => $article
     ]);
 })->name('blog.show');
