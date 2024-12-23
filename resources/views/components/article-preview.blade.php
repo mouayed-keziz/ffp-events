@@ -9,7 +9,7 @@ $content = $getRecord()->content;
         {{ $getRecord()->title }}
     </x-slot>
 
-    <div class="shadow mb-12" style="position: relative; width: 100%; aspect-ratio: 21/9; border-radius: 0.5rem; overflow: hidden;">
+    <div class="shadow mb-12" style="position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 0.5rem; overflow: hidden;">
         @if ($hasImage)
         <img src="{{ $imageUrl }}" alt="{{ $getRecord()->title }}" style="width: 100%; height: 100%; object-fit: cover;">
 

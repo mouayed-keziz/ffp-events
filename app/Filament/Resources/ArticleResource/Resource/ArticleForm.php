@@ -68,6 +68,7 @@ class ArticleForm
                                 SpatieMediaLibraryFileUpload::make('image')
                                     ->label("")
                                     ->image()
+                                    ->imageEditor()
                                     ->collection('image')
                                     ->columnSpanFull(),
                             ]),

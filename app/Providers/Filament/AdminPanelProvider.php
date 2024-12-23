@@ -34,7 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             // ->topNavigation()
             // ->sidebarWidth('20rem')
-            // ->sidebarFullyCollapsibleOnDesktop()
+            ->sidebarFullyCollapsibleOnDesktop()
             // ->sidebarCollapsibleOnDesktop()
             ->id('admin')
             ->path('admin')
