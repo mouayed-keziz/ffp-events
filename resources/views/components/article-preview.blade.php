@@ -12,6 +12,7 @@ $content = $getRecord()->content;
     <div class="shadow mb-12" style="position: relative; width: 100%; aspect-ratio: 21/9; border-radius: 0.5rem; overflow: hidden;">
         @if ($hasImage)
         <img src="{{ $imageUrl }}" alt="{{ $getRecord()->title }}" style="width: 100%; height: 100%; object-fit: cover;">
+
         @else
         <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
             <h1 style="font-size: 2rem; font-weight: bold;">{{ $getRecord()->title }}</h1>

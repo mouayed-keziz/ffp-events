@@ -23,7 +23,7 @@ class ArticleFactory extends Factory
             'title' => $title,
             'slug' => Str::slug($title),
             'description' => $this->faker->paragraph(),
-            'content' => $this->faker->randomHtml(),
+            'content' => $this->faker->realText($this->faker->numberBetween(500, 2000)),
             'published_at' => $this->faker->boolean(20) ? $this->faker->dateTimeBetween('-1 year') : null,
         ];
     }

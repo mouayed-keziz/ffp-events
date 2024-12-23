@@ -25,7 +25,7 @@ class EventAnnouncementFactory extends Factory
         return [
             'title' => $this->faker->realText(30),
             'description' => $this->faker->realText(200),
-            'content' => $this->faker->randomHtml(),
+            'content' => $this->faker->realText($this->faker->numberBetween(500, 2000)),
             'start_date' => $startDate,
             'end_date' => $endDate,
             'location' => $this->faker->city(),
