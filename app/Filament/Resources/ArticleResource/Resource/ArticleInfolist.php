@@ -24,22 +24,19 @@ class ArticleInfolist
                                     ->schema([
                                         TextEntry::make('title')
                                             ->label(__('articles.form.title')),
+
                                         TextEntry::make('status')
                                             ->badge()
-                                            ->label("articles.form.status")
-                                        // ->color(fn(string $state): string => match ($state) {
-                                        //     'published' => 'success',
-                                        //     'draft' => 'gray',
-                                        //     'pending' => 'warning',
-                                        //     'deleted' => 'danger',
-                                        // }),
-                                        ,
+                                            ->label(__("articles.columns.status")),
+
                                         TextEntry::make('description')
                                             ->label(__('articles.form.description'))
                                             ->columnSpanFull(),
+
                                         TextEntry::make('published_at')
                                             ->label(__('articles.form.published_date'))
                                             ->dateTime(),
+
                                         TextEntry::make('categories.name')
                                             ->label(__('articles.categories.plural'))
                                             ->badge()
@@ -52,7 +49,7 @@ class ArticleInfolist
                             ->schema([
 
                                 Infolists\Components\ViewEntry::make('article')
-                                    ->view('components.article-preview')
+                                    ->view('panel.components.article-preview')
                                     ->columnSpanFull(),
 
                                 // SpatieMediaLibraryImageEntry::make('image')

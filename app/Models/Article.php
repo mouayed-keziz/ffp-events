@@ -21,6 +21,7 @@ class Article extends Model implements HasMedia
         'content',
         'published_at',
     ];
+    protected $with = ['categories'];
 
     protected $casts = [
         'published_at' => 'datetime',

@@ -16,6 +16,7 @@ class ArticleTable
             ->columns([
                 SpatieMediaLibraryImageColumn::make('image')
                     ->toggleable()
+                    ->label(__("articles.columns.image"))
                     ->collection('image')
                     ->circular()
                     ->placeholder(__('articles.empty_states.image')),
@@ -48,6 +49,7 @@ class ArticleTable
                     ->grow(true),
 
                 Tables\Columns\TextColumn::make('status')
+                    ->label(__("articles.columns.status"))
                     ->badge()
                     ->sortable()
                     ->alignCenter()

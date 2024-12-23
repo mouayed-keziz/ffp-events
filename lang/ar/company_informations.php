@@ -2,6 +2,7 @@
 
 return [
     'title' => 'معلومات الشركة',
+    'description' =>  'إدارة معلومات الشركة.',
     'navigation_label' => 'معلومات الشركة',
     'navigation_group' => 'الإعدادات',
     'tabs' => [

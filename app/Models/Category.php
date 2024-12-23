@@ -14,6 +14,11 @@ class Category extends Model
         'slug'
     ];
 
+    public function getCategoryTitleAttribute()
+    {
+        return __("articles.categories.single") . " - " . $this->name;
+    }
+
     public function articles()
     {
         return $this->belongsToMany(Article::class);

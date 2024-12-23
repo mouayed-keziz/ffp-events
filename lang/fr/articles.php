@@ -14,6 +14,8 @@ return [
         'created_at' => 'Créé le',
         'updated_at' => 'Mis à jour le',
         'deleted_at' =>  'Supprimé le',
+        "status" => "Statut",
+        'image' => 'Image',
     ],
     'form' => [
         'title' =>  'Titre',

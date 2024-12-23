@@ -2,6 +2,7 @@
 
 return [
     'title' => 'Company Information',
+    'description' =>  'Manage your company information.',
     'navigation_label' => 'Company Information',
     'navigation_group' => 'Settings',
     'tabs' => [

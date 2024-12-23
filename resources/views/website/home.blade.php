@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html data-theme="light" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">
@@ -17,10 +17,11 @@
     @endif
 </head>
 
-<body class="w-full min-h-screen flex justify-center items-center bg-blue-100">
-    <h1 class="text-2xl font-bold px-6 py-4 bg-blue-400 rounded-lg text-center">
+<body class="w-full min-h-screen flex justify-center items-center">
+    <h1 class="text-2xl font-bold px-6 py-4  rounded-lg text-center">
         {{ env('APP_NAME', 'Laravel') }}
     </h1>
+
 </body>
 
 

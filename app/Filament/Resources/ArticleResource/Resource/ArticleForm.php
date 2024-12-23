@@ -78,6 +78,8 @@ class ArticleForm
                                 Forms\Components\Select::make('categories')
                                     ->label("")
                                     ->multiple()
+                                    ->native(false)
+                                    ->preload()
                                     ->relationship('categories', 'name')
                                     ->createOptionForm([
                                         Forms\Components\TextInput::make('name')
@@ -94,6 +96,7 @@ class ArticleForm
                                     ->columnSpanFull(),
 
                                 // Forms\Components\CheckboxList::make('categories')
+                                //     ->searchable()
                                 //     ->relationship('categories', 'name')
                             ]),
                     ]),

@@ -14,6 +14,8 @@ return [
         'updated_at' => 'Updated at',
         'deleted_at' => 'Deleted at',
         'slug' => 'Slug',
+        "status" => "Status",
+        'image' => 'Image',
     ],
     'form' => [
         'title' => 'Title',

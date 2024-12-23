@@ -18,7 +18,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 6;
+    protected static ?string $recordTitleAttribute = 'categoryTitle';
     public static function getNavigationGroup(): ?string
     {
         return __('nav.groups.articles');
