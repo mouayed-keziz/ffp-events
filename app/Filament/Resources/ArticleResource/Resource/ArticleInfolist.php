@@ -51,8 +51,8 @@ class ArticleInfolist
                         Tabs\Tab::make(__('articles.form.tabs.content'))
                             ->schema([
 
-                                Infolists\Components\ViewEntry::make('banner')
-                                    ->view('components.article-banner')
+                                Infolists\Components\ViewEntry::make('article')
+                                    ->view('components.article-preview')
                                     ->columnSpanFull(),
 
                                 // SpatieMediaLibraryImageEntry::make('image')
@@ -64,7 +64,7 @@ class ArticleInfolist
                                 // TextEntry::make('content')
                                 //     ->label("")
                                 //     ->html()
-                                //     ->extraAttributes(["class" => "prose"])
+                                //     // ->extraAttributes(["class" => "prose prose-sm sm:prose-md lg:prose-lg dark:prose-invert max-w-none"])
                                 //     ->columnSpanFull(),
 
                             ]),
