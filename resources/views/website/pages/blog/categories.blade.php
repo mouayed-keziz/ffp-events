@@ -9,13 +9,8 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @foreach($categories as $category)
-            <a href="{{ route('blog.category', $category) }}" class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow">
-                <div class="card-body">
-                    <h2 class="card-title">{{ $category->name }}</h2>
-                    <p class="text-gray-600">{{ $category->articles_count }} articles</p>
-                </div>
-            </a>
+        @foreach ($categories as $category)
+            @include('website.components.category-card', ['category' => $category])
         @endforeach
     </div>
 @endsection

@@ -20,6 +20,10 @@
 
             <div class="text-gray-600 mb-8">
                 Published {{ $article->published_at->diffForHumans() }}
+                <div class="flex items-center gap-1 mt-2 text-sm text-gray-500">
+                    <x-heroicon-o-eye class="w-5 h-5" />
+                    <span>1,234 views</span>
+                </div>
             </div>
 
             <div class="mb-6">
@@ -27,7 +31,7 @@
             </div>
 
             <div class="prose max-w-none">
-                {!! $article->content !!}
+                {!! str($article->content)->sanitizeHtml() !!}
             </div>
         </div>
 

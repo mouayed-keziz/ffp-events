@@ -9,21 +9,8 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @foreach($articles as $article)
-            <div class="card bg-base-100 shadow-xl">
-                @if($article->hasMedia('image'))
-                    <figure>
-                        <img src="{{ $article->getFirstMediaUrl('image') }}" alt="{{ $article->title }}" class="h-48 w-full object-cover" />
-                    </figure>
-                @endif
-                <div class="card-body">
-                    <h2 class="card-title">{{ $article->title }}</h2>
-                    <p class="text-gray-600 line-clamp-2">{{ $article->description }}</p>
-                    <div class="card-actions justify-end mt-4">
-                        <a href="{{ route('blog.show', $article) }}" class="btn btn-primary btn-sm">Read More</a>
-                    </div>
-                </div>
-            </div>
+        @foreach ($articles as $article)
+            @include('website.components.blog-card', ['article' => $article])
         @endforeach
     </div>
 
