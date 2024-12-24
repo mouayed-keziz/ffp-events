@@ -34,22 +34,22 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             // ->topNavigation()
             // ->sidebarWidth('20rem')
-            ->sidebarFullyCollapsibleOnDesktop()
+            // ->sidebarFullyCollapsibleOnDesktop()
             // ->sidebarCollapsibleOnDesktop()
             ->id('admin')
             ->path('admin')
             ->spa()
             ->login()
-            ->profile()
+            ->profile(isSimple: false)
             ->databaseNotifications()
             ->databaseTransactions()
             ->brandLogo(fn() => view('panel.brand-logo'))
-            ->darkModeBrandLogo(fn() => view('panel.brand-logo'))
-            ->brandLogoHeight('2rem')
+            ->darkModeBrandLogo(fn() => view('panel.brand-logo-dark'))
+            ->brandLogoHeight(fn() => auth()->check() ? '3rem' : '5rem')
             ->databaseNotificationsPolling("30s")
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => Color::Amber,
             ])
             ->font("Inter")
             // ->font("Open sans")
@@ -82,11 +82,12 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
-                // \RickDBCN\FilamentEmail\FilamentEmail::make(),
+                \RickDBCN\FilamentEmail\FilamentEmail::make(),
                 FilamentDeveloperLoginsPlugin::make()
                     ->enabled(env('APP_DEBUG', false))
                     ->users([
-                        "SUPER ADMIN " => 'admin@admin.dev'
+                        "SUPER ADMIN " => 'admin@admin.dev',
+                        "EXPOSANT 1 " => 'rafik@redspot.com'
                     ])
             ]);
     }
