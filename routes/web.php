@@ -28,8 +28,11 @@ Route::get('/category/{category:slug}', function (Category $category) {
 })->name('blog.category');
 
 Route::get('/blog/{article:slug}', function (Article $article) {
+    views($article)->record();
+
     return view('website.pages.blog.show', [
-        'article' => $article
+        'article' => $article,
+        'viewCount' => views($article)->count()
     ]);
 })->name('blog.show');
 

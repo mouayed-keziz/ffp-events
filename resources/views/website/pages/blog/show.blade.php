@@ -22,7 +22,7 @@
                 Published {{ $article->published_at->diffForHumans() }}
                 <div class="flex items-center gap-1 mt-2 text-sm text-gray-500">
                     <x-heroicon-o-eye class="w-5 h-5" />
-                    <span>1,234 views</span>
+                    <span>{{ $viewCount }} views</span>
                 </div>
             </div>
 
