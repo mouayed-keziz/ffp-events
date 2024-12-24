@@ -55,7 +55,9 @@ return [
         "published" => "منشور",
         "deleted" => "محذوف",
     ],
-    'actions' => [],
+    'actions' => [
+        "visit" =>  "زيارة",
+    ],
     "categories" => [
         "single" => "تصنيف",
         "plural" => "تصنيفات",

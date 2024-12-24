@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ArticleResource\Pages;
 
 use App\Filament\Resources\ArticleResource;
+use App\Filament\Resources\ArticleResource\Resource\ArticleActions;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 
@@ -16,6 +17,7 @@ class ViewArticle extends ViewRecord
             Actions\EditAction::make()->icon("heroicon-o-pencil"),
             Actions\ForceDeleteAction::make()->icon("heroicon-o-trash"),
             Actions\RestoreAction::make()->icon("heroicon-o-arrow-path"),
+            ArticleActions::getHeaderAction()
         ];
     }
 }

@@ -55,7 +55,9 @@ return [
         "published" => "Published",
         "deleted" => "Deleted",
     ],
-    'actions' => [],
+    'actions' => [
+        "visit" =>  "Visit",
+    ],
     "categories" => [
         "single" => "Category",
         "plural" => "Categories",
