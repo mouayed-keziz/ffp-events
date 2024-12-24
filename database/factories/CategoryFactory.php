@@ -17,10 +17,26 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-        $name = $this->faker->unique()->words(2, true);
+        // Faker instance for English
+        $fakerEn = \Faker\Factory::create('en_US');
+        // Faker instance for French
+        $fakerFr = \Faker\Factory::create('fr_FR');
+        // Faker instance for Arabic
+        $fakerAr = \Faker\Factory::create('ar_SA');
+
+        $name = [
+            'en' => $fakerEn->unique()->realTextBetween(10, 20),  // English name
+            'fr' => $fakerFr->unique()->realTextBetween(10, 20),  // French name
+            'ar' => $fakerAr->unique()->realTextBetween(10, 20),  // Arabic name
+        ];
+        // dd($name);
         return [
             'name' => $name,
-            'slug' => Str::slug($name),
+            'slug' => [
+                'en' => Str::slug($name['en']),  // English slug
+                'fr' => Str::slug($name['fr']),  // French slug
+                'ar' => Str::slug($name['ar']),  // Arabic slug (based on the Arabic name)
+            ],
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Filament\Support\Enums\MaxWidth;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -17,8 +18,7 @@ class ArticleFactory extends Factory
      */
     public function definition(): array
     {
-        $arabic_faker = $this->faker->setlocale('ar_SA');
-        $title = $arabic_faker->sentence();
+        $title = $this->faker->sentence();
         return [
             'title' => $title,
             'slug' => Str::slug($title),
