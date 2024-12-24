@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\RelationManagers;
+use App\Filament\Resources\CategoryResource\RelationManagers\ArticlesRelationManager;
 use App\Filament\Resources\CategoryResource\Resource\CategoryForm;
 use App\Filament\Resources\CategoryResource\Resource\CategoryTable;
 use App\Models\Category;
@@ -48,7 +49,7 @@ class CategoryResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ArticlesRelationManager::class
         ];
     }
 
@@ -57,6 +58,7 @@ class CategoryResource extends Resource
         return [
             'index' => Pages\ListCategories::route('/'),
             'create' => Pages\CreateCategory::route('/create'),
+            'view' => Pages\ViewCategory::route('/{record}'),
             'edit' => Pages\EditCategory::route('/{record}/edit'),
         ];
     }

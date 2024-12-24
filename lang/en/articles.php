@@ -66,5 +66,6 @@ return [
             "name" => "Name",
             "slug" => "Slug",
         ],
+        "goto_article" => "Go to article",
     ]
 ];

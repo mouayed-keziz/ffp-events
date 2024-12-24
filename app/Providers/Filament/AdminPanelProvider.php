@@ -46,6 +46,7 @@ class AdminPanelProvider extends PanelProvider
             ->databaseTransactions()
             ->brandLogo(fn() => view('panel.brand-logo'))
             ->darkModeBrandLogo(fn() => view('panel.brand-logo-dark'))
+            ->favicon(asset(("favicon.svg")))
             ->brandLogoHeight(fn() => Auth::check() ? '3rem' : '5rem')
             ->databaseNotificationsPolling("30s")
             ->viteTheme('resources/css/filament/admin/theme.css')

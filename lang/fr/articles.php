@@ -67,5 +67,6 @@ return [
             "name" => "Nom",
             "slug" => "Slug",
         ],
+        "goto_article" => "Voir l'article",
     ]
 ];

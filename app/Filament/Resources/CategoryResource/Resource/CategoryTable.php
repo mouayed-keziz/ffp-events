@@ -11,14 +11,15 @@ class CategoryTable
     public static function table(Table $table): Table
     {
         return $table
+            // ->paginated(false)
             ->columns([
                 TextColumn::make('name')
                     ->label(__('articles.categories.fields.name'))
-                    ->searchable()
+                    // ->searchable()
                     ->sortable(),
                 TextColumn::make('slug')
                     ->label(__('articles.categories.fields.slug'))
-                    ->searchable()
+                    // ->searchable()
                     ->sortable()
                     ->badge()
                     ->color("gray"),
@@ -31,6 +32,7 @@ class CategoryTable
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([

@@ -9,7 +9,7 @@ use Filament\Actions\Action as HeaderAction;
 
 class ArticleActions
 {
-    public static function getTableAction(): Action
+    public static function PreviewAction(): Action
     {
         return Action::make('preview')
             ->button()
