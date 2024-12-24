@@ -84,12 +84,12 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
-                \RickDBCN\FilamentEmail\FilamentEmail::make(),
+                // \RickDBCN\FilamentEmail\FilamentEmail::make(),
                 FilamentDeveloperLoginsPlugin::make()
                     ->enabled(env('APP_DEBUG', false))
                     ->users([
-                        "SUPER ADMIN " => 'admin@admin.dev',
-                        "EXPOSANT 1 " => 'rafik@redspot.com'
+                        "super admin " => 'admin@admin.dev',
+                        // "EXPOSANT 1 " => 'rafik@redspot.com'
                     ])
             ]);
     }

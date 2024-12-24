@@ -28,6 +28,7 @@
         "spatie/filament-simple-stats": "^0.1.4",
         "spatie/laravel-medialibrary": "^11.10",
         "spatie/laravel-permission": "^6.10",
+        "spatie/laravel-translatable": "^6.9",
         "ysfkaya/filament-phone-input": "^3.1"
     },
     "require-dev": {

@@ -11,19 +11,16 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Enums\ArticleStatus;
 use CyrildeWit\EloquentViewable\InteractsWithViews;
 use CyrildeWit\EloquentViewable\Contracts\Viewable;
-
+use Spatie\Translatable\HasTranslations;
 
 class Article extends Model implements HasMedia, Viewable
 {
     use SoftDeletes, InteractsWithMedia, HasFactory, InteractsWithViews;
+    use HasTranslations;
 
-    protected $fillable = [
-        'title',
-        'slug',
-        'description',
-        'content',
-        'published_at',
-    ];
+    protected $fillable = ['title', 'slug', 'description', 'content', 'published_at'];
+    public $translatable = ['title', 'slug', 'description', 'content'];
+
     protected $with = ['categories'];
 
     protected $casts = [
