@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\ArticleResource\Resource;
 
-use App\Enums\ArticleStatus;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
