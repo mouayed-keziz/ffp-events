@@ -25,6 +25,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Navigation\NavigationGroup;
 use Filament\Facades\Filament;
+use Illuminate\Support\Facades\Auth;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -45,7 +46,7 @@ class AdminPanelProvider extends PanelProvider
             ->databaseTransactions()
             ->brandLogo(fn() => view('panel.brand-logo'))
             ->darkModeBrandLogo(fn() => view('panel.brand-logo-dark'))
-            ->brandLogoHeight(fn() => auth()->check() ? '3rem' : '5rem')
+            ->brandLogoHeight(fn() => Auth::check() ? '3rem' : '5rem')
             ->databaseNotificationsPolling("30s")
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
