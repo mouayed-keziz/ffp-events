@@ -10,7 +10,8 @@ Route::get('/', function () {
 
 Route::get('/blog', function () {
     return view('website.pages.blog.index', [
-        'articles' => Article::published()->latest()->paginate(9)
+        'articles' => Article::published()->latest()->paginate(9),
+        'totalViews' => views(Article::class)->count(),
     ]);
 })->name('blog.index');
 

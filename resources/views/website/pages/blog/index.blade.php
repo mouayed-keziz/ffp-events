@@ -15,7 +15,7 @@
                     <x-heroicon-o-eye class="w-8 h-8" />
                 </div>
                 <div class="stat-title">Total Views</div>
-                <div class="stat-value text-primary">25.6K</div>
+                <div class="stat-value text-primary">{{ $totalViews }}</div>
                 <div class="stat-desc">21% more than last month</div>
             </div>
 
