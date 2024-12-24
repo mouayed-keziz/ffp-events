@@ -18,6 +18,7 @@
         "filament/filament": "^3.2.128",
         "filament/spatie-laravel-media-library-plugin": "^3.2",
         "filament/spatie-laravel-settings-plugin": "^3.2",
+        "filament/spatie-laravel-translatable-plugin": "^3.2",
         "g4t/swagger": "^3.2",
         "howdu/filament-record-switcher": "^1.0",
         "joaopaulolndev/filament-edit-profile": "^1.0",

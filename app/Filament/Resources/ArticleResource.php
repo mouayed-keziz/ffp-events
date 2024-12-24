@@ -13,9 +13,12 @@ use Filament\Tables\Table;
 use Filament\Infolists\Infolist;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\Concerns\Translatable;
 
 class ArticleResource extends Resource
 {
+    use Translatable;
+
     protected static ?string $model = Article::class;
 
     // protected static ?string $navigationIcon = 'heroicon-o-document-duplicate';

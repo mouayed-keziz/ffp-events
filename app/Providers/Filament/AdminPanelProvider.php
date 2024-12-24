@@ -26,6 +26,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Navigation\NavigationGroup;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Auth;
+use Filament\SpatieLaravelTranslatablePlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -85,6 +86,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 // \RickDBCN\FilamentEmail\FilamentEmail::make(),
+                SpatieLaravelTranslatablePlugin::make()
+                    ->defaultLocales(['en', 'fr', 'ar']),
                 FilamentDeveloperLoginsPlugin::make()
                     ->enabled(env('APP_DEBUG', false))
                     ->users([
@@ -112,7 +115,6 @@ class AdminPanelProvider extends PanelProvider
                     ->icon('heroicon-o-calendar'),
                 NavigationGroup::make()
                     ->label(__("nav.groups.settings")),
-
             ]);
         });
     }

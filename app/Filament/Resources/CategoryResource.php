@@ -15,9 +15,13 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Resources\Concerns\Translatable;
+
 
 class CategoryResource extends Resource
 {
+    use Translatable;
+
     protected static ?string $model = Category::class;
     protected static ?int $navigationSort = 6;
     protected static ?string $recordTitleAttribute = 'categoryTitle';
