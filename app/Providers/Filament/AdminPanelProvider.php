@@ -27,6 +27,7 @@ use Filament\Navigation\NavigationGroup;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Auth;
 use Filament\SpatieLaravelTranslatablePlugin;
+use CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -86,6 +87,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 // \RickDBCN\FilamentEmail\FilamentEmail::make(),
+                GlobalSearchModalPlugin::make(),
                 SpatieLaravelTranslatablePlugin::make()
                     ->defaultLocales(['en', 'fr', 'ar']),
                 FilamentDeveloperLoginsPlugin::make()

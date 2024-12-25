@@ -2,7 +2,7 @@
 
 return [
     'resource' => [
-        'label' => 'Exposant',
+        'single' => 'Exposant',
         'plural' => 'Exposants',
     ],
     'columns' => [
