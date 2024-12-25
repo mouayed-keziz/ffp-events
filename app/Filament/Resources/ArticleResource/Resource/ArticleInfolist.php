@@ -9,6 +9,8 @@ use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\TextEntry\TextEntrySize;
+use Filament\Support\Enums\FontWeight;
 
 class ArticleInfolist
 {
@@ -23,6 +25,8 @@ class ArticleInfolist
                                 Section::make()
                                     ->schema([
                                         TextEntry::make('title')
+                                            ->size(TextEntrySize::Large)
+                                            ->weight(FontWeight::Bold)
                                             ->label(__('articles.form.title')),
 
                                         TextEntry::make('status')
@@ -30,8 +34,12 @@ class ArticleInfolist
                                             ->label(__("articles.columns.status")),
 
                                         TextEntry::make('description')
-                                            ->label(__('articles.form.description'))
-                                            ->columnSpanFull(),
+                                            ->label(__('articles.form.description')),
+
+                                        TextEntry::make('views')
+                                            ->badge()
+                                            ->label(__("articles.columns.views"))
+                                            ->color("gray"),
 
                                         TextEntry::make('published_at')
                                             ->label(__('articles.form.published_date'))

@@ -21,6 +21,19 @@ export default {
     },
     daisyui: {
         themes: [
+            {
+                mytheme: {
+                    "primary": "#f59e0b",
+                    "secondary": "#fbbf24",
+                    "accent": "#22d3ee",
+                    "neutral": "#292524",
+                    "base-100": "#f3f4f6",
+                    "info": "#2563eb",
+                    "success": "#22c55e",
+                    "warning": "#fcd34d",
+                    "error": "#f87171",
+                },
+            },
             "light",
             "dark",
             "cupcake",

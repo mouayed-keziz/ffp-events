@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-theme="winter" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html dir="ltr" data-theme="mytheme" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">
@@ -27,7 +27,10 @@
                     <li><a href="{{ route('blog.categories') }}">Categories</a></li>
                 </ul>
             </div>
-            <a href="/" class="btn btn-ghost normal-case text-xl">{{ config('app.name') }}</a>
+            <a href="/" class="btn btn-ghost normal-case text-xl">
+                <img src="{{ asset('favicon.svg') }}" alt="Logo" class="h-10 w-10 mr-2">
+                {{ config('app.name') }}
+            </a>
         </div>
         <div class="navbar-end hidden lg:flex">
             <ul class="menu menu-horizontal px-1">
@@ -37,7 +40,7 @@
         </div>
     </div>
 
-    <main class="container mx-auto px-4 py-8">
+    <main class="w-full max-w-7xl mx-auto px-4 py-8">
         @yield('content')
     </main>
 

@@ -53,6 +53,15 @@ class ArticleTable
                 ->alignCenter()
                 ->grow(true),
 
+            Tables\Columns\TextColumn::make("views")
+                ->label(__("articles.columns.views"))
+                ->badge()
+                ->color("gray")
+                ->alignCenter()
+                ->sortable()
+                ->toggleable(),
+            // ->grow(true),
+
             Tables\Columns\TextColumn::make('published_at')
                 ->dateTime()
                 ->sortable()

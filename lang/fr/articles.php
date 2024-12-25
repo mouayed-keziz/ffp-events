@@ -16,6 +16,7 @@ return [
         'deleted_at' =>  'Supprimé le',
         "status" => "Statut",
         'image' => 'Image',
+        "views" => "Vues",
     ],
     'form' => [
         'title' =>  'Titre',

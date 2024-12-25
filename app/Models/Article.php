@@ -49,6 +49,11 @@ class Article extends Model implements HasMedia, Viewable
         return $query->whereNotNull('published_at')->where('published_at', '<=', now());
     }
 
+
+    public function getViewsAttribute()
+    {
+        return $this->views()->count();
+    }
     public function getArticleTitleAttribute()
     {
         return __("articles.resource.single") . " - " . $this->title;

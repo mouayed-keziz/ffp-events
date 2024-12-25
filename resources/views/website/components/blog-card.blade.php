@@ -1,4 +1,4 @@
-<div class="card bg-base-100 shadow-xl border">
+<div class="card bg-base-100 shadow-xl card-bordered">
     @if ($article->hasMedia('image'))
         <figure class="border-b">
             <img src="{{ $article->getFirstMediaUrl('image') }}" alt="{{ $article->title }}"

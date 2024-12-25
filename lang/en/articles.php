@@ -16,6 +16,7 @@ return [
         'slug' => 'Slug',
         "status" => "Status",
         'image' => 'Image',
+        "views" =>  "Views",
     ],
     'form' => [
         'title' => 'Title',

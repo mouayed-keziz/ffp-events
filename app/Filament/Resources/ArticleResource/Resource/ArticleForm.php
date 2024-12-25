@@ -46,6 +46,7 @@ class ArticleForm
 
                                         Forms\Components\DateTimePicker::make('published_at')
                                             ->columnSpanFull()
+                                            ->native(false)
                                             ->label(__('articles.form.published_date')),
                                     ])->columns(2),
 
@@ -64,6 +65,7 @@ class ArticleForm
                     ->columnSpan(['lg' => 1])
                     ->schema([
                         Section::make(__('articles.form.sections.featured_image'))
+                            ->collapsible()
                             ->schema([
                                 SpatieMediaLibraryFileUpload::make('image')
                                     ->label("")
