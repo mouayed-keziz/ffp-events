@@ -1,28 +1,97 @@
-<!DOCTYPE html>
-<html data-theme="light" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+@extends('website.layouts.app')
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@section('title', 'FFP Events - Create Memorable Experiences')
 
-    <title>Laravel</title>
+@section('content')
+    <!-- Hero Section -->
+    <div class="hero py-24 bg-base-200/50 rounded-box">
+        <div class="hero-content text-center">
+            <div class="max-w-md">
+                <h1 class="text-5xl font-bold text-primary">FFP EVENTS</h1>
+                <p class="py-6">Transform your events into unforgettable experiences with our professional event planning
+                    services.</p>
+                <button class="btn btn-primary">Get Started</button>
+            </div>
+        </div>
+    </div>
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <!-- Features Section -->
+    {{-- <div class="py-20 bg-base-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Our Services</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="card bg-base-200 shadow-xl">
+                    <div class="card-body">
+                        <h3 class="card-title">Corporate Events</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
+                            labore.</p>
+                    </div>
+                </div>
+                <div class="card bg-base-200 shadow-xl">
+                    <div class="card-body">
+                        <h3 class="card-title">Wedding Planning</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
+                            labore.</p>
+                    </div>
+                </div>
+                <div class="card bg-base-200 shadow-xl">
+                    <div class="card-body">
+                        <h3 class="card-title">Social Gatherings</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
+                            labore.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> --}}
 
-    <!-- Styles / Scripts -->
-    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @endif
-</head>
+    <!-- CTA Section -->
+    {{-- <div class="bg-primary text-primary-content py-16">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-3xl font-bold mb-4">Ready to Plan Your Next Event?</h2>
+            <p class="mb-8">Contact us today and let's create something amazing together!</p>
+            <button class="btn btn-secondary">Contact Us</button>
+        </div>
+    </div> --}}
 
-<body class="w-full min-h-screen flex justify-center items-center">
-    <h1 class="btn btn-primary">
-        {{ env('APP_NAME', 'Laravel') }}
-    </h1>
-
-</body>
-
-
-</html>
+    <!-- Testimonials Section -->
+    {{-- <div class="py-20 bg-base-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">What Our Clients Say</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <div class="rating mb-4">
+                            <input type="radio" name="rating-1" class="mask mask-star-2 bg-warning" checked />
+                            <input type="radio" name="rating-1" class="mask mask-star-2 bg-warning" checked />
+                            <input type="radio" name="rating-1" class="mask mask-star-2 bg-warning" checked />
+                            <input type="radio" name="rating-1" class="mask mask-star-2 bg-warning" checked />
+                            <input type="radio" name="rating-1" class="mask mask-star-2 bg-warning" checked />
+                        </div>
+                        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
+                            labore."</p>
+                        <div class="card-actions justify-end">
+                            <div class="font-bold">John Doe</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card bg-base-200">
+                    <div class="card-body">
+                        <div class="rating mb-4">
+                            <input type="radio" name="rating-2" class="mask mask-star-2 bg-warning" checked />
+                            <input type="radio" name="rating-2" class="mask mask-star-2 bg-warning" checked />
+                            <input type="radio" name="rating-2" class="mask mask-star-2 bg-warning" checked />
+                            <input type="radio" name="rating-2" class="mask mask-star-2 bg-warning" checked />
+                            <input type="radio" name="rating-2" class="mask mask-star-2 bg-warning" checked />
+                        </div>
+                        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
+                            labore."</p>
+                        <div class="card-actions justify-end">
+                            <div class="font-bold">Jane Smith</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> --}}
+@endsection
