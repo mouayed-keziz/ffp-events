@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
         User::factory(count: 50)->visitor()->create();
 
         // Create categories
+        // dd("heeee");
         $categories = Category::factory(5)->create();
 
         // Create articles and attach random categories

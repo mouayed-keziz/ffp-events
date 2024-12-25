@@ -21,14 +21,17 @@ Route::get('/categories', function () {
     ]);
 })->name('blog.categories');
 
-Route::get('/category/{category:slug}', function (Category $category) {
+Route::get('/category/{id}', function (int $id) {
+    $category = Category::findOrFail($id);
+
     return view('website.pages.blog.category', [
         'category' => $category,
         'articles' => $category->articles()->published()->latest()->paginate(9)
     ]);
 })->name('blog.category');
 
-Route::get('/blog/{article:slug}', function (Article $article) {
+Route::get('/blog/{id}', function (int $id) {
+    $article = Article::findOrFail($id);
     views($article)->record();
 
     return view('website.pages.blog.show', [

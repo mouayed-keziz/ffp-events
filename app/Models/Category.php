@@ -14,6 +14,11 @@ class Category extends Model
     protected $fillable = ['name', 'slug'];
     public $translatable = ['name', 'slug'];
 
+    // protected $casts = [
+    //     'name' => 'array',
+    //     'slug' => 'array',
+    // ];
+
     public function getCategoryTitleAttribute()
     {
         return __("articles.categories.single") . " - " . $this->name;

@@ -32,7 +32,6 @@
         <div class="navbar-end hidden lg:flex">
             <ul class="menu menu-horizontal px-1">
                 <li><a href="{{ route('blog.index') }}">Blog</a></li>
-                <li><a href="{{ route('blog.index') }}">{{ __('nav.groups.users') }}</a></li>
                 <li><a href="{{ route('blog.categories') }}">Categories</a></li>
             </ul>
         </div>
