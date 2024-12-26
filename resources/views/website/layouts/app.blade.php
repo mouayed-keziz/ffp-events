@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html dir="ltr" data-theme="ffp-stheme" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}" data-theme="ffp-theme-dark"
+    lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">

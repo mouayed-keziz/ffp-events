@@ -42,7 +42,7 @@
                         class="flex items-center gap-6 text-sm {{ $article->hasMedia('image') ? 'text-white/90' : 'text-base-content/70' }} mb-8">
                         <div class="flex items-center gap-2">
                             <x-heroicon-o-calendar class="w-5 h-5" />
-                            <span>{{ $article->published_at->format('F j, Y') }}</span>
+                            <span>{{ $article->published_at->translatedFormat('F j, Y') }}</span>
                         </div>
                         <div class="flex items-center gap-2">
                             <x-heroicon-o-eye class="w-5 h-5" />

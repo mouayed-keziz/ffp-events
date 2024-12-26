@@ -2,6 +2,7 @@
 
 use App\Models\Article;
 use App\Models\Category;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,7 +33,7 @@ Route::get('/category/{id}', function (int $id) {
 
 Route::get('/blog/{id}', function (int $id) {
     $article = Article::findOrFail($id);
-    views($article)->record();
+    views($article)->cooldown(now()->addMinutes(5))->record();
 
     return view('website.pages.blog.show', [
         'article' => $article,

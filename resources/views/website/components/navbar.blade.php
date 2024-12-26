@@ -10,26 +10,32 @@
                 </label>
                 <a href="/" class="btn btn-ghost normal-case text-xl hover:bg-transparent">
                     <img src="{{ asset('favicon.svg') }}" alt="Logo"
-                        class="h-8 w-8 mr-2 transition-transform hover:scale-110">
+                        class="h-8 w-8 ltr:mr-2 rtl:ml-2 transition-transform hover:scale-110">
                     <span class="font-bold">{{ config('app.name') }}</span>
                 </a>
             </div>
 
             <div class="navbar-end">
-                <div class="hidden lg:flex items-center gap-8 mr-4">
-                    <a href="{{ route('blog.index') }}"
-                        class="link link-hover transition-colors {{ request()->routeIs('blog.index') ? 'link-primary underline' : '' }}">
-                        Blog
-                    </a>
-                    <a href="{{ route('blog.categories') }}"
-                        class="link link-hover transition-colors {{ request()->routeIs('blog.categories') ? 'link-primary underline' : '' }}">
-                        Categories
+                <div class="hidden lg:flex items-center ltr:mr-4 rtl:ml-4">
+                    <div class="flex items-center gap-8">
+                        <a href="{{ route('blog.index') }}"
+                            class="link link-hover transition-colors {{ request()->routeIs('blog.index') ? 'link-primary underline' : '' }}">
+                            Blog
+                        </a>
+                        <a href="{{ route('blog.categories') }}"
+                            class="link link-hover transition-colors {{ request()->routeIs('blog.categories') ? 'link-primary underline' : '' }}">
+                            Categories
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a href="#" class="btn btn-sm">
+                        <div class="flex items-center gap-2">
+                            <x-heroicon-o-user class="w-4 h-4" />
+                            <span>Login</span>
+                        </div>
                     </a>
                 </div>
-                <a href="#" class="btn  btn-sm">
-                    <x-heroicon-o-user class="w-4 h-4" />
-                    <span>Login</span>
-                </a>
             </div>
         </div>
     </div>
@@ -41,7 +47,7 @@
             <!-- Drawer Header -->
             <div class="border-b border-base-200 pb-4">
                 <a href="/" class="text-xl font-bold flex items-center">
-                    <img src="{{ asset('favicon.svg') }}" alt="Logo" class="h-8 w-8 mr-2">
+                    <img src="{{ asset('favicon.svg') }}" alt="Logo" class="h-8 w-8 ltr:mr-2 rtl:ml-2">
                     {{ config('app.name') }}
                 </a>
             </div>

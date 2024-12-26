@@ -13,11 +13,11 @@ return [
     |
     */
 
-    'previous' => '&laquo; Previous',
-    'next' => 'Next &raquo;',
-    'showing' => 'Showing',
-    'to' => 'to',
-    'of' => 'of',
-    'results' => 'results',
+    'previous' => '&laquo; السابق',
+    'next' => 'التالي &raquo;',
+    'showing' => 'عرض النتائج من',
+    'to' => 'إلى',
+    'of' => 'من',
+    'results' => ''
 
 ];

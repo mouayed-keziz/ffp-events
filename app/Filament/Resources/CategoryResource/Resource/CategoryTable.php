@@ -26,6 +26,7 @@ class CategoryTable
                 TextColumn::make('articles_count')
                     ->label(__('articles.categories.articles'))
                     ->counts('articles')
+                    ->sortable()
                     ->badge(),
             ])
             ->filters([

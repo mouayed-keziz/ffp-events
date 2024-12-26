@@ -2,12 +2,12 @@
     <div
         class="card bg-base-100 shadow-xl card-bordered group-hover:shadow-2xl transition-all duration-300 group-hover:-translate-y-1 h-full flex flex-col">
         @if ($article->hasMedia('image'))
-            <figure class="relative border-b aspect-[16/9] overflow-hidden rounded-t-2xl">
+            <figure class="relative border-b aspect-[16/9] overflow-hidden rounded-box">
                 <img src="{{ $article->getFirstMediaUrl('image') }}" alt="{{ $article->title }}"
                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
             </figure>
         @else
-            <div class="aspect-[16/9] w-full bg-base-200 border-b flex items-center justify-center p-6 rounded-t-2xl">
+            <div class="aspect-[16/9] w-full bg-base-200 border-b flex items-center justify-center p-6 rounded-box">
                 <h3 class="text-xl font-semibold text-center text-base-content/70">{{ $article->title }}</h3>
             </div>
         @endif
