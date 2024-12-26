@@ -41,7 +41,7 @@ class ArticlesRelationManager extends RelationManager
             ->actions([
                 // ArticleActions::PreviewAction(),
                 Tables\Actions\Action::make('Go to article')->button()->outlined()
-                    ->label(__("articles.categories.goto_article"))
+                    ->label(__("panel/articles.categories.goto_article"))
                     ->icon('heroicon-o-eye')
                     ->url(fn($record) => ViewArticle::getUrl(["record" => $record])),
                 Tables\Actions\DeleteAction::make()->button(),

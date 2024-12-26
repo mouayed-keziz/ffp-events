@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <a href="#" class="btn btn-sm">
+                    <a href="#" class="btn btn-sm hidden lg:flex">
                         <div class="flex items-center gap-2">
                             <x-heroicon-o-user class="w-4 h-4" />
                             <span>{{ __('website/navbar.login') }}</span>

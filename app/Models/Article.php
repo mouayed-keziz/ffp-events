@@ -9,17 +9,25 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Enums\ArticleStatus;
+use App\Traits\HasRichMedia;
 use CyrildeWit\EloquentViewable\InteractsWithViews;
 use CyrildeWit\EloquentViewable\Contracts\Viewable;
 use Spatie\Translatable\HasTranslations;
 
 class Article extends Model implements HasMedia, Viewable
 {
-    use SoftDeletes, InteractsWithMedia, HasFactory, InteractsWithViews;
+    use HasFactory;
+    use SoftDeletes;
+    use InteractsWithMedia;
+    use InteractsWithViews;
     use HasTranslations;
+    use HasRichMedia;
+
+    // public static $richFields = ['content'];
 
     protected $fillable = ['title', 'slug', 'description', 'content', 'published_at'];
-    public $translatable = ['title', 'slug', 'description', 'content'];
+    public $translatable = ['title', 'slug', 'description'];
+    // public $translatable = ['title', 'slug', 'description', 'content'];
 
     protected $with = ['categories'];
 
@@ -32,6 +40,7 @@ class Article extends Model implements HasMedia, Viewable
     {
         $this->addMediaCollection('image')
             ->singleFile();
+        $this->addMediaCollection('attachments');
     }
 
     public function scopeDraft(Builder $query): Builder

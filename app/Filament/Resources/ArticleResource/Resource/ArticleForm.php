@@ -52,6 +52,10 @@ class ArticleForm
 
                                 Forms\Components\Tabs\Tab::make(__('panel/articles.form.tabs.content'))
                                     ->schema([
+                                        // \App\Filament\Custom\RichEditor::make('content')
+                                        //     ->label(__('panel/articles.form.content'))
+                                        //     ->placeholder(__('panel/articles.placeholders.content'))
+                                        //     ->required(),
                                         Forms\Components\RichEditor::make('content')
                                             ->label(__('panel/articles.form.content'))
                                             ->placeholder(__('panel/articles.placeholders.content'))

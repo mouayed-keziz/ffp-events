@@ -21,36 +21,36 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            // RoleSeeder::class,
-            // AdvancedEventAnnouncementSeeder::class,
+            RoleSeeder::class,
+            AdvancedEventAnnouncementSeeder::class,
         ]);
 
         // Create admin and other users
-        // User::factory()->superAdmin()->create([
-        //     'name' => 'Admin',
-        //     'email' => 'admin@admin.dev',
-        //     'password' => bcrypt('adminadmin'),
-        // ]);
+        User::factory()->superAdmin()->create([
+            'name' => 'Admin',
+            'email' => 'admin@admin.dev',
+            'password' => bcrypt('adminadmin'),
+        ]);
 
-        // User::factory(16)->exhibitor()->create();
-        // User::factory(4)->admin()->create();
-        // User::factory(count: 50)->visitor()->create();
+        User::factory(16)->exhibitor()->create();
+        User::factory(4)->admin()->create();
+        User::factory(count: 50)->visitor()->create();
 
         // Create categories
-        // dd("heeee");
-        $categories = Category::factory(5)->create();
+
+        // $categories = Category::factory(5)->create();
 
         // Create articles and attach random categories
-        Article::factory(15)->published()->create()->each(function ($article) use ($categories) {
-            $article->categories()->attach(
-                $categories->random(rand(1, 3))->pluck('id')->toArray()
-            );
-        });
+        // Article::factory(15)->published()->create()->each(function ($article) use ($categories) {
+        //     $article->categories()->attach(
+        //         $categories->random(rand(1, 3))->pluck('id')->toArray()
+        //     );
+        // });
 
-        Article::factory(5)->unpublished()->create()->each(function ($article) use ($categories) {
-            $article->categories()->attach(
-                $categories->random(rand(1, 3))->pluck('id')->toArray()
-            );
-        });
+        // Article::factory(5)->unpublished()->create()->each(function ($article) use ($categories) {
+        //     $article->categories()->attach(
+        //         $categories->random(rand(1, 3))->pluck('id')->toArray()
+        //     );
+        // });
     }
 }

@@ -89,7 +89,7 @@ class AdminPanelProvider extends PanelProvider
                 // \RickDBCN\FilamentEmail\FilamentEmail::make(),
                 GlobalSearchModalPlugin::make()->slideOver(false)->searchItemTree(false),
                 SpatieLaravelTranslatablePlugin::make()
-                    ->defaultLocales(['en', 'fr', 'ar']),
+                    ->defaultLocales(['fr', 'en', 'ar']),
                 FilamentDeveloperLoginsPlugin::make()
                     ->enabled(env('APP_DEBUG', false))
                     ->users([
