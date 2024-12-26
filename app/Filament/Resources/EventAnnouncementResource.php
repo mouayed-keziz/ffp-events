@@ -22,16 +22,16 @@ class EventAnnouncementResource extends Resource
     protected static ?string $recordTitleAttribute = 'title';
     public static function getNavigationGroup(): ?string
     {
-        return __('nav.groups.event_management');
+        return __('panel/nav.groups.event_management');
     }
     public static function getModelLabel(): string
     {
-        return __('event_announcement.resource.label');
+        return __('panel/event_announcement.resource.label');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('event_announcement.resource.plural_label');
+        return __('panel/event_announcement.resource.plural_label');
     }
 
     public static function form(Form $form): Form

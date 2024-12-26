@@ -16,10 +16,10 @@ class EventAnnouncementStats extends BaseWidget
         $descriptionIconPosition = $isArabic ? 'after' : 'before';
         $margin = $isArabic ? 'margin-right: 50px !important' : '';
 
-        $description = new HtmlString('<span style="' . $margin . '">' . __('event_announcement.stats.last_7_days') . '</span>');
+        $description = new HtmlString('<span style="' . $margin . '">' . __('panel/event_announcement.stats.last_7_days') . '</span>');
 
         return [
-            Stat::make(__('event_announcement.stats.total_events'), EventAnnouncement::count())
+            Stat::make(__('panel/event_announcement.stats.total_events'), EventAnnouncement::count())
                 ->icon('heroicon-o-calendar')
                 ->color('primary')
                 // ->description($description)
@@ -35,7 +35,7 @@ class EventAnnouncementStats extends BaseWidget
                 ])
                 ->chartColor('primary'),
 
-            Stat::make(__('event_announcement.stats.active_events'), EventAnnouncement::active()->count())
+            Stat::make(__('panel/event_announcement.stats.active_events'), EventAnnouncement::active()->count())
                 ->icon('heroicon-o-play')
                 ->color('success')
                 // ->description($description)
@@ -52,16 +52,16 @@ class EventAnnouncementStats extends BaseWidget
                 ->chartColor('success'),
 
             Stat::make(
-                __('event_announcement.stats.upcoming_events'),
+                __('panel/event_announcement.stats.upcoming_events'),
                 EventAnnouncement::where('start_date', '>', now())->count()
             )
                 ->icon('heroicon-o-clock')
                 ->color('warning')
-            // ->description(__('event_announcement.stats.events_to_start'))
+            // ->description(__('panel/event_announcement.stats.events_to_start'))
             // ->descriptionIcon('heroicon-o-arrow-right', $descriptionIconPosition),
             ,
             Stat::make(
-                __('event_announcement.stats.featured_events'),
+                __('panel/event_announcement.stats.featured_events'),
                 EventAnnouncement::where('is_featured', true)->count()
             )
                 ->icon('heroicon-o-star')
@@ -69,7 +69,7 @@ class EventAnnouncementStats extends BaseWidget
                 ->progressBarColor('warning')
                 ->progress(
                     EventAnnouncement::where('is_featured', true)->count() /
-                    max(1, EventAnnouncement::count()) * 100
+                        max(1, EventAnnouncement::count()) * 100
                 )
                 // Apply custom classes to the progress bar wrapper
                 ->extraAttributes([

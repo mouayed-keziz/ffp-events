@@ -13,18 +13,18 @@ class VisitorForm
             ->schema([
                 Forms\Components\Section::make([
                     Forms\Components\TextInput::make('name')
-                        ->label(__('visitors.form.name'))
+                        ->label(__('panel/visitors.form.name'))
                         ->required()
                         ->maxLength(255),
 
                     Forms\Components\TextInput::make('email')
-                        ->label(__('visitors.form.email'))
+                        ->label(__('panel/visitors.form.email'))
                         ->email()
                         ->required()
                         ->maxLength(255),
 
                     Forms\Components\TextInput::make('password')
-                        ->label(__('visitors.form.password'))
+                        ->label(__('panel/visitors.form.password'))
                         ->password()
                         ->required()
                         ->maxLength(255),

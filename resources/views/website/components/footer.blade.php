@@ -43,28 +43,29 @@
 
             <!-- Quick Links -->
             <div class="space-y-4">
-                <h3 class="text-lg font-semibold">Quick Links</h3>
+                <h3 class="text-lg font-semibold">{{ __('website/footer.quick_links') }}</h3>
                 <ul class="space-y-2 text-base-content/80">
-                    <li><a href="/" class="hover:text-primary">Home</a></li>
-                    <li><a href="/" class="hover:text-primary">Events</a></li>
-                    <li><a href="/" class="hover:text-primary">About Us</a></li>
-                    <li><a href="/" class="hover:text-primary">Contact</a></li>
+                    <li><a href="/" class="hover:text-primary">{{ __('website/footer.home') }}</a></li>
+                    <li><a href="/" class="hover:text-primary">{{ __('website/footer.events') }}</a></li>
+                    <li><a href="/" class="hover:text-primary">{{ __('website/footer.about_us') }}</a></li>
+                    <li><a href="/" class="hover:text-primary">{{ __('website/footer.contact') }}</a></li>
                 </ul>
             </div>
 
             <!-- Newsletter -->
             <div class="space-y-4">
-                <h3 class="text-lg font-semibold">Newsletter</h3>
-                <p class="text-base-content/80">Subscribe to our newsletter to receive updates about new events.</p>
+                <h3 class="text-lg font-semibold">{{ __('website/footer.newsletter') }}</h3>
+                <p class="text-base-content/80">{{ __('website/footer.newsletter_desc') }}</p>
                 <form class="flex gap-2">
-                    <input type="email" placeholder="Your email" class="input input-bordered flex-1" />
-                    <button class="btn btn-primary">Subscribe</button>
+                    <input type="email" placeholder="{{ __('website/footer.email_placeholder') }}"
+                        class="input input-bordered flex-1" />
+                    <button class="btn btn-primary">{{ __('website/footer.subscribe') }}</button>
                 </form>
             </div>
         </div>
 
         <div class="border-t border-base-300 mt-12 pt-8 text-center text-base-content/70">
-            <p>© {{ date('Y') }} {{ $settings->name }}. All rights reserved.</p>
+            <p>© {{ date('Y') }} {{ $settings->name }}. {{ __('website/footer.all_rights_reserved') }}</p>
         </div>
     </div>
 </footer>

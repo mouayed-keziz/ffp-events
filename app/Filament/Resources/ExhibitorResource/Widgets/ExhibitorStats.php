@@ -18,23 +18,23 @@ class ExhibitorStats extends BaseWidget
                 ->last30Days()
                 ->dailyCount()
                 ->color("success")
-                ->label(__('visitors.stats.total_users'))
-                ->description(__('visitors.stats.last_30_days')),
+                ->label(__('panel/visitors.stats.total_users'))
+                ->description(__('panel/visitors.stats.last_30_days')),
 
             SimpleStat::make(User::class)
                 ->last30Days()
                 ->dailyCount()
                 ->color("danger")
-                ->label(__('visitors.stats.total_users'))
-                ->description(__('visitors.stats.last_30_days')),
+                ->label(__('panel/visitors.stats.total_users'))
+                ->description(__('panel/visitors.stats.last_30_days')),
 
             SimpleStat::make(User::class)
                 ->last30Days()
                 ->dailyCount()
                 ->icon("heroicon-o-users")
                 ->color("primary")
-                ->label(__('visitors.stats.total_users'))
-                ->description(__('visitors.stats.last_30_days')),
+                ->label(__('panel/visitors.stats.total_users'))
+                ->description(__('panel/visitors.stats.last_30_days')),
         ];
     }
 }

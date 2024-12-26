@@ -14,17 +14,17 @@ class CategoryTable
             // ->paginated(false)
             ->columns([
                 TextColumn::make('name')
-                    ->label(__('articles.categories.fields.name'))
+                    ->label(__('panel/articles.categories.fields.name'))
                     // ->searchable()
                     ->sortable(),
                 TextColumn::make('slug')
-                    ->label(__('articles.categories.fields.slug'))
+                    ->label(__('panel/articles.categories.fields.slug'))
                     // ->searchable()
                     ->sortable()
                     ->badge()
                     ->color("gray"),
                 TextColumn::make('articles_count')
-                    ->label(__('articles.categories.articles'))
+                    ->label(__('panel/articles.categories.articles'))
                     ->counts('articles')
                     ->sortable()
                     ->badge(),

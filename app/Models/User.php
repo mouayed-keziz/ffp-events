@@ -67,14 +67,14 @@ class User extends Authenticatable
 
     public function getVisitorTitleAttribute()
     {
-        return __("visitors.resource.single") . " - " . $this->name;
+        return __("panel/visitors.resource.single") . " - " . $this->name;
     }
     public function getExhibitorTitleAttribute()
     {
-        return __("exhibitors.resource.single") . " - " . $this->name;
+        return __("panel/exhibitors.resource.single") . " - " . $this->name;
     }
     public function getAdminTitleAttribute()
     {
-        return __("admins.resource.single") . " - " . $this->name;
+        return __("panel/admins.resource.single") . " - " . $this->name;
     }
 }

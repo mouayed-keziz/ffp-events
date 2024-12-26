@@ -14,32 +14,32 @@ class ArticleTable
             SpatieMediaLibraryImageColumn::make('image')
                 ->toggleable()
                 ->alignCenter()
-                ->label(__("articles.columns.image"))
+                ->label(__("panel/articles.columns.image"))
                 ->collection('image')
                 ->circular()
-                ->placeholder(__('articles.empty_states.image')),
+                ->placeholder(__('panel/articles.empty_states.image')),
 
             Tables\Columns\TextColumn::make('title')
-                ->label(trans('articles.columns.title'))
+                ->label(__('panel/articles.columns.title'))
                 ->limit(25)
                 ->sortable()
                 ->searchable(),
 
             Tables\Columns\TextColumn::make('description')
-                ->label(trans('articles.columns.description'))
+                ->label(__('panel/articles.columns.description'))
                 ->limit(25)
                 ->toggleable(isToggledHiddenByDefault: true)
                 ->searchable(),
 
             Tables\Columns\TextColumn::make('slug')
-                ->label(__("articles.columns.slug"))
+                ->label(__("panel/articles.columns.slug"))
                 ->badge()
                 ->badge()
                 ->toggleable(isToggledHiddenByDefault: true)
                 ->color("gray"),
 
             Tables\Columns\TextColumn::make("categories.name")
-                ->label(__("articles.categories.plural"))
+                ->label(__("panel/articles.categories.plural"))
                 ->toggleable(isToggledHiddenByDefault: true)
                 ->searchable()
                 ->limitList(1)
@@ -47,14 +47,14 @@ class ArticleTable
                 ->grow(true),
 
             Tables\Columns\TextColumn::make('status')
-                ->label(__("articles.columns.status"))
+                ->label(__("panel/articles.columns.status"))
                 ->badge()
                 ->sortable()
                 ->alignCenter()
                 ->grow(true),
 
             Tables\Columns\TextColumn::make("views")
-                ->label(__("articles.columns.views"))
+                ->label(__("panel/articles.columns.views"))
                 ->badge()
                 ->color("gray")
                 ->alignCenter()
@@ -65,29 +65,29 @@ class ArticleTable
             Tables\Columns\TextColumn::make('published_at')
                 ->dateTime()
                 ->sortable()
-                ->label(trans('articles.form.published_date'))
+                ->label(trans('panel/articles.form.published_date'))
                 ->toggleable(isToggledHiddenByDefault: true)
-                ->placeholder(trans('articles.empty_states.published_at')),
+                ->placeholder(trans('panel/articles.empty_states.published_at')),
 
             Tables\Columns\TextColumn::make('created_at')
                 ->dateTime()
                 ->sortable()
-                ->label(trans('articles.columns.created_at'))
-                ->placeholder(trans('articles.empty_states.created_at'))
+                ->label(trans('panel/articles.columns.created_at'))
+                ->placeholder(trans('panel/articles.empty_states.created_at'))
                 ->toggleable(isToggledHiddenByDefault: true),
 
             Tables\Columns\TextColumn::make('updated_at')
                 ->dateTime()
                 ->sortable()
-                ->label(trans('articles.columns.updated_at'))
-                ->placeholder(trans('articles.empty_states.updated_at'))
+                ->label(trans('panel/articles.columns.updated_at'))
+                ->placeholder(trans('panel/articles.empty_states.updated_at'))
                 ->toggleable(isToggledHiddenByDefault: true),
 
             Tables\Columns\TextColumn::make('deleted_at')
                 ->dateTime()
                 ->sortable()
-                ->label(trans('articles.columns.deleted_at'))
-                ->placeholder(trans('articles.empty_states.deleted_at'))
+                ->label(trans('panel/articles.columns.deleted_at'))
+                ->placeholder(trans('panel/articles.empty_states.deleted_at'))
                 ->toggleable(isToggledHiddenByDefault: true),
         ];
     }

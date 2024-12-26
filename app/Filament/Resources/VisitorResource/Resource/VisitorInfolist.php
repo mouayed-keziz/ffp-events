@@ -13,26 +13,26 @@ class VisitorInfolist
             ->schema([
                 Infolists\Components\Section::make([
                     Infolists\Components\TextEntry::make('name')
-                        ->label(__('visitors.form.name'))
-                        ->default(__('visitors.empty_states.name')),
+                        ->label(__('panel/visitors.form.name'))
+                        ->default(__('panel/visitors.empty_states.name')),
 
                     Infolists\Components\TextEntry::make('email')
-                        ->label(__('visitors.form.email'))
-                        ->default(__('visitors.empty_states.email')),
+                        ->label(__('panel/visitors.form.email'))
+                        ->default(__('panel/visitors.empty_states.email')),
 
                     Infolists\Components\TextEntry::make('roles.name')
-                        ->label(__('visitors.columns.roles'))
+                        ->label(__('panel/visitors.columns.roles'))
                         ->badge()
                         ->color("gray")
-                        ->default(__('visitors.empty_states.roles')),
+                        ->default(__('panel/visitors.empty_states.roles')),
 
                     Infolists\Components\TextEntry::make('created_at')
-                        ->label(__('visitors.columns.created_at'))
+                        ->label(__('panel/visitors.columns.created_at'))
                         ->dateTime(),
 
                     Infolists\Components\TextEntry::make('verified_at')
-                        ->label(__('visitors.columns.verified_at'))
-                        ->default(__('visitors.empty_states.verification'))
+                        ->label(__('panel/visitors.columns.verified_at'))
+                        ->default(__('panel/visitors.empty_states.verification'))
                     // ->dateTime(),
                 ])
             ]);

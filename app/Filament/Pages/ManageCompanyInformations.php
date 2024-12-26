@@ -17,23 +17,23 @@ class ManageCompanyInformations extends SettingsPage
 
     public function getTitle(): string
     {
-        return __('company_informations.title');
+        return __('settings/company_informations.title');
     }
 
     public function getSubheading(): string|Htmlable|null
     {
-        return __('company_informations.description');
+        return __('settings/company_informations.description');
     }
 
 
     public static function getNavigationLabel(): string
     {
-        return __('company_informations.navigation_label');
+        return __('settings/company_informations.navigation_label');
     }
 
     public static function getNavigationGroup(): ?string
     {
-        return __('nav.groups.settings');
+        return __('panel/nav.groups.settings');
     }
 
     public function form(Form $form): Form
@@ -42,7 +42,7 @@ class ManageCompanyInformations extends SettingsPage
             ->schema([
                 Forms\Components\Tabs::make('Settings')
                     ->tabs([
-                        Forms\Components\Tabs\Tab::make(__('company_informations.tabs.general_information'))
+                        Forms\Components\Tabs\Tab::make(__('settings/company_informations.tabs.general_information'))
                             ->columns([
                                 'default' => 1,
                                 'sm' => 2,
@@ -50,9 +50,9 @@ class ManageCompanyInformations extends SettingsPage
                             ])
                             ->schema([
                                 Forms\Components\TextInput::make('name')
-                                    ->label(__('company_informations.fields.name.label'))
+                                    ->label(__('settings/company_informations.fields.name.label'))
                                     ->required()
-                                    ->placeholder(__('company_informations.fields.name.placeholder'))
+                                    ->placeholder(__('settings/company_informations.fields.name.placeholder'))
                                     ->columnSpan([
                                         'default' => 1,
                                         'sm' => 2,
@@ -60,9 +60,9 @@ class ManageCompanyInformations extends SettingsPage
                                     ]),
 
                                 Forms\Components\TextInput::make('email')
-                                    ->label(__('company_informations.fields.email.label'))
+                                    ->label(__('settings/company_informations.fields.email.label'))
                                     ->required()
-                                    ->placeholder(__('company_informations.fields.email.placeholder'))
+                                    ->placeholder(__('settings/company_informations.fields.email.placeholder'))
                                     ->columnSpan([
                                         'default' => 1,
                                         'sm' => 1,
@@ -71,9 +71,9 @@ class ManageCompanyInformations extends SettingsPage
 
                                 // Forms\Components\TextInput::make('phone')
                                 PhoneInput::make("phone")
-                                    ->label(__('company_informations.fields.phone.label'))
+                                    ->label(__('settings/company_informations.fields.phone.label'))
                                     ->required()
-                                    ->placeholder(__('company_informations.fields.phone.placeholder'))
+                                    ->placeholder(__('settings/company_informations.fields.phone.placeholder'))
                                     ->columnSpan([
                                         'default' => 1,
                                         'sm' => 1,
@@ -81,9 +81,9 @@ class ManageCompanyInformations extends SettingsPage
                                     ]),
 
                                 Forms\Components\TextInput::make('country')
-                                    ->label(__('company_informations.fields.country.label'))
+                                    ->label(__('settings/company_informations.fields.country.label'))
                                     ->required()
-                                    ->placeholder(__('company_informations.fields.country.placeholder'))
+                                    ->placeholder(__('settings/company_informations.fields.country.placeholder'))
                                     ->columnSpan([
                                         'default' => 1,
                                         'sm' => 1,
@@ -91,9 +91,9 @@ class ManageCompanyInformations extends SettingsPage
                                     ]),
 
                                 Forms\Components\TextInput::make('state')
-                                    ->label(__('company_informations.fields.state.label'))
+                                    ->label(__('settings/company_informations.fields.state.label'))
                                     ->required()
-                                    ->placeholder(__('company_informations.fields.state.placeholder'))
+                                    ->placeholder(__('settings/company_informations.fields.state.placeholder'))
                                     ->columnSpan([
                                         'default' => 1,
                                         'sm' => 1,
@@ -101,9 +101,9 @@ class ManageCompanyInformations extends SettingsPage
                                     ]),
 
                                 Forms\Components\TextInput::make('city')
-                                    ->label(__('company_informations.fields.city.label'))
+                                    ->label(__('settings/company_informations.fields.city.label'))
                                     ->required()
-                                    ->placeholder(__('company_informations.fields.city.placeholder'))
+                                    ->placeholder(__('settings/company_informations.fields.city.placeholder'))
                                     ->columnSpan([
                                         'default' => 1,
                                         'sm' => 1,
@@ -113,9 +113,9 @@ class ManageCompanyInformations extends SettingsPage
 
 
                                 Forms\Components\TextInput::make('zip')
-                                    ->label(__('company_informations.fields.zip.label'))
+                                    ->label(__('settings/company_informations.fields.zip.label'))
                                     ->required()
-                                    ->placeholder(__('company_informations.fields.zip.placeholder'))
+                                    ->placeholder(__('settings/company_informations.fields.zip.placeholder'))
                                     ->columnSpan([
                                         'default' => 1,
                                         'sm' => 1,
@@ -123,9 +123,9 @@ class ManageCompanyInformations extends SettingsPage
                                     ]),
 
                                 Forms\Components\TextInput::make('address')
-                                    ->label(__('company_informations.fields.address.label'))
+                                    ->label(__('settings/company_informations.fields.address.label'))
                                     ->required()
-                                    ->placeholder(__('company_informations.fields.address.placeholder'))
+                                    ->placeholder(__('settings/company_informations.fields.address.placeholder'))
                                     ->columnSpan([
                                         'default' => 1,
                                         'sm' => 1,

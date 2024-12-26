@@ -27,17 +27,17 @@ class ArticleResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('nav.groups.articles');
+        return __('panel/nav.groups.articles');
     }
 
     public static function getModelLabel(): string
     {
-        return __('articles.resource.single');
+        return __('panel/articles.resource.single');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('articles.resource.plural');
+        return __('panel/articles.resource.plural');
     }
     public static function getGloballySearchableAttributes(): array
     {

@@ -105,15 +105,15 @@ class AdminPanelProvider extends PanelProvider
             Filament::registerNavigationGroups([
                 NavigationGroup::make()
                     ->collapsible(true)
-                    ->label(__('nav.groups.articles'))
+                    ->label(__('panel/nav.groups.articles'))
                     ->icon('heroicon-o-document-duplicate'),
                 NavigationGroup::make()
                     ->collapsible(true)
-                    ->label(__('nav.groups.users'))
+                    ->label(__('panel/nav.groups.users'))
                     ->icon('heroicon-o-users'),
                 NavigationGroup::make()
                     ->collapsible(true)
-                    ->label(__('nav.groups.event_management'))
+                    ->label(__('panel/nav.groups.event_management'))
                     ->icon('heroicon-o-calendar'),
                 NavigationGroup::make()
                     ->label(__("nav.groups.settings")),

@@ -1,11 +1,11 @@
 @extends('website.layouts.app')
 
-@section('title', 'Blog')
+@section('title', __('website/blog.our_blog'))
 
 @section('content')
     <div class="text-center mb-8">
-        <h1 class="text-4xl font-bold">Our Blog</h1>
-        <p class="text-gray-600 mt-2">Discover our latest articles and insights</p>
+        <h1 class="text-4xl font-bold">{{ __('website/blog.our_blog') }}</h1>
+        <p class="text-gray-600 mt-2">{{ __('website/blog.discover_articles') }}</p>
     </div>
 
     <div class="flex justify-center gap-8 mb-12">
@@ -14,18 +14,18 @@
                 <div class="stat-figure text-primary">
                     <x-heroicon-o-eye class="w-8 h-8" />
                 </div>
-                <div class="stat-title">Total Views</div>
+                <div class="stat-title">{{ __('website/blog.total_views') }}</div>
                 <div class="stat-value text-primary">{{ $totalViews }}</div>
-                <div class="stat-desc">21% more than last month</div>
+                <div class="stat-desc">{{ __('website/blog.more_than_last_month') }}</div>
             </div>
 
             <div class="stat">
                 <div class="stat-figure text-secondary">
                     <x-heroicon-o-book-open class="w-8 h-8" />
                 </div>
-                <div class="stat-title">Total Articles</div>
+                <div class="stat-title">{{ __('website/blog.total_articles') }}</div>
                 <div class="stat-value text-secondary">{{ $articles->total() }}</div>
-                <div class="stat-desc">And growing every week</div>
+                <div class="stat-desc">{{ __('website/blog.growing_weekly') }}</div>
             </div>
         </div>
     </div>

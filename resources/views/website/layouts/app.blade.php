@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}" data-theme="ffp-theme-dark"
-    lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html dir="{{ App::getLocale() === 'ar' ? 'rtl' : 'ltr' }}" data-theme="ffp-theme-light" lang="{{ App::getLocale() }}">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="{{ __('website/layout.meta.charset') }}">
+    <meta name="viewport" content="{{ __('website/layout.meta.viewport') }}">
     <title>@yield('title', config('app.name'))</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <link rel="preconnect" href="https://fonts.bunny.net">

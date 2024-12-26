@@ -13,25 +13,25 @@ class AdminInfolist
             ->schema([
                 Infolists\Components\Section::make([
                     Infolists\Components\TextEntry::make('name')
-                        ->label(__('exhibitors.form.name'))
-                        ->default(__('exhibitors.empty_states.name')),
+                        ->label(__('panel/admins.form.name'))
+                        ->default(__('panel/admins.empty_states.name')),
 
                     Infolists\Components\TextEntry::make('email')
-                        ->label(__('exhibitors.form.email'))
-                        ->default(__('exhibitors.empty_states.email')),
+                        ->label(__('panel/admins.form.email'))
+                        ->default(__('panel/admins.empty_states.email')),
 
                     Infolists\Components\TextEntry::make('roles.name')
-                        ->label(__('exhibitors.columns.roles'))
+                        ->label(__('panel/admins.columns.roles'))
                         ->badge()
                         ->color("gray")
-                        ->default(__('exhibitors.empty_states.roles')),
+                        ->default(__('panel/admins.empty_states.roles')),
 
                     Infolists\Components\TextEntry::make('created_at')
-                        ->label(__('exhibitors.columns.created_at'))
+                        ->label(__('panel/admins.columns.created_at'))
                         ->dateTime(),
 
                     Infolists\Components\TextEntry::make('verified_at')
-                        ->label(__('exhibitors.columns.verified_at'))
+                        ->label(__('panel/admins.columns.verified_at'))
                         ->dateTime(),
                 ])
             ]);

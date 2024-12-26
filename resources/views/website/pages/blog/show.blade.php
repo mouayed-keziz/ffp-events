@@ -46,7 +46,7 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <x-heroicon-o-eye class="w-5 h-5" />
-                            <span>{{ $viewCount }} views</span>
+                            <span>{{ $viewCount }} {{ __('website/blog.views') }}</span>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                 <div class="mt-16 pt-8 border-t border-base-300">
                     <a href="{{ route('blog.index') }}" class="btn btn-primary btn-outline gap-2">
                         <x-heroicon-o-arrow-left class="w-5 h-5" />
-                        Back to Blog
+                        {{ __('website/blog.back_to_blog') }}
                     </a>
                 </div>
             </div>

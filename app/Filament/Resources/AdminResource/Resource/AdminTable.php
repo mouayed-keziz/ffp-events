@@ -21,23 +21,23 @@ class AdminTable
                     ->toggleable()
                     ->sortable()
                     ->searchable()
-                    ->label(__('exhibitors.columns.name'))
-                    ->default(__('exhibitors.empty_states.name'))
-                    ->description(fn(User $record): string => $record->email)
+                    ->label(__('panel/admins.columns.name'))
+                    ->default(__('panel/admins.empty_states.name'))
+                    ->description(fn(User $record) => $record->email)
                     ->wrap(),
 
                 Tables\Columns\TextColumn::make('roles.name')
                     ->toggleable()
                     ->sortable()
                     ->searchable()
-                    ->label(__('exhibitors.columns.roles'))
+                    ->label(__('panel/admins.columns.roles'))
                     ->badge()
-                    ->default(__('exhibitors.empty_states.roles')),
+                    ->default(__('panel/admins.empty_states.roles')),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->toggleable()
                     ->sortable()
-                    ->label(__('exhibitors.columns.created_at'))
+                    ->label(__('panel/admins.columns.created_at'))
                     ->dateTime()
                     ->formatStateUsing(fn($state) => $state ? $state->diffForHumans() : null)
                     ->tooltip(fn($state) => $state ? $state->format('Y-m-d H:i:s') : null),
@@ -46,26 +46,26 @@ class AdminTable
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable()
-                    ->label(__('exhibitors.columns.verified_at'))
+                    ->label(__('panel/admins.columns.verified_at'))
                     ->afterStateUpdated(function ($state, $record) {
                         $record->update(['verified_at' => $state ? now() : null]);
                     }),
             ])
             ->filters([
                 // SelectFilter::make('roles')
-                //     ->label(__('exhibitors.filters.roles.label'))
-                //     ->placeholder(__('exhibitors.filters.roles.placeholder'))
+                //     ->label(__('panel/admins.filters.roles.label'))
+                //     ->placeholder(__('panel/admins.filters.roles.placeholder'))
                 //     ->multiple()
                 //     ->relationship('roles', 'name')
                 //     ->preload()
                 //     ->searchable(),
 
                 SelectFilter::make('verified')
-                    ->label(__('exhibitors.filters.verification.label'))
-                    ->placeholder(__('exhibitors.filters.verification.placeholder'))
+                    ->label(__('panel/admins.filters.verification.label'))
+                    ->placeholder(__('panel/admins.filters.verification.placeholder'))
                     ->options([
-                        'verified' => __('exhibitors.filters.verification.verified'),
-                        'unverified' => __('exhibitors.filters.verification.unverified'),
+                        'verified' => __('panel/admins.filters.verification.verified'),
+                        'unverified' => __('panel/admins.filters.verification.unverified'),
                     ])
                     ->attribute('verified_at')
                     ->query(function (Builder $query, array $data): Builder {
@@ -77,8 +77,8 @@ class AdminTable
                     }),
 
                 Tables\Filters\TrashedFilter::make()
-                    ->label(__('exhibitors.filters.trashed.label'))
-                    ->placeholder(__('exhibitors.filters.trashed.placeholder')),
+                    ->label(__('panel/admins.filters.trashed.label'))
+                    ->placeholder(__('panel/admins.filters.trashed.placeholder')),
             ])
             // ->filtersFormColumns(3)
             // ->filtersLayout(FiltersLayout::Modal)
@@ -99,7 +99,7 @@ class AdminTable
                     Tables\Actions\RestoreBulkAction::make(),
                 ])->color('gray'),
             ])
-            ->emptyStateHeading(__('exhibitors.empty_states.title'))
-            ->emptyStateDescription(__('exhibitors.empty_states.description'));
+            ->emptyStateHeading(__('panel/admins.empty_states.title'))
+            ->emptyStateDescription(__('panel/admins.empty_states.description'));
     }
 }

@@ -20,26 +20,26 @@ class ArticleForm
                     ->schema([
                         Forms\Components\Tabs::make('Article')
                             ->tabs([
-                                Forms\Components\Tabs\Tab::make(__('articles.form.tabs.information'))
+                                Forms\Components\Tabs\Tab::make(__('panel/articles.form.tabs.information'))
                                     ->schema([
                                         Forms\Components\TextInput::make('title')
-                                            ->label(__('articles.form.title'))
-                                            ->placeholder(__('articles.placeholders.title'))
+                                            ->label(__('panel/articles.form.title'))
+                                            ->placeholder(__('panel/articles.placeholders.title'))
                                             ->required()
                                             ->maxLength(255)
                                             ->live(onBlur: true)
                                             ->afterStateUpdated(fn(string $state, Forms\Set $set) => $set('slug', Str::slug($state))),
 
                                         Forms\Components\TextInput::make('slug')
-                                            ->label(__('articles.form.slug'))
-                                            ->placeholder(__('articles.placeholders.slug'))
+                                            ->label(__('panel/articles.form.slug'))
+                                            ->placeholder(__('panel/articles.placeholders.slug'))
                                             ->disabled()
                                             ->dehydrated()
                                             ->required(),
 
                                         Forms\Components\Textarea::make('description')
-                                            ->label(__('articles.form.description'))
-                                            ->placeholder(__('articles.placeholders.description'))
+                                            ->label(__('panel/articles.form.description'))
+                                            ->placeholder(__('panel/articles.placeholders.description'))
                                             ->required()
                                             ->columnSpanFull()
                                             ->rows(4),
@@ -47,14 +47,14 @@ class ArticleForm
                                         Forms\Components\DateTimePicker::make('published_at')
                                             ->columnSpanFull()
                                             ->native(false)
-                                            ->label(__('articles.form.published_date')),
+                                            ->label(__('panel/articles.form.published_date')),
                                     ])->columns(2),
 
-                                Forms\Components\Tabs\Tab::make(__('articles.form.tabs.content'))
+                                Forms\Components\Tabs\Tab::make(__('panel/articles.form.tabs.content'))
                                     ->schema([
                                         Forms\Components\RichEditor::make('content')
-                                            ->label(__('articles.form.content'))
-                                            ->placeholder(__('articles.placeholders.content'))
+                                            ->label(__('panel/articles.form.content'))
+                                            ->placeholder(__('panel/articles.placeholders.content'))
                                             ->required(),
                                     ]),
                             ])
@@ -64,7 +64,7 @@ class ArticleForm
                 Group::make()
                     ->columnSpan(['lg' => 1])
                     ->schema([
-                        Section::make(__('articles.form.sections.featured_image'))
+                        Section::make(__('panel/articles.form.sections.featured_image'))
                             ->collapsible()
                             ->schema([
                                 SpatieMediaLibraryFileUpload::make('image')
@@ -75,7 +75,7 @@ class ArticleForm
                                     ->columnSpanFull(),
                             ]),
 
-                        Section::make(__('articles.categories.plural'))
+                        Section::make(__('panel/articles.categories.plural'))
                             ->schema([
                                 Forms\Components\Select::make('categories')
                                     ->label("")

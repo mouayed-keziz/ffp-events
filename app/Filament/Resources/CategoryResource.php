@@ -27,17 +27,17 @@ class CategoryResource extends Resource
     protected static ?string $recordTitleAttribute = 'categoryTitle';
     public static function getNavigationGroup(): ?string
     {
-        return __('nav.groups.articles');
+        return __('panel/nav.groups.articles');
     }
 
     public static function getModelLabel(): string
     {
-        return __('articles.categories.single');
+        return __('panel/articles.categories.single');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('articles.categories.plural');
+        return __('panel/articles.categories.plural');
     }
 
     public static function form(Form $form): Form

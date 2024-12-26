@@ -20,11 +20,11 @@
                     <div class="flex items-center gap-8">
                         <a href="{{ route('blog.index') }}"
                             class="link link-hover transition-colors {{ request()->routeIs('blog.index') ? 'link-primary underline' : '' }}">
-                            Blog
+                            {{ __('website/navbar.blog') }}
                         </a>
                         <a href="{{ route('blog.categories') }}"
                             class="link link-hover transition-colors {{ request()->routeIs('blog.categories') ? 'link-primary underline' : '' }}">
-                            Categories
+                            {{ __('website/navbar.categories') }}
                         </a>
                     </div>
                 </div>
@@ -32,9 +32,10 @@
                     <a href="#" class="btn btn-sm">
                         <div class="flex items-center gap-2">
                             <x-heroicon-o-user class="w-4 h-4" />
-                            <span>Login</span>
+                            <span>{{ __('website/navbar.login') }}</span>
                         </div>
                     </a>
+                    @include('website.components.local-dropdown')
                 </div>
             </div>
         </div>
@@ -57,12 +58,12 @@
                 <a href="{{ route('blog.index') }}"
                     class="flex items-center gap-3 p-3 rounded-lg hover:bg-base-200 transition-colors {{ request()->routeIs('blog.index') ? 'bg-primary/10 text-primary' : '' }}">
                     <x-heroicon-o-newspaper class="w-5 h-5" />
-                    <span>Blog</span>
+                    <span>{{ __('website/navbar.blog') }}</span>
                 </a>
                 <a href="{{ route('blog.categories') }}"
                     class="flex items-center gap-3 p-3 rounded-lg hover:bg-base-200 transition-colors {{ request()->routeIs('blog.categories') ? 'bg-primary/10 text-primary' : '' }}">
                     <x-heroicon-o-squares-2x2 class="w-5 h-5" />
-                    <span>Categories</span>
+                    <span>{{ __('website/navbar.categories') }}</span>
                 </a>
             </nav>
 
@@ -70,7 +71,7 @@
             <div class="mt-auto border-t border-base-200 pt-4">
                 <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-base-200 transition-colors">
                     <x-heroicon-o-user class="w-5 h-5" />
-                    <span>Login</span>
+                    <span>{{ __('website/navbar.login') }}</span>
                 </a>
             </div>
         </div>

@@ -1,16 +1,15 @@
 @extends('website.layouts.app')
 
-@section('title', 'FFP Events - Create Memorable Experiences')
+@section('title', __('website/home.page_title'))
 
 @section('content')
     <!-- Hero Section -->
     <div class="hero py-24 bg-base-200/50 rounded-box">
         <div class="hero-content text-center">
             <div class="max-w-md">
-                <h1 class="text-5xl font-bold text-primary">FFP EVENTS</h1>
-                <p class="py-6">Transform your events into unforgettable experiences with our professional event planning
-                    services.</p>
-                <button class="btn btn-primary">Get Started</button>
+                <h1 class="text-5xl font-bold text-primary">{{ __('website/home.hero.title') }}</h1>
+                <p class="py-6">{{ __('website/home.hero.description') }}</p>
+                <button class="btn btn-primary">{{ __('website/home.hero.cta_button') }}</button>
             </div>
         </div>
     </div>

@@ -21,7 +21,7 @@ class Category extends Model
 
     public function getCategoryTitleAttribute()
     {
-        return __("articles.categories.single") . " - " . $this->name;
+        return __("panel/articles.categories.single") . " - " . $this->name;
     }
 
     public function articles()

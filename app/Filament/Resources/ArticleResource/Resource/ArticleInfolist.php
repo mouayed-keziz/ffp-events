@@ -20,40 +20,40 @@ class ArticleInfolist
             ->schema([
                 Tabs::make('Article')
                     ->tabs([
-                        Tabs\Tab::make(__('articles.form.tabs.information'))
+                        Tabs\Tab::make(__('panel/articles.form.tabs.information'))
                             ->schema([
                                 Section::make()
                                     ->schema([
                                         TextEntry::make('title')
                                             ->size(TextEntrySize::Large)
                                             ->weight(FontWeight::Bold)
-                                            ->label(__('articles.form.title')),
+                                            ->label(__('panel/articles.form.title')),
 
                                         TextEntry::make('status')
                                             ->badge()
-                                            ->label(__("articles.columns.status")),
+                                            ->label(__("panel/articles.columns.status")),
 
                                         TextEntry::make('description')
-                                            ->label(__('articles.form.description')),
+                                            ->label(__('panel/articles.form.description')),
 
                                         TextEntry::make('views')
                                             ->badge()
-                                            ->label(__("articles.columns.views"))
+                                            ->label(__("panel/articles.columns.views"))
                                             ->color("gray"),
 
                                         TextEntry::make('published_at')
-                                            ->label(__('articles.form.published_date'))
+                                            ->label(__('panel/articles.form.published_date'))
                                             ->dateTime(),
 
                                         TextEntry::make('categories.name')
-                                            ->label(__('articles.categories.plural'))
+                                            ->label(__('panel/articles.categories.plural'))
                                             ->badge()
                                             ->columnSpanFull(),
                                     ])
                                     ->columns(2),
                             ]),
 
-                        Tabs\Tab::make(__('articles.form.tabs.content'))
+                        Tabs\Tab::make(__('panel/articles.form.tabs.content'))
                             ->schema([
 
                                 Infolists\Components\ViewEntry::make('article')

@@ -27,7 +27,7 @@ class ListArticles extends ListRecords
     {
         return [
             'all' => Tab::make()
-                ->label(__('articles.status.all'))
+                ->label(__('panel/articles.status.all'))
                 ->icon('heroicon-m-list-bullet')
                 ->modifyQueryUsing(fn($query) => $query->withoutTrashed())
                 ->badge(Article::published()->count())

@@ -34,17 +34,17 @@ class ExhibitorResource extends Resource
     }
     public static function getNavigationGroup(): ?string
     {
-        return __('nav.groups.users');
+        return __('panel/nav.groups.users');
     }
 
     public static function getModelLabel(): string
     {
-        return __('exhibitors.resource.single');
+        return __('panel/exhibitors.resource.single');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('exhibitors.resource.plural');
+        return __('panel/exhibitors.resource.plural');
     }
 
     public static function getGloballySearchableAttributes(): array

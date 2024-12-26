@@ -24,8 +24,8 @@ export default {
         themes: [
             {
                 "ffp-theme-light": {
-                    "primary": colors.amber[500],
-                    "primary-focus": colors.amber[600],
+                    "primary": colors.orange[500],
+                    "primary-focus": colors.orange[600],
                     "primary-content": colors.white,
                     "secondary": colors.amber[400],
                     "secondary-focus": colors.amber[500],

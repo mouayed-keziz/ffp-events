@@ -19,8 +19,8 @@ class VisitorTable
                     ->toggleable()
                     ->sortable()
                     ->searchable()
-                    ->label(__('visitors.columns.name'))
-                    ->default(__('visitors.empty_states.name'))
+                    ->label(__('panel/visitors.columns.name'))
+                    ->default(__('panel/visitors.empty_states.name'))
                     ->description(fn(User $record): string => $record->email)
                     ->wrap(),
 
@@ -28,14 +28,14 @@ class VisitorTable
                     ->toggleable()
                     ->sortable()
                     ->searchable()
-                    ->label(__('visitors.columns.roles'))
+                    ->label(__('panel/visitors.columns.roles'))
                     ->badge()
-                    ->default(__('visitors.empty_states.roles')),
+                    ->default(__('panel/visitors.empty_states.roles')),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->toggleable()
                     ->sortable()
-                    ->label(__('visitors.columns.created_at'))
+                    ->label(__('panel/visitors.columns.created_at'))
                     ->dateTime()
                     ->formatStateUsing(fn($state) => $state ? $state->diffForHumans() : null)
                     ->tooltip(fn($state) => $state ? $state->format('Y-m-d H:i:s') : null),
@@ -44,30 +44,30 @@ class VisitorTable
                     ->toggleable()
                     ->toggledHiddenByDefault()
                     ->sortable()
-                    ->label(__('visitors.columns.verified_at'))
+                    ->label(__('panel/visitors.columns.verified_at'))
                     ->afterStateUpdated(function ($state, $record) {
                         $record->update(['verified_at' => $state ? now() : null]);
                     }),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make()
-                    ->label(__('visitors.filters.trashed.label'))
-                    ->placeholder(__('visitors.filters.trashed.placeholder')),
+                    ->label(__('panel/visitors.filters.trashed.label'))
+                    ->placeholder(__('panel/visitors.filters.trashed.placeholder')),
 
                 // SelectFilter::make('roles')
-                //     ->label(__('visitors.filters.roles.label'))
-                //     ->placeholder(__('visitors.filters.roles.placeholder'))
+                //     ->label(__('panel/visitors.filters.roles.label'))
+                //     ->placeholder(__('panel/visitors.filters.roles.placeholder'))
                 //     ->multiple()
                 //     ->relationship('roles', 'name')
                 //     ->preload()
                 //     ->searchable(),
 
                 SelectFilter::make('verified')
-                    ->label(__('visitors.filters.verification.label'))
-                    ->placeholder(__('visitors.filters.verification.placeholder'))
+                    ->label(__('panel/visitors.filters.verification.label'))
+                    ->placeholder(__('panel/visitors.filters.verification.placeholder'))
                     ->options([
-                        'verified' => __('visitors.filters.verification.verified'),
-                        'unverified' => __('visitors.filters.verification.unverified'),
+                        'verified' => __('panel/visitors.filters.verification.verified'),
+                        'unverified' => __('panel/visitors.filters.verification.unverified'),
                     ])
                     ->attribute('verified_at')
                     ->query(function (Builder $query, array $data): Builder {
@@ -95,7 +95,7 @@ class VisitorTable
                     Tables\Actions\RestoreBulkAction::make(),
                 ])->color('gray'),
             ])
-            ->emptyStateHeading(__('visitors.empty_states.title'))
-            ->emptyStateDescription(__('visitors.empty_states.description'));
+            ->emptyStateHeading(__('panel/visitors.empty_states.title'))
+            ->emptyStateDescription(__('panel/visitors.empty_states.description'));
     }
 }

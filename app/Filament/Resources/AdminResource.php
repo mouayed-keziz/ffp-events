@@ -34,17 +34,17 @@ class AdminResource extends Resource
     }
     public static function getNavigationGroup(): ?string
     {
-        return __('nav.groups.users');
+        return __('panel/nav.groups.users');
     }
 
     public static function getModelLabel(): string
     {
-        return __('admins.resource.single');
+        return __('panel/admins.resource.single');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('admins.resource.plural');
+        return __('panel/admins.resource.plural');
     }
     public static function getGloballySearchableAttributes(): array
     {

@@ -4,7 +4,7 @@
         <h2 class="text-1xl font-bold text-base-content group-hover:text-primary transition-colors mb-2">
             {{ $category->name }}
         </h2>
-        <div class="flex items-center space-x-2">
+        <div class="flex items-center gap-1">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-neutral" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -12,7 +12,7 @@
             </svg>
             <p class="text-base-content/70 font-medium">
                 {{ $category->articles_count }}
-                {{ Str::plural('article', $category->articles_count) }}
+                {{ trans_choice('website/blog.articles', $category->articles_count) }}
             </p>
         </div>
     </div>

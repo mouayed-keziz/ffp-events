@@ -34,17 +34,17 @@ class VisitorResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('nav.groups.users');
+        return __('panel/nav.groups.users');
     }
 
     public static function getModelLabel(): string
     {
-        return __('visitors.resource.single');
+        return __('panel/visitors.resource.single');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('visitors.resource.plural');
+        return __('panel/visitors.resource.plural');
     }
 
     public static function getGloballySearchableAttributes(): array

@@ -13,18 +13,18 @@ class ExhibitorForm
             ->schema([
                 Forms\Components\Section::make([
                     Forms\Components\TextInput::make('name')
-                        ->label(__('exhibitors.form.name'))
+                        ->label(__('panel/exhibitors.form.name'))
                         ->required()
                         ->maxLength(255),
 
                     Forms\Components\TextInput::make('email')
-                        ->label(__('exhibitors.form.email'))
+                        ->label(__('panel/exhibitors.form.email'))
                         ->email()
                         ->required()
                         ->maxLength(255),
 
                     Forms\Components\TextInput::make('password')
-                        ->label(__('exhibitors.form.password'))
+                        ->label(__('panel/exhibitors.form.password'))
                         ->password()
                         ->required()
                         ->maxLength(255),

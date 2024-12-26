@@ -14,11 +14,11 @@ class ExhibitorActions
         return Tables\Actions\Action::make('regeneratePassword')
             ->button()
             ->outlined()
-            ->label(__('exhibitors.actions.regenerate_password.label'))
+            ->label(__('panel/exhibitors.actions.regenerate_password.label'))
             ->icon('heroicon-o-key')
             ->requiresConfirmation()
-            ->modalHeading(__('exhibitors.actions.regenerate_password.modal_heading'))
-            ->modalDescription(__('exhibitors.actions.regenerate_password.modal_description'))
+            ->modalHeading(__('panel/exhibitors.actions.regenerate_password.modal_heading'))
+            ->modalDescription(__('panel/exhibitors.actions.regenerate_password.modal_description'))
             ->action(function (User $record) {
                 self::execute_action($record);
             });
@@ -27,11 +27,11 @@ class ExhibitorActions
     public static function regeneratePasswordViewPageAction()
     {
         return \Filament\Actions\Action::make("regeneratePassword")
-            ->label(__('exhibitors.actions.regenerate_password.label'))
+            ->label(__('panel/exhibitors.actions.regenerate_password.label'))
             ->icon('heroicon-o-key')
             ->requiresConfirmation()
-            ->modalHeading(__('exhibitors.actions.regenerate_password.modal_heading'))
-            ->modalDescription(__('exhibitors.actions.regenerate_password.modal_description'))
+            ->modalHeading(__('panel/exhibitors.actions.regenerate_password.modal_heading'))
+            ->modalDescription(__('panel/exhibitors.actions.regenerate_password.modal_description'))
             ->action(function (User $record) {
                 self::execute_action($record);
             });
@@ -44,14 +44,14 @@ class ExhibitorActions
 
             Notification::make()
                 ->success()
-                ->title(__('exhibitors.actions.regenerate_password.success_title'))
-                ->body(__('exhibitors.actions.regenerate_password.success_body'))
+                ->title(__('panel/exhibitors.actions.regenerate_password.success_title'))
+                ->body(__('panel/exhibitors.actions.regenerate_password.success_body'))
                 ->send();
         } catch (\Exception $e) {
             Notification::make()
                 ->danger()
-                ->title(__('exhibitors.actions.regenerate_password.error_title'))
-                ->body(__('exhibitors.actions.regenerate_password.error_body'))
+                ->title(__('panel/exhibitors.actions.regenerate_password.error_title'))
+                ->body(__('panel/exhibitors.actions.regenerate_password.error_body'))
                 ->send();
         }
     }

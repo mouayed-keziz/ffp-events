@@ -14,7 +14,7 @@ class ArticleActions
         return Action::make('preview')
             ->button()
             ->outlined()
-            ->label(__("articles.actions.visit"))
+            ->label(__("panel/articles.actions.visit"))
             ->icon('heroicon-o-arrow-top-right-on-square')
             ->url(fn($record) => route('blog.show', $record), true)
             ->visible(fn($record) => $record->status === ArticleStatus::Published);
@@ -25,7 +25,7 @@ class ArticleActions
         return HeaderAction::make('preview')
             ->icon('heroicon-o-eye')
             ->color("gray")
-            ->label(__("articles.actions.visit"))
+            ->label(__("panel/articles.actions.visit"))
             ->url(fn($record) => route('blog.show', $record), true)
             ->visible(fn($record) => $record->status === ArticleStatus::Published);
     }

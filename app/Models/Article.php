@@ -56,7 +56,7 @@ class Article extends Model implements HasMedia, Viewable
     }
     public function getArticleTitleAttribute()
     {
-        return __("articles.resource.single") . " - " . $this->title;
+        return __("panel/articles.resource.single") . " - " . $this->title;
     }
     public function getStatusAttribute(): ArticleStatus
     {
