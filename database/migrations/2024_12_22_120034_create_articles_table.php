@@ -16,7 +16,7 @@ return new class extends Migration
             $table->json('title');
             $table->json('slug')->unique();
             $table->json('description')->nullable();
-            $table->longText('content')->nullable();
+            $table->json('content')->nullable();
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
             $table->softDeletes();

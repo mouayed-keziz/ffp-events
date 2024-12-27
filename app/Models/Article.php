@@ -21,13 +21,13 @@ class Article extends Model implements HasMedia, Viewable
     use InteractsWithMedia;
     use InteractsWithViews;
     use HasTranslations;
-    use HasRichMedia;
+    // use HasRichMedia;
 
     // public static $richFields = ['content'];
 
     protected $fillable = ['title', 'slug', 'description', 'content', 'published_at'];
-    public $translatable = ['title', 'slug', 'description'];
-    // public $translatable = ['title', 'slug', 'description', 'content'];
+    // public $translatable = ['title', 'slug', 'description'];
+    public $translatable = ['title', 'slug', 'description', 'content'];
 
     protected $with = ['categories'];
 

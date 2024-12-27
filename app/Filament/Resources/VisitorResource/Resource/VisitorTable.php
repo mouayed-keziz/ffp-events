@@ -21,7 +21,7 @@ class VisitorTable
                     ->searchable()
                     ->label(__('panel/visitors.columns.name'))
                     ->default(__('panel/visitors.empty_states.name'))
-                    ->description(fn(User $record): string => $record->email)
+                    ->description(fn(User $record) => $record->email)
                     ->wrap(),
 
                 Tables\Columns\TextColumn::make('roles.name')

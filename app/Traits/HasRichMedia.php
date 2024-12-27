@@ -8,7 +8,8 @@
  * to reduce boilerplate code and standardize database operations.
  * Not recommended for production use without proper testing and validation.
  * 
- * The goal is to simplify CRUD operations while maintaining flexibility and 
+ * The goal is to simplify adding attachements to filament's rich text editor
+ * through spatie media library, while maintaining a flexible way to customize it and
  * keeping the codebase DRY (Don't Repeat Yourself).
  * 
  * @experimental This is an experimental feature and may change in future versions
