@@ -6,10 +6,7 @@ use App\Models\Article;
 use App\Models\Category;
 use App\Models\User;
 use Database\Seeders\application\RoleSeeder;
-use Spatie\Permission\Models\Role;
-use Filament\Notifications\Notification;
-use Filament\Notifications\Actions\Action;
-use Faker\Factory as Faker;
+// use Faker\Factory as Faker;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -22,15 +19,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RoleSeeder::class,
+            AdminSeeder::class,
             AdvancedEventAnnouncementSeeder::class,
         ]);
 
-        // Create admin and other users
-        User::factory()->superAdmin()->create([
-            'name' => 'Admin',
-            'email' => 'admin@admin.dev',
-            'password' => bcrypt('adminadmin'),
-        ]);
 
         User::factory(16)->exhibitor()->create();
         User::factory(4)->admin()->create();

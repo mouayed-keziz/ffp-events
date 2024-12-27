@@ -44,7 +44,8 @@ class ArticleTable
                 ->searchable()
                 ->limitList(1)
                 ->badge()
-                ->grow(true),
+                ->grow(true)
+                ->wrap(false),
 
             Tables\Columns\TextColumn::make('status')
                 ->label(__("panel/articles.columns.status"))
