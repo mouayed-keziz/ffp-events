@@ -11,6 +11,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Enums\ArticleStatus;
 use App\Traits\HasRichMedia;
 use Spatie\Translatable\HasTranslations;
+use App\Observers\ArticleObserver;
 
 class Article extends Model implements HasMedia
 {
@@ -32,6 +33,12 @@ class Article extends Model implements HasMedia
         'published_at' => 'datetime',
         'status' => ArticleStatus::class,
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::observe(ArticleObserver::class);
+    }
 
     public function registerMediaCollections(): void
     {
@@ -60,7 +67,7 @@ class Article extends Model implements HasMedia
     {
         return 999;
     }
-    public function getArticleTitleAttribute()
+    public function getRecordTitleAttribute()
     {
         return __("panel/articles.resource.single") . " - " . $this->title;
     }

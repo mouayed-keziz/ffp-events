@@ -20,10 +20,9 @@ class ArticleResource extends Resource
     use Translatable;
 
     protected static ?string $model = Article::class;
-
     // protected static ?string $navigationIcon = 'heroicon-o-document-duplicate';
     protected static ?int $navigationSort = 5;
-    protected static ?string $recordTitleAttribute = 'articleTitle';
+    protected static ?string $recordTitleAttribute = 'recordTitle';
 
     public static function getNavigationGroup(): ?string
     {

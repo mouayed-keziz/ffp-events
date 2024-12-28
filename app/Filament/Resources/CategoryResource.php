@@ -24,7 +24,7 @@ class CategoryResource extends Resource
 
     protected static ?string $model = Category::class;
     protected static ?int $navigationSort = 6;
-    protected static ?string $recordTitleAttribute = 'categoryTitle';
+    protected static ?string $recordTitleAttribute = 'recordTitle';
     public static function getNavigationGroup(): ?string
     {
         return __('panel/nav.groups.articles');

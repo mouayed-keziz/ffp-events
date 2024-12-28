@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\CategoryObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
@@ -19,7 +20,7 @@ class Category extends Model
     //     'slug' => 'array',
     // ];
 
-    public function getCategoryTitleAttribute()
+    public function getRecordTitleAttribute()
     {
         return __("panel/articles.categories.single") . " - " . $this->name;
     }
@@ -27,5 +28,11 @@ class Category extends Model
     public function articles()
     {
         return $this->belongsToMany(Article::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::observe(CategoryObserver::class);
     }
 }
