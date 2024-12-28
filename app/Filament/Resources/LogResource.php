@@ -17,6 +17,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\ExportAction;
+use Filament\Tables\Actions\ExportBulkAction;
 
 class LogResource extends Resource
 {
@@ -58,8 +59,7 @@ class LogResource extends Resource
         return $table
             ->headerActions([
                 ExportAction::make()
-                    // ->label("panel")
-                    ->icon('heroicon-o-arrow-up-tray')
+                    ->icon('heroicon-o-arrow-down-tray')
                     ->exporter(LogExporter::class)
             ])
             ->columns([
@@ -156,6 +156,9 @@ class LogResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    ExportBulkAction::make()
+                        ->icon('heroicon-o-arrow-down-tray')
+                        ->exporter(LogExporter::class),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
