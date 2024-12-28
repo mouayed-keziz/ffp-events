@@ -5,6 +5,10 @@ return [
         'creation' => 'إنشاء',
         'modification' => 'تعديل',
         'deletion' => 'حذف',
+        'force_deletion' => 'حذف نهائي',
+        'restoration' => 'استعادة',
+        'login' => 'تسجيل الدخول',
+        'logout' => 'تسجيل الخروج',
     ],
     'resource' => [
         'single' => 'سجل',
@@ -13,6 +17,7 @@ return [
     "names" => [
         'categories' => 'التصنيفات',
         'articles' => 'المقالات',
+        'authentication' => 'المصادقة',
     ],
     'columns' => [
         "log_name" => "اسم السجل",
@@ -27,6 +32,7 @@ return [
         'causer' => 'بدون متسبب',
         'event' => 'بدون حدث',
         "created_at" => "بدون تاريخ إنشاء",
+        'deleted_record' => '*سجل محذوف*',
     ],
     'filters' => [
         'date' => [
@@ -39,5 +45,29 @@ return [
         ],
         'log_name' => 'نوع السجل',
         'event' => 'نوع الحدث'
+    ],
+    'actions' => [
+        'delete_all' => [
+            'label' => 'حذف جميع السجلات',
+            'modal' => [
+                'heading' => 'حذف جميع السجلات',
+                'description' => 'هل أنت متأكد من حذف جميع السجلات؟ لا يمكن التراجع عن هذا الإجراء.',
+                'submit_label' => 'نعم، احذف جميع السجلات',
+                'password' => [
+                    'label' => 'كلمة المرور',
+                    'helper_text' => 'الرجاء إدخال كلمة المرور لتأكيد هذا الإجراء'
+                ]
+            ],
+            'notifications' => [
+                'success' => [
+                    'title' => 'تم حذف السجلات بنجاح',
+                    'body' => 'تم حذف جميع السجلات بشكل نهائي.'
+                ],
+                'error' => [
+                    'title' => 'كلمة المرور غير صحيحة',
+                    'body' => 'كلمة المرور التي أدخلتها غير صحيحة.'
+                ]
+            ]
+        ]
     ]
 ];

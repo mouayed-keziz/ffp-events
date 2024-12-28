@@ -56,7 +56,7 @@ enum LogEvent: string implements HasLabel, HasColor, HasIcon
             self::Deletion => 'heroicon-o-trash',
 
             self::ForceDeletion => 'heroicon-o-trash',
-            self::Restoration => 'heroicon-o-refresh',
+            self::Restoration => 'heroicon-o-arrow-path',
 
             self::Login => 'heroicon-o-arrow-left-start-on-rectangle',
             self::Logout => 'heroicon-o-arrow-left-end-on-rectangle',

@@ -45,12 +45,12 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->profile(isSimple: false)
             ->databaseNotifications()
+            ->databaseNotificationsPolling("30s")
             ->databaseTransactions()
             ->brandLogo(fn() => view('panel.brand-logo'))
             ->darkModeBrandLogo(fn() => view('panel.brand-logo-dark'))
             ->favicon(asset(("favicon.svg")))
             ->brandLogoHeight(fn() => Auth::check() ? '3rem' : '5rem')
-            ->databaseNotificationsPolling("30s")
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
                 'primary' => Color::Amber,

@@ -10,6 +10,7 @@ use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
@@ -20,6 +21,15 @@ class LogResource extends Resource
     protected static ?string $model = Log::class;
     protected static ?int $navigationSort = 6;
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'primary';
+    }
     public static function getNavigationGroup(): ?string
     {
         return __('panel/nav.groups.management');
@@ -57,15 +67,6 @@ class LogResource extends Resource
                     ->label(__('panel/logs.columns.log_name'))
                     ->placeholder(__('panel/logs.empty_states.log_name')),
 
-                Tables\Columns\TextColumn::make('subject.recordTitle')
-                    ->tooltip(fn($record) => $record->subjectField)
-                    ->limit(30)
-                    ->state(fn($record) => $record->subjectField)
-                    ->searchable()
-                    ->toggleable()
-                    ->label(__('panel/logs.columns.subject'))
-                    ->placeholder(__('panel/logs.empty_states.subject')),
-
                 Tables\Columns\TextColumn::make('causer.name')
                     ->searchable()
                     ->sortable()
@@ -80,6 +81,16 @@ class LogResource extends Resource
                     ->label(__('panel/logs.columns.event'))
                     ->placeholder(__('panel/logs.empty_states.event')),
 
+                Tables\Columns\TextColumn::make('subject.recordTitle')
+                    ->tooltip(fn($record) => $record->subjectField)
+                    ->limit(30)
+                    ->state(fn($record) => $record->subjectField)
+                    ->searchable()
+                    ->toggleable()
+                    ->label(__('panel/logs.columns.subject'))
+                    ->placeholder(__('panel/logs.empty_states.subject')),
+
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -89,6 +100,8 @@ class LogResource extends Resource
                     ->placeholder(__('panel/logs.empty_states.created_at')),
             ])
             ->defaultSort('created_at', 'desc')
+            ->filtersFormColumns(2)
+            ->filtersLayout(FiltersLayout::AboveContent)
             ->filters([
                 Filter::make('created_from')
                     ->form([
@@ -151,8 +164,8 @@ class LogResource extends Resource
     {
         return [
             'index' => Pages\ListLogs::route('/'),
-            'create' => Pages\CreateLog::route('/create'),
-            'view' => Pages\ViewLog::route('/{record}'),
+            // 'create' => Pages\CreateLog::route('/create'),
+            // 'view' => Pages\ViewLog::route('/{record}'),
             // 'edit' => Pages\EditLog::route('/{record}/edit'),
         ];
     }

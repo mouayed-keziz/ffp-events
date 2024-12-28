@@ -69,6 +69,24 @@ class ArticleObserver
 
     public function deleted(Article $article)
     {
+        // Only log if it's a soft delete
+        if (!$article->isForceDeleting()) {
+            $this->logArticleAction($article, LogEvent::Deletion, "Suppression de l'article");
+        }
+    }
+
+    public function forceDeleted(Article $article)
+    {
+        $this->logArticleAction($article, LogEvent::ForceDeletion, "Suppression définitive de l'article");
+    }
+
+    public function restored(Article $article)
+    {
+        $this->logArticleAction($article, LogEvent::Restoration, "Restauration de l'article");
+    }
+
+    private function logArticleAction(Article $article, LogEvent $event, string $description)
+    {
         $properties = [
             'fr' => [
                 'title' => $article->getTranslation('title', 'fr'),
@@ -86,10 +104,10 @@ class ArticleObserver
 
         activity()
             ->useLog(LogName::Articles->value)
-            ->event(LogEvent::Deletion->value)
+            ->event($event->value)
             ->performedOn($article)
             ->causedBy(Auth::user())
             ->withProperties($properties)
-            ->log("Suppression de l'article");
+            ->log($description);
     }
 }
