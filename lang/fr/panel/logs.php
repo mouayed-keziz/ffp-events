@@ -5,10 +5,14 @@ return [
         'creation' => 'Création',
         'modification' => 'Modification',
         'deletion' => 'Suppression',
+
+        'login' => 'Connexion',
+        'logout' => 'Déconnexion',
     ],
     "names" => [
         'categories' => 'Catégories',
         'articles' => 'Articles',
+        'authentication' => 'Authentification',
     ],
     'resource' => [
         'single' => 'Journal',
@@ -27,6 +31,8 @@ return [
         'causer' => 'sans causer',
         'event' => 'sans événement',
         "created_at" => "sans date de création",
+
+        'deleted_record' => '*Enregistrement supprimé*',
     ],
 
     'filters' => [

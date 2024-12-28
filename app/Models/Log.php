@@ -12,4 +12,15 @@ class Log extends Activity
         'event' => LogEvent::class,
         'log_name' => LogName::class,
     ];
+
+    public function getSubjectFieldAttribute()
+    {
+        if ($this->log_name === LogName::Authentication) {
+            return null;
+        }
+        if ($this->subject === null) {
+            return __('panel/logs.empty_states.deleted_record') . ' - id:' . $this->subject_id;
+        }
+        return $this->subject->recordTitle;
+    }
 }

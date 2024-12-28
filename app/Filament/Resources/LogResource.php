@@ -58,13 +58,9 @@ class LogResource extends Resource
                     ->placeholder(__('panel/logs.empty_states.log_name')),
 
                 Tables\Columns\TextColumn::make('subject.recordTitle')
+                    ->tooltip(fn($record) => $record->subjectField)
                     ->limit(30)
-                    ->state(function ($record) {
-                        if ($record->subject === null) {
-                            return __('panel/articles.categories.single') . ' - ' . $record->subject_id;
-                        }
-                        return $record->subject->recordTitle;
-                    })
+                    ->state(fn($record) => $record->subjectField)
                     ->searchable()
                     ->toggleable()
                     ->label(__('panel/logs.columns.subject'))
