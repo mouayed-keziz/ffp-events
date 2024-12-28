@@ -22,7 +22,7 @@ Route::middleware('locloooc')->group(function () {
     Route::get('/blog', function () {
         return view('website.pages.blog.index', [
             'articles' => Article::published()->latest()->paginate(9),
-            'totalViews' => views(Article::class)->count(),
+            'totalViews' => 9999,
         ]);
     })->name('blog.index');
 
@@ -43,11 +43,10 @@ Route::middleware('locloooc')->group(function () {
 
     Route::get('/blog/{id}', function (int $id) {
         $article = Article::findOrFail($id);
-        views($article)->cooldown(now()->addMinutes(5))->record();
 
         return view('website.pages.blog.show', [
             'article' => $article,
-            'viewCount' => views($article)->count()
+            'viewCount' => $article->views
         ]);
     })->name('blog.show');
 });

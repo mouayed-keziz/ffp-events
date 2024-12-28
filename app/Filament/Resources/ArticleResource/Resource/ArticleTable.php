@@ -17,6 +17,7 @@ class ArticleTable
                 ->label(__("panel/articles.columns.image"))
                 ->collection('image')
                 ->circular()
+                ->toggleable(isToggledHiddenByDefault: true)
                 ->placeholder(__('panel/articles.empty_states.image')),
 
             Tables\Columns\TextColumn::make('title')
@@ -51,8 +52,7 @@ class ArticleTable
                 ->label(__("panel/articles.columns.status"))
                 ->badge()
                 ->sortable()
-                ->alignCenter()
-                ->grow(true),
+                ->alignCenter(),
 
             Tables\Columns\TextColumn::make("views")
                 ->label(__("panel/articles.columns.views"))
@@ -101,9 +101,9 @@ class ArticleTable
                 // Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                ArticleActions::PreviewAction(),
+                ArticleActions::PreviewAction()->link(),
                 Tables\Actions\ViewAction::make()->button(),
-                Tables\Actions\EditAction::make()->button(),
+                Tables\Actions\EditAction::make()->button()->outlined(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

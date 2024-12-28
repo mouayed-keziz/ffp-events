@@ -10,16 +10,13 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use App\Enums\ArticleStatus;
 use App\Traits\HasRichMedia;
-use CyrildeWit\EloquentViewable\InteractsWithViews;
-use CyrildeWit\EloquentViewable\Contracts\Viewable;
 use Spatie\Translatable\HasTranslations;
 
-class Article extends Model implements HasMedia, Viewable
+class Article extends Model implements HasMedia
 {
     use HasFactory;
     use SoftDeletes;
     use InteractsWithMedia;
-    use InteractsWithViews;
     use HasTranslations;
     // use HasRichMedia;
 
@@ -61,7 +58,7 @@ class Article extends Model implements HasMedia, Viewable
 
     public function getViewsAttribute()
     {
-        return $this->views()->count();
+        return 999;
     }
     public function getArticleTitleAttribute()
     {
