@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html dir="{{ App::getLocale() === 'ar' ? 'rtl' : 'ltr' }}" data-theme="ffp-theme-dark" lang="{{ App::getLocale() }}">
+<html dir="{{ App::getLocale() === 'ar' ? 'rtl' : 'ltr' }}" data-theme="ffp-theme-light" lang="{{ App::getLocale() }}">
 
 <head>
     <meta charset="{{ __('website/layout.meta.charset') }}">

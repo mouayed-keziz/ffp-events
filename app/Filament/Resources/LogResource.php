@@ -152,7 +152,7 @@ class LogResource extends Resource
                     ->native(false),
             ])
             ->actions([
-                // Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()->requiresConfirmation(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
