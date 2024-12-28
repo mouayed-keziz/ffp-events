@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Enums\LogEvent;
 use App\Enums\LogName;
+use App\Filament\Exports\LogExporter;
 use App\Filament\Resources\LogResource\Pages;
 use App\Models\Log;
 use Filament\Forms;
@@ -15,6 +16,7 @@ use Filament\Tables\Table;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\ExportAction;
 
 class LogResource extends Resource
 {
@@ -54,6 +56,12 @@ class LogResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                ExportAction::make()
+                    // ->label("panel")
+                    ->icon('heroicon-o-arrow-up-tray')
+                    ->exporter(LogExporter::class)
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label("")
