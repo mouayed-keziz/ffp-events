@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ExportType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -20,7 +21,8 @@ class Export extends Model
     ];
 
     protected $casts = [
-        'completed_at' => 'datetime'
+        'completed_at' => 'datetime',
+        "exporter" => ExportType::class
     ];
 
     public function exported_by()

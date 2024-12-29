@@ -23,10 +23,18 @@ return [
             'end' => 'End Date',
             'placeholder' => 'Select date...',
         ],
+        'type' => [
+            'label' => 'Export Type',
+            'placeholder' => 'Select export type...',
+        ],
     ],
 
     'empty' => [
         'title' => 'No exports yet',
         'description' => 'Start by creating an export.',
+    ],
+
+    'type' => [
+        'log' => 'Log Export',
     ],
 ];

@@ -14,7 +14,7 @@ class LogExporter extends Exporter
     public static function getColumns(): array
     {
         return [
-            ExportColumn::make('id')->label("Identifiant"),
+            ExportColumn::make('id'),
             ExportColumn::make('log_name')
                 ->formatStateUsing(fn($state) => $state->value),
             ExportColumn::make('causer.name')

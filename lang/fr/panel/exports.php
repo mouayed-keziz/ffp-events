@@ -23,10 +23,18 @@ return [
             'end' => 'Date de fin',
             'placeholder' => 'Sélectionner une date...',
         ],
+        'type' => [
+            'label' => 'Type d\'exportation',
+            'placeholder' => 'Sélectionner le type...',
+        ],
     ],
 
     'empty' => [
         'title' => 'Aucune exportation',
         'description' => 'Commencez par créer une exportation.',
+    ],
+
+    'type' => [
+        'log' => 'Export des journaux',
     ],
 ];
