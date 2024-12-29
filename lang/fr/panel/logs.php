@@ -52,6 +52,9 @@ return [
     ],
 
     'actions' => [
+        'export' => [
+            "label" => "Exporter les journaux",
+        ],
         'delete_all' => [
             'label' => 'Supprimer tous les journaux',
             'modal' => [

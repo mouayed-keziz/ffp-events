@@ -2,10 +2,12 @@
 
 namespace App\Filament\Resources\LogResource\Pages;
 
+use App\Filament\Exports\LogExporter;
 use App\Filament\Resources\LogResource;
 use App\Models\Log;
 use App\Models\User;
 use Filament\Actions;
+use Filament\Actions\ExportAction;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
@@ -20,6 +22,10 @@ class ListLogs extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            ExportAction::make()
+                ->label(__("panel/logs.actions.export.label"))
+                ->icon('heroicon-o-arrow-down-tray')
+                ->exporter(LogExporter::class),
             Actions\Action::make("delete-all-logs")
                 ->outlined()
                 ->label(__('panel/logs.actions.delete_all.label'))

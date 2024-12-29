@@ -47,6 +47,9 @@ return [
         'event' => 'نوع الحدث'
     ],
     'actions' => [
+        'export' => [
+            "label" =>  "تصدير السجلات",
+        ],
         'delete_all' => [
             'label' => 'حذف جميع السجلات',
             'modal' => [

@@ -47,6 +47,9 @@ return [
         'event' => 'Event Type'
     ],
     'actions' => [
+        'export' => [
+            "label" => "Export logs",
+        ],
         'delete_all' => [
             'label' => 'Delete all logs',
             'modal' => [
