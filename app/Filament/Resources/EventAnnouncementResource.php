@@ -3,10 +3,14 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EventAnnouncementResource\Pages;
+use App\Filament\Resources\EventAnnouncementResource\Pages\EditEventAnnouncement;
+use App\Filament\Resources\EventAnnouncementResource\Pages\ViewEventAnnouncement;
 use App\Filament\Resources\EventAnnouncementResource\Resource\EventAnnouncementForm;
 use App\Filament\Resources\EventAnnouncementResource\Resource\EventAnnouncementInfolist;
 use App\Filament\Resources\EventAnnouncementResource\Resource\EventAnnouncementTable;
 use App\Models\EventAnnouncement;
+use AymanAlhattami\FilamentPageWithSidebar\FilamentPageSidebar;
+use AymanAlhattami\FilamentPageWithSidebar\PageNavigationItem;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
@@ -36,17 +40,22 @@ class EventAnnouncementResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return EventAnnouncementForm::form($form);
+        return $form->schema([]);
+        // return EventAnnouncementForm::form($form);
     }
 
     public static function table(Table $table): Table
     {
-        return EventAnnouncementTable::table($table);
+        return $table->columns([
+            \Filament\Tables\Columns\TextColumn::make("id")->badge(),
+        ]);
+        // return EventAnnouncementTable::table($table);
     }
 
     public static function infolist(Infolist $infolist): Infolist
     {
-        return EventAnnouncementInfolist::infolist($infolist);
+        return $infolist->schema([]);
+        // return EventAnnouncementInfolist::infolist($infolist);
     }
 
     public static function getRelations(): array
@@ -54,6 +63,28 @@ class EventAnnouncementResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function sidebar(EventAnnouncement $record): FilamentPageSidebar
+    {
+        return FilamentPageSidebar::make()
+            ->setTitle("{$record->title}")
+            ->sidebarNavigation()
+            ->setNavigationItems([
+                PageNavigationItem::make(__('panel/event_announcement.actions.view'))
+                    ->url(fn() => static::getUrl('view', ['record' => $record->id]))
+                    ->icon('heroicon-o-eye')
+                    ->isActiveWhen(fn() =>
+                    request()->routeIs(ViewEventAnnouncement::getRouteName())),
+
+                PageNavigationItem::make(__('panel/event_announcement.actions.edit'))
+                    ->url(fn() => static::getUrl('edit', ['record' => $record->id]))
+                    ->icon('heroicon-o-pencil')
+                    ->isActiveWhen(
+                        fn() =>
+                        request()->routeIs(EditEventAnnouncement::getRouteName())
+                    ),
+            ]);
     }
 
     public static function getPages(): array

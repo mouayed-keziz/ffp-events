@@ -3,11 +3,14 @@
 namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 
 use App\Filament\Resources\EventAnnouncementResource;
-use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
+use Filament\Actions;
 
 class EditEventAnnouncement extends EditRecord
 {
+    use HasPageSidebar;
+
     protected static string $resource = EventAnnouncementResource::class;
 
     protected function getHeaderActions(): array

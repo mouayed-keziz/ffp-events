@@ -5,9 +5,12 @@ namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 use App\Filament\Resources\EventAnnouncementResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
+use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
 
 class ViewEventAnnouncement extends ViewRecord
 {
+    use HasPageSidebar;
+
     protected static string $resource = EventAnnouncementResource::class;
 
     protected function getHeaderActions(): array

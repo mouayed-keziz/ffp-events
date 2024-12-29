@@ -33,10 +33,12 @@ class EventAnnouncementForm
                             ->schema([
                                 Forms\Components\DateTimePicker::make('start_date')
                                     ->required()
+                                    ->native(false)
                                     ->label(__('panel/event_announcement.fields.start_date')),
 
                                 Forms\Components\DateTimePicker::make('end_date')
                                     ->required()
+                                    ->native(false)
                                     ->label(__('panel/event_announcement.fields.end_date')),
 
                                 Forms\Components\TextInput::make('location')

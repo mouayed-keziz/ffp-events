@@ -10,6 +10,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "aymanalhattami/filament-page-with-sidebar": "^2.5",
         "bezhansalleh/filament-language-switch": "^3.1",
         "bezhansalleh/filament-shield": "^3.3",
         "charrafimed/global-search-modal": "^3.4",
