@@ -1,1 +1,0 @@
-php artisan make:filament-page SortUsers --resource=EventAnnouncementResource --type=custom

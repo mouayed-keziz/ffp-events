@@ -33,7 +33,7 @@ enum LogName: string implements HasLabel, HasColor, HasIcon
     public function getIcon(): ?string
     {
         return match ($this) {
-            self::Categories => "heroicon-o-bars-2",
+            self::Categories => "heroicon-o-bars-3",
             self::Articles => "heroicon-o-document-duplicate",
             self::Authentication => "heroicon-o-user",
         };

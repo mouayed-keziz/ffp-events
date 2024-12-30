@@ -33,8 +33,10 @@ return [
     'actions' => [
         'create' => 'Créer une annonce',
         'edit' => 'Modifier l\'annonce',
+        "edit_terms" =>  "Modifier les termes",
+        "edit_visitor_form" =>  "Modifier le formulaire visiteur",
         'delete' => 'Supprimer l\'annonce',
-        'view' => 'Voir l\'annonce',
+        'view' => 'Détails de l\'annonce',
         'restore' => 'Restaurer l\'annonce',
         'force_delete' => 'Supprimer définitivement l\'annonce',
     ],

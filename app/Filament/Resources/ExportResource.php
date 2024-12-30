@@ -17,11 +17,18 @@ use Illuminate\Support\Facades\Storage;
 class ExportResource extends Resource
 {
     protected static ?string $model = Export::class;
-
+    protected static ?int $navigationSort = 2;
     protected static ?string $navigationIcon = 'heroicon-o-arrow-down-tray';
 
-    protected static ?string $modelLabel = null;
-    protected static ?string $pluralModelLabel = null;
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'primary';
+    }
 
     public static function getModelLabel(): string
     {

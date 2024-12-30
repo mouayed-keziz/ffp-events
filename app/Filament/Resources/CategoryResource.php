@@ -23,8 +23,20 @@ class CategoryResource extends Resource
     use Translatable;
 
     protected static ?string $model = Category::class;
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationIcon = 'heroicon-o-bars-3';
     protected static ?string $recordTitleAttribute = 'recordTitle';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'primary';
+    }
+
     public static function getNavigationGroup(): ?string
     {
         return __('panel/nav.groups.articles');

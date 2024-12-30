@@ -3,9 +3,11 @@
 namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 
 use App\Filament\Resources\EventAnnouncementResource;
+use App\Filament\Resources\EventAnnouncementResource\Resource\EventAnnouncementInfolist;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
+use Filament\Infolists\Infolist;
 
 class ViewEventAnnouncement extends ViewRecord
 {
@@ -20,5 +22,10 @@ class ViewEventAnnouncement extends ViewRecord
             Actions\ForceDeleteAction::make()->icon("heroicon-o-trash"),
             Actions\RestoreAction::make()->icon("heroicon-o-arrow-path"),
         ];
+    }
+
+    public function infolist(Infolist $infolist): Infolist
+    {
+        return EventAnnouncementInfolist::infolist($infolist);
     }
 }

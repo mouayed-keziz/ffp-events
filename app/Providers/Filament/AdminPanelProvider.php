@@ -41,7 +41,7 @@ class AdminPanelProvider extends PanelProvider
             // ->sidebarCollapsibleOnDesktop()
             ->id('admin')
             ->path('admin')
-            // ->spa()
+            ->spa()
             ->login()
             ->profile(isSimple: false)
             ->databaseNotifications()
@@ -104,19 +104,29 @@ class AdminPanelProvider extends PanelProvider
         Filament::serving(function () {
             Filament::registerNavigationGroups([
                 NavigationGroup::make()
-                    ->collapsible(true)
-                    ->label(__('panel/nav.groups.articles'))
-                    ->icon('heroicon-o-document-duplicate'),
+                    ->collapsible(false)
+                    ->label(__('panel/nav.groups.event_management')),
+
                 NavigationGroup::make()
-                    ->collapsible(true)
+                    ->collapsible(false)
+                    ->label(__('panel/nav.groups.management')),
+
+                NavigationGroup::make()
+                    ->collapsible(false)
+                    ->label(__('panel/nav.groups.articles')),
+
+                NavigationGroup::make()
+                    ->collapsible(false)
                     ->label(__('panel/nav.groups.users'))
                     ->icon('heroicon-o-users'),
+
                 NavigationGroup::make()
-                    ->collapsible(true)
-                    ->label(__('panel/nav.groups.event_management'))
-                    ->icon('heroicon-o-calendar'),
-                NavigationGroup::make()
-                    ->label(__("nav.groups.settings")),
+                    ->collapsible(false)
+                    ->label(__("panel/nav.groups.settings")),
+
+                NavigationGroup::make("hello world")
+                    ->label("hello 2")
+                    ->items([])
             ]);
         });
     }

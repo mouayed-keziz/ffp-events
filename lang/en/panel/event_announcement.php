@@ -33,8 +33,10 @@ return [
     'actions' => [
         'create' => 'Create Announcement',
         'edit' => 'Edit Announcement',
+        "edit_terms" => "Edit Terms",
+        "edit_visitor_form" =>  "Edit Visitor Form",
         'delete' => 'Delete Announcement',
-        'view' => 'View Announcement',
+        'view' => 'Announcement Details',
         'restore' => 'Restore Announcement',
         'force_delete' => 'Force Delete Announcement',
     ],

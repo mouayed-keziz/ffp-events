@@ -3,22 +3,25 @@
 namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 
 use App\Filament\Resources\EventAnnouncementResource;
+use App\Filament\Resources\EventAnnouncementResource\Resource\EventAnnouncementTermsForm;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
 use Filament\Actions;
-use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Forms\Form;
 
-class EditEventAnnouncementVisitorForm extends EditRecord
+class EditEventAnnouncementTerms extends EditRecord
 {
     use HasPageSidebar;
+
     protected static string $resource = EventAnnouncementResource::class;
+
+    public function getBreadcrumb(): string
+    {
+        return __('panel/event_announcement.actions.edit_terms  ');
+    }
 
     public function form(Form $form): Form
     {
-        return  $form->schema([
-            \Filament\Forms\Components\Section::make()->schema([
-                \Filament\Forms\Components\TextInput::make("id")->disabled(),
-            ]),
-        ]);
+        return EventAnnouncementTermsForm::form($form);
     }
 }

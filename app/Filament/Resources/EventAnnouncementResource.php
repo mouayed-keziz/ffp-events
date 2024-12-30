@@ -3,8 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EventAnnouncementResource\Pages;
-use App\Filament\Resources\EventAnnouncementResource\Pages\EditEventAnnouncement;
-use App\Filament\Resources\EventAnnouncementResource\Pages\ViewEventAnnouncement;
 use App\Filament\Resources\EventAnnouncementResource\Resource\EventAnnouncementForm;
 use App\Filament\Resources\EventAnnouncementResource\Resource\EventAnnouncementInfolist;
 use App\Filament\Resources\EventAnnouncementResource\Resource\EventAnnouncementTable;
@@ -21,9 +19,20 @@ use Filament\Infolists\Infolist;
 class EventAnnouncementResource extends Resource
 {
     protected static ?string $model = EventAnnouncement::class;
-    protected static ?int $navigationSort = 4;
-    // protected static ?string $navigationIcon = 'heroicon-o-megaphone';
+    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationIcon = 'heroicon-o-megaphone';
+    protected static bool $shouldRegisterNavigation = true;
     protected static ?string $recordTitleAttribute = 'title';
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'primary';
+    }
     public static function getNavigationGroup(): ?string
     {
         return __('panel/nav.groups.event_management');
@@ -38,26 +47,6 @@ class EventAnnouncementResource extends Resource
         return __('panel/event_announcement.resource.plural_label');
     }
 
-    public static function form(Form $form): Form
-    {
-        return $form->schema([]);
-        // return EventAnnouncementForm::form($form);
-    }
-
-    public static function table(Table $table): Table
-    {
-        return $table->columns([
-            \Filament\Tables\Columns\TextColumn::make("id")->badge(),
-        ]);
-        // return EventAnnouncementTable::table($table);
-    }
-
-    public static function infolist(Infolist $infolist): Infolist
-    {
-        return $infolist->schema([]);
-        // return EventAnnouncementInfolist::infolist($infolist);
-    }
-
     public static function getRelations(): array
     {
         return [
@@ -68,21 +57,36 @@ class EventAnnouncementResource extends Resource
     public static function sidebar(EventAnnouncement $record): FilamentPageSidebar
     {
         return FilamentPageSidebar::make()
-            ->setTitle("{$record->title}")
+            // ->setTitle("{$record->title}")
+            // ->topbarNavigation()
             ->sidebarNavigation()
             ->setNavigationItems([
                 PageNavigationItem::make(__('panel/event_announcement.actions.view'))
                     ->url(fn() => static::getUrl('view', ['record' => $record->id]))
                     ->icon('heroicon-o-eye')
                     ->isActiveWhen(fn() =>
-                    request()->routeIs(ViewEventAnnouncement::getRouteName())),
+                    request()->routeIs(Pages\ViewEventAnnouncement::getRouteName())),
 
                 PageNavigationItem::make(__('panel/event_announcement.actions.edit'))
                     ->url(fn() => static::getUrl('edit', ['record' => $record->id]))
                     ->icon('heroicon-o-pencil')
                     ->isActiveWhen(
                         fn() =>
-                        request()->routeIs(EditEventAnnouncement::getRouteName())
+                        request()->routeIs(Pages\EditEventAnnouncement::getRouteName())
+                    ),
+                PageNavigationItem::make(__('panel/event_announcement.actions.edit_terms'))
+                    ->url(fn() => static::getUrl('edit-terms', ['record' => $record->id]))
+                    ->icon('heroicon-o-document-text')
+                    ->isActiveWhen(
+                        fn() =>
+                        request()->routeIs(Pages\EditEventAnnouncementTerms::getRouteName())
+                    ),
+                PageNavigationItem::make(__('panel/event_announcement.actions.edit_visitor_form'))
+                    ->url(fn() => static::getUrl('edit-visitor-form', ['record' => $record->id]))
+                    ->icon('heroicon-o-clipboard-document-check')
+                    ->isActiveWhen(
+                        fn() =>
+                        request()->routeIs(Pages\EditEventAnnouncementVisitorForm::getRouteName())
                     ),
             ]);
     }
@@ -94,6 +98,8 @@ class EventAnnouncementResource extends Resource
             'create' => Pages\CreateEventAnnouncement::route('/create'),
             'view' => Pages\ViewEventAnnouncement::route('/{record}'),
             'edit' => Pages\EditEventAnnouncement::route('/{record}/edit'),
+            'edit-terms' => Pages\EditEventAnnouncementTerms::route('/{record}/edit-terms'),
+            'edit-visitor-form' => Pages\EditEventAnnouncementVisitorForm::route("/{record}/visitor-form"),
         ];
     }
 
