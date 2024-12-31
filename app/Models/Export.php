@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use App\Enums\ExportType;
+use App\Actions\ExportActions;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class Export extends Model
 {
@@ -29,27 +28,13 @@ class Export extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-    public function delete_files()
-    {
-        $disk = Storage::disk($this->file_disk);
-        $dirs = $disk->directories('filament_exports');
-        foreach ($dirs as $dir) {
-            if ($dir !== "filament_exports/{$this->id}") {
-                continue;
-            }
-            $files = $disk->files($dir);
-            foreach ($files as $file) {
-                $disk->delete($file);
-            }
-            $disk->deleteDirectory($dir);
-        }
-    }
+
     protected static function boot()
     {
         parent::boot();
 
         static::deleting(function (Export $export) {
-            $export->delete_files();
+            ExportActions::delete_files($export);
         });
     }
 }
