@@ -3,7 +3,7 @@
 return [
     'resource' => [
         'label' => 'Event',
-        'plural_label' => 'Event',
+        'plural_label' => 'Events',
     ],
     'fields' => [
         'title' => 'Title',

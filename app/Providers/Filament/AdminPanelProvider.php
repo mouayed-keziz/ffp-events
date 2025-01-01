@@ -87,6 +87,7 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
+                \Awcodes\LightSwitch\LightSwitchPlugin::make(),
                 GlobalSearchModalPlugin::make()->slideOver(false)->searchItemTree(false),
                 FilamentTranslatableFieldsPlugin::make()->supportedLocales([
                     'fr' => 'Français',
