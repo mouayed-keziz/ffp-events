@@ -87,7 +87,6 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
-                // FilamentMailsPlugin::make(),
                 GlobalSearchModalPlugin::make()->slideOver(false)->searchItemTree(false),
                 FilamentTranslatableFieldsPlugin::make()->supportedLocales([
                     'fr' => 'Français',

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ArticleResource\Resource;
 
+use App\Filament\Resources\CategoryResource;
 use App\Utils\SlugUtils;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -40,6 +41,7 @@ class ArticleForm
                                             ->translatable(),
 
                                         Forms\Components\TextInput::make('slug')
+                                            ->prefix(config('app.url') . '/article/')
                                             ->label(__('panel/articles.form.slug'))
                                             ->placeholder(__('panel/articles.placeholders.slug'))
                                             ->required()
@@ -95,18 +97,7 @@ class ArticleForm
                                     ->native(false)
                                     ->preload()
                                     ->relationship('categories', 'name')
-                                    ->createOptionForm([
-                                        Forms\Components\TextInput::make('name')
-                                            ->required()
-                                            ->maxLength(255)
-                                            ->live(onBlur: true)
-                                            ->afterStateUpdated(fn(string $state, Forms\Set $set) => $set('slug', Str::slug($state))),
-
-                                        Forms\Components\TextInput::make('slug')
-                                            ->disabled()
-                                            ->dehydrated()
-                                            ->required(),
-                                    ])
+                                    ->createOptionForm(CategoryResource::form($form)->getComponents())
                                     ->columnSpanFull(),
 
                                 // Forms\Components\CheckboxList::make('categories')

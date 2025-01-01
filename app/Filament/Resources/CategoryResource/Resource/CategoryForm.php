@@ -14,6 +14,7 @@ class CategoryForm
         return $form
             ->schema([
                 Forms\Components\Section::make()
+                    ->columns(1)
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->label(__('panel/articles.categories.fields.name'))
@@ -22,6 +23,7 @@ class CategoryForm
                             ->translatable(),
 
                         Forms\Components\TextInput::make('slug')
+                            ->prefix(config('app.url') . '/category/')
                             ->label(__('panel/articles.categories.fields.slug'))
                             ->required()
                             ->maxLength(255)
@@ -33,7 +35,7 @@ class CategoryForm
                                         $set('slug', SlugUtils::generateSlugFromMultilingualName($get('name')));
                                     })
                             ),
-                    ])->columns(1)->columnSpan(1)
+                    ])
             ]);
     }
 }
