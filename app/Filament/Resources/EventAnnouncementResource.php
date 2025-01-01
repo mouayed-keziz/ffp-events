@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Navigation\Sidebar;
 use App\Filament\Resources\EventAnnouncementResource\Pages;
 use App\Filament\Resources\EventAnnouncementResource\Resource\EventAnnouncementForm;
 use App\Filament\Resources\EventAnnouncementResource\Resource\EventAnnouncementInfolist;
@@ -19,8 +20,8 @@ use Filament\Infolists\Infolist;
 class EventAnnouncementResource extends Resource
 {
     protected static ?string $model = EventAnnouncement::class;
-    protected static ?int $navigationSort = 1;
-    protected static ?string $navigationIcon = 'heroicon-o-megaphone';
+    protected static ?int $navigationSort = Sidebar::EVENT_ANNOUNCEMENT["sort"];
+    protected static ?string $navigationIcon = Sidebar::EVENT_ANNOUNCEMENT["icon"];
     protected static bool $shouldRegisterNavigation = true;
     protected static ?string $recordTitleAttribute = 'title';
 
@@ -57,7 +58,8 @@ class EventAnnouncementResource extends Resource
     public static function sidebar(EventAnnouncement $record): FilamentPageSidebar
     {
         return FilamentPageSidebar::make()
-            // ->setTitle("{$record->title}")
+            ->setTitle("{$record->title}")
+            // ->setDescription("{$record->description}")
             // ->topbarNavigation()
             ->sidebarNavigation()
             ->setNavigationItems([

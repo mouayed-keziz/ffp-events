@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a4486b15add74fa7dc674b67905638c7",
+    "content-hash": "eeed13950e9c3f1ba5423300299ecbf9",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -4568,72 +4568,6 @@
             "time": "2024-10-10T12:33:01+00:00"
         },
         {
-            "name": "malzariey/filament-daterangepicker-filter",
-            "version": "3.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/malzariey/filament-daterangepicker-filter.git",
-                "reference": "95340da9dcbcddc8250f1ffb1598f3742500ce97"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/malzariey/filament-daterangepicker-filter/zipball/95340da9dcbcddc8250f1ffb1598f3742500ce97",
-                "reference": "95340da9dcbcddc8250f1ffb1598f3742500ce97",
-                "shasum": ""
-            },
-            "require": {
-                "filament/filament": "^3.0",
-                "illuminate/contracts": "^8.0|^9.0|^10.0|^11.0",
-                "spatie/laravel-package-tools": "^1.16.4"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "FilamentDaterangepickerFilter": "Malzariey\\FilamentDaterangepickerFilter\\Facades\\FilamentDaterangepickerFilter"
-                    },
-                    "providers": [
-                        "Malzariey\\FilamentDaterangepickerFilter\\FilamentDaterangepickerFilterServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Malzariey\\FilamentDaterangepickerFilter\\": "src",
-                    "Malzariey\\FilamentDaterangepickerFilter\\Database\\Factories\\": "database/factories"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Majid Al-Zariey",
-                    "email": "malzariey@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "This package uses daterangepciker library to filter date by a range or predefined date ranges (Today , Yesterday ...etc)",
-            "homepage": "https://github.com/malzariey/filament-daterangepicker-filter",
-            "keywords": [
-                "Malzariey",
-                "filament-daterangepicker-filter",
-                "laravel"
-            ],
-            "support": {
-                "issues": "https://github.com/malzariey/filament-daterangepicker-filter/issues",
-                "source": "https://github.com/malzariey/filament-daterangepicker-filter/tree/3.1.1"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/Malzariey",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-10-30T17:53:53+00:00"
-        },
-        {
             "name": "masterminds/html5",
             "version": "2.9.0",
             "source": {
@@ -5356,6 +5290,61 @@
                 }
             ],
             "time": "2024-12-17T11:28:11+00:00"
+        },
+        {
+            "name": "outerweb/filament-translatable-fields",
+            "version": "v2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/outer-web/filament-translatable-fields.git",
+                "reference": "88deedb0d73704abb08a58147ffb91ae88e524f7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/outer-web/filament-translatable-fields/zipball/88deedb0d73704abb08a58147ffb91ae88e524f7",
+                "reference": "88deedb0d73704abb08a58147ffb91ae88e524f7",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^3.2",
+                "laravel/framework": "^10.0|^11.0",
+                "php": "^8.0",
+                "spatie/laravel-package-tools": "^1.16",
+                "spatie/laravel-translatable": "^6.6"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Outerweb\\FilamentTranslatableFields\\FilamentTranslatableFieldsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src\\Helpers\\helpers.php"
+                ],
+                "psr-4": {
+                    "Outerweb\\FilamentTranslatableFields\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Outerweb",
+                    "email": "info@outerweb.be"
+                }
+            ],
+            "description": "This package adds a way to interact with outerweb/translatable-fields in Filament.",
+            "homepage": "https://github.com/outer-web/filament-translatable-fields",
+            "support": {
+                "issues": "https://github.com/outer-web/filament-translatable-fields/issues",
+                "source": "https://github.com/outer-web/filament-translatable-fields/tree/v2.0.1"
+            },
+            "time": "2024-06-09T16:50:30+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -6426,79 +6415,6 @@
                 }
             ],
             "time": "2024-04-27T21:32:50+00:00"
-        },
-        {
-            "name": "rickdbcn/filament-email",
-            "version": "v1.7.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/RickDBCN/filament-email.git",
-                "reference": "7e0ca1d9742c90e1f8aa6f010ce3472ce7d2f765"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/RickDBCN/filament-email/zipball/7e0ca1d9742c90e1f8aa6f010ce3472ce7d2f765",
-                "reference": "7e0ca1d9742c90e1f8aa6f010ce3472ce7d2f765",
-                "shasum": ""
-            },
-            "require": {
-                "filament/filament": "^3.2",
-                "illuminate/contracts": "^10.0|^11.0",
-                "laravel/framework": "^10.0|^11.0",
-                "malzariey/filament-daterangepicker-filter": "^3.0",
-                "php": "^8.1",
-                "spatie/laravel-package-tools": "^1.14.0"
-            },
-            "require-dev": {
-                "laravel/pint": "^1.0",
-                "nunomaduro/collision": "^7.9|^8.0",
-                "orchestra/testbench": "^8.0|^9.0",
-                "pestphp/pest": "^2.0",
-                "pestphp/pest-plugin-arch": "^2.0",
-                "pestphp/pest-plugin-laravel": "^2.0",
-                "pestphp/pest-plugin-livewire": "^2.1"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "FilamentEmail": "RickDBCN\\FilamentEmail\\Facades\\FilamentEmail"
-                    },
-                    "providers": [
-                        "RickDBCN\\FilamentEmail\\FilamentEmailServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "RickDBCN\\FilamentEmail\\": "src/",
-                    "RickDBCN\\FilamentEmail\\Database\\Factories\\": "database/factories/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Rick de Boer",
-                    "email": "rickdb@calvintijd.nl",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Log all outbound emails you send through your Filament application",
-            "homepage": "https://github.com/rickdbcn/filament-email",
-            "keywords": [
-                "RickDBCN",
-                "filament-email",
-                "laravel",
-                "marcogermani87"
-            ],
-            "support": {
-                "issues": "https://github.com/RickDBCN/filament-email/issues",
-                "source": "https://github.com/RickDBCN/filament-email/tree/v1.7.2"
-            },
-            "time": "2024-11-05T23:37:32+00:00"
         },
         {
             "name": "ryangjchandler/blade-capture-directive",
@@ -7720,12 +7636,12 @@
             },
             "type": "library",
             "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/contracts",
+                    "name": "symfony/contracts"
+                },
                 "branch-alias": {
                     "dev-main": "3.5-dev"
-                },
-                "thanks": {
-                    "name": "symfony/contracts",
-                    "url": "https://github.com/symfony/contracts"
                 }
             },
             "autoload": {

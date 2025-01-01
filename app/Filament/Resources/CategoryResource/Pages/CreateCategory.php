@@ -8,12 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 
 class CreateCategory extends CreateRecord
 {
-    use CreateRecord\Concerns\Translatable;
     protected function getHeaderActions(): array
     {
-        return [
-            Actions\LocaleSwitcher::make(),
-        ];
+        return [];
     }
 
     protected static string $resource = CategoryResource::class;

@@ -25,7 +25,7 @@ class Article extends Model implements HasMedia
 
     protected $fillable = ['title', 'slug', 'description', 'content', 'published_at'];
     // public $translatable = ['title', 'slug', 'description'];
-    public $translatable = ['title', 'slug', 'description', 'content'];
+    public $translatable = ['title', 'description', 'content'];
 
     protected $with = ['categories'];
 

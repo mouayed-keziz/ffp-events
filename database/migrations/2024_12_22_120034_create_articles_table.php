@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
             $table->json('title');
-            $table->json('slug')->unique();
+            $table->string('slug')->unique();
             $table->json('description')->nullable();
             $table->json('content')->nullable();
             $table->timestamp('published_at')->nullable();

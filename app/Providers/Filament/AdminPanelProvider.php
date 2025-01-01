@@ -27,6 +27,7 @@ use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Auth;
 use Filament\SpatieLaravelTranslatablePlugin;
 use CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin;
+use Outerweb\FilamentTranslatableFields\Filament\Plugins\FilamentTranslatableFieldsPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -86,48 +87,48 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
-                // \RickDBCN\FilamentEmail\FilamentEmail::make(),
+                // FilamentMailsPlugin::make(),
                 GlobalSearchModalPlugin::make()->slideOver(false)->searchItemTree(false),
+                FilamentTranslatableFieldsPlugin::make()->supportedLocales([
+                    'fr' => 'Français',
+                    'en' => 'English',
+                    'ar' => 'العربية',
+                ]),
                 SpatieLaravelTranslatablePlugin::make()
                     ->defaultLocales(['fr', 'en', 'ar']),
                 FilamentDeveloperLoginsPlugin::make()
                     ->enabled(env('APP_DEBUG', false))
                     ->users([
                         "super admin " => 'admin@admin.dev',
-                        // "EXPOSANT 1 " => 'rafik@redspot.com'
                     ])
             ]);
     }
 
-    public function boot(): void
-    {
-        Filament::serving(function () {
-            Filament::registerNavigationGroups([
-                NavigationGroup::make()
-                    ->collapsible(false)
-                    ->label(__('panel/nav.groups.event_management')),
+    // public function boot(): void
+    // {
+    //     Filament::serving(function () {
+    //         Filament::registerNavigationGroups([
+    //             NavigationGroup::make()
+    //                 ->collapsible(false)
+    //                 ->label(__('panel/nav.groups.event_management')),
 
-                NavigationGroup::make()
-                    ->collapsible(false)
-                    ->label(__('panel/nav.groups.management')),
+    //             NavigationGroup::make()
+    //                 ->collapsible(false)
+    //                 ->label(__('panel/nav.groups.management')),
 
-                NavigationGroup::make()
-                    ->collapsible(false)
-                    ->label(__('panel/nav.groups.articles')),
+    //             NavigationGroup::make()
+    //                 ->collapsible(false)
+    //                 ->label(__('panel/nav.groups.articles')),
 
-                NavigationGroup::make()
-                    ->collapsible(false)
-                    ->label(__('panel/nav.groups.users'))
-                    ->icon('heroicon-o-users'),
+    //             NavigationGroup::make()
+    //                 ->collapsible(false)
+    //                 ->label(__('panel/nav.groups.users'))
+    //                 ->icon('heroicon-o-users'),
 
-                NavigationGroup::make()
-                    ->collapsible(false)
-                    ->label(__("panel/nav.groups.settings")),
-
-                NavigationGroup::make("hello world")
-                    ->label("hello 2")
-                    ->items([])
-            ]);
-        });
-    }
+    //             NavigationGroup::make()
+    //                 ->collapsible(false)
+    //                 ->label(__("panel/nav.groups.settings")),
+    //         ]);
+    //     });
+    // }
 }

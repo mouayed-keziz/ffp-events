@@ -26,11 +26,7 @@ class ArticleFactory extends Factory
 
         return [
             'title' => $title,
-            'slug' => [
-                'en' => Str::slug($title['en']),
-                'fr' => Str::slug($title['fr']),
-                'ar' => Str::slug($title['ar']),
-            ],
+            'slug' => Str::slug($title['fr']), // Use French as primary language for slug
             'description' => [
                 'en' => $this->faker->paragraph(),
                 'fr' => $this->faker->paragraph(),

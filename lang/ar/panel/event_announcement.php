@@ -2,8 +2,8 @@
 
 return [
     'resource' => [
-        'label' => 'إعلان فعالية',
-        'plural_label' => 'إعلانات الفعاليات',
+        'label' => 'فعالية',
+        'plural_label' => 'الفعاليات',
     ],
     'fields' => [
         'event' => 'الحدث',

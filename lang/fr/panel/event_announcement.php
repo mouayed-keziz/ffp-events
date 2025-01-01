@@ -2,8 +2,8 @@
 
 return [
     'resource' => [
-        'label' => 'Annonce d\'événement',
-        'plural_label' => 'Annonces d\'événements',
+        'label' => 'événement',
+        'plural_label' => 'événements',
     ],
     'fields' => [
         'title' => 'Titre',

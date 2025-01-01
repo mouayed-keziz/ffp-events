@@ -16,15 +16,15 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\Concerns\Translatable;
-
+use App\Filament\Navigation\Sidebar;
 
 class CategoryResource extends Resource
 {
     use Translatable;
 
     protected static ?string $model = Category::class;
-    protected static ?int $navigationSort = 2;
-    protected static ?string $navigationIcon = 'heroicon-o-bars-3';
+    protected static ?string $navigationIcon = Sidebar::CATEGORY['icon'];
+    protected static ?int $navigationSort = Sidebar::CATEGORY['sort'];
     protected static ?string $recordTitleAttribute = 'recordTitle';
 
     public static function getNavigationBadge(): ?string

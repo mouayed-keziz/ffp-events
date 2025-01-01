@@ -17,21 +17,18 @@ class CategoryFactory extends Factory
      */
     public function definition(): array
     {
-
-
         $name = [
             'en' => $this->faker->words(2, true),
             'fr' => $this->faker->words(2, true),
             'ar' => $this->faker->words(2, true),
         ];
 
+        // Generate slug from French name by default
+        $slug = Str::slug($name['fr']);
+
         return [
             'name' => $name,
-            'slug' => [
-                'en' => Str::slug($name['en']),
-                'fr' => Str::slug($name['fr']),
-                'ar' => Str::slug($name['ar']),
-            ],
+            'slug' => $slug,
         ];
     }
 }

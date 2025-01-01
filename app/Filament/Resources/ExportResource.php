@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\ExportType;
+use App\Filament\Navigation\Sidebar;
 use App\Filament\Resources\ExportResource\Pages;
 use App\Filament\Resources\ExportResource\Resource\ExportTable;
 use App\Models\Export;
@@ -17,8 +18,8 @@ use Illuminate\Support\Facades\Storage;
 class ExportResource extends Resource
 {
     protected static ?string $model = Export::class;
-    protected static ?int $navigationSort = 2;
-    protected static ?string $navigationIcon = 'heroicon-o-arrow-down-tray';
+    protected static ?int $navigationSort = Sidebar::EXPORT["sort"];
+    protected static ?string $navigationIcon = Sidebar::EXPORT["icon"];
 
     public static function getNavigationBadge(): ?string
     {

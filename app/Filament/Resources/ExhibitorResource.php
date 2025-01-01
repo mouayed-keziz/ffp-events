@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Navigation\Sidebar;
 use App\Filament\Resources\ExhibitorResource\Pages;
 use App\Filament\Resources\ExhibitorResource\RelationManagers;
 use App\Filament\Resources\ExhibitorResource\Resource\ExhibitorForm;
@@ -20,8 +21,8 @@ class ExhibitorResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-users';
-    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationIcon = Sidebar::EXHIBITOR["icon"];
+    protected static ?int $navigationSort = Sidebar::EXHIBITOR["sort"];
     protected static ?string $recordTitleAttribute = 'exhibitorTitle';
     protected static bool $shouldRegisterNavigation = true;
     public static function getNavigationBadge(): ?string

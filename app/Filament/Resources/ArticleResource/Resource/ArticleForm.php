@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ArticleResource\Resource;
 
+use App\Utils\SlugUtils;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Components\Section;
@@ -28,38 +29,45 @@ class ArticleForm
                                             ->required()
                                             ->maxLength(255)
                                             ->live(onBlur: true)
-                                            ->afterStateUpdated(fn(string $state, Forms\Set $set) => $set('slug', Str::slug($state))),
-
-                                        Forms\Components\TextInput::make('slug')
-                                            ->label(__('panel/articles.form.slug'))
-                                            ->placeholder(__('panel/articles.placeholders.slug'))
-                                            ->disabled()
-                                            ->dehydrated()
-                                            ->required(),
+                                            ->translatable(),
 
                                         Forms\Components\Textarea::make('description')
                                             ->label(__('panel/articles.form.description'))
                                             ->placeholder(__('panel/articles.placeholders.description'))
                                             ->required()
                                             ->columnSpanFull()
-                                            ->rows(4),
+                                            ->rows(4)
+                                            ->translatable(),
+
+                                        Forms\Components\TextInput::make('slug')
+                                            ->label(__('panel/articles.form.slug'))
+                                            ->placeholder(__('panel/articles.placeholders.slug'))
+                                            ->required()
+                                            ->maxLength(255)
+                                            ->suffixAction(
+                                                Forms\Components\Actions\Action::make('generateSlug')
+                                                    ->icon('heroicon-m-arrow-path')
+                                                    ->disabled(fn(Forms\Components\TextInput $component) => $component->isDisabled())
+                                                    ->action(function (Forms\Get $get, Forms\Set $set) {
+                                                        $set('slug', SlugUtils::generateSlugFromMultilingualName($get('title')));
+                                                    })
+                                            ),
+
+
 
                                         Forms\Components\DateTimePicker::make('published_at')
                                             ->columnSpanFull()
                                             ->native(false)
                                             ->label(__('panel/articles.form.published_date')),
-                                    ])->columns(2),
+                                    ])->columns(1),
 
                                 Forms\Components\Tabs\Tab::make(__('panel/articles.form.tabs.content'))
                                     ->schema([
-                                        // \App\Filament\Custom\RichEditor::make('content')
-                                        //     ->label(__('panel/articles.form.content'))
-                                        //     ->placeholder(__('panel/articles.placeholders.content'))
-                                        //     ->required(),
                                         Forms\Components\RichEditor::make('content')
                                             ->label(__('panel/articles.form.content'))
                                             ->placeholder(__('panel/articles.placeholders.content'))
-                                            ->required(),
+                                            ->required()
+                                            ->translatable(),
                                     ]),
                             ])
                             ->columnSpanFull(),

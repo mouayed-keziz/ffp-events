@@ -14,14 +14,15 @@ use Filament\Infolists\Infolist;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\Concerns\Translatable;
+use App\Filament\Navigation\Sidebar;
 
 class ArticleResource extends Resource
 {
     use Translatable;
 
     protected static ?string $model = Article::class;
-    protected static ?string $navigationIcon = 'heroicon-o-document-duplicate';
-    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationIcon = Sidebar::ARTICLE['icon'];
+    protected static ?int $navigationSort = Sidebar::ARTICLE['sort'];
     protected static ?string $recordTitleAttribute = 'recordTitle';
 
     public static function getNavigationBadge(): ?string

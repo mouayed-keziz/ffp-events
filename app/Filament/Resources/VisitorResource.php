@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Navigation\Sidebar;
 use App\Models\User;
 use Filament\Forms\Form;
 use Filament\Infolists\Infolist;
@@ -18,8 +19,8 @@ class VisitorResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-users';
-    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationIcon = Sidebar::VISITOR["icon"];
+    protected static ?int $navigationSort = Sidebar::VISITOR["sort"];
     protected static ?string $recordTitleAttribute = 'visitorTitle';
     protected static bool $shouldRegisterNavigation = true;
     public static function getNavigationBadge(): ?string

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Navigation\Sidebar;
 use App\Settings\CompanyInformationsSettings;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -11,9 +12,9 @@ use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 
 class ManageCompanyInformations extends SettingsPage
 {
-    protected static ?string $navigationIcon = 'heroicon-o-building-office';
     protected static string $settings = CompanyInformationsSettings::class;
-    // protected static ?int $navigationSort = 1;
+    protected static ?string $navigationIcon = Sidebar::VISITOR["icon"];
+    protected static ?int $navigationSort = Sidebar::VISITOR["sort"];
 
     public function getTitle(): string
     {

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Navigation\Sidebar;
 use App\Filament\Resources\AdminResource\Pages;
 use App\Filament\Resources\AdminResource\RelationManagers;
 use App\Filament\Resources\AdminResource\Resource\AdminForm;
@@ -21,8 +22,8 @@ class AdminResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
-    protected static ?int $navigationSort = 3;
+    protected static ?string $navigationIcon = Sidebar::ADMIN["icon"];
+    protected static ?int $navigationSort = Sidebar::ADMIN["sort"];
     protected static ?string $recordTitleAttribute = 'adminTitle';
     public static function getNavigationBadge(): ?string
     {
