@@ -12,6 +12,8 @@ use Filament\Tables\Table;
 
 class ListEventAnnouncements extends ListRecords
 {
+    use ListRecords\Concerns\Translatable;
+
     protected static string $resource = EventAnnouncementResource::class;
 
     protected function getHeaderWidgets(): array
@@ -25,6 +27,7 @@ class ListEventAnnouncements extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Actions\LocaleSwitcher::make(),
             Actions\CreateAction::make()->icon("heroicon-o-plus"),
         ];
     }

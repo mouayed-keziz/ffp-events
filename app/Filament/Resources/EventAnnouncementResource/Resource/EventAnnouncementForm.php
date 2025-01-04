@@ -19,16 +19,19 @@ class EventAnnouncementForm
                                 Forms\Components\TextInput::make('title')
                                     ->required()
                                     ->maxLength(255)
-                                    ->label(__('panel/event_announcement.fields.title')),
+                                    ->label(__('panel/event_announcement.fields.title'))
+                                    ->translatable(),
 
                                 Forms\Components\Textarea::make('description')
                                     ->maxLength(65535)
-                                    ->label(__('panel/event_announcement.fields.description')),
+                                    ->label(__('panel/event_announcement.fields.description'))
+                                    ->translatable(),
 
 
                                 Forms\Components\RichEditor::make('content')
                                     ->required()
-                                    ->label(__('panel/event_announcement.fields.content')),
+                                    ->label(__('panel/event_announcement.fields.content'))
+                                    ->translatable(),
 
                             ])->columns(1),
 
@@ -87,10 +90,12 @@ class EventAnnouncementForm
                         Forms\Components\Tabs\Tab::make(__('panel/event_announcement.tabs.media'))
                             ->schema([
 
-                                Forms\Components\FileUpload::make('image_path')
+                                Forms\Components\SpatieMediaLibraryFileUpload::make('image')
                                     ->image()
+                                    ->imageEditor()
+                                    ->collection("image")
                                     ->directory('event-announcements')
-                                    ->label(__('panel/event_announcement.fields.image_path'))
+                                    ->label(__('panel/event_announcement.fields.image'))
                                     ->placeholder(__('panel/event_announcement.empty_states.photo')),
 
                             ])->columns(1),

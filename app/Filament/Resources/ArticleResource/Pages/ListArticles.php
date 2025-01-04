@@ -20,7 +20,6 @@ class ListArticles extends ListRecords
         return [
             Actions\LocaleSwitcher::make(),
             Actions\CreateAction::make()->icon("heroicon-s-plus"),
-            // action to delete everything in the trash (visible when the deleted tab is active)
             Actions\Action::make("empty_trash")
                 ->label("Empty Trash")
                 ->icon("heroicon-s-trash")

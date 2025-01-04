@@ -12,12 +12,14 @@ use Filament\Infolists\Infolist;
 class ViewEventAnnouncement extends ViewRecord
 {
     use HasPageSidebar;
+    use ViewRecord\Concerns\Translatable;
 
     protected static string $resource = EventAnnouncementResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
+            Actions\LocaleSwitcher::make(),
             Actions\EditAction::make()->icon("heroicon-o-pencil"),
             Actions\ForceDeleteAction::make()->icon("heroicon-o-trash"),
             Actions\RestoreAction::make()->icon("heroicon-o-arrow-path"),

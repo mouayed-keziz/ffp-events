@@ -4,21 +4,19 @@ namespace App\Filament\Resources;
 
 use App\Filament\Navigation\Sidebar;
 use App\Filament\Resources\EventAnnouncementResource\Pages;
-use App\Filament\Resources\EventAnnouncementResource\Resource\EventAnnouncementForm;
-use App\Filament\Resources\EventAnnouncementResource\Resource\EventAnnouncementInfolist;
-use App\Filament\Resources\EventAnnouncementResource\Resource\EventAnnouncementTable;
 use App\Models\EventAnnouncement;
 use AymanAlhattami\FilamentPageWithSidebar\FilamentPageSidebar;
 use AymanAlhattami\FilamentPageWithSidebar\PageNavigationItem;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Infolists\Infolist;
+use Filament\Resources\Concerns\Translatable;
 
 class EventAnnouncementResource extends Resource
 {
+
+    use Translatable;
+
     protected static ?string $model = EventAnnouncement::class;
     protected static ?int $navigationSort = Sidebar::EVENT_ANNOUNCEMENT["sort"];
     protected static ?string $navigationIcon = Sidebar::EVENT_ANNOUNCEMENT["icon"];

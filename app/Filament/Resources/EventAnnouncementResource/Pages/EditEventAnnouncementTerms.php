@@ -17,7 +17,7 @@ class EditEventAnnouncementTerms extends EditRecord
 
     public function getBreadcrumb(): string
     {
-        return __('panel/event_announcement.actions.edit_terms  ');
+        return __('panel/event_announcement.actions.edit_terms');
     }
 
     public function form(Form $form): Form

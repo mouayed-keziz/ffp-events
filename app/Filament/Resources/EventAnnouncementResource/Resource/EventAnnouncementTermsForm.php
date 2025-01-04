@@ -13,9 +13,10 @@ class EventAnnouncementTermsForm
             ->schema([
                 Forms\Components\Section::make()->schema([
                     Forms\Components\RichEditor::make('terms')
-                        ->label("terms")
+                        ->label(__('panel/event_announcement.fields.terms'))
                         ->columnSpanFull()
                         ->required()
+                        ->translatable(),
                 ])
             ]);
     }

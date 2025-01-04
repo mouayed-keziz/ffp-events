@@ -57,8 +57,8 @@ class EventAnnouncementTable
                     ->sortable()
                     ->toggleable(),
 
-                Tables\Columns\ImageColumn::make('image_path')
-                    ->label(__('panel/event_announcement.fields.image_path'))
+                Tables\Columns\ImageColumn::make('image')
+                    ->label(__('panel/event_announcement.fields.image'))
                     ->placeholder(__('panel/event_announcement.empty_states.photo'))
                     ->circular()
                     ->toggleable(),

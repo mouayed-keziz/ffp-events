@@ -86,8 +86,8 @@ class EventAnnouncementInfolist
                             ->schema([
                                 Section::make()
                                     ->schema([
-                                        Infolists\Components\ImageEntry::make('image_path')
-                                            ->label(__('panel/event_announcement.fields.image_path'))
+                                        Infolists\Components\ImageEntry::make('image')
+                                            ->label(__('panel/event_announcement.fields.image'))
                                             ->placeholder(__('panel/event_announcement.empty_states.photo'))
                                             ->circular(),
                                     ])->columns(1),

@@ -24,7 +24,6 @@ class Article extends Model implements HasMedia
     // public static $richFields = ['content'];
 
     protected $fillable = ['title', 'slug', 'description', 'content', 'published_at'];
-    // public $translatable = ['title', 'slug', 'description'];
     public $translatable = ['title', 'description', 'content'];
 
     protected $with = ['categories'];
