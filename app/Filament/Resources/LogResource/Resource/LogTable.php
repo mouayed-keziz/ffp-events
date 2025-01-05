@@ -68,6 +68,7 @@ class LogTable
     public static function table(Table $table): Table
     {
         return $table
+            ->striped()
             ->columns(self::LogColumns())
             ->defaultSort('created_at', 'desc')
             ->filtersFormColumns(2)

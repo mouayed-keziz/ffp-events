@@ -38,6 +38,11 @@ class EventAnnouncementFactory extends Factory
                 'fr' => $this->faker->realText($this->faker->numberBetween(500, 2000)),
                 'ar' => $this->faker->realText($this->faker->numberBetween(500, 2000)),
             ],
+            'terms' => [
+                'en' => $this->faker->realText($this->faker->numberBetween(1000, 3000)),
+                'fr' => $this->faker->realText($this->faker->numberBetween(1000, 3000)),
+                'ar' => $this->faker->realText($this->faker->numberBetween(1000, 3000)),
+            ],
             'start_date' => $startDate,
             'end_date' => $endDate,
             'location' => $this->faker->city(),

@@ -20,9 +20,9 @@ class ViewEventAnnouncement extends ViewRecord
     {
         return [
             Actions\LocaleSwitcher::make(),
-            Actions\EditAction::make()->icon("heroicon-o-pencil"),
-            Actions\ForceDeleteAction::make()->icon("heroicon-o-trash"),
-            Actions\RestoreAction::make()->icon("heroicon-o-arrow-path"),
+            // Actions\EditAction::make()->icon("heroicon-o-pencil")->iconButton()->button()->hiddenLabel(),
+            Actions\ForceDeleteAction::make()->icon("heroicon-o-trash")->iconButton()->button()->hiddenLabel(),
+            Actions\RestoreAction::make()->icon("heroicon-o-arrow-path")->iconButton()->button()->hiddenLabel(),
         ];
     }
 
