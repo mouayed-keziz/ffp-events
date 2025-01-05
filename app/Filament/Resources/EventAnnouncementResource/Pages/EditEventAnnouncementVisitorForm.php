@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 
+use App\Enums\VisitorFormFieldType;
 use App\Filament\Resources\EventAnnouncementResource;
 use App\Models\EventAnnouncement;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
@@ -21,24 +22,45 @@ class EditEventAnnouncementVisitorForm extends EditRecord
             ->schema([
                 \Filament\Forms\Components\Section::make()->schema([
                     \Filament\Forms\Components\Repeater::make('fields')
-                        ->label('Visitor Form Fields')
+                        ->collapsible()
+                        ->collapsed(true)
+                        ->itemLabel(function ($state) {
+                            $label = is_array($state['label'])
+                                ? ($state['label'][app()->getLocale()] ?? array_values($state['label'])[0])
+                                : $state['label'];
+                            if ($state['type'] && VisitorFormFieldType::from($state['type'])) {
+                                return VisitorFormFieldType::from($state['type'])->getLabel() . ' - ' . $label;
+                            }
+                            return $label;
+                        })
+                        ->label("")
                         ->schema([
-                            \Filament\Forms\Components\TextInput::make('label')
-                                ->label('Field Label')
-                                ->required()
-                                ->translatable(),
-                            \Filament\Forms\Components\Select::make('type')
-                                ->label('Field Type')
-                                ->options([
-                                    'text' => 'Text',
-                                    'email' => 'Email',
-                                    'number' => 'Number',
-                                    'date' => 'Date',
-                                ])
-                                ->required(),
-                            \Filament\Forms\Components\Toggle::make('required')
-                                ->label('Required')
-                                ->default(true),
+                            \Filament\Forms\Components\Group::make()->columns(2)
+                                ->schema([
+                                    \Filament\Forms\Components\TextInput::make('label')
+                                        ->label('field label')
+                                        ->required()
+                                        ->translatable(),
+                                    \Filament\Forms\Components\TextInput::make('description')
+                                        ->label('field description')
+                                        ->translatable(),
+                                ]),
+                            \Filament\Forms\Components\Group::make()->columns(10)
+                                ->schema([
+                                    \Filament\Forms\Components\Select::make('type')
+                                        ->label('Field Type')
+                                        ->default(VisitorFormFieldType::Text->value)
+                                        ->native(false)
+                                        ->options(VisitorFormFieldType::class)
+                                        ->required()
+                                        ->columnSpan(8),
+                                    \Filament\Forms\Components\Toggle::make('required')
+                                        ->label('Required')
+                                        ->default(true)
+                                        ->inline(false)
+                                        ->columnSpan(1),
+                                ]),
+
                         ])
                         ->columnSpanFull(),
                 ]),
@@ -47,10 +69,8 @@ class EditEventAnnouncementVisitorForm extends EditRecord
 
     protected function fillForm(): void
     {
-        // Load the visitorForm relationship
         $this->record->load('visitorForm');
 
-        // Fill the form with the fields data from visitorForm
         $this->form->fill([
             'fields' => $this->record->visitorForm->fields ?? [],
         ]);
