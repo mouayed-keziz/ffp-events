@@ -16,6 +16,7 @@ return [
         'categories' => 'Catégories',
         'articles' => 'Articles',
         'authentication' => 'Authentification',
+        'event_announcements' =>  'Annonces d\'événements',
     ],
     'resource' => [
         'single' => 'Journal',

@@ -18,6 +18,7 @@ return [
         'categories' => 'التصنيفات',
         'articles' => 'المقالات',
         'authentication' => 'المصادقة',
+        'event_announcements' => 'إعلانات الفعاليات',
     ],
     'columns' => [
         "log_name" => "اسم السجل",

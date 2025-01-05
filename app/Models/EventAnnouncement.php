@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\EventAnnouncementObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -37,6 +38,12 @@ class EventAnnouncement extends Model implements HasMedia
         'is_featured' => 'boolean',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+        static::observe(EventAnnouncementObserver::class);
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('image')
@@ -59,5 +66,17 @@ class EventAnnouncement extends Model implements HasMedia
             ->where('status', '!=', 'archived')
             ->where('start_date', '<=', now())
             ->where('end_date', '>=', now());
+    }
+
+
+    // ------------------ RELATIONSHIPS ------------------
+
+    public function visitorForm()
+    {
+        return $this->hasOne(VisitorForm::class);
+    }
+    public function exhibitorForms()
+    {
+        return $this->hasMany(ExhibitorForm::class);
     }
 }

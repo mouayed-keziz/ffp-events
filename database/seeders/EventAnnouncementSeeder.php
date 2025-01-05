@@ -16,7 +16,7 @@ class EventAnnouncementSeeder extends Seeder
 
             // Regular published events (increasing trend)
             EventAnnouncement::factory()
-                ->count($month) // More events in later months
+                ->count(ceil($month / 2)) // Halved the count but maintain increasing trend
                 ->published()
                 ->state([
                     'created_at' => $date,
@@ -29,7 +29,7 @@ class EventAnnouncementSeeder extends Seeder
             // Featured events (random distribution)
             if ($month % 2 == 0) { // Every other month
                 EventAnnouncement::factory()
-                    ->count(rand(1, 3))
+                    ->count(rand(1, 2)) // Reduced from 1-3 to 1-2
                     ->published()
                     ->featured()
                     ->state([
@@ -43,7 +43,7 @@ class EventAnnouncementSeeder extends Seeder
 
             // Draft events (constant low number)
             EventAnnouncement::factory()
-                ->count(2)
+                ->count(1) // Reduced from 2 to 1
                 ->draft()
                 ->state([
                     'created_at' => $date,
@@ -53,7 +53,7 @@ class EventAnnouncementSeeder extends Seeder
 
             // Archived events (decreasing trend)
             EventAnnouncement::factory()
-                ->count(max(0, 12 - $month)) // More archived events in earlier months
+                ->count(max(0, 6 - ceil($month / 2))) // Halved from 12 to 6
                 ->archived()
                 ->state([
                     'created_at' => $date,

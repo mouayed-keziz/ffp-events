@@ -18,6 +18,7 @@ return [
         'categories' => 'Categories',
         'articles' => 'Articles',
         'authentication' => 'Authentication',
+        'event_announcements' => 'Event Announcements',
     ],
     'columns' => [
         "log_name" => "Log Name",
