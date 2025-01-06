@@ -27,6 +27,7 @@ use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Auth;
 use Filament\SpatieLaravelTranslatablePlugin;
 use CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin;
+use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Outerweb\FilamentTranslatableFields\Filament\Plugins\FilamentTranslatableFieldsPlugin;
 
 class AdminPanelProvider extends PanelProvider
@@ -87,6 +88,7 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
+                FilamentEditProfilePlugin::make(),
                 \Awcodes\LightSwitch\LightSwitchPlugin::make(),
                 GlobalSearchModalPlugin::make()->slideOver(false)->searchItemTree(false),
                 FilamentTranslatableFieldsPlugin::make()->supportedLocales([

@@ -10,18 +10,26 @@ use Filament\Support\Contracts\HasLabel;
 enum VisitorFormFieldType: string implements HasLabel, HasColor
 {
     case Text = 'text';
-    case Paragraph = 'paragraph';
+    case Number = 'number';
     case Email = 'email';
     case Phone = 'phone';
-    case Switch = 'switch';
-    case Checkbox = 'checkbox';
-    case MultipleOptions = 'multiple_options';
-    case SingleOption = 'single_option';
     case Date = 'date';
-    case Number = 'number';
-    // case File = 'file';
-    // case Url = 'url';
-    // case Password = 'password';
+    case Paragraph = 'paragraph';
+    case File = 'file';
+    case Image = 'image';
+    case Pdf = 'pdf';
+    case SingleOption = 'single_option';
+    case MultipleOptions = 'multiple_options';
+    case Checkbox = 'checkbox';
+    case Switch = 'switch';
+
+    public function hasOptions(): bool
+    {
+        return match ($this) {
+            self::MultipleOptions, self::SingleOption => true,
+            default => false,
+        };
+    }
 
     public function getLabel(): ?string
     {
@@ -38,6 +46,7 @@ enum VisitorFormFieldType: string implements HasLabel, HasColor
             self::Switch, self::Checkbox => 'success',
             self::MultipleOptions, self::SingleOption => 'warning',
             self::Date, self::Number => 'primary',
+            self::File, self::Image, self::Pdf => 'danger',
         };
     }
 
@@ -54,6 +63,9 @@ enum VisitorFormFieldType: string implements HasLabel, HasColor
     //         self::SingleOption => 'heroicon-m-check-circle',
     //         self::Date => 'heroicon-m-calendar',
     //         self::Number => 'heroicon-m-currency-dollar',
+    //         self::File => 'heroicon-m-document',
+    //         self::Image => 'heroicon-m-image',
+    //         self::Pdf => 'heroicon-m-document-pdf',
     //     };
     // }
 }

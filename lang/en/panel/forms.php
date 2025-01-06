@@ -1,6 +1,15 @@
 <?php
 
 return [
+    'add_field_action_label' => "Add Field",
+    'add_option_action_label' => "Add Option",
+    'field' => [
+        'label' => "Label",
+        'description' => "Description",
+        'type' => "Field Type",
+        'required' => "Required?",
+        'option' => "Option",
+    ],
     'visitor' => [
         'field_type' => [
             'text' => 'Text',
@@ -13,7 +22,9 @@ return [
             'single_option' => 'Single Option',
             'date' => 'Date',
             'number' => 'Number',
-            // 'file' => 'File Upload',
+            'file' => 'File Upload',
+            'image' => 'Image Upload',
+            'pdf' => 'PDF Upload',
             // 'url' => 'URL',
             // 'password' => 'Password',
         ],
