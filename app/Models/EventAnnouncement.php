@@ -44,6 +44,11 @@ class EventAnnouncement extends Model implements HasMedia
         static::observe(EventAnnouncementObserver::class);
     }
 
+    public function getRecordTitleAttribute()
+    {
+        return __("panel/event_announcement.resource.label") . " - " . $this->title;
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('image')

@@ -21,7 +21,8 @@ class EventAnnouncementResource extends Resource
     protected static ?int $navigationSort = Sidebar::EVENT_ANNOUNCEMENT["sort"];
     protected static ?string $navigationIcon = Sidebar::EVENT_ANNOUNCEMENT["icon"];
     protected static bool $shouldRegisterNavigation = true;
-    protected static ?string $recordTitleAttribute = 'title';
+    protected static ?string $recordTitleAttribute = 'recordTitle';
+
 
     public static function getNavigationBadge(): ?string
     {
@@ -88,6 +89,16 @@ class EventAnnouncementResource extends Resource
                         fn() =>
                         request()->routeIs(Pages\EditEventAnnouncementVisitorForm::getRouteName())
                     ),
+                PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_forms'))
+                    ->url(fn() => static::getUrl('manage-exhibitor-forms', ['record' => $record->id]))
+                    ->icon('heroicon-o-clipboard-document-list')
+                    ->isActiveWhen(
+                        fn() =>
+                        request()->routeIs([
+                            Pages\ManageEventAnnouncementExhibitorForms::getRouteName(),
+                            Pages\EditEventAnnouncementExhibitorForm::getRouteName(),
+                        ])
+                    ),
             ]);
     }
 
@@ -100,6 +111,8 @@ class EventAnnouncementResource extends Resource
             'edit' => Pages\EditEventAnnouncement::route('/{record}/edit'),
             'edit-terms' => Pages\EditEventAnnouncementTerms::route('/{record}/edit-terms'),
             'edit-visitor-form' => Pages\EditEventAnnouncementVisitorForm::route("/{record}/visitor-form"),
+            'manage-exhibitor-forms' => Pages\ManageEventAnnouncementExhibitorForms::route('/{record}/exhibitor-forms'),
+            'edit-exhibitor-form' => Pages\EditEventAnnouncementExhibitorForm::route('/{record}/exhibitor-forms/{exhibitorForm}'),
         ];
     }
 

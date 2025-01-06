@@ -36,6 +36,7 @@ return [
         'edit' => 'Edit Announcement',
         "edit_terms" => "Edit Terms",
         "edit_visitor_form" =>  "Edit Visitor Form",
+        "manage_exhibitor_forms" => "Manage Exhibitor Forms",
         'delete' => 'Delete Announcement',
         'view' => 'Announcement Details',
         'restore' => 'Restore Announcement',
