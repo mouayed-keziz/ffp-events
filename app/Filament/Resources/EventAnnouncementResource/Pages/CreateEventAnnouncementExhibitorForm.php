@@ -8,17 +8,15 @@ use App\Models\EventAnnouncement;
 use App\Models\ExhibitorForm;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
 use Filament\Forms\Form;
-use Filament\Resources\Pages\EditRecord;
+use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
 
-class EditEventAnnouncementExhibitorForm extends EditRecord
+class CreateEventAnnouncementExhibitorForm extends CreateRecord
 {
     use HasPageSidebar;
 
     protected static string $resource = EventAnnouncementResource::class;
-
-    public $exhibitorForm;
 
 
     public function form(Form $form): Form
@@ -97,23 +95,7 @@ class EditEventAnnouncementExhibitorForm extends EditRecord
             ]);
     }
 
-    protected function fillForm(): void
-    {
-
-        $exhibitorForm = ExhibitorForm::firstOrNew([
-            'id' => request()->route('exhibitorForm'),
-            'event_announcement_id' => $this->record->id,
-        ]);
-
-        $this->exhibitorForm = $exhibitorForm;
-
-        $this->form->fill([
-            'title' => $exhibitorForm->getTranslations('title'),
-            'fields' => $exhibitorForm->fields ?? [],
-        ]);
-    }
-
-    protected function handleRecordUpdate(Model $record, array $data): Model
+    protected function handleRecordCreation(array $data): Model
     {
         // Validate options requirement before processing
         collect($data['fields'])->each(function ($field) {
@@ -142,21 +124,23 @@ class EditEventAnnouncementExhibitorForm extends EditRecord
             return $field;
         })->toArray();
 
+        $exhibitorForm = new ExhibitorForm();
+        $exhibitorForm->event_announcement_id = request()->route('record');
 
         // Set translations for title
         foreach ($data['title'] as $locale => $value) {
-            $this->exhibitorForm->setTranslation('title', $locale, $value);
+            $exhibitorForm->setTranslation('title', $locale, $value);
         }
 
         // Set other fields
-        $this->exhibitorForm->fields = $processedFields;
-        $this->exhibitorForm->save();
+        $exhibitorForm->fields = $processedFields;
+        $exhibitorForm->save();
 
-        return $this->exhibitorForm;
+        return $exhibitorForm;
     }
 
     protected function getRedirectUrl(): string
     {
-        return EventAnnouncementResource::getUrl('manage-exhibitor-forms', ['record' => $this->record->id]);
+        return EventAnnouncementResource::getUrl('manage-exhibitor-forms', ['record' => request()->route('record')]);
     }
 }

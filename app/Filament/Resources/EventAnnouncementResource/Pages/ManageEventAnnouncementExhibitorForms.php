@@ -25,7 +25,9 @@ class ManageEventAnnouncementExhibitorForms extends ListRecords
     {
         return [
             Actions\LocaleSwitcher::make(),
-            // Actions\CreateAction::make()->icon("heroicon-o-plus"),
+            Actions\Action::make('create')
+                ->url(fn(): string => EventAnnouncementResource::getUrl('create-exhibitor-form', ['record' => $this->record]))
+                ->icon('heroicon-o-plus'),
         ];
     }
 

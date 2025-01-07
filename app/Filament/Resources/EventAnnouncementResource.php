@@ -97,6 +97,7 @@ class EventAnnouncementResource extends Resource
                         request()->routeIs([
                             Pages\ManageEventAnnouncementExhibitorForms::getRouteName(),
                             Pages\EditEventAnnouncementExhibitorForm::getRouteName(),
+                            Pages\CreateEventAnnouncementExhibitorForm::getRouteName()
                         ])
                     ),
             ]);
@@ -112,6 +113,7 @@ class EventAnnouncementResource extends Resource
             'edit-terms' => Pages\EditEventAnnouncementTerms::route('/{record}/edit-terms'),
             'edit-visitor-form' => Pages\EditEventAnnouncementVisitorForm::route("/{record}/visitor-form"),
             'manage-exhibitor-forms' => Pages\ManageEventAnnouncementExhibitorForms::route('/{record}/exhibitor-forms'),
+            'create-exhibitor-form' => Pages\CreateEventAnnouncementExhibitorForm::route('/{record}/exhibitor-forms/create'),
             'edit-exhibitor-form' => Pages\EditEventAnnouncementExhibitorForm::route('/{record}/exhibitor-forms/{exhibitorForm}'),
         ];
     }
