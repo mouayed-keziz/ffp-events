@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('exhibitor_forms', function (Blueprint $table) {
             $table->id();
             $table->json("title");
+            $table->json("currencies");
             $table->foreignId('event_announcement_id')->constrained()->onDelete('cascade');
             $table->json('fields');
             $table->timestamps();

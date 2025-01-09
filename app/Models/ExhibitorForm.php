@@ -10,8 +10,8 @@ class ExhibitorForm extends Model
 {
     use HasFactory, HasTranslations;
 
-    protected $fillable = ['title', 'event_announcement_id', 'fields'];
-    protected $casts = ['fields' => 'array'];
+    protected $fillable = ['title', 'event_announcement_id', 'fields', 'currencies'];
+    protected $casts = ['fields' => 'array', 'currencies' => 'array'];
     public $translatable = ["title"];
 
     // -------------------- Relationships --------------------

@@ -3,77 +3,73 @@
 namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 
 use App\Filament\Resources\EventAnnouncementResource;
-use App\Models\ExhibitorForm;
-use App\Models\EventAnnouncement;
+use App\Filament\Resources\EventAnnouncementResource\Resource\ExhibitorFormDefinition;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
-use Filament\Resources\Pages\ListRecords;
-use Filament\Tables;
 use Filament\Actions;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Pages\ManageRelatedRecords;
+use Filament\Resources\RelationManagers\Concerns\Translatable;
+use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class ManageEventAnnouncementExhibitorForms extends ListRecords
+class ManageEventAnnouncementExhibitorForms extends ManageRelatedRecords
 {
     use HasPageSidebar;
-    use ListRecords\Concerns\Translatable;
-
-    public ?EventAnnouncement $record = null;
-
+    // use Translatable;
     protected static string $resource = EventAnnouncementResource::class;
+    protected static string $relationship = 'exhibitorForms';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    public static function getNavigationLabel(): string
+    {
+        return 'Exhibitor Forms';
+    }
+
+    public function form(Form $form): Form
+    {
+        return ExhibitorFormDefinition::form($form);
+    }
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\LocaleSwitcher::make(),
-            Actions\Action::make('create')
-                ->url(fn(): string => EventAnnouncementResource::getUrl('create-exhibitor-form', ['record' => $this->record]))
-                ->icon('heroicon-o-plus'),
-        ];
-    }
-
-    public function mount(): void
-    {
-        $this->record = EventAnnouncement::find(request()->route('record'))->first();
-    }
-
-    protected function getTableQuery(): Builder
-    {
-        return ExhibitorForm::query()->where('event_announcement_id', $this->record->id);
-    }
-
-    public function getBreadcrumbs(): array
-    {
-        return [
-            static::getResource()::getUrl() => static::getResource()::getModelLabel(),
-            static::getResource()::getUrl('view', ['record' => $this->record]) => $this->record->title,
-            '#' => __('panel/exhibitors.resource.plural'),
+            // Actions\LocaleSwitcher::make(),
         ];
     }
 
     public function table(Table $table): Table
     {
         return $table
-            ->query($this->getTableQuery())
+            ->paginated(false)
+            ->recordTitleAttribute('title')
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label('ID')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('title')
-                    ->label('Title')
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('title'),
+            ])
+            ->filters([])
+            ->headerActions([
+                Tables\Actions\CreateAction::make()
+                    ->slideOver() // Use slide-over for create action
+                    ->mutateFormDataUsing(function (array $data): array {
+                        return ExhibitorFormDefinition::cleanUpFormData($data);
+                    }),
+                Tables\Actions\AssociateAction::make(),
             ])
             ->actions([
-                Tables\Actions\Action::make('edit')
-                    ->url(fn(ExhibitorForm $record): string =>
-                    EventAnnouncementResource::getUrl('edit-exhibitor-form', [
-                        'record' => $this->record,
-                        'exhibitorForm' => $record
-                    ]))
-                    ->icon('heroicon-o-pencil'),
+                Tables\Actions\ViewAction::make()->slideOver(),
+                Tables\Actions\EditAction::make()
+                    ->slideOver() // Use slide-over for edit action
+                    ->mutateFormDataUsing(function (array $data): array {
+                        return ExhibitorFormDefinition::cleanUpFormData($data);
+                    }),
+                Tables\Actions\DissociateAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DissociateBulkAction::make(),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
