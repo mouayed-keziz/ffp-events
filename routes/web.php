@@ -2,6 +2,7 @@
 
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\EventAnnouncement;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
@@ -54,3 +55,10 @@ Route::middleware('locloooc')->group(function () {
 Route::get("/redirect", function () {
     return redirect("/admin/login");
 })->name("login");
+
+
+
+Route::get("mouayed", function () {
+    $eventAnnouncements = EventAnnouncement::with('visitorForm', 'exhibitorForms')->get();
+    return $eventAnnouncements;
+});

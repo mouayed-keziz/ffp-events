@@ -88,7 +88,8 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
-                FilamentEditProfilePlugin::make(),
+                FilamentEditProfilePlugin::make()
+                    ->setIcon('heroicon-o-user'),
                 \Awcodes\LightSwitch\LightSwitchPlugin::make(),
                 GlobalSearchModalPlugin::make()->slideOver(false)->searchItemTree(false),
                 FilamentTranslatableFieldsPlugin::make()->supportedLocales([

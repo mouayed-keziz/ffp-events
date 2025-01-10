@@ -42,11 +42,11 @@ class ExhibitorFormDefinition
                                     'USD' => 120,
                                 ];
 
-                                // Update single_prices for each field in the fields repeater
+                                // Update prices for each field in the fields repeater
                                 $fields = $get('fields');
                                 if (is_array($fields)) {
                                     foreach ($fields as $index => $field) {
-                                        $set("fields.{$index}.single_prices", $staticPrices);
+                                        $set("fields.{$index}.prices", $staticPrices);
                                     }
                                 }
 
@@ -64,25 +64,8 @@ class ExhibitorFormDefinition
                             })
                     )
                     ->afterStateUpdated(function ($state, $set, $get) {
-                        // Update single_prices with selected currencies for each field in the repeater
-                        $fields = $get('fields');
-                        if (is_array($fields)) {
-                            foreach ($fields as $index => $field) {
-                                $set("fields.{$index}.single_prices", self::getDefaultPrices($state));
-                            }
-                        }
-
-                        // Update prices for each option in the options repeater
-                        if (is_array($fields)) {
-                            foreach ($fields as $fieldIndex => $field) {
-                                $options = $field['options'] ?? [];
-                                if (is_array($options)) {
-                                    foreach ($options as $optionIndex => $option) {
-                                        $set("fields.{$fieldIndex}.options.{$optionIndex}.prices", self::getDefaultPrices($state));
-                                    }
-                                }
-                            }
-                        }
+                        // Sync prices for all fields and options when currencies are updated
+                        self::syncPricesWithCurrencies($state, $set, $get);
                     }),
 
                 // Fields Repeater
@@ -129,18 +112,18 @@ class ExhibitorFormDefinition
                             ->hidden(fn($get) => !self::shouldShowPricingToggle($get)),
 
                         // Key-Value Input for Single Price Input
-                        Forms\Components\KeyValue::make('single_prices')
+                        Forms\Components\KeyValue::make('prices') // Changed from single_prices to prices
                             ->label('Prices')
                             ->keyLabel('Currency')
                             ->valueLabel('Price')
                             ->addable(false)
                             ->deletable(false)
                             ->editableKeys(false)
-                            ->default([]) // Initialize as empty array
+                            ->default([])
                             ->afterStateUpdated(function ($state, $set) {
                                 foreach ($state as $currency => $price) {
                                     if (!is_numeric($price)) {
-                                        $set('single_prices.' . $currency, null);
+                                        $set('prices.' . $currency, null);
                                     }
                                 }
                             })
@@ -168,7 +151,7 @@ class ExhibitorFormDefinition
                                     ->addable(false)
                                     ->deletable(false)
                                     ->editableKeys(false)
-                                    ->default([]) // Initialize as empty array
+                                    ->default(fn($get) => self::getDefaultPrices($get('../../currencies'))) // Initialize with selected currencies
                                     ->afterStateUpdated(function ($state, $set) {
                                         foreach ($state as $currency => $price) {
                                             if (!is_numeric($price)) {
@@ -185,6 +168,32 @@ class ExhibitorFormDefinition
                     ])
                     ->columnSpanFull(),
             ]);
+    }
+
+    /**
+     * Sync prices for all fields and options when currencies are updated.
+     */
+    protected static function syncPricesWithCurrencies(?array $currencies, $set, $get): void
+    {
+        // Update prices for each field in the fields repeater
+        $fields = $get('fields');
+        if (is_array($fields)) {
+            foreach ($fields as $index => $field) {
+                $set("fields.{$index}.prices", self::getDefaultPrices($currencies));
+            }
+        }
+
+        // Update prices for each option in the options repeater
+        if (is_array($fields)) {
+            foreach ($fields as $fieldIndex => $field) {
+                $options = $field['options'] ?? [];
+                if (is_array($options)) {
+                    foreach ($options as $optionIndex => $option) {
+                        $set("fields.{$fieldIndex}.options.{$optionIndex}.prices", self::getDefaultPrices($currencies));
+                    }
+                }
+            }
+        }
     }
 
     protected static function getFieldLabel(array $state): string
@@ -233,13 +242,15 @@ class ExhibitorFormDefinition
 
     protected static function shouldShowMultiplePriceInput($get): bool
     {
-        $type = $get('type');
+        $type = $get('../../type');
+        $enablePricing = $get('../../enable_pricing');
+
         if (!$type) {
             return false;
         }
 
         $fieldType = ExhibitorFormFieldType::from($type);
-        return $fieldType->hasMultiplePriceInput() && $get('enable_pricing');
+        return $fieldType->hasMultiplePriceInput() && $enablePricing;
     }
 
     protected static function shouldShowOptionsRepeater($get): bool
@@ -275,8 +286,7 @@ class ExhibitorFormDefinition
 
             // Remove pricing data if pricing is not enabled
             if (!($field['enable_pricing'] ?? false)) {
-                unset($field['single_prices']);
-                unset($field['multiple_prices']);
+                unset($field['prices']);
             }
 
             return $field;
