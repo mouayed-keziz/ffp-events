@@ -1,77 +1,71 @@
-<!-- resources/views/components/navbar.blade.php -->
-<div class="drawer">
+<div class="drawer drawer-end">
     <input id="navbar-drawer" type="checkbox" class="drawer-toggle" />
-    <div class="drawer-content">
-        <!-- Navbar -->
-        <div class="navbar bg-base-100 shadow-md backdrop-blur bg-opacity-90 sticky top-0 z-50">
-            <div class="navbar-start">
-                <label for="navbar-drawer" class="btn btn-ghost drawer-button lg:hidden">
-                    <x-heroicon-o-bars-3 class="w-5 h-5" />
-                </label>
-                <a href="/" class="btn btn-ghost normal-case text-xl hover:bg-transparent">
-                    <img src="{{ asset('favicon.svg') }}" alt="Logo"
-                        class="h-8 w-8 ltr:mr-2 rtl:ml-2 transition-transform hover:scale-110">
-                    <span class="font-bold">{{ config('app.name') }}</span>
-                </a>
-            </div>
 
-            <div class="navbar-end">
-                <div class="hidden lg:flex items-center ltr:mr-4 rtl:ml-4">
-                    <div class="flex items-center gap-8">
-                        <a href="{{ route('blog.index') }}"
-                            class="link link-hover transition-colors {{ request()->routeIs('blog.index') ? 'link-primary underline' : '' }}">
-                            {{ __('website/navbar.blog') }}
+    <div class="drawer-content">
+        <div class="bg-white shadow-sm">
+            <div class="container mx-auto">
+                <div class="navbar">
+                    <div class="navbar-start h-16">
+                        @include('website.components.brand.logo')
+                    </div>
+
+                    <div class="navbar-center hidden md:flex flex-none gap-8">
+                        <a href="#" class="flex items-center gap-2 text-primary font-bold">
+                            @include('website.svg.events')
+                            <span>Nos evenements</span>
                         </a>
-                        <a href="{{ route('blog.categories') }}"
-                            class="link link-hover transition-colors {{ request()->routeIs('blog.categories') ? 'link-primary underline' : '' }}">
-                            {{ __('website/navbar.categories') }}
+
+                        <a href="#"
+                            class="flex items-center gap-2 text-gray-700 hover:text-primary transition-colors font-bold">
+                            @include('website.svg.articles')
+                            <span>Nos articles</span>
                         </a>
                     </div>
-                </div>
-                <div class="flex items-center gap-2">
-                    <a href="#" class="btn btn-sm hidden lg:flex">
-                        <div class="flex items-center gap-2">
-                            <x-heroicon-o-user class="w-4 h-4" />
-                            <span>{{ __('website/navbar.login') }}</span>
+
+                    <div class="navbar-end space-x-4">
+                        <div class="flex items-center gap-4">
+                            <button class="btn btn-square btn-ghost">
+                                <div class="w-8">
+                                    @include('website.svg.flags.france')
+                                </div>
+                            </button>
+                            <div class="hidden md:flex items-center gap-4">
+                                <a href="#" class="btn btn-outline text-[1rem] border-base-200 border-2">
+                                    Se connecter
+                                </a>
+                                <a href="#" class="btn btn-primary text-[1rem]">
+                                    S'inscrire
+                                </a>
+                            </div>
+                            <label for="navbar-drawer" class="btn btn-square btn-ghost md:hidden">
+                                @include('website.svg.burger')
+                            </label>
                         </div>
-                    </a>
-                    @include('website.components.local-dropdown')
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Mobile drawer -->
-    <div class="drawer-side z-50">
+    <div class="drawer-side">
         <label for="navbar-drawer" class="drawer-overlay"></label>
-        <div class="p-4 w-80 h-full bg-base-100 flex flex-col">
-            <!-- Drawer Header -->
-            <div class="border-b border-base-200 pb-4">
-                <a href="/" class="text-xl font-bold flex items-center">
-                    <img src="{{ asset('favicon.svg') }}" alt="Logo" class="h-8 w-8 ltr:mr-2 rtl:ml-2">
-                    {{ config('app.name') }}
+        <div class="menu p-4 w-80 min-h-full bg-white">
+            <div class="flex flex-col gap-4">
+                <a href="#" class="flex items-center gap-2 text-primary font-bold">
+                    @include('website.svg.events')
+                    <span class="text-lg">Nos evenements</span>
                 </a>
-            </div>
-
-            <!-- Navigation Links -->
-            <nav class="flex flex-col gap-2 mt-6">
-                <a href="{{ route('blog.index') }}"
-                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-base-200 transition-colors {{ request()->routeIs('blog.index') ? 'bg-primary/10 text-primary' : '' }}">
-                    <x-heroicon-o-newspaper class="w-5 h-5" />
-                    <span>{{ __('website/navbar.blog') }}</span>
+                <a href="#"
+                    class="flex items-center gap-2 text-gray-700 hover:text-primary transition-colors font-bold">
+                    @include('website.svg.articles')
+                    <span class="text-lg">Nos articles</span>
                 </a>
-                <a href="{{ route('blog.categories') }}"
-                    class="flex items-center gap-3 p-3 rounded-lg hover:bg-base-200 transition-colors {{ request()->routeIs('blog.categories') ? 'bg-primary/10 text-primary' : '' }}">
-                    <x-heroicon-o-squares-2x2 class="w-5 h-5" />
-                    <span>{{ __('website/navbar.categories') }}</span>
+                <div class="border-t my-4"></div>
+                <a href="#" class="btn btn-outline text-[1rem] border-base-200 border-2">
+                    Se connecter
                 </a>
-            </nav>
-
-            <!-- Bottom Section -->
-            <div class="mt-auto border-t border-base-200 pt-4">
-                <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-base-200 transition-colors">
-                    <x-heroicon-o-user class="w-5 h-5" />
-                    <span>{{ __('website/navbar.login') }}</span>
+                <a href="#" class="btn btn-primary text-[1rem]">
+                    S'inscrire
                 </a>
             </div>
         </div>

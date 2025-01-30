@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Website\GuestController;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\EventAnnouncement;
@@ -16,9 +17,7 @@ Route::get('language/{locale}', function ($locale) {
 
 
 Route::middleware('local_middleware')->group(function () {
-    Route::get('/', function () {
-        return view('website.home');
-    });
+    Route::get('/', [GuestController::class, 'Home'])->name('home');
 
     Route::get('/blog', function () {
         return view('website.pages.blog.index', [

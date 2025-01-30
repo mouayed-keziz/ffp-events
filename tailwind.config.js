@@ -43,8 +43,8 @@ export default {
                     "warning": colors.amber[300],
                     "error": colors.red[400],
 
-                    "--rounded-box": "0.5rem",
-                    "--rounded-btn": "0.3rem",
+                    "--rounded-box": "0.4rem",
+                    "--rounded-btn": "0.7rem",
                     "--rounded-badge": "1.9rem",
                 },
                 "ffp-theme-dark": {

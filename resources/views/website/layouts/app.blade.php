@@ -11,14 +11,13 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="min-h-screen bg-base-200/20 flex flex-col">
+<body class="min-h-screen flex flex-col">
     @include('website.components.navbar')
 
-    <main class="w-full max-w-7xl mx-auto px-4 py-8 flex-grow">
+    <main class="container mx-auto px-4 py-8 flex-grow">
         @yield('content')
     </main>
 
-    @include('website.components.footer')
 </body>
 
 </html>
