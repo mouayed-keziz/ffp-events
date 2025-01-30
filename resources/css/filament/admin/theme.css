@@ -34,67 +34,62 @@
 }
 
 .fi-layout {
-    @apply bg-[#efeff4] dark:bg-[#000000];
+    /* @apply bg-[#efeff4] dark:bg-[#000000]; */
 }
 
-/* .fi-ta-table > thead > tr {
+.fi-ta-table > thead > tr {
     @apply divide-x divide-gray-200 dark:divide-white/5;
 }
 .fi-ta-row {
     @apply divide-x divide-gray-200 dark:divide-white/5;
-} */
+}
 
 /* .fi-ta-table > tbody {
     @apply divide-none
 } */
 
-
-
-
-
 .fi-ta-text {
-    @apply py-1
+    @apply py-1;
 }
 
 .fi-ta-table > .whitesoace-nowrap {
-    @apply py-1
+    @apply py-1;
 }
 
 .fi-ta-cell > div:has(.flex) {
-    @apply py-1
+    @apply py-1;
 }
-
 
 /*----------------------------------------------------*/
 
 @media (min-width: 768px) {
     ::-webkit-scrollbar {
         height: 5px;
-        width: 5px
+        width: 5px;
     }
 
     ::-webkit-scrollbar-track {
-        background: #e5e7eb
+        background: #e5e7eb;
     }
 
     ::-webkit-scrollbar-thumb {
-        background: #d1d5db
+        background: #d1d5db;
     }
 
     ::-webkit-scrollbar-thumb:hover {
-        background: #c9cbcd
+        background: #c9cbcd;
     }
 
     .dark ::-webkit-scrollbar-track {
-        background: #101215
+        background: #101215;
     }
 
     .dark ::-webkit-scrollbar-thumb {
-        background: #1f2126
+        background: #1f2126;
     }
 
     .dark ::-webkit-scrollbar-thumb:hover {
-        background: #1a1d21
+        background: #1a1d21;
     }
 
     @supports (-moz-appearance: none) {
@@ -103,7 +98,8 @@
             scrollbar-color: #d1d5db #e5e7eb;
         }
 
-        .dark, .dark * {
+        .dark,
+        .dark * {
             scrollbar-color: #1f2126 #101215;
         }
     }

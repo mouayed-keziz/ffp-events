@@ -15,7 +15,7 @@ Route::get('language/{locale}', function ($locale) {
 })->name('language.switch');
 
 
-Route::middleware('locloooc')->group(function () {
+Route::middleware('local_middleware')->group(function () {
     Route::get('/', function () {
         return view('website.home');
     });
