@@ -18,6 +18,8 @@ Route::get('language/{locale}', function ($locale) {
 
 Route::middleware('local_middleware')->group(function () {
     Route::get('/', [GuestController::class, 'Home'])->name('home');
+    Route::get('/event', [GuestController::class, 'Event'])->name('event');
+    Route::get('/articles', [GuestController::class, 'Articles'])->name('articles');
 
     Route::get('/blog', function () {
         return view('website.pages.blog.index', [

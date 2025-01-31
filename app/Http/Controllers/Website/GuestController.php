@@ -11,4 +11,14 @@ class GuestController extends Controller
     {
         return view('website.pages.home');
     }
+
+    public static function Event()
+    {
+        return view('website.pages.event');
+    }
+
+    public static function Articles()
+    {
+        return view('website.pages.articles');
+    }
 }

@@ -6,18 +6,22 @@
     <meta name="viewport" content="{{ __('website/layout.meta.viewport') }}">
     <title>@yield('title', config('app.name'))</title>
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+    </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body class="min-h-screen flex flex-col">
     @include('website.components.navbar')
 
-    <main class="container mx-auto px-4 py-8 flex-grow">
-        @yield('content')
-    </main>
+    @yield('content')
 
+    @if (request()->routeIs('home'))
+        @include('website.components.footer', ['hasContactCard' => true])
+    @else
+        @include('website.components.footer')
+    @endif
 </body>
 
 </html>

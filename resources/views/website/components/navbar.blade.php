@@ -3,7 +3,7 @@
 
     <div class="drawer-content">
         <div class="bg-white shadow-sm">
-            <div class="container mx-auto">
+            <div class="w-full max-w-7xl mx-auto">
                 <div class="navbar">
                     <div class="navbar-start h-16">
                         @include('website.components.brand.logo')
@@ -24,11 +24,7 @@
 
                     <div class="navbar-end space-x-4">
                         <div class="flex items-center gap-4">
-                            <button class="btn btn-square btn-ghost">
-                                <div class="w-8">
-                                    @include('website.svg.flags.france')
-                                </div>
-                            </button>
+                            @include('website.components.local-dropdown')
                             <div class="hidden md:flex items-center gap-4">
                                 <a href="#" class="btn btn-outline text-[1rem] border-base-200 border-2">
                                     Se connecter
@@ -47,7 +43,7 @@
         </div>
     </div>
 
-    <div class="drawer-side">
+    <div class="drawer-side z-50">
         <label for="navbar-drawer" class="drawer-overlay"></label>
         <div class="menu p-4 w-80 min-h-full bg-white">
             <div class="flex flex-col gap-4">

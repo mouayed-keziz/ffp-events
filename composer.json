@@ -30,6 +30,7 @@
         "laravel/octane": "^2.6",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.5",
+        "livewire/volt": "^1.6",
         "outerweb/filament-translatable-fields": "^2.0",
         "spatie/filament-simple-stats": "^0.1.4",
         "spatie/laravel-activitylog": "^4.9",
