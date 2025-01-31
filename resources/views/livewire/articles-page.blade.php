@@ -15,6 +15,16 @@ new class extends Component {
     #[Url]
     public $sortBy = 'Date';
 
+    public function updatedSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedSortBy()
+    {
+        $this->resetPage();
+    }
+
     public function with(): array
     {
         return [
