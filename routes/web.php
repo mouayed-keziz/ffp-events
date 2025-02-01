@@ -17,9 +17,11 @@ Route::get('language/{locale}', function ($locale) {
 
 
 Route::middleware('local_middleware')->group(function () {
-    Route::get('/', [GuestController::class, 'Home'])->name('home');
-    Route::get('/event', [GuestController::class, 'Event'])->name('event');
+    Route::get('/', [GuestController::class, 'Home'])->name('events');
+    Route::get('/event', [GuestController::class, 'Event'])->name('event_details');
     Route::get('/articles', [GuestController::class, 'Articles'])->name('articles');
+    Route::get('/se-connecter', [GuestController::class, 'SignIn'])->name('sign_in');
+    Route::get('/s\'inscrire', [GuestController::class, 'SignUp'])->name('sign_up');
 
     Route::get('/blog', function () {
         return view('website.pages.blog.index', [

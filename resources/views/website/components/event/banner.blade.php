@@ -9,7 +9,7 @@
         <div class="container mx-auto h-full max-w-6xl relative px-4">
             {{-- Return Link and Title --}}
             <div class="absolute top-12 left-4 space-y-4">
-                <a href="{{ route('home') }}"
+                <a href="{{ route('events') }}"
                     class="flex items-center gap-2 text-white hover:text-primary transition-colors">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                         stroke="currentColor" class="w-5 h-5">
@@ -24,26 +24,10 @@
             <div class="absolute bottom-8 left-4 right-4 flex gap-4 items-center">
                 {{-- Countdown --}}
                 <div class="flex-1">
-                    <div class="inline-block bg-black/10 backdrop-blur-sm rounded-xl px-4 md:px-6 py-3">
-                        <div class="flex gap-4 md:gap-6 text-white text-center">
-                            <div>
-                                <div class="text-2xl md:text-4xl font-bold">{{ $event['countdown']['days'] }}</div>
-                                <div class="text-xs md:text-sm">Jours</div>
-                            </div>
-                            <div>
-                                <div class="text-2xl md:text-4xl font-bold">{{ $event['countdown']['hours'] }}</div>
-                                <div class="text-xs md:text-sm">Heures</div>
-                            </div>
-                            <div>
-                                <div class="text-2xl md:text-4xl font-bold">{{ $event['countdown']['minutes'] }}</div>
-                                <div class="text-xs md:text-sm">Minutes</div>
-                            </div>
-                            <div>
-                                <div class="text-2xl md:text-4xl font-bold">{{ $event['countdown']['seconds'] }}</div>
-                                <div class="text-xs md:text-sm">Secondes</div>
-                            </div>
-                        </div>
-                    </div>
+                    @include('website.components.countdown', [
+                        'countdown' => $event['countdown'],
+                        'size' => 'lg',
+                    ])
                 </div>
 
                 {{-- Share Button --}}

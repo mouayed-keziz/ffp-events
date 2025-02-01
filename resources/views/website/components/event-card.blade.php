@@ -31,26 +31,11 @@
             <div class="absolute inset-0 mx-2">
                 <img src="{{ $event['image'] }}" alt="{{ $event['title'] }}"
                     class="w-full h-full object-cover rounded-btn aspect-[7/4] md:aspect-video lg:aspect-[3/1]">
-                <div
-                    class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/10 backdrop-blur-sm rounded-xl px-6 py-3">
-                    <div class="flex gap-6 text-white text-center">
-                        <div>
-                            <div class="text-3xl font-bold">{{ $event['countdown']['days'] }}</div>
-                            <div class="text-xs">Jours</div>
-                        </div>
-                        <div>
-                            <div class="text-3xl font-bold">{{ $event['countdown']['hours'] }}</div>
-                            <div class="text-xs">Heures</div>
-                        </div>
-                        <div>
-                            <div class="text-3xl font-bold">{{ $event['countdown']['minutes'] }}</div>
-                            <div class="text-xs">Minutes</div>
-                        </div>
-                        <div>
-                            <div class="text-3xl font-bold">{{ $event['countdown']['seconds'] }}</div>
-                            <div class="text-xs">Secondes</div>
-                        </div>
-                    </div>
+                <div class="absolute bottom-4 left-1/2 -translate-x-1/2">
+                    @include('website.components.countdown', [
+                        'countdown' => $event['countdown'],
+                        'size' => 'md',
+                    ])
                 </div>
             </div>
         </div>

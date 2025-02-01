@@ -21,4 +21,13 @@ class GuestController extends Controller
     {
         return view('website.pages.articles');
     }
+
+    public static function SignIn()
+    {
+        return ["message" => "Sign In"];
+    }
+    public static function SignUp()
+    {
+        return ["message" => "Sign Up"];
+    }
 }
