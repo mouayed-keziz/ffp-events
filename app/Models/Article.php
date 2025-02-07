@@ -45,6 +45,10 @@ class Article extends Model implements HasMedia
             ->singleFile();
         $this->addMediaCollection('attachments');
     }
+    public function getImageAttribute()
+    {
+        return $this->getFirstMediaUrl('image');
+    }
 
     public function scopeDraft(Builder $query): Builder
     {

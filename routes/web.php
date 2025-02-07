@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Website\GuestController;
+use App\Http\Controllers\Website\AuthController;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\EventAnnouncement;
@@ -22,6 +23,8 @@ Route::middleware('local_middleware')->group(function () {
     Route::get('/articles', [GuestController::class, 'Articles'])->name('articles');
     Route::get('/se-connecter', [GuestController::class, 'SignIn'])->name('sign_in');
     Route::get('/s\'inscrire', [GuestController::class, 'SignUp'])->name('sign_up');
+    Route::get('/article/{id}', [GuestController::class, 'Article'])->name('article');
+    Route::get('/login', [AuthController::class, 'LogIn'])->name('login');
 
     Route::get('/blog', function () {
         return view('website.pages.blog.index', [
