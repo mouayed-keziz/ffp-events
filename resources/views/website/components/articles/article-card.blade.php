@@ -1,6 +1,6 @@
-@props(['title', 'date', 'views', 'image'])
+@props(['title', "slug", 'date', 'views', 'image'])
 
-<div class="card bg-white shadow-md rounded-btn overflow-hidden">
+<a href="{{route("article", ["slug" => $slug])}}" class="card bg-white shadow-md rounded-btn overflow-hidden">
     <div class="relative">
         <img src="{{ $image }}" class="w-full h-[200px] object-cover" alt="{{ $title }}" />
         <!-- Circle overlay with logo positioned at 25% from left -->
@@ -23,4 +23,4 @@
             </div>
         </div>
     </div>
-</div>
+</a>

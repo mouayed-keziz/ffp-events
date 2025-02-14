@@ -134,9 +134,12 @@ class ManageCompanyInformations extends SettingsPage
                                     ]),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make('Tab 2 (vide)')
+                        Forms\Components\Tabs\Tab::make('faq')
                             ->schema([
-                                // Reserved for future use
+                                Forms\Components\Repeater::make("faq")->schema([
+                                    Forms\Components\TextInput::make("question"),
+                                    Forms\Components\TextInput::make("answer")
+                                ])
                             ]),
 
                         Forms\Components\Tabs\Tab::make('Tab 3 (vide)')

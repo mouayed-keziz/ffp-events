@@ -20,10 +20,14 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3">
-                <a href="#"
-                    class="btn text-[1rem] font-bold btn-outline border-base-200 border-2 flex-1 normal-case">VISITER</a>
-                <a href="#" class="btn text-[1rem] font-bold btn-primary flex-1 normal-case">EXPOSER ET
-                    SPONSORISER</a>
+                <a href="{{route("event_details", ["id" => $event['id']])}}"
+                    class="btn text-[1rem] font-bold btn-outline border-base-200 border-2 flex-1 normal-case">
+                    {{ __('website/home.events.visit') }}
+                </a>
+                <a href="{{route("event_details", ["id" => $event['id']])}}"
+                    class="btn text-[1rem] font-bold btn-primary flex-1 normal-case">
+                    {{ __('website/home.events.exhibit') }}
+                </a>
             </div>
         </div>
 

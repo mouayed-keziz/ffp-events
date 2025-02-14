@@ -1,6 +1,7 @@
 @php
     $events = [
         [
+            'id' => 1,
             'title' => 'Cuisine Bain 3ème édition',
             'location' => 'Palais des expositions de la SAFEX (Pavilion Ahaggar, Casbah) Alger',
             'dateStart' => '20 Septembre 2025',
@@ -14,6 +15,7 @@
             'image' => 'https://placehold.co/600x400',
         ],
         [
+            'id' => 2,
             'title' => 'SIFFP 7ème édition',
             'location' => 'Palais des expositions de la SAFEX (Pavilion Ahaggar, Casbah) Alger',
             'dateStart' => '20 Septembre 2025',
@@ -27,6 +29,7 @@
             'image' => 'https://placehold.co/600x400',
         ],
         [
+            'id' => 3,
             'title' => 'Franchise Expo',
             'location' => 'Palais des expositions de la SAFEX (Pavilion Ahaggar, Casbah) Alger',
             'dateStart' => '20 Septembre 2025',
@@ -43,7 +46,7 @@
 @endphp
 
 <section class="space-y-6">
-    <h2 class="text-2xl font-bold">Nos évènements</h2>
+    <h2 class="text-2xl font-bold">{{ __('website/home.events.title') }}</h2>
 
     <div class="space-y-4">
         @foreach ($events as $event)

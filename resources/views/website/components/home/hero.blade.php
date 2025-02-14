@@ -14,8 +14,10 @@
     currentX: 0,
     isDragging: false,
     threshold: 50,
+    isRTL: false, // added for RTL detection
 
     init() {
+        this.isRTL = document.documentElement.getAttribute('dir') === 'rtl'; // detect text direction
         this.autoPlay();
     },
 
@@ -50,8 +52,11 @@
         if (!this.isDragging) return;
         const diff = this.startX - this.currentX;
         if (Math.abs(diff) > this.threshold) {
-            if (diff > 0) this.next();
-            else this.prev();
+            if(this.isRTL) {
+                diff > 0 ? this.prev() : this.next();
+            } else {
+                diff > 0 ? this.next() : this.prev();
+            }
         }
         this.isDragging = false;
     }
@@ -62,7 +67,7 @@
 
     <!-- Slides -->
     <div class="w-full h-full flex transition-all duration-500"
-        :style="{ transform: `translateX(-${activeSlide * 100}%)` }">
+        :style="{ transform: `translateX(${isRTL ? '' : '-'}${activeSlide * 100}%)` }">
         @foreach ($placeholderImages as $index => $image)
             <div class="flex-shrink-0 w-full h-full">
                 <img src="{{ $image }}" class="w-full h-full object-cover pointer-events-none"
@@ -72,7 +77,7 @@
     </div>
 
     <!-- Pagination -->
-    <div class="absolute bottom-5 left-1/2 -translate-x-1/2 flex space-x-2">
+    <div class="absolute bottom-5 left-1/2 -translate-x-1/2 flex space-x-2 rtl:space-x-reverse">
         @foreach ($placeholderImages as $index => $image)
             <button class="h-3 rounded-full border-0 transition-all duration-500"
                 :class="activeSlide === {{ $index }} ? 'w-6 bg-primary' : 'w-3 bg-primary/20'"

@@ -11,4 +11,16 @@ class AuthController extends Controller
     {
         return view('website.pages.auth.login');
     }
+    public static function Register()
+    {
+        return view('website.pages.auth.register');
+    }
+    public static function RestoreAccount()
+    {
+        return view('website.pages.auth.restore-account');
+    }
+    public static function EmailSent()
+    {
+        return view('website.pages.auth.email-sent');
+    }
 }

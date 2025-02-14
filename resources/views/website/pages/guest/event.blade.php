@@ -2,6 +2,7 @@
 
 @php
     $event = [
+        'id' => "1",
         'title' => 'Forum International de l\'Économie Sociale et Solidaire',
         'image' => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2070&auto=format&fit=crop',
         'location' => 'Palais des Congrès, Tunis',

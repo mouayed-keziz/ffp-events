@@ -22,6 +22,8 @@ class CompanyInformationsSettings extends Settings
 
     public string $country;
 
+    public array $faq;
+
     public static function group(): string
     {
         return 'default';

@@ -12,7 +12,7 @@ class GuestController extends Controller
         return view('website.pages.guest.home');
     }
 
-    public static function Event()
+    public static function Event($id)
     {
         return view('website.pages.guest.event');
     }
@@ -21,22 +21,13 @@ class GuestController extends Controller
     {
         return view('website.pages.guest.articles');
     }
-    public static function Article($id) {
-        $article = Article::findOrFail($id);
-        $similarArticles = Article::where('id', '!=', $id)->limit(3)->get();
+    public static function Article($slug) {
+        $article = Article::where('slug', $slug)->firstOrFail();
+        $similarArticles = Article::where('slug', '!=', $slug)->limit(3)->get();
         return view('website.pages.guest.article', [
             'article' => $article,
             'viewCount' => $article->views,
             'similarArticles' => $similarArticles
         ]);
-    }
-
-    public static function SignIn()
-    {
-        return ["message" => "Sign In"];
-    }
-    public static function SignUp()
-    {
-        return ["message" => "Sign Up"];
     }
 }

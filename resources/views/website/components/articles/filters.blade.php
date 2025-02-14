@@ -3,40 +3,44 @@
     maxScroll: 0,
     canScrollLeft: false,
     canScrollRight: false,
+    isRTL: document.documentElement.getAttribute('dir') === 'rtl', // detect RTL
     updateScroll() {
         const container = this.$refs.scrollContainer;
         this.maxScroll = Math.max(0, container.scrollWidth - container.clientWidth);
-        this.scroll = container.scrollLeft;
-        this.canScrollLeft = this.scroll > 0;
-        this.canScrollRight = this.scroll < (this.maxScroll - 1); // Added tolerance
-
-        // Update gradient based on scroll position
-        if (this.maxScroll > 0) {
-            container.style.maskImage = `linear-gradient(to right, 
-                ${this.canScrollLeft ? 'transparent' : 'black'}, 
-                black 15%, 
-                black 85%, 
-                ${this.canScrollRight ? 'transparent' : 'black'} 100%)`;
-            container.style.webkitMaskImage = container.style.maskImage;
+        let s = this.isRTL ? Math.abs(container.scrollLeft) : container.scrollLeft;
+        this.scroll = s;
+        if (this.isRTL) {
+            this.canScrollRight = s > 0;
+            this.canScrollLeft = s < (this.maxScroll - 1);
+            container.style.maskImage = `linear-gradient(to left, ${this.canScrollRight ? 'transparent' : 'black'}, black 15%, black 85%, ${this.canScrollLeft ? 'transparent' : 'black'} 100%)`;
         } else {
-            container.style.maskImage = 'none';
-            container.style.webkitMaskImage = 'none';
+            this.canScrollLeft = s > 0;
+            this.canScrollRight = s < (this.maxScroll - 1);
+            container.style.maskImage = `linear-gradient(to right, ${this.canScrollLeft ? 'transparent' : 'black'}, black 15%, black 85%, ${this.canScrollRight ? 'transparent' : 'black'} 100%)`;
         }
+        container.style.webkitMaskImage = container.style.maskImage;
     },
     scrollLeft() {
-        this.$refs.scrollContainer.scrollBy({ left: -200, behavior: 'smooth' });
+        // In RTL, scroll left button scrolls right
+        this.$refs.scrollContainer.scrollBy({ left: this.isRTL ? 200 : -200, behavior: 'smooth' });
     },
     scrollRight() {
-        this.$refs.scrollContainer.scrollBy({ left: 200, behavior: 'smooth' });
+        // In RTL, scroll right button scrolls left
+        this.$refs.scrollContainer.scrollBy({ left: this.isRTL ? -200 : 200, behavior: 'smooth' });
     }
-}" x-init="updateScroll();
-window.addEventListener('resize', updateScroll)">
-
+}" x-init="updateScroll(); window.addEventListener('resize', updateScroll)">
     <!-- Left scroll button -->
     <button
-        class="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white shadow-lg border border-base-200 flex items-center justify-center transition-opacity duration-200"
-        :class="{ 'opacity-0 pointer-events-none': !canScrollLeft, 'opacity-100': canScrollLeft }" @click="scrollLeft()">
-        <x-heroicon-o-chevron-left class="h-4 w-4 sm:h-6 sm:w-6" />
+        @click="scrollLeft()"
+        x-show="isRTL ? canScrollRight : canScrollLeft"
+        :class="isRTL ? 'absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white shadow-lg border border-base-200 flex items-center justify-center transition-opacity duration-200' : 'absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white shadow-lg border border-base-200 flex items-center justify-center transition-opacity duration-200'">
+        <!-- Conditionally swap chevron icon -->
+        <template x-if="isRTL">
+            <x-heroicon-o-chevron-right class="h-4 w-4 sm:h-6 sm:w-6" />
+        </template>
+        <template x-if="!isRTL">
+            <x-heroicon-o-chevron-left class="h-4 w-4 sm:h-6 sm:w-6" />
+        </template>
     </button>
 
     <!-- Buttons container with custom scrollbar -->
@@ -56,9 +60,15 @@ window.addEventListener('resize', updateScroll)">
 
     <!-- Right scroll button -->
     <button
-        class="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white shadow-lg border border-base-200 flex items-center justify-center transition-opacity duration-200"
-        :class="{ 'opacity-0 pointer-events-none': !canScrollRight, 'opacity-100': canScrollRight }"
-        @click="scrollRight()">
-        <x-heroicon-o-chevron-right class="h-4 w-4 sm:h-6 sm:w-6" />
+        @click="scrollRight()"
+        x-show="isRTL ? canScrollLeft : canScrollRight"
+        :class="isRTL ? 'absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white shadow-lg border border-base-200 flex items-center justify-center transition-opacity duration-200' : 'absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white shadow-lg border border-base-200 flex items-center justify-center transition-opacity duration-200'">
+        <!-- Conditionally swap chevron icon -->
+        <template x-if="isRTL">
+            <x-heroicon-o-chevron-left class="h-4 w-4 sm:h-6 sm:w-6" />
+        </template>
+        <template x-if="!isRTL">
+            <x-heroicon-o-chevron-right class="h-4 w-4 sm:h-6 sm:w-6" />
+        </template>
     </button>
 </div>

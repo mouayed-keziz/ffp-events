@@ -38,15 +38,15 @@
         <div class="max-w-5xl mx-auto">
             <div class="text-center mb-10">
                 <span class="text-sm font-medium text-neutral-600 uppercase tracking-wider">FAQS</span>
-                <h2 class="text-3xl font-bold">Les questions les plus Fréquentes</h2>
+                <h2 class="text-3xl font-bold">{{ __('website/home.faq.title') }}</h2>
             </div>
 
             <div class="space-y-4">
                 @foreach ($faqs as $index => $faq)
                     <div class="bg-base-100 rounded-xl overflow-hidden">
                         <button
-                            @click="openItems.includes({{ $index }}) ? 
-                                openItems = openItems.filter(i => i !== {{ $index }}) : 
+                            @click="openItems.includes({{ $index }}) ?
+                                openItems = openItems.filter(i => i !== {{ $index }}) :
                                 openItems.push({{ $index }})"
                             class="w-full flex justify-between items-center p-6 hover:bg-base-100/50 transition-colors">
                             <span class="text-left font-semibold text-lg">{{ $faq['question'] }}</span>

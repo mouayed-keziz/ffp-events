@@ -19,12 +19,14 @@ Route::get('language/{locale}', function ($locale) {
 
 Route::middleware('local_middleware')->group(function () {
     Route::get('/', [GuestController::class, 'Home'])->name('events');
-    Route::get('/event', [GuestController::class, 'Event'])->name('event_details');
+    Route::get('/event/{id}', [GuestController::class, 'Event'])->name('event_details');
     Route::get('/articles', [GuestController::class, 'Articles'])->name('articles');
-    Route::get('/se-connecter', [GuestController::class, 'SignIn'])->name('sign_in');
-    Route::get('/s\'inscrire', [GuestController::class, 'SignUp'])->name('sign_up');
-    Route::get('/article/{id}', [GuestController::class, 'Article'])->name('article');
+    Route::get('/article/{slug}', [GuestController::class, 'Article'])->name('article');
+
     Route::get('/login', [AuthController::class, 'LogIn'])->name('login');
+    Route::get('/register', [AuthController::class, 'Register'])->name('register');
+    Route::get('/restore-account', [AuthController::class, 'RestoreAccount'])->name('restore-account');
+    Route::get('/email-sent', [AuthController::class, 'EmailSent'])->name('email-sent');
 
     Route::get('/blog', function () {
         return view('website.pages.blog.index', [
@@ -58,9 +60,9 @@ Route::middleware('local_middleware')->group(function () {
     })->name('blog.show');
 });
 
-Route::get("/redirect", function () {
-    return redirect("/admin/login");
-})->name("login");
+// Route::get("/redirect", function () {
+//     return redirect("/admin/login");
+// })->name("login");
 
 
 

@@ -4,6 +4,7 @@
         @foreach ($similarArticles as $article)
             @include('website.components.articles.article-card', [
                 'title' => $article->title,
+                'slug' => $article->slug,
                 'date' => $article->published_at ? $article->published_at->format('d F Y') : '',
                 'views' => $article->views,
                 'image' => $article->getFirstMediaUrl('image') ?: 'https://placehold.co/600x400',

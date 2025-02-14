@@ -1,10 +1,15 @@
 <?php
-
 return [
-    'page_title' => 'FFP Events - Créez des Expériences Mémorables',
     'hero' => [
-        'title' => 'FFP EVENTS',
-        'description' => 'Transformez vos événements en expériences inoubliables grâce à nos services de planification événementielle professionnels.',
-        'cta_button' => 'Commencer'
-    ]
+        'welcome'     => 'Bienvenue sur notre site',
+        'description' => 'Découvrez les actualités et événements à venir.',
+    ],
+    'events' => [
+        'title'   => 'Nos évènements',
+        'visit'   => 'VISITER',
+        'exhibit' => 'EXPOSER ET SPONSORISER',
+    ],
+    'faq'  => [
+        'title'   => 'Les questions les plus Fréquentes',
+    ],
 ];

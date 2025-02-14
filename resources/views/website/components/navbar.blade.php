@@ -6,19 +6,28 @@
             <div class="w-full max-w-7xl mx-auto">
                 <div class="navbar">
                     <div class="navbar-start h-16">
-                        @include('website.components.brand.logo')
+                        <a href="{{ route('events') }}">
+                            @include('website.components.brand.logo')
+                        </a>
                     </div>
 
                     <div class="navbar-center hidden md:flex flex-none gap-8">
-                        <a href="#" class="flex items-center gap-2 text-primary font-bold">
-                            @include('website.svg.events')
-                            <span>Nos evenements</span>
+                        <a href="{{ route('events') }}" class="flex items-center gap-2 font-bold {{ request()->routeIs('events') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
+                            @if(request()->routeIs('events'))
+                                @include('website.svg.events_active')
+                            @else
+                                @include('website.svg.events')
+                            @endif
+                            <span>{{ __('website/navbar.events') }}</span>
                         </a>
 
-                        <a href="#"
-                            class="flex items-center gap-2 text-gray-700 hover:text-primary transition-colors font-bold">
-                            @include('website.svg.articles')
-                            <span>Nos articles</span>
+                        <a href="{{ route('articles') }}" class="flex items-center gap-2 font-bold {{ request()->routeIs('articles') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
+                            @if(request()->routeIs('articles'))
+                                @include('website.svg.articles_active')
+                            @else
+                                @include('website.svg.articles')
+                            @endif
+                            <span>{{ __('website/navbar.articles') }}</span>
                         </a>
                     </div>
 
@@ -26,11 +35,11 @@
                         <div class="flex items-center gap-4">
                             @include('website.components.local-dropdown')
                             <div class="hidden md:flex items-center gap-4">
-                                <a href="#" class="btn btn-outline text-[1rem] border-base-200 border-2">
-                                    Se connecter
+                                <a href="{{ route('login') }}" class="btn btn-outline text-[1rem] border-base-200 border-2">
+                                    {{ __('website/navbar.login') }}
                                 </a>
-                                <a href="#" class="btn btn-primary text-[1rem]">
-                                    S'inscrire
+                                <a href="{{ route('register') }}" class="btn btn-primary text-[1rem]">
+                                    {{ __('website/navbar.register') }}
                                 </a>
                             </div>
                             <label for="navbar-drawer" class="btn btn-square btn-ghost md:hidden">
@@ -47,21 +56,28 @@
         <label for="navbar-drawer" class="drawer-overlay"></label>
         <div class="menu p-4 w-80 min-h-full bg-white">
             <div class="flex flex-col gap-4">
-                <a href="#" class="flex items-center gap-2 text-primary font-bold">
-                    @include('website.svg.events')
-                    <span class="text-lg">Nos evenements</span>
+                <a href="{{ route('events') }}" class="flex items-center gap-2 font-bold {{ request()->routeIs('events') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
+                    @if(request()->routeIs('events'))
+                        @include('website.svg.events_active')
+                    @else
+                        @include('website.svg.events')
+                    @endif
+                    <span class="text-lg">{{ __('website/navbar.events') }}</span>
                 </a>
-                <a href="#"
-                    class="flex items-center gap-2 text-gray-700 hover:text-primary transition-colors font-bold">
-                    @include('website.svg.articles')
-                    <span class="text-lg">Nos articles</span>
+                <a href="{{ route('articles') }}" class="flex items-center gap-2 font-bold {{ request()->routeIs('articles') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
+                    @if(request()->routeIs('articles'))
+                        @include('website.svg.articles_active')
+                    @else
+                        @include('website.svg.articles')
+                    @endif
+                    <span class="text-lg">{{ __('website/navbar.articles') }}</span>
                 </a>
                 <div class="border-t my-4"></div>
-                <a href="#" class="btn btn-outline text-[1rem] border-base-200 border-2">
-                    Se connecter
+                <a href="{{ route('login') }}" class="btn btn-outline text-[1rem] border-base-200 border-2">
+                    {{ __('website/navbar.login') }}
                 </a>
-                <a href="#" class="btn btn-primary text-[1rem]">
-                    S'inscrire
+                <a href="{{ route('register') }}" class="btn btn-primary text-[1rem]">
+                    {{ __('website/navbar.register') }}
                 </a>
             </div>
         </div>
