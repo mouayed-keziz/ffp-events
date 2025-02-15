@@ -24,29 +24,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        // User::factory(16)->exhibitor()->create();
-        // User::factory(4)->admin()->create();
-        // User::factory(count: 50)->visitor()->create();
-
-        // Create categories
-
-        // $categories = Category::factory(5)->create();
-
-        // // Create articles and attach random categories
-        // Article::factory(15)->published()->create()->each(function ($article) use ($categories) {
-        //     $article->categories()->attach(
-        //         $categories->random(rand(1, 3))->pluck('id')->toArray()
-        //     );
-        //     $this->call(UsersTableSeeder::class);
-
-        // Article::factory(5)->unpublished()->create()->each(function ($article) use ($categories) {
-        //     $article->categories()->attach(
-        //         $categories->random(rand(1, 3))->pluck('id')->toArray()
-        //     );
-
-
-
-
         $this->call(IseedUsersTableSeeder::class);
 
         $this->call(IseedRolesTableSeeder::class);
