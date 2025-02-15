@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class EventAnnouncement extends Model implements HasMedia
 {
@@ -61,17 +62,22 @@ class EventAnnouncement extends Model implements HasMedia
         $this->addMediaCollection('image')
             ->singleFile();
     }
+
     public function getImageAttribute()
     {
         return $this->getFirstMediaUrl('image') ? $this->getFirstMediaUrl('image') : null;
     }
-
-
 
     // ------------------ RELATIONSHIPS ------------------
 
     public function visitorForm()
     {
         return $this->hasOne(VisitorForm::class);
+    }
+
+    // Define the hasMany relationship with ExhibitorForm.
+    public function exhibitorForms(): HasMany
+    {
+        return $this->hasMany(ExhibitorForm::class);
     }
 }
