@@ -11,10 +11,13 @@ use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
+use Guava\FilamentNestedResources\Concerns\NestedPage;
 
 class EditEventAnnouncementVisitorForm extends EditRecord
 {
     use HasPageSidebar;
+    use NestedPage;
+
     protected static string $resource = EventAnnouncementResource::class;
 
     public function form(Form $form): Form

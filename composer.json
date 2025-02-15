@@ -23,6 +23,7 @@
         "filament/spatie-laravel-settings-plugin": "^3.2",
         "filament/spatie-laravel-translatable-plugin": "^3.2",
         "g4t/swagger": "^3.2",
+        "guava/filament-nested-resources": "^1.2",
         "howdu/filament-record-switcher": "^1.0",
         "joaopaulolndev/filament-edit-profile": "^1.0",
         "kossa/algerian-cities": "^4.1",

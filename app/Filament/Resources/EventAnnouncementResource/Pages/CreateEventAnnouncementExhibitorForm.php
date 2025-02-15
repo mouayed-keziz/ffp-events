@@ -3,19 +3,16 @@
 namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 
 use App\Filament\Resources\EventAnnouncementResource;
-use App\Filament\Resources\EventAnnouncementResource\Resource\EventAnnouncementForm;
+use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
-use Filament\Forms\Form;
 use Guava\FilamentNestedResources\Concerns\NestedPage;
+use Guava\FilamentNestedResources\Pages\CreateRelatedRecord;
 
-class CreateEventAnnouncement extends CreateRecord
+class CreateEventAnnouncementExhibitorForm extends CreateRelatedRecord
 {
     use NestedPage;
 
     protected static string $resource = EventAnnouncementResource::class;
 
-    public function form(Form $form): Form
-    {
-        return EventAnnouncementForm::form($form);
-    }
+    protected static string $relationship = 'exhibitorForms';
 }

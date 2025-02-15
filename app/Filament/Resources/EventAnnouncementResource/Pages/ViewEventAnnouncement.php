@@ -8,10 +8,12 @@ use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
 use Filament\Infolists\Infolist;
+use Guava\FilamentNestedResources\Concerns\NestedPage;
 
 class ViewEventAnnouncement extends ViewRecord
 {
     use HasPageSidebar;
+    use NestedPage;
     use ViewRecord\Concerns\Translatable;
 
     protected static string $resource = EventAnnouncementResource::class;

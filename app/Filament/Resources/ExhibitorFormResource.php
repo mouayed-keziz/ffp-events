@@ -19,9 +19,21 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Spatie\MediaLibrary\Forms\Components\MediaLibraryFileUpload;
+use Guava\FilamentNestedResources\Ancestor;
+use Guava\FilamentNestedResources\Concerns\NestedResource;
 
 class ExhibitorFormResource extends Resource
 {
+    use NestedResource;
+
+    public static function getAncestor(): ?Ancestor
+    {
+        return Ancestor::make(
+            'exhibitorForms',
+            'eventAnnouncement',
+        );
+    }
+
     protected static ?string $model = ExhibitorForm::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -35,9 +47,9 @@ class ExhibitorFormResource extends Resource
                     ->schema([
                         TextInput::make('name')
                             ->required(),
-                        Select::make('event_announcement_id')
-                            ->relationship('eventAnnouncement', 'title')
-                            ->required(),
+                        // Select::make('event_announcement_id')
+                        //     ->relationship('eventAnnouncement', 'title')
+                        //     ->required(),
                         SpatieMediaLibraryFileUpload::make('images')
                             ->collection('images')
                             ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif']),
@@ -82,7 +94,7 @@ class ExhibitorFormResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListExhibitorForms::route('/'),
+            // 'index' => Pages\ListExhibitorForms::route('/'),
             'create' => Pages\CreateExhibitorForm::route('/create'),
             'edit' => Pages\EditExhibitorForm::route('/{record}/edit'),
         ];

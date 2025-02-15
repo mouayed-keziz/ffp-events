@@ -8,10 +8,12 @@ use Filament\Resources\Pages\EditRecord;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
 use Filament\Actions;
 use Filament\Forms\Form;
+use Guava\FilamentNestedResources\Concerns\NestedPage;
 
 class EditEventAnnouncement extends EditRecord
 {
     use HasPageSidebar;
+    use NestedPage;
 
     protected static string $resource = EventAnnouncementResource::class;
 

@@ -9,9 +9,12 @@ use App\Filament\Resources\EventAnnouncementResource\Widgets\EventAnnouncementSt
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Table;
+use Guava\FilamentNestedResources\Concerns\NestedPage;
+
 
 class ListEventAnnouncements extends ListRecords
 {
+    use NestedPage;
     use ListRecords\Concerns\Translatable;
 
     protected static string $resource = EventAnnouncementResource::class;

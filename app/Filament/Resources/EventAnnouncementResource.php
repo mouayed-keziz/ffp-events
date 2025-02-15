@@ -11,18 +11,24 @@ use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\Concerns\Translatable;
+use Guava\FilamentNestedResources\Ancestor;
+use Guava\FilamentNestedResources\Concerns\NestedResource;
 
 class EventAnnouncementResource extends Resource
 {
-
+    use NestedResource;
     use Translatable;
+
+    public static function getAncestor(): ?Ancestor
+    {
+        return null;
+    }
 
     protected static ?string $model = EventAnnouncement::class;
     protected static ?int $navigationSort = Sidebar::EVENT_ANNOUNCEMENT["sort"];
     protected static ?string $navigationIcon = Sidebar::EVENT_ANNOUNCEMENT["icon"];
     protected static bool $shouldRegisterNavigation = true;
     protected static ?string $recordTitleAttribute = 'recordTitle';
-
 
     public static function getNavigationBadge(): ?string
     {
@@ -89,15 +95,15 @@ class EventAnnouncementResource extends Resource
                         fn() =>
                         request()->routeIs(Pages\EditEventAnnouncementVisitorForm::getRouteName())
                     ),
-                // PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_forms'))
-                //     ->url(fn() => static::getUrl('manage-exhibitor-forms', ['record' => $record->id]))
-                //     ->icon('heroicon-o-clipboard-document-list')
-                //     ->isActiveWhen(
-                //         fn() =>
-                //         request()->routeIs([
-                //             Pages\ManageEventAnnouncementExhibitorForms::getRouteName(),
-                //         ])
-                //     ),
+                PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_forms'))
+                    ->url(fn() => static::getUrl('exhibitor-forms', ['record' => $record->id]))
+                    ->icon('heroicon-o-clipboard-document-list')
+                    ->isActiveWhen(
+                        fn() =>
+                        request()->routeIs([
+                            Pages\ManageEventAnnouncementExhibitorForms::getRouteName(),
+                        ])
+                    ),
             ]);
     }
 
@@ -110,6 +116,9 @@ class EventAnnouncementResource extends Resource
             'edit' => Pages\EditEventAnnouncement::route('/{record}/edit'),
             'edit-terms' => Pages\EditEventAnnouncementTerms::route('/{record}/edit-terms'),
             'edit-visitor-form' => Pages\EditEventAnnouncementVisitorForm::route("/{record}/visitor-form"),
+
+            'exhibitor-forms' => Pages\ManageEventAnnouncementExhibitorForms::route('/{record}/exhibitor-forms'),
+            'exhibitorForms.create' => Pages\CreateEventAnnouncementExhibitorForm::route('/{record}/exhibitor-forms/create'),
             // 'manage-exhibitor-forms' => Pages\ManageEventAnnouncementExhibitorForms::route('/{record}/exhibitor-forms'),
             // 'create-exhibitor-form' => Pages\CreateEventAnnouncementExhibitorForm::route('/{record}/exhibitor-forms/create'),
             // 'edit-exhibitor-form' => Pages\EditEventAnnouncementExhibitorForm::route('/{record}/exhibitor-forms/{exhibitorForm}'),
