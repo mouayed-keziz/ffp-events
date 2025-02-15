@@ -18,24 +18,31 @@ class EventAnnouncement extends Model implements HasMedia
     protected $fillable = [
         'title',
         'description',
-        'content',
         'terms',
+        'content',
         'location',
-        'status',
-        'publish_at',
         'start_date',
         'end_date',
-        'max_exhibitors',
-        'max_visitors',
-        'is_featured'
+        'visitor_registration_start_date',
+        'visitor_registration_end_date',
+        'exhibitor_registration_start_date',
+        'exhibitor_registration_end_date',
+        'website_url',
+        'contact',
+        'currencies',
     ];
-    public $translatable = ['title', 'description', 'content', 'terms'];
+    public $translatable = ['title', 'description', 'terms', 'content'];
 
     protected $casts = [
-        'start_date' => 'datetime',
-        'end_date' => 'datetime',
-        'publish_at' => 'datetime',
-        'is_featured' => 'boolean',
+        'start_date'                      => 'datetime',
+        'end_date'                        => 'datetime',
+        'visitor_registration_start_date' => 'datetime',
+        'visitor_registration_end_date'   => 'datetime',
+        'exhibitor_registration_start_date' => 'datetime',
+        'exhibitor_registration_end_date'   => 'datetime',
+        'website_url'                     => 'string',
+        'contact'                         => 'array',
+        'currencies'                      => 'array',
     ];
 
     protected static function boot()
@@ -56,22 +63,9 @@ class EventAnnouncement extends Model implements HasMedia
     }
     public function getImageAttribute()
     {
-        $image = $this->getFirstMediaUrl('image');
-        return $image ? $image : 'https://via.placeholder.com/150';
-    }
-    public function scopePublished($query)
-    {
-        return $query->where('status', 'published')
-            ->where('publish_at', '<=', now());
+        return $this->getFirstMediaUrl('image') ? $this->getFirstMediaUrl('image') : null;
     }
 
-    public function scopeActive($query)
-    {
-        return $query->published()
-            ->where('status', '!=', 'archived')
-            ->where('start_date', '<=', now())
-            ->where('end_date', '>=', now());
-    }
 
 
     // ------------------ RELATIONSHIPS ------------------
@@ -79,9 +73,5 @@ class EventAnnouncement extends Model implements HasMedia
     public function visitorForm()
     {
         return $this->hasOne(VisitorForm::class);
-    }
-    public function exhibitorForms()
-    {
-        return $this->hasMany(ExhibitorForm::class);
     }
 }

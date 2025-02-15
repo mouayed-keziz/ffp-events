@@ -14,16 +14,18 @@ return new class extends Migration {
             $table->id();
             $table->json('title');
             $table->json('description')->nullable();
-            $table->json('content')->nullable();
-            $table->json("terms")->nullable();
-            $table->dateTime('start_date');
-            $table->dateTime('end_date');
+            $table->json('terms'); // new column for translatable terms (html)
+            $table->dateTime('start_date')->nullable();
+            $table->dateTime('end_date')->nullable();
             $table->string('location')->nullable();
-            $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
-            $table->integer('max_exhibitors')->nullable();
-            $table->integer('max_visitors')->nullable();
-            $table->boolean('is_featured')->default(false);
-            $table->timestamp('publish_at')->nullable();
+            $table->dateTime('visitor_registration_start_date');
+            $table->dateTime('visitor_registration_end_date');
+            $table->dateTime('exhibitor_registration_start_date');
+            $table->dateTime('exhibitor_registration_end_date');
+            $table->string('website_url')->nullable();
+            $table->json('contact'); // {name, email, phone_number}
+            $table->json('content')->nullable(); // translatable html content
+            $table->json('currencies'); // json array e.g. ['eur', 'usd']
             $table->timestamps();
             $table->softDeletes();
         });

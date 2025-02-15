@@ -89,15 +89,15 @@ class EventAnnouncementResource extends Resource
                         fn() =>
                         request()->routeIs(Pages\EditEventAnnouncementVisitorForm::getRouteName())
                     ),
-                PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_forms'))
-                    ->url(fn() => static::getUrl('manage-exhibitor-forms', ['record' => $record->id]))
-                    ->icon('heroicon-o-clipboard-document-list')
-                    ->isActiveWhen(
-                        fn() =>
-                        request()->routeIs([
-                            Pages\ManageEventAnnouncementExhibitorForms::getRouteName(),
-                        ])
-                    ),
+                // PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_forms'))
+                //     ->url(fn() => static::getUrl('manage-exhibitor-forms', ['record' => $record->id]))
+                //     ->icon('heroicon-o-clipboard-document-list')
+                //     ->isActiveWhen(
+                //         fn() =>
+                //         request()->routeIs([
+                //             Pages\ManageEventAnnouncementExhibitorForms::getRouteName(),
+                //         ])
+                //     ),
             ]);
     }
 
@@ -110,7 +110,7 @@ class EventAnnouncementResource extends Resource
             'edit' => Pages\EditEventAnnouncement::route('/{record}/edit'),
             'edit-terms' => Pages\EditEventAnnouncementTerms::route('/{record}/edit-terms'),
             'edit-visitor-form' => Pages\EditEventAnnouncementVisitorForm::route("/{record}/visitor-form"),
-            'manage-exhibitor-forms' => Pages\ManageEventAnnouncementExhibitorForms::route('/{record}/exhibitor-forms'),
+            // 'manage-exhibitor-forms' => Pages\ManageEventAnnouncementExhibitorForms::route('/{record}/exhibitor-forms'),
             // 'create-exhibitor-form' => Pages\CreateEventAnnouncementExhibitorForm::route('/{record}/exhibitor-forms/create'),
             // 'edit-exhibitor-form' => Pages\EditEventAnnouncementExhibitorForm::route('/{record}/exhibitor-forms/{exhibitorForm}'),
         ];

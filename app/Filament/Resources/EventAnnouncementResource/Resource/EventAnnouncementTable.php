@@ -13,21 +13,19 @@ class EventAnnouncementTable
         return $table
             ->striped()
             ->columns([
+                Tables\Columns\ImageColumn::make('image')
+                    ->label(__('panel/event_announcement.fields.image'))
+                    ->placeholder(__('panel/event_announcement.empty_states.photo'))
+                    ->circular()
+                    ->alignCenter()
+                    ->toggleable(),
+
                 Tables\Columns\TextColumn::make('title')
                     ->label(__('panel/event_announcement.fields.title'))
                     ->searchable()
                     ->sortable()
                     ->toggleable()
-                    ->limit(40),
-
-                Tables\Columns\TextColumn::make('description')
-                    ->label(__('panel/event_announcement.fields.description'))
-                    ->limit(40)
-                    ->placeholder(__('panel/event_announcement.empty_states.description'))
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: false)
-                    ->limit(50),
+                    ->limit(30),
 
                 Tables\Columns\TextColumn::make('dates')
                     ->label(__('panel/event_announcement.fields.event_dates'))
@@ -52,47 +50,13 @@ class EventAnnouncementTable
 
                 Tables\Columns\TextColumn::make('location')
                     ->label(__('panel/event_announcement.fields.location'))
+                    ->limit(30)
                     ->placeholder(__('panel/event_announcement.empty_states.location'))
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
 
-                Tables\Columns\ImageColumn::make('image')
-                    ->label(__('panel/event_announcement.fields.image'))
-                    ->placeholder(__('panel/event_announcement.empty_states.photo'))
-                    ->circular()
-                    ->toggleable(),
 
-                Tables\Columns\TextColumn::make('max_exhibitors')
-                    ->label(__('panel/event_announcement.fields.max_exhibitors'))
-                    ->alignment(\Filament\Support\Enums\Alignment::Center)
-                    ->badge()
-                    ->sortable()
-                    ->toggleable(),
-
-                Tables\Columns\TextColumn::make('max_visitors')
-                    ->label(__('panel/event_announcement.fields.max_visitors'))
-                    ->alignment(\Filament\Support\Enums\Alignment::Center)
-                    ->badge()
-                    ->sortable()
-                    ->toggleable(),
-
-                Tables\Columns\IconColumn::make('is_featured')
-                    ->label(__('panel/event_announcement.fields.is_featured'))
-                    ->boolean()
-                    ->alignment(\Filament\Support\Enums\Alignment::Center)
-                    ->sortable()
-                    ->toggleable(),
-
-                Tables\Columns\SelectColumn::make('status')
-                    ->label(__('panel/event_announcement.fields.status'))
-                    ->options([
-                        'draft' => __('panel/event_announcement.filters.draft'),
-                        'published' => __('panel/event_announcement.filters.published'),
-                        'archived' => __('panel/event_announcement.filters.archived'),
-                    ])
-                    ->sortable()
-                    ->toggleable(),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('panel/event_announcement.fields.created_at'))
@@ -114,17 +78,6 @@ class EventAnnouncementTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('status')
-                    ->label(__('panel/event_announcement.filters.status'))
-                    ->options([
-                        'draft' => __('panel/event_announcement.filters.draft'),
-                        'published' => __('panel/event_announcement.filters.published'),
-                        'archived' => __('panel/event_announcement.filters.archived'),
-                    ]),
-
-                Tables\Filters\TernaryFilter::make('is_featured')
-                    ->label(__('panel/event_announcement.filters.featured')),
-
                 Tables\Filters\TrashedFilter::make()
                     ->label(__('panel/event_announcement.filters.trashed')),
             ])

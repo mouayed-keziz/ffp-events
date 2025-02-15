@@ -4,7 +4,6 @@ namespace App\Filament\Resources\EventAnnouncementResource\Resource;
 
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
-use Filament\Infolists\Components\Grid;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
 
@@ -14,85 +13,88 @@ class EventAnnouncementInfolist
     {
         return $infolist
             ->schema([
-                Tabs::make('Event Announcement')
+                Tabs::make(__('panel/event_announcement.resource.label'))
                     ->columnSpan(2)
                     ->tabs([
+                        // General Tab
                         Tabs\Tab::make(__('panel/event_announcement.tabs.general'))
                             ->schema([
-                                Section::make()
-                                    ->schema([
-                                        Infolists\Components\TextEntry::make('title')
-                                            ->label(__('panel/event_announcement.fields.title')),
 
-                                        Infolists\Components\TextEntry::make('description')
-                                            ->label(__('panel/event_announcement.fields.description'))
-                                            ->markdown()
-                                            ->placeholder(__('panel/event_announcement.empty_states.description')),
-
-                                        Infolists\Components\TextEntry::make('content')
-                                            ->label(__('panel/event_announcement.fields.content'))
-                                            ->html()
-                                            ->placeholder(__('panel/event_announcement.empty_states.content')),
-                                    ])->columns(1),
+                                Infolists\Components\TextEntry::make('title')
+                                    ->label(__('panel/event_announcement.fields.title')),
+                                Infolists\Components\TextEntry::make('description')
+                                    ->label(__('panel/event_announcement.fields.description'))
+                                    ->markdown()
+                                    ->placeholder(__('panel/event_announcement.empty_states.description')),
+                                Infolists\Components\TextEntry::make('content')
+                                    ->label(__('panel/event_announcement.fields.content'))
+                                    ->html()
+                                    ->placeholder(__('panel/event_announcement.empty_states.content')),
                             ]),
-
+                        // Dates Tab
                         Tabs\Tab::make(__('panel/event_announcement.tabs.dates_location'))
                             ->schema([
-                                Section::make()
+                                Section::make(__('panel/event_announcement.fields.event_dates'))
                                     ->schema([
                                         Infolists\Components\TextEntry::make('start_date')
                                             ->label(__('panel/event_announcement.fields.start_date'))
                                             ->dateTime(),
-
                                         Infolists\Components\TextEntry::make('end_date')
                                             ->label(__('panel/event_announcement.fields.end_date'))
                                             ->dateTime(),
-
-                                        Infolists\Components\TextEntry::make('location')
-                                            ->label(__('panel/event_announcement.fields.location'))
-                                            ->placeholder(__('panel/event_announcement.empty_states.location')),
-                                    ])->columns(3),
-                            ]),
-
-                        Tabs\Tab::make(__('panel/event_announcement.tabs.details'))
-                            ->schema([
-                                Section::make()
+                                    ])->columns(2),
+                                Section::make(__('panel/event_announcement.fields.location'))
                                     ->schema([
-                                        Grid::make(3)
-                                            ->schema([
-                                                Infolists\Components\TextEntry::make('status')
-                                                    ->label(__('panel/event_announcement.fields.status')),
-
-                                                Infolists\Components\IconEntry::make('is_featured')
-                                                    ->label(__('panel/event_announcement.fields.is_featured'))
-                                                    ->icon(fn(bool $state): string => $state ? 'heroicon-s-check' : 'heroicon-s-x-mark')
-                                                    ->color(fn(bool $state): string => $state ? 'success' : 'danger'),
-                                            ]),
-
-                                        Grid::make(3)
-                                            ->schema([
-                                                Infolists\Components\TextEntry::make('max_exhibitors')
-                                                    ->label(__('panel/event_announcement.fields.max_exhibitors'))
-                                                    ->placeholder('-'),
-
-                                                Infolists\Components\TextEntry::make('max_visitors')
-                                                    ->label(__('panel/event_announcement.fields.max_visitors'))
-                                                    ->placeholder('-'),
-                                            ]),
+                                        Infolists\Components\TextEntry::make('location')
+                                            ->label(__('panel/event_announcement.fields.location')),
+                                        Infolists\Components\TextEntry::make('website_url')
+                                            ->label(__('panel/event_announcement.fields.website_url')),
+                                    ])->columns(2),
+                                Section::make(__('panel/event_announcement.fields.visitor_registration'))
+                                    ->schema([
+                                        Infolists\Components\TextEntry::make('visitor_registration_start_date')
+                                            ->label(__('panel/event_announcement.fields.visitor_registration_start_date')),
+                                        Infolists\Components\TextEntry::make('visitor_registration_end_date')
+                                            ->label(__('panel/event_announcement.fields.visitor_registration_end_date')),
+                                    ])->columns(2),
+                                Section::make(__('panel/event_announcement.fields.exhibitor_registration'))
+                                    ->schema([
+                                        Infolists\Components\TextEntry::make('exhibitor_registration_start_date')
+                                            ->label(__('panel/event_announcement.fields.exhibitor_registration_start_date')),
+                                        Infolists\Components\TextEntry::make('exhibitor_registration_end_date')
+                                            ->label(__('panel/event_announcement.fields.exhibitor_registration_end_date')),
+                                    ])->columns(2),
+                            ]),
+                        // Contact & Currencies Tab
+                        Tabs\Tab::make(__('panel/event_announcement.tabs.contact_currencies'))
+                            ->schema([
+                                Section::make(__('Contact Information'))
+                                    ->schema([
+                                        Infolists\Components\TextEntry::make('contact.name')
+                                            ->label(__('panel/event_announcement.fields.contact_name')),
+                                        Infolists\Components\TextEntry::make('contact.email')
+                                            ->label(__('panel/event_announcement.fields.contact_email')),
+                                        Infolists\Components\TextEntry::make('contact.phone_number')
+                                            ->label(__('panel/event_announcement.fields.contact_phone_number')),
+                                    ]),
+                                Section::make(__('Currencies'))
+                                    ->schema([
+                                        Infolists\Components\TextEntry::make('currencies')
+                                            ->label(__('panel/event_announcement.fields.currencies')),
                                     ]),
                             ]),
-
+                        // Media Tab
                         Tabs\Tab::make(__('panel/event_announcement.tabs.media'))
                             ->schema([
-                                Section::make()
+                                Section::make(__('Image'))
                                     ->schema([
                                         Infolists\Components\ImageEntry::make('image')
                                             ->label(__('panel/event_announcement.fields.image'))
-                                            ->placeholder(__('panel/event_announcement.empty_states.photo'))
-                                            ->circular(),
+                                            ->circular()
+                                            ->placeholder(__('panel/event_announcement.empty_states.photo')),
                                     ])->columns(1),
                             ]),
-                    ])
+                    ]),
             ]);
     }
 }

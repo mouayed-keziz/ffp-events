@@ -37,15 +37,15 @@
     /* @apply bg-[#efeff4] dark:bg-[#000000]; */
 }
 
-.fi-ta-table > thead > tr {
+/* .fi-ta-table > thead > tr {
     @apply divide-x divide-gray-200 dark:divide-white/5;
 }
 .fi-ta-row {
     @apply divide-x divide-gray-200 dark:divide-white/5;
-}
+} */
 
 /* .fi-ta-table > tbody {
-    @apply divide-none
+    @apply divide-none;
 } */
 
 .fi-ta-text {

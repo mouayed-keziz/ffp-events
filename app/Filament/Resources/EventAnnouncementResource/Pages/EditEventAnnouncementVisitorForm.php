@@ -153,8 +153,7 @@ class EditEventAnnouncementVisitorForm extends EditRecord
 
     protected function transformOptions(array $options): array
     {
-        return collect($options)->map(function ($option) {
-            return $option['value'];
-        })->toArray();
+        // Return the options unchanged to preserve the translatable JSON structure.
+        return $options;
     }
 }

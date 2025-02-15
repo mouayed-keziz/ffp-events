@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\EventAnnouncement;
+use App\Enums\Currency;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,11 +20,18 @@ class EventAnnouncementFactory extends Factory
      */
     public function definition(): array
     {
-        $startDate = $this->faker->dateTimeBetween('now', '+2 years');
-        $endDate = $this->faker->dateTimeBetween($startDate, '+3 years');
+        $startDate    = $this->faker->dateTimeBetween('now', '+2 years');
+        $endDate      = $this->faker->dateTimeBetween($startDate, '+3 years');
+
+        $visitorRegStart = $this->faker->dateTimeBetween('-1 month', '+1 month');
+        $visitorRegEnd   = $this->faker->dateTimeBetween($visitorRegStart, '+1 month');
+
+        $exhibitorRegStart = $this->faker->dateTimeBetween('-1 month', '+1 month');
+        $exhibitorRegEnd   = $this->faker->dateTimeBetween($exhibitorRegStart, '+1 month');
+
 
         return [
-            'title' => [
+            'title'       => [
                 'en' => $this->faker->realText(30),
                 'fr' => $this->faker->realText(30),
                 'ar' => $this->faker->realText(30),
@@ -33,75 +41,33 @@ class EventAnnouncementFactory extends Factory
                 'fr' => $this->faker->realText(200),
                 'ar' => $this->faker->realText(200),
             ],
-            'content' => [
-                'en' => $this->faker->realText($this->faker->numberBetween(500, 2000)),
-                'fr' => $this->faker->realText($this->faker->numberBetween(500, 2000)),
-                'ar' => $this->faker->realText($this->faker->numberBetween(500, 2000)),
+            'terms'       => [
+                'en' => '<p>' . $this->faker->realText(100) . '</p>',
+                'fr' => '<p>' . $this->faker->realText(100) . '</p>',
+                'ar' => '<p>' . $this->faker->realText(100) . '</p>',
             ],
-            'terms' => [
-                'en' => $this->faker->realText($this->faker->numberBetween(1000, 3000)),
-                'fr' => $this->faker->realText($this->faker->numberBetween(1000, 3000)),
-                'ar' => $this->faker->realText($this->faker->numberBetween(1000, 3000)),
+            'content'     => [
+                'en' => '<p>' . $this->faker->realText(200) . '</p>',
+                'fr' => '<p>' . $this->faker->realText(200) . '</p>',
+                'ar' => '<p>' . $this->faker->realText(200) . '</p>',
             ],
-            'start_date' => $startDate,
-            'end_date' => $endDate,
-            'location' => $this->faker->city(),
-            'status' => $this->faker->randomElement(['draft', 'published', 'archived']),
-            'max_exhibitors' => $this->faker->numberBetween(10, 100),
-            'max_visitors' => $this->faker->numberBetween(100, 1000),
-            'is_featured' => $this->faker->boolean(20),
-            'publish_at' => $this->faker->dateTimeBetween('-1 month', '+1 month'),
+            'location'    => $this->faker->city(),
+            'start_date'  => $startDate,
+            'end_date'    => $endDate,
+            'visitor_registration_start_date' => $visitorRegStart,
+            'visitor_registration_end_date'   => $visitorRegEnd,
+            'exhibitor_registration_start_date' => $exhibitorRegStart,
+            'exhibitor_registration_end_date'   => $exhibitorRegEnd,
+            'website_url' => $this->faker->url(),
+            'contact'     => [
+                'name'         => $this->faker->name(),
+                'email'        => $this->faker->safeEmail(),
+                'phone_number' => $this->faker->phoneNumber(),
+            ],
+            'currencies'  => array_map(
+                fn($currency) => $currency->value,
+                $this->faker->randomElements(Currency::cases(), rand(1, count(Currency::cases())))
+            ),
         ];
-    }
-
-    /**
-     * Indicate that the announcement is published.
-     */
-    public function published(): static
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'status' => 'published',
-                'publish_at' => $this->faker->dateTimeBetween('-1 month', 'now'),
-            ];
-        });
-    }
-
-    /**
-     * Indicate that the announcement is a draft.
-     */
-    public function draft(): static
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'status' => 'draft',
-                'publish_at' => null,
-            ];
-        });
-    }
-
-    /**
-     * Indicate that the announcement is archived.
-     */
-    public function archived(): static
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'status' => 'archived',
-                'publish_at' => $this->faker->dateTimeBetween('-6 months', '-1 month'),
-            ];
-        });
-    }
-
-    /**
-     * Indicate that the announcement is featured.
-     */
-    public function featured(): static
-    {
-        return $this->state(function (array $attributes) {
-            return [
-                'is_featured' => true,
-            ];
-        });
     }
 }
