@@ -109,6 +109,21 @@ class IseedActivityLogTableSeeder extends Seeder
                 'event' => 'modification',
                 'batch_uuid' => NULL,
             ),
+            6 => 
+            array (
+                'id' => 7,
+                'log_name' => 'authentication',
+                'description' => 'User logged in',
+                'subject_type' => NULL,
+                'subject_id' => NULL,
+                'causer_type' => 'App\\Models\\User',
+                'causer_id' => 1,
+                'properties' => '{"email":"admin@admin.dev","name":"Admin"}',
+                'created_at' => '2025-02-15 18:04:04',
+                'updated_at' => '2025-02-15 18:04:04',
+                'event' => 'login',
+                'batch_uuid' => NULL,
+            ),
         ));
         
         
