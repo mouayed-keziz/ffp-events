@@ -31,6 +31,7 @@
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.5",
         "livewire/volt": "^1.6",
+        "orangehill/iseed": "^3.1",
         "outerweb/filament-translatable-fields": "^2.0",
         "spatie/filament-simple-stats": "^0.1.4",
         "spatie/laravel-activitylog": "^4.9",

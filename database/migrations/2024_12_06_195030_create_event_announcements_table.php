@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->json('title');
             $table->json('description')->nullable();
-            $table->json('terms'); // new column for translatable terms (html)
+            $table->json('terms')->nullable(); // new column for translatable terms (html)
             $table->dateTime('start_date')->nullable();
             $table->dateTime('end_date')->nullable();
             $table->string('location')->nullable();

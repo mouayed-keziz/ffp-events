@@ -18,9 +18,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            RoleSeeder::class,
-            AdminSeeder::class,
-            EventAnnouncementSeeder::class,
+            // RoleSeeder::class,
+            // AdminSeeder::class,
+            // EventAnnouncementSeeder::class,
         ]);
 
 
@@ -37,12 +37,36 @@ class DatabaseSeeder extends Seeder
         //     $article->categories()->attach(
         //         $categories->random(rand(1, 3))->pluck('id')->toArray()
         //     );
-        // });
+        //     $this->call(UsersTableSeeder::class);
 
         // Article::factory(5)->unpublished()->create()->each(function ($article) use ($categories) {
         //     $article->categories()->attach(
         //         $categories->random(rand(1, 3))->pluck('id')->toArray()
         //     );
-        // });
+
+
+
+
+        $this->call(IseedUsersTableSeeder::class);
+
+        $this->call(IseedRolesTableSeeder::class);
+        $this->call(IseedPermissionsTableSeeder::class);
+        $this->call(IseedModelHasPermissionsTableSeeder::class);
+        $this->call(IseedModelHasRolesTableSeeder::class);
+        $this->call(IseedRoleHasPermissionsTableSeeder::class);
+        $this->call(IseedNotificationsTableSeeder::class);
+
+        $this->call(IseedEventAnnouncementsTableSeeder::class);
+        $this->call(IseedVisitorFormsTableSeeder::class);
+
+        $this->call(IseedCategoriesTableSeeder::class);
+        $this->call(IseedArticlesTableSeeder::class);
+        $this->call(IseedArticleCategoryTableSeeder::class);
+
+        $this->call(IseedActivityLogTableSeeder::class);
+
+
+
+        $this->call(IseedSettingsTableSeeder::class);
     }
 }

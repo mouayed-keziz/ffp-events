@@ -6,4 +6,5 @@ return [
     App\Providers\Filament\AdminPanelProvider::class,
     App\Providers\VoltServiceProvider::class,
     Spatie\Permission\PermissionServiceProvider::class,
+    Orangehill\Iseed\IseedServiceProvider::class,
 ];
