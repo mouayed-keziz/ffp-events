@@ -6,6 +6,7 @@ use Filament\Tables;
 use App\Models\User;
 use App\Actions\UserActions as UserActionsService;
 use Filament\Notifications\Notification;
+use Illuminate\Database\Eloquent\Model;
 
 class ExhibitorActions
 {
@@ -19,7 +20,7 @@ class ExhibitorActions
             ->requiresConfirmation()
             ->modalHeading(__('panel/exhibitors.actions.regenerate_password.modal_heading'))
             ->modalDescription(__('panel/exhibitors.actions.regenerate_password.modal_description'))
-            ->action(function (User $record) {
+            ->action(function (Model $record) {
                 self::execute_action($record);
             });
     }
@@ -32,12 +33,12 @@ class ExhibitorActions
             ->requiresConfirmation()
             ->modalHeading(__('panel/exhibitors.actions.regenerate_password.modal_heading'))
             ->modalDescription(__('panel/exhibitors.actions.regenerate_password.modal_description'))
-            ->action(function (User $record) {
+            ->action(function (Model $record) {
                 self::execute_action($record);
             });
     }
 
-    protected static function execute_action(User $record)
+    protected static function execute_action(Model $record)
     {
         try {
             UserActionsService::regeneratePassword($record);

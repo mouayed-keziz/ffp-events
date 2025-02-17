@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\VisitorResource\Resource;
 
 use App\Models\User;
+use App\Models\Visitor;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -21,20 +22,21 @@ class VisitorTable
                     ->searchable()
                     ->label(__('panel/visitors.columns.name'))
                     ->default(__('panel/visitors.empty_states.name'))
-                    ->description(fn(User $record) => $record->email)
+                    ->description(fn(Visitor $record) => $record->email)
                     ->wrap(),
 
-                Tables\Columns\TextColumn::make('roles.name')
-                    ->toggleable()
-                    ->sortable()
-                    ->searchable()
-                    ->label(__('panel/visitors.columns.roles'))
-                    ->badge()
-                    ->default(__('panel/visitors.empty_states.roles')),
+                // Tables\Columns\TextColumn::make('roles.name')
+                //     ->toggleable()
+                //     ->sortable()
+                //     ->searchable()
+                //     ->label(__('panel/visitors.columns.roles'))
+                //     ->badge()
+                //     ->default(__('panel/visitors.empty_states.roles')),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->toggleable()
                     ->sortable()
+                    ->toggledHiddenByDefault()
                     ->label(__('panel/visitors.columns.created_at'))
                     ->dateTime()
                     ->formatStateUsing(fn($state) => $state ? $state->diffForHumans() : null)

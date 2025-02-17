@@ -14,10 +14,11 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\VisitorResource\Resource\VisitorForm;
 use App\Filament\Resources\VisitorResource\Resource\VisitorTable;
 use App\Filament\Resources\VisitorResource\Resource\VisitorInfolist;
+use App\Models\Visitor;
 
 class VisitorResource extends Resource
 {
-    protected static ?string $model = User::class;
+    protected static ?string $model = Visitor::class;
 
     protected static ?string $navigationIcon = Sidebar::VISITOR["icon"];
     protected static ?int $navigationSort = Sidebar::VISITOR["sort"];
@@ -25,7 +26,7 @@ class VisitorResource extends Resource
     protected static bool $shouldRegisterNavigation = true;
     public static function getNavigationBadge(): ?string
     {
-        return User::visitors()->count();
+        return static::getModel()::count();
     }
 
     public static function getNavigationBadgeColor(): ?string
@@ -86,7 +87,6 @@ class VisitorResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->visitors()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);

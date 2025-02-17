@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ExhibitorResource\Resource;
 
 use App\Filament\Resources\ExhibitorResource\Resource\ExhibitorActions;
+use App\Models\Exhibitor;
 use App\Models\User;
 use Filament\Tables;
 use Filament\Tables\Enums\FiltersLayout;
@@ -23,20 +24,21 @@ class ExhibitorTable
                     ->searchable()
                     ->label(__('panel/exhibitors.columns.name'))
                     ->default(__('panel/exhibitors.empty_states.name'))
-                    ->description(fn(User $record): string => $record->email)
+                    ->description(fn(Exhibitor $record): string => $record->email)
                     ->wrap(),
 
-                Tables\Columns\TextColumn::make('roles.name')
-                    ->toggleable()
-                    ->sortable()
-                    ->searchable()
-                    ->label(__('panel/exhibitors.columns.roles'))
-                    ->badge()
-                    ->default(__('panel/exhibitors.empty_states.roles')),
+                // Tables\Columns\TextColumn::make('roles.name')
+                //     ->toggleable()
+                //     ->sortable()
+                //     ->searchable()
+                //     ->label(__('panel/exhibitors.columns.roles'))
+                //     ->badge()
+                //     ->default(__('panel/exhibitors.empty_states.roles')),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->toggleable()
                     ->sortable()
+                    ->toggledHiddenByDefault()
                     ->label(__('panel/exhibitors.columns.created_at'))
                     ->dateTime()
                     ->formatStateUsing(fn($state) => $state ? $state->diffForHumans() : null)

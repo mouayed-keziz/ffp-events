@@ -40,6 +40,16 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        // Add new auth guard for Visitor
+        'visitor' => [
+            'driver' => 'session',
+            'provider' => 'visitors',
+        ],
+        // Add new auth guard for Exhibitor
+        'exhibitor' => [
+            'driver' => 'session',
+            'provider' => 'exhibitors',
+        ],
     ],
 
     /*
@@ -64,7 +74,16 @@ return [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
-
+        // Add provider for Visitor
+        'visitors' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Visitor::class,
+        ],
+        // Add provider for Exhibitor
+        'exhibitors' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Exhibitor::class,
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

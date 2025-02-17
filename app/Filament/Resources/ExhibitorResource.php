@@ -9,6 +9,7 @@ use App\Filament\Resources\ExhibitorResource\Resource\ExhibitorForm;
 use App\Filament\Resources\ExhibitorResource\Resource\ExhibitorInfolist;
 use App\Filament\Resources\ExhibitorResource\Resource\ExhibitorTable;
 use App\Filament\Resources\UserResource\Resource\UserTable;
+use App\Models\Exhibitor;
 use App\Models\User;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -19,7 +20,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ExhibitorResource extends Resource
 {
-    protected static ?string $model = User::class;
+    protected static ?string $model = Exhibitor::class;
 
     protected static ?string $navigationIcon = Sidebar::EXHIBITOR["icon"];
     protected static ?int $navigationSort = Sidebar::EXHIBITOR["sort"];
@@ -27,7 +28,7 @@ class ExhibitorResource extends Resource
     protected static bool $shouldRegisterNavigation = true;
     public static function getNavigationBadge(): ?string
     {
-        return User::exhibitors()->count();
+        return static::getModel()::count();
     }
     public static function getNavigationBadgeColor(): ?string
     {
@@ -88,7 +89,6 @@ class ExhibitorResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->exhibitors()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);

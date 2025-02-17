@@ -46,18 +46,7 @@ class User extends Authenticatable
         'verified_at' => 'datetime',
     ];
 
-    public function scopeSuperAdmins($query)
-    {
-        return $query->whereHas('roles', function ($q) {
-            $q->where('name', 'super_admin');
-        });
-    }
-    public function scopeVisitors($query)
-    {
-        return $query->whereHas('roles', function ($q) {
-            $q->where('name', 'visitor');
-        });
-    }
+
 
     public function scopeExhibitors($query)
     {
