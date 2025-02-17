@@ -11,17 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('exhibitor_forms', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->json('title');
-            $table->json('description')->nullable();
-            $table->json('sections')->nullable();
-
-            $table->foreignId('event_announcement_id')
-                ->constrained('event_announcements')
-                ->cascadeOnDelete();
-
+            $table->json('name');
+            $table->string('code')->unique();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -30,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('exhibitor_forms');
+        Schema::dropIfExists('products');
     }
 };

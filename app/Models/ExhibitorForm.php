@@ -6,18 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Translatable\HasTranslations;
 
 class ExhibitorForm extends Model implements HasMedia
 {
     use InteractsWithMedia;
+    use HasTranslations;
 
     protected $fillable = [
-        'name',
+        'title',
+        'description',
         'event_announcement_id',
-        // ...other attributes...
+        'sections'
+    ];
+    public $translatable = ['title', 'description'];
+
+    protected $casts = [
+        'sections' => 'array',
     ];
 
-    // Register the media collection for images.
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('images')
@@ -29,7 +36,6 @@ class ExhibitorForm extends Model implements HasMedia
         return $this->hasMedia('images') ? $this->getFirstMediaUrl('images') : null;
     }
 
-    // Define the belongsTo relationship with EventAnnouncement.
     public function eventAnnouncement(): BelongsTo
     {
         return $this->belongsTo(EventAnnouncement::class);
