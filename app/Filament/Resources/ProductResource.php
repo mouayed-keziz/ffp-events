@@ -41,6 +41,7 @@ class ProductResource extends Resource
                                             ->translatable(),
                                         TextInput::make('code')
                                             ->label('Code')
+                                            ->disabledOn("edit")
                                             ->unique(Product::class, 'code')
                                     ])
                             ]),
