@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder
 
 
         $this->call(IseedUsersTableSeeder::class);
+        $this->call(IseedExhibitorsTableSeeder::class);
+        $this->call(IseedVisitorsTableSeeder::class);
 
         $this->call(IseedRolesTableSeeder::class);
         $this->call(IseedPermissionsTableSeeder::class);
@@ -35,14 +37,14 @@ class DatabaseSeeder extends Seeder
 
         $this->call(IseedEventAnnouncementsTableSeeder::class);
         $this->call(IseedVisitorFormsTableSeeder::class);
+        $this->call(IseedProductsTableSeeder::class);
+        $this->call(IseedExhibitorFormsTableSeeder::class);
 
         $this->call(IseedCategoriesTableSeeder::class);
         $this->call(IseedArticlesTableSeeder::class);
         $this->call(IseedArticleCategoryTableSeeder::class);
 
         $this->call(IseedActivityLogTableSeeder::class);
-
-
 
         $this->call(IseedSettingsTableSeeder::class);
     }

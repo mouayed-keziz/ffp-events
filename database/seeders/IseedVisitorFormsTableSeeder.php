@@ -27,6 +27,14 @@ class IseedVisitorFormsTableSeeder extends Seeder
                 'created_at' => '2025-02-15 17:50:07',
                 'updated_at' => '2025-02-15 18:13:18',
             ),
+            1 => 
+            array (
+                'id' => 2,
+                'event_announcement_id' => 2,
+                'fields' => '[]',
+                'created_at' => '2025-02-15 20:41:16',
+                'updated_at' => '2025-02-15 20:41:16',
+            ),
         ));
         
         

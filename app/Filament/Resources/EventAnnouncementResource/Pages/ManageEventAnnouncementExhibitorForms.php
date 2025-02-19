@@ -52,8 +52,8 @@ class ManageEventAnnouncementExhibitorForms extends ManageRelatedRecords
                     ->placeholder('No image')
                     ->circular(),
 
-                Tables\Columns\TextColumn::make('name')
-                    ->label('Name'),
+                Tables\Columns\TextColumn::make('title')
+                    ->label('Title'),
 
                 Tables\Columns\TextColumn::make('eventAnnouncement.title')
                     ->label('Event'),

@@ -15,6 +15,9 @@ class OptionsPriced
             ->columnSpan(2)
             ->collapsible()
             ->collapsed()
+            ->itemLabel(function ($state) {
+                return "Option" . ($state['option'] ? ": " . ($state['option'][app()->getLocale()] ?? '') : '');
+            })
             ->schema([
                 TextInput::make('option')
                     ->label('Option')
