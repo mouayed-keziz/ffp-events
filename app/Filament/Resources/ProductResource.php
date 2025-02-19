@@ -42,7 +42,6 @@ class ProductResource extends Resource
                                         TextInput::make('code')
                                             ->label('Code')
                                             ->disabledOn("edit")
-                                            ->unique(Product::class, 'code')
                                     ])
                             ]),
                         // Second section: spans 2 columns
