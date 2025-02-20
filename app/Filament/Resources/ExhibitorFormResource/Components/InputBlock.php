@@ -10,11 +10,13 @@ use App\Enums\ExhibitorFormInputType;
 use App\Filament\Resources\ExhibitorFormResource\Components\Core\DescriptionInput;
 use App\Filament\Resources\ExhibitorFormResource\Components\Core\LabelInput;
 use Filament\Forms\Components\Group;
+use Illuminate\Support\Facades\Lang;
 
 class InputBlock
 {
     public static function make(string $name)
     {
+
         return Block::make($name)
             ->columns(2)
             ->schema([
@@ -24,7 +26,7 @@ class InputBlock
                 Group::make()->columnSpan(2)->columns(10)->schema([
                     Select::make('type')
                         ->columnSpan(8)
-                        ->label('Type')
+                        ->label(__('panel/forms.exhibitors.blocks.type'))
                         ->native(false)
                         ->options(ExhibitorFormInputType::class),
 
@@ -32,7 +34,7 @@ class InputBlock
                         ->columnSpan(1)
                         ->default(true)
                         ->inline(false)
-                        ->label('Required'),
+                        ->label(__('panel/forms.exhibitors.blocks.required')),
                 ])
             ]);
     }

@@ -15,4 +15,9 @@ class CreateEventAnnouncementExhibitorForm extends CreateRelatedRecord
     protected static string $resource = EventAnnouncementResource::class;
 
     protected static string $relationship = 'exhibitorForms';
+
+    public function getTitle(): string
+    {
+        return __("panel/forms.exhibitors.add_exhibitor_form");
+    }
 }

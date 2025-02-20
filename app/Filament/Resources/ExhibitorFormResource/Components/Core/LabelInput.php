@@ -10,7 +10,7 @@ class LabelInput
     public static function make()
     {
         return TextInput::make('label')
-            ->label('Label')
+            ->label(__('panel/forms.exhibitors.blocks.label'))
             ->required()
             ->translatable();
     }

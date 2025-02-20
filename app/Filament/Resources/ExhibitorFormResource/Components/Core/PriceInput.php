@@ -3,13 +3,8 @@
 namespace App\Filament\Resources\ExhibitorFormResource\Components\Core;
 
 use App\Enums\Currency;
-use App\Filament\Resources\ExhibitorFormResource\Components\Core\DescriptionInput;
-use App\Filament\Resources\ExhibitorFormResource\Components\Core\LabelInput;
-use App\Filament\Resources\ExhibitorFormResource\Components\Core\Options;
-use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\KeyValue;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Repeater;
+use Illuminate\Support\Facades\Lang;
 
 class PriceInput
 {
@@ -22,7 +17,7 @@ class PriceInput
         ];
         return  KeyValue::make('price')
             ->columnSpanFull()
-            ->label('Price')
+            ->label(__('panel/forms.exhibitors.blocks.price'))
             ->columns(3)
             ->default($fixedCurrencies)
             ->live() // activate live updates

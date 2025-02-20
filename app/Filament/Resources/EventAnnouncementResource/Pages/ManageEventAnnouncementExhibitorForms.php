@@ -29,7 +29,12 @@ class ManageEventAnnouncementExhibitorForms extends ManageRelatedRecords
 
     public static function getNavigationLabel(): string
     {
-        return 'Exhibitor Forms';
+        return __("panel/forms.exhibitors.plural");
+    }
+
+    public function getTitle(): string
+    {
+        return __("panel/forms.exhibitors.plural");
     }
 
     public function form(Form $form): Form
@@ -48,21 +53,22 @@ class ManageEventAnnouncementExhibitorForms extends ManageRelatedRecords
             ->recordTitleAttribute('name')
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
-                    ->label('Image')
+                    ->label(__("panel/forms.exhibitors.images"))
                     ->placeholder('No image')
                     ->circular(),
 
                 Tables\Columns\TextColumn::make('title')
-                    ->label('Title'),
+                    ->label(__("panel/forms.exhibitors.title")),
 
-                Tables\Columns\TextColumn::make('eventAnnouncement.title')
-                    ->label('Event'),
+                // Tables\Columns\TextColumn::make('eventAnnouncement.title')
+                //     ->label('Event'),
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->label(__("panel/forms.exhibitors.add_exhibitor_form")),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

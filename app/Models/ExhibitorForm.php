@@ -36,6 +36,11 @@ class ExhibitorForm extends Model implements HasMedia
         return $this->hasMedia('images') ? $this->getFirstMediaUrl('images') : null;
     }
 
+    public function getRecordTitleAttribute()
+    {
+        return __("panel/forms.exhibitors.single") . " : " . $this->title;
+    }
+
     public function eventAnnouncement(): BelongsTo
     {
         return $this->belongsTo(EventAnnouncement::class);

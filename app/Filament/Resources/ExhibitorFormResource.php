@@ -62,6 +62,23 @@ class ExhibitorFormResource extends Resource
 
     protected static ?string $model = ExhibitorForm::class;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $recordTitleAttribute = 'recordTitle';
+
+    public static function getNavigationLabel(): string
+    {
+        return __("panel/forms.exhibitors.plural");
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __("panel/forms.exhibitors.single");
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __("panel/forms.exhibitors.plural");
+    }
+
 
     public static function form(Form $form): Form
     {
@@ -71,20 +88,23 @@ class ExhibitorFormResource extends Resource
         return $form
             ->columns(5)
             ->schema([
-                Section::make("Exhibitor Form Information")
+                Section::make(__("panel/forms.exhibitors.section_title"))
                     ->columnSpan(3)
-                    ->description("This is the information about the exhibitor form.")
+                    ->description(__("panel/forms.exhibitors.description"))
                     ->schema([
                         TextInput::make('title')
                             ->required()
+                            ->label(__("panel/forms.exhibitors.title"))
                             ->translatable(),
                         TextInput::make('description')
+                            ->label(__("panel/forms.exhibitors.title"))
                             ->translatable(),
                     ]),
-                Section::make("image")
+                Section::make(__("panel/forms.exhibitors.images"))
                     ->columnSpan(2)
                     ->schema([
                         SpatieMediaLibraryFileUpload::make('images')
+                            ->label("")
                             ->collection('images')
                             ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif']),
                     ]),
@@ -94,20 +114,21 @@ class ExhibitorFormResource extends Resource
                         Repeater::make('sections')
                             ->collapsed()
                             ->collapsible()
-                            ->addActionLabel('Add Section')
+                            ->addActionLabel(__("panel/forms.exhibitors.add_section"))
+                            ->label(__("panel/forms.exhibitors.sections"))
                             ->itemLabel(function ($state) {
-                                return "Section" . ($state['title'] ? ": " . ($state['title'][app()->getLocale()] ?? '') : '');
+                                return __("panel/forms.exhibitors.section") . ($state['title'] ? ": " . ($state['title'][app()->getLocale()] ?? '') : '');
                             })
                             ->schema([
                                 TextInput::make('title')
-                                    ->label('Section Title')
+                                    ->label(__("panel/forms.exhibitors.section_title_label"))
                                     ->required()
                                     ->translatable(),
                                 ComponentsBuilder::make('fields')
                                     ->collapsed()
                                     ->collapsible()
-                                    ->label("Fields")
-                                    ->addActionLabel('Add Field')
+                                    ->label(__("panel/forms.exhibitors.fields"))
+                                    ->addActionLabel(__("panel/forms.exhibitors.add_field"))
                                     ->blocks([
                                         Components\InputBlock::make(ExhibitorFormField::INPUT->value)
                                             ->icon('heroicon-o-pencil')
@@ -150,10 +171,10 @@ class ExhibitorFormResource extends Resource
                                                 return ExhibitorFormField::RADIO_PRICED->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
                                             }),
                                         Components\EcommerceBlock::make(ExhibitorFormField::ECOMMERCE->value, $currencies)
-                                            ->icon('heroicon-o-shopping-cart'),
-                                        // ->label(function ($state) {
-                                        //     return ExhibitorFormField::ECOMMERCE->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
-                                        // }),
+                                            ->icon('heroicon-o-shopping-cart')
+                                            ->label(function ($state) {
+                                                return ExhibitorFormField::ECOMMERCE->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                            }),
                                     ]),
                             ]),
                     ]),
@@ -164,9 +185,9 @@ class ExhibitorFormResource extends Resource
     {
         return $table
             ->columns([
-                ImageColumn::make('image')->label('Image')->circular(),
-                TextColumn::make('title')->label('Title'),
-                TextColumn::make('eventAnnouncement.title')->label('Event'),
+                ImageColumn::make('image')->label(__("panel/forms.exhibitors.images"))->circular(),
+                TextColumn::make('title')->label(__("panel/forms.exhibitors.title")),
+                // TextColumn::make('eventAnnouncement.title')->label('Event'),
             ])
             ->filters([ /* ... */])
             ->actions([Tables\Actions\EditAction::make()])

@@ -15,9 +15,8 @@ enum ExhibitorFormInputType: string implements HasLabel
     case Date = 'date';
     case Paragraph = 'paragraph';
 
-
     public function getLabel(): ?string
     {
-        return $this->value;
+        return trans('panel/forms.exhibitors.input_types.' . $this->value);
     }
 }

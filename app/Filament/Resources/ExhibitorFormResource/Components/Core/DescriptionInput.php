@@ -10,7 +10,7 @@ class DescriptionInput
     public static function make()
     {
         return TextInput::make('description')
-            ->label('Description')
+            ->label(__('panel/forms.exhibitors.blocks.description'))
             ->translatable();
     }
 }
