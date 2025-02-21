@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             // Extra field for Exhibitor
-            $table->string('currency')->default('DA');
+            $table->string('currency')->default('DZD');
             $table->timestamps();
             $table->softDeletes();
         });

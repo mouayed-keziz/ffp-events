@@ -20,14 +20,26 @@ class Exhibitor extends Authenticatable implements HasMedia
         'email',
         'password',
         'currency',
+        'verified_at'
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
     ];
 
     protected $casts = [
+        'password' => 'hashed',
+        'verified_at' => 'datetime',
         'currency' => Currency::class,
     ];
-
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('image')->singleFile();
+        $this->addMediaCollection('image')
+            ->singleFile();
+    }
+    public function getImageAttribute()
+    {
+        return $this->getFirstMediaUrl('image');
     }
 }

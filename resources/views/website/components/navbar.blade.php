@@ -12,8 +12,9 @@
                     </div>
 
                     <div class="navbar-center hidden md:flex flex-none gap-8">
-                        <a href="{{ route('events') }}" class="flex items-center gap-2 font-bold {{ request()->routeIs('events') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
-                            @if(request()->routeIs('events'))
+                        <a href="{{ route('events') }}"
+                            class="flex items-center gap-2 font-bold {{ request()->routeIs('events') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
+                            @if (request()->routeIs('events'))
                                 @include('website.svg.events_active')
                             @else
                                 @include('website.svg.events')
@@ -21,8 +22,9 @@
                             <span>{{ __('website/navbar.events') }}</span>
                         </a>
 
-                        <a href="{{ route('articles') }}" class="flex items-center gap-2 font-bold {{ request()->routeIs('articles') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
-                            @if(request()->routeIs('articles'))
+                        <a href="{{ route('articles') }}"
+                            class="flex items-center gap-2 font-bold {{ request()->routeIs('articles') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
+                            @if (request()->routeIs('articles'))
                                 @include('website.svg.articles_active')
                             @else
                                 @include('website.svg.articles')
@@ -33,9 +35,10 @@
 
                     <div class="navbar-end space-x-4">
                         <div class="flex items-center gap-4">
-                            @include('website.components.local-dropdown')
+                            @include('website.components.navbar.local-dropdown')
                             <div class="hidden md:flex items-center gap-4">
-                                <a href="{{ route('login') }}" class="btn btn-outline text-[1rem] border-base-200 border-2">
+                                <a href="{{ route('login') }}"
+                                    class="btn btn-outline text-[1rem] border-base-200 border-2">
                                     {{ __('website/navbar.login') }}
                                 </a>
                                 <a href="{{ route('register') }}" class="btn btn-primary text-[1rem]">
@@ -56,16 +59,18 @@
         <label for="navbar-drawer" class="drawer-overlay"></label>
         <div class="menu p-4 w-80 min-h-full bg-white">
             <div class="flex flex-col gap-4">
-                <a href="{{ route('events') }}" class="flex items-center gap-2 font-bold {{ request()->routeIs('events') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
-                    @if(request()->routeIs('events'))
+                <a href="{{ route('events') }}"
+                    class="flex items-center gap-2 font-bold {{ request()->routeIs('events') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
+                    @if (request()->routeIs('events'))
                         @include('website.svg.events_active')
                     @else
                         @include('website.svg.events')
                     @endif
                     <span class="text-lg">{{ __('website/navbar.events') }}</span>
                 </a>
-                <a href="{{ route('articles') }}" class="flex items-center gap-2 font-bold {{ request()->routeIs('articles') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
-                    @if(request()->routeIs('articles'))
+                <a href="{{ route('articles') }}"
+                    class="flex items-center gap-2 font-bold {{ request()->routeIs('articles') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
+                    @if (request()->routeIs('articles'))
                         @include('website.svg.articles_active')
                     @else
                         @include('website.svg.articles')

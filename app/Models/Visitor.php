@@ -18,10 +18,23 @@ class Visitor extends Authenticatable implements HasMedia
         'name',
         'email',
         'password',
+        'verified_at'
     ];
-
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+    protected $casts = [
+        'password' => 'hashed',
+        'verified_at' => 'datetime',
+    ];
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('image')->singleFile();
+        $this->addMediaCollection('image')
+            ->singleFile();
+    }
+    public function getImageAttribute()
+    {
+        return $this->getFirstMediaUrl('image');
     }
 }

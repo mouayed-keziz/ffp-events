@@ -12,7 +12,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-            'local_middleware' =>  \App\Http\Middleware\SetLocalMiddleware::class
+            'local_middleware' =>  \App\Http\Middleware\SetLocalMiddleware::class,
+            'is_authenticated'         => \App\Http\Middleware\Authenticated::class,
+            'is_admin'        => \App\Http\Middleware\IsAdmin::class,
+            'is_exhibitor'    => \App\Http\Middleware\IsExhibitor::class,
+            'is_visitor'      => \App\Http\Middleware\IsVisitor::class,
+            'is_guest'        => \App\Http\Middleware\GuestOnly::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

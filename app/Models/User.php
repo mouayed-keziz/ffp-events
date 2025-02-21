@@ -46,7 +46,15 @@ class User extends Authenticatable
         'verified_at' => 'datetime',
     ];
 
-
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('image')
+            ->singleFile();
+    }
+    public function getImageAttribute()
+    {
+        return $this->getFirstMediaUrl('image');
+    }
 
     public function scopeExhibitors($query)
     {
