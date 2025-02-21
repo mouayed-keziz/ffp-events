@@ -46,18 +46,19 @@ new class extends Component {
             return;
         }
 
-        $this->errorMessage = 'Email ou mot de passe est incorrect';
+        $this->errorMessage = __('website/login.incorrect_credentials');
     }
 }; ?>
 
 <div class="flex justify-center mt-16">
     <div class="card w-full max-w-md shadow-lg bg-white rounded-lg p-6">
-        <h2 class="text-xl font-bold text-center mb-6">Connectez vous à votre compte</h2>
+        <h2 class="text-xl font-bold text-center mb-6">{{ __('website/login.title') }}</h2>
         <form wire:submit.prevent="login" method="POST">
             @csrf
             <div class="form-control mb-4">
                 <label class="label">
-                    <span class="label-text text-neutral-500 font-semibold text-xs">Adresse mail</span>
+                    <span
+                        class="label-text text-neutral-500 font-semibold text-xs">{{ __('website/login.email_label') }}</span>
                 </label>
                 <input type="email" name="email" class="input input-bordered w-full rounded-lg bg-white"
                     wire:model="email" required autofocus placeholder="test@example.com">
@@ -71,7 +72,8 @@ new class extends Component {
 
             <div class="form-control mb-2" x-data="{ showPassword: false }">
                 <label class="label">
-                    <span class="label-text text-neutral-500 font-semibold text-xs">Mot de passe</span>
+                    <span
+                        class="label-text text-neutral-500 font-semibold text-xs">{{ __('website/login.password_label') }}</span>
                 </label>
                 <div class="relative">
                     <input :type="showPassword ? 'text' : 'password'" name="password"
@@ -100,16 +102,17 @@ new class extends Component {
             </div>
 
             <div class="text-right text-sm mb-6">
-                <a class="link link-primary">Mot de passe oublié?</a>
+                <a class="link link-primary">{{ __('website/login.forgot_password') }}</a>
             </div>
 
             <div class="form-control mb-6">
-                <button type="submit" class="btn btn-neutral w-full rounded-lg">Se connecter</button>
+                <button type="submit"
+                    class="btn btn-neutral w-full rounded-lg">{{ __('website/login.login_button') }}</button>
             </div>
 
             <div class="text-center text-sm text-neutral-500">
-                <span>Vous n’avez pas de compte? </span>
-                <a class="link link-primary">Inscrivez vous aujourd’hui</a>
+                <span>{{ __('website/login.no_account') }}</span>
+                <a class="link link-primary">{{ __('website/login.register_today') }}</a>
             </div>
         </form>
     </div>
