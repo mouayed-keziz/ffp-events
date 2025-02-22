@@ -39,7 +39,7 @@ new class extends Component {
 
         \Mail::to($this->email)->send(new \App\Mail\ResetPasswordMail($token, $model));
 
-        return redirect()->route('email-sent');
+        return redirect()->route('email-sent', ['email' => $this->email]);
     }
 }; ?>
 
