@@ -12,7 +12,7 @@ return [
     'email' => 'البريد الإلكتروني',
     'phone' => 'الهاتف',
     'visit' => 'زيارة',
-    'exhibit_and_sponsor' => 'اعرض و ارعى',
+    'exhibit_and_sponsor' => 'عرض ورعاية',
     'goback' => 'العودة',
     'countdown' => [
         "days" => "أيام",

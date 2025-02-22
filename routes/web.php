@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Website\GuestController;
+use App\Http\Controllers\Website\EventController;
 use App\Http\Controllers\Website\AuthController;
 use App\Models\Article;
 use App\Models\Category;
@@ -10,7 +11,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-// Add this new route at the beginning
 Route::get('language/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'ar', 'fr'])) {
         session()->put('locale', $locale);
@@ -19,10 +19,14 @@ Route::get('language/{locale}', function ($locale) {
 })->name('language.switch');
 
 Route::middleware('local_middleware')->group(function () {
-    Route::get('/', [GuestController::class, 'Events'])->name('events')->middleware();
-    Route::get('/event/{id}', [GuestController::class, 'Event'])->name('event_details');
+
+    Route::get('/', [EventController::class, 'Events'])->name('events')->middleware();
+    Route::get('/event/{id}', [EventController::class, 'Event'])->name('event_details');
+    Route::get('/event/{id}/visit', [EventController::class, 'VisitEvent'])->name('visit_event');
+
     Route::get('/articles', [GuestController::class, 'Articles'])->name('articles');
     Route::get('/article/{slug}', [GuestController::class, 'Article'])->name('article');
+
     Route::prefix("auth")->group(function () {
         Route::middleware("is_guest")->group(function () {
             Route::get('/login', [AuthController::class, 'LogIn'])->name('login');
