@@ -40,6 +40,6 @@ class Exhibitor extends Authenticatable implements HasMedia
     }
     public function getImageAttribute()
     {
-        return $this->getFirstMediaUrl('image');
+        return $this->hasMedia('image') ? $this->getFirstMediaUrl('image') : null;
     }
 }

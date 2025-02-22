@@ -23,4 +23,8 @@ class AuthController extends Controller
     {
         return view('website.pages.auth.email-sent');
     }
+    public static function ResetPassword()
+    {
+        return view('website.pages.auth.reset-password');
+    }
 }

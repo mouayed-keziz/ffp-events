@@ -4,4 +4,6 @@ return [
     'articles' => 'Our Articles',
     'login'    => 'Login',
     'register' => 'Register',
+    'profile'  => 'Profile',
+    'logout'   => 'Logout',
 ];

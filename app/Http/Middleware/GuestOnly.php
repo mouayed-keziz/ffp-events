@@ -16,7 +16,7 @@ class GuestOnly
             auth()->guard('visitor')->check()
         ) {
             // Optionally, redirect authenticated users to a default page.
-            return redirect()->intended('/');
+            return redirect()->intended(route("events"));
         }
         return $next($request);
     }

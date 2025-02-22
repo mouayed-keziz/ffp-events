@@ -15,16 +15,20 @@
                 <div
                     class="flex items-center gap-2 badge bg-base-100 text-neutral-600 rounded-btn py-4 border-transparent">
                     @include('website.svg.calendar')
-                    <span>{{ $event['dateStart'] }} au {{ $event['dateEnd'] }}</span>
+                    <span>
+                        {{ \Carbon\Carbon::parse($event['start_date'])->locale(app()->getLocale())->isoFormat('LL') }}
+                        {{ __('website/home.events.to') }}
+                        {{ \Carbon\Carbon::parse($event['end_date'])->locale(app()->getLocale())->isoFormat('LL') }}
+                    </span>
                 </div>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3">
-                <a href="{{route("event_details", ["id" => $event['id']])}}"
+                <a href="{{ route('event_details', ['id' => $event['id']]) }}"
                     class="btn text-[1rem] font-bold btn-outline border-base-200 border-2 flex-1 normal-case">
                     {{ __('website/home.events.visit') }}
                 </a>
-                <a href="{{route("event_details", ["id" => $event['id']])}}"
+                <a href="{{ route('event_details', ['id' => $event['id']]) }}"
                     class="btn text-[1rem] font-bold btn-primary flex-1 normal-case">
                     {{ __('website/home.events.exhibit') }}
                 </a>

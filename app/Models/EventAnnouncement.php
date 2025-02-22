@@ -32,6 +32,8 @@ class EventAnnouncement extends Model implements HasMedia
         'contact',
         'currencies',
     ];
+
+
     public $translatable = ['title', 'description', 'terms', 'content'];
 
     protected $casts = [
@@ -66,6 +68,19 @@ class EventAnnouncement extends Model implements HasMedia
     public function getImageAttribute()
     {
         return $this->getFirstMediaUrl('image') ? $this->getFirstMediaUrl('image') : null;
+    }
+
+    public function getCountdownAttribute()
+    {
+        $now = now();
+        $start_date = $this->start_date;
+        $diff = $start_date->diff($now);
+        return [
+            'days' => $diff->d,
+            'hours' => $diff->h,
+            'minutes' => $diff->i,
+            'seconds' => $diff->s,
+        ];
     }
 
     // ------------------ RELATIONSHIPS ------------------

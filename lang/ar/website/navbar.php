@@ -1,7 +1,6 @@
 <?php
 return [
     'home'     => 'Home',
-    'about'    => 'About Us',
     'contact'  => 'Contact Us',
     'events'   => 'فعالياتنا',
     'articles' => 'مقالاتنا',
@@ -9,4 +8,6 @@ return [
     'register' => 'تسجيل',
     'services' => 'Our Services',
     'blog'     => 'Blog',
+    'profile'  => 'الملف الشخصي',
+    'logout'  => 'تسجيل الخروج',
 ];

@@ -8,6 +8,7 @@ return [
         'title'   => 'Nos évènements',
         'visit'   => 'VISITER',
         'exhibit' => 'EXPOSER ET SPONSORISER',
+        'to'     => 'à',
     ],
     'faq'  => [
         'title'   => 'Les questions les plus Fréquentes',

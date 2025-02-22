@@ -1,36 +1,5 @@
 @php
-    $faqs = [
-        [
-            'question' => 'How can I get the update?',
-            'answer' =>
-                'Donec id justo. Curabitur blandit mollis lacus. Vivamus quis mi. In ut quam vitae odio lacinia tincidunt. In consectetuer turpis ut velit.',
-        ],
-        [
-            'question' => 'Which license is right for you?',
-            'answer' =>
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        ],
-        [
-            'question' => 'How long is my license valid for?',
-            'answer' =>
-                'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-        ],
-        [
-            'question' => 'Which platforms will the template support?',
-            'answer' =>
-                'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.',
-        ],
-        [
-            'question' => 'For what kind of projects is the Standard license intended?',
-            'answer' =>
-                'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-        ],
-        [
-            'question' => 'Do you have a free demo to review the code before purchasing?',
-            'answer' =>
-                'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.',
-        ],
-    ];
+    $faqs = app(\App\Settings\CompanyInformationsSettings::class)->faq;
 @endphp
 
 <div x-data="{ openItems: [0] }">

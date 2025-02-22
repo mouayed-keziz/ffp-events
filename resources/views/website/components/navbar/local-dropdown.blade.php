@@ -1,5 +1,5 @@
 <div class="dropdown dropdown-end">
-    <div tabindex="0" role="button" class="btn btn-square btn-ghost">
+    <div tabindex="0" role="button" class="btn btn-square btn-link btn-sm">
         <div class="w-8">
             @if (session('locale') === 'ar')
                 @include('website.svg.flags.algeria')

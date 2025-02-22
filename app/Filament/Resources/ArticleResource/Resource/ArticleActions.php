@@ -16,7 +16,7 @@ class ArticleActions
             ->outlined()
             ->label(__("panel/articles.actions.visit"))
             ->icon('heroicon-o-arrow-top-right-on-square')
-            ->url(fn($record) => route('blog.show', $record), true)
+            ->url(fn($record) => route('article', ["slug" => $record->slug]), true)
             ->visible(fn($record) => $record->status === ArticleStatus::Published);
     }
 
@@ -26,7 +26,7 @@ class ArticleActions
             ->icon('heroicon-o-eye')
             ->color("gray")
             ->label(__("panel/articles.actions.visit"))
-            ->url(fn($record) => route('blog.show', $record), true)
+            ->url(fn($record) => route('article', ["slug" => $record->slug]), true)
             ->visible(fn($record) => $record->status === ArticleStatus::Published);
     }
 }

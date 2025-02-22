@@ -1,6 +1,5 @@
 <div class="drawer drawer-end">
     <input id="navbar-drawer" type="checkbox" class="drawer-toggle" />
-
     <div class="drawer-content">
         <div class="bg-white shadow-sm">
             <div class="w-full max-w-7xl mx-auto">
@@ -34,16 +33,25 @@
                     </div>
 
                     <div class="navbar-end space-x-4">
-                        <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-2 md:gap-4">
                             @include('website.components.navbar.local-dropdown')
-                            <div class="hidden md:flex items-center gap-4">
-                                <a href="{{ route('login') }}"
-                                    class="btn btn-outline text-[1rem] border-base-200 border-2">
-                                    {{ __('website/navbar.login') }}
-                                </a>
-                                <a href="{{ route('register') }}" class="btn btn-primary text-[1rem]">
-                                    {{ __('website/navbar.register') }}
-                                </a>
+                            <div class="md:hidden">
+                                @if (checkUser())
+                                    @livewire('website.user-menu')
+                                @endif
+                            </div>
+                            <div class="hidden md:flex items-center gap-2 md:gap-4">
+                                @if (checkUser())
+                                    @livewire('website.user-menu')
+                                @else
+                                    <a href="{{ route('login') }}"
+                                        class="btn btn-outline text-[1rem] border-base-200 border-2">
+                                        {{ __('website/navbar.login') }}
+                                    </a>
+                                    <a href="{{ route('register') }}" class="btn btn-primary text-[1rem]">
+                                        {{ __('website/navbar.register') }}
+                                    </a>
+                                @endif
                             </div>
                             <label for="navbar-drawer" class="btn btn-square btn-ghost md:hidden">
                                 @include('website.svg.burger')
@@ -78,12 +86,16 @@
                     <span class="text-lg">{{ __('website/navbar.articles') }}</span>
                 </a>
                 <div class="border-t my-4"></div>
-                <a href="{{ route('login') }}" class="btn btn-outline text-[1rem] border-base-200 border-2">
-                    {{ __('website/navbar.login') }}
-                </a>
-                <a href="{{ route('register') }}" class="btn btn-primary text-[1rem]">
-                    {{ __('website/navbar.register') }}
-                </a>
+                @if (checkUser())
+                    {{-- Optionally include the user menu in drawer if needed --}}
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-outline text-[1rem] border-base-200 border-2">
+                        {{ __('website/navbar.login') }}
+                    </a>
+                    <a href="{{ route('register') }}" class="btn btn-primary text-[1rem]">
+                        {{ __('website/navbar.register') }}
+                    </a>
+                @endif
             </div>
         </div>
     </div>

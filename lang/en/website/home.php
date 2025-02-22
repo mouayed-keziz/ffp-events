@@ -8,6 +8,7 @@ return [
         'title'   => 'Our Events',
         'visit'   => 'VISIT',
         'exhibit' => 'EXHIBIT AND SPONSOR',
+        'to'     => 'to',
     ],
     'faq'  => [
         'title'   => 'Frequently Asked Questions',
