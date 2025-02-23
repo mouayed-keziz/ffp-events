@@ -30,7 +30,7 @@ class EventController extends Controller
         ]);
     }
 
-    public static function EventVisitorRegistration($id)
+    public static function VisitEvent($id)
     {
         $event = EventAnnouncement::find($id);
         if (!$event) {

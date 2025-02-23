@@ -14,29 +14,28 @@ class IseedVisitorFormsTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
 
         \DB::table('visitor_forms')->delete();
-        
-        \DB::table('visitor_forms')->insert(array (
-            0 => 
-            array (
+
+        \DB::table('visitor_forms')->insert(array(
+            0 =>
+            array(
                 'id' => 1,
                 'event_announcement_id' => 1,
-                'fields' => '[{"label":{"fr":"nom complet","en":"full name","ar":"\\u0627\\u0644\\u0625\\u0633\\u0645 \\u0627\\u0644\\u0643\\u0627\\u0645\\u0644"},"description":{"fr":null,"en":null,"ar":null},"type":"text","required":true},{"label":{"fr":"addresse email","en":"email address","ar":"\\u0627\\u0644\\u0628\\u0631\\u064a\\u062f \\u0627\\u0644\\u0627\\u0643\\u062a\\u0631\\u0648\\u0646\\u064a"},"description":{"fr":null,"en":null,"ar":null},"type":"email","required":true},{"label":{"fr":"Niveau d\'int\\u00e9r\\u00eat","en":"Level of Interest","ar":"\\u0645\\u0633\\u062a\\u0648\\u0649 \\u0627\\u0644\\u0627\\u0647\\u062a\\u0645\\u0627\\u0645"},"description":{"fr":null,"en":null,"ar":null},"type":"single_option","required":true,"options":[{"value":{"fr":"Faible","en":"Low","ar":"\\u0636\\u0639\\u064a\\u0641"}},{"value":{"fr":"Moyen","en":"Medium","ar":"\\u0645\\u062a\\u0648\\u0633\\u0637"}},{"value":{"fr":"\\u00c9lev\\u00e9","en":"High ","ar":"\\u0639\\u0627\\u0644\\u064a"}},{"value":{"fr":"Tr\\u00e8s \\u00e9lev\\u00e9","en":"Very High ","ar":"\\u0639\\u0627\\u0644\\u064d \\u062c\\u062f\\u0627"}}]},{"label":{"fr":"Nom","en":"Name","ar":"\\u0627\\u0644\\u0625\\u0633\\u0645"},"description":{"fr":null,"en":null,"ar":null},"type":"text","required":true},{"label":{"fr":"Pr\\u00e9nom","en":"First Name","ar":"\\u0627\\u0644\\u0623\\u0633\\u0645 \\u0627\\u0644\\u0623\\u0648\\u0644"},"description":{"fr":null,"en":null,"ar":null},"type":"text","required":true},{"label":{"fr":"T\\u00e9l\\u00e9phone","en":"Phone","ar":"\\u0631\\u0642\\u0645 \\u0627\\u0644\\u0647\\u0627\\u062a\\u0641"},"description":{"fr":null,"en":null,"ar":null},"type":"phone","required":true},{"label":{"fr":"Mobile","en":"Mobile Phone","ar":"\\u0631\\u0642\\u0645 \\u0627\\u0644\\u062c\\u0648\\u0627\\u0644"},"description":{"fr":null,"en":null,"ar":null},"type":"phone","required":true},{"label":{"fr":"Fonction","en":"Function","ar":"\\u0648\\u0638\\u064a\\u0641\\u0629"},"description":{"fr":null,"en":null,"ar":null},"type":"text","required":true},{"label":{"fr":"Pays","en":"Country","ar":"\\u0627\\u0644\\u062f\\u0648\\u0644\\u0629"},"description":{"fr":null,"en":null,"ar":null},"type":"text","required":true},{"label":{"fr":"Wilaya","en":"Province","ar":"\\u0627\\u0644\\u0648\\u0644\\u0627\\u064a\\u0629"},"description":{"fr":null,"en":null,"ar":null},"type":"text","required":true}]',
+                'sections' => '[{"title":{"fr":"Int\\u00e9r\\u00eat","en":"Int\\u00e9r\\u00eat","ar":"\\u0641\\u0627\\u064a\\u062f\\u0629"},"fields":[{"type":"select","data":{"label":{"fr":"Niveau d\'int\\u00e9r\\u00eat","en":"Niveau d\'int\\u00e9r\\u00eat","ar":"Niveau d\'int\\u00e9r\\u00eat"},"description":{"fr":null,"en":null,"ar":null},"options":[{"option":{"fr":"Faible","en":"Faible","ar":"Faible"}},{"option":{"fr":"Moyen","en":"Moyen","ar":"Moyen"}},{"option":{"fr":"\\u00c9lev\\u00e9","en":"\\u00c9lev\\u00e9","ar":"\\u00c9lev\\u00e9"}},{"option":{"fr":"Tr\\u00e8s \\u00e9lev\\u00e9","en":"Tr\\u00e8s \\u00e9lev\\u00e9","ar":"Tr\\u00e8s \\u00e9lev\\u00e9"}}]}},{"type":"select","data":{"label":{"fr":"Etes-vous la personne qui prend la d\\u00e9cision d\\u2019exposer*","en":"Etes-vous la personne qui prend la d\\u00e9cision d\\u2019exposer*","ar":"Etes-vous la personne qui prend la d\\u00e9cision d\\u2019exposer*"},"description":{"fr":null,"en":null,"ar":null},"options":[{"option":{"fr":"option 1","en":"option 1","ar":"option 1"}},{"option":{"fr":"option 2","en":"option 2","ar":"option 2"}},{"option":{"fr":"option 3","en":"option 3","ar":"option 3"}}]}}]},{"title":{"fr":"Informations personnelles","en":"Informations personnelles","ar":"Informations personnelles"},"fields":[{"type":"input","data":{"label":{"fr":"Nom","en":"Nom","ar":"Nom"},"description":{"fr":null,"en":null,"ar":null},"type":"text","required":true}},{"type":"input","data":{"label":{"fr":"Pr\\u00e9nom","en":"Pr\\u00e9nom","ar":"Pr\\u00e9nom"},"description":{"fr":null,"en":null,"ar":null},"type":"text","required":true}},{"type":"input","data":{"label":{"fr":"T\\u00e9l\\u00e9phone","en":"T\\u00e9l\\u00e9phone","ar":"T\\u00e9l\\u00e9phone"},"description":{"fr":null,"en":null,"ar":null},"type":"phone","required":true}},{"type":"input","data":{"label":{"fr":"Mobile","en":"Mobile","ar":"Mobile"},"description":{"fr":null,"en":null,"ar":null},"type":"phone","required":true}},{"type":"input","data":{"label":{"fr":"Fonction","en":"Fonction","ar":"Fonction"},"description":{"fr":null,"en":null,"ar":null},"type":"text","required":true}},{"type":"input","data":{"label":{"fr":"Pays","en":"Pays","ar":"Pays"},"description":{"fr":null,"en":null,"ar":null},"type":"text","required":true}},{"type":"input","data":{"label":{"fr":"Wilaya","en":"Wilaya","ar":"Wilaya"},"description":{"fr":null,"en":null,"ar":null},"type":"text","required":true}}]},{"title":{"fr":"Informations sur l\\u2019entreprise","en":"Informations sur l\\u2019entreprise","ar":"Informations sur l\\u2019entreprise"},"fields":[{"type":"input","data":{"label":{"fr":"Entreprise","en":"Entreprise","ar":"Entreprise"},"description":{"fr":null,"en":null,"ar":null},"type":"text","required":true}},{"type":"input","data":{"label":{"fr":"Secteur d\\u2019activit\\u00e9","en":"Secteur d\\u2019activit\\u00e9","ar":"Secteur d\\u2019activit\\u00e9"},"description":{"fr":null,"en":null,"ar":null},"type":"text","required":true}},{"type":"input","data":{"label":{"fr":"Site web","en":"Site web","ar":"Site web"},"description":{"fr":null,"en":null,"ar":null},"type":"text","required":true}}]}]',
+                // 'sections' => '[]',
                 'created_at' => '2025-02-15 17:50:07',
                 'updated_at' => '2025-02-15 18:13:18',
             ),
-            1 => 
-            array (
+            1 =>
+            array(
                 'id' => 2,
                 'event_announcement_id' => 2,
-                'fields' => '[]',
+                'sections' => '[]',
                 'created_at' => '2025-02-15 20:41:16',
                 'updated_at' => '2025-02-15 20:41:16',
             ),
         ));
-        
-        
     }
 }

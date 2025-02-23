@@ -6,7 +6,7 @@ use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
-use App\Enums\ExhibitorFormInputType;
+use App\Enums\FormInputType;
 use App\Filament\Resources\ExhibitorFormResource\Components\Core\DescriptionInput;
 use App\Filament\Resources\ExhibitorFormResource\Components\Core\LabelInput;
 use Filament\Forms\Components\Group;
@@ -28,7 +28,7 @@ class InputBlock
                         ->columnSpan(8)
                         ->label(__('panel/forms.exhibitors.blocks.type'))
                         ->native(false)
-                        ->options(ExhibitorFormInputType::class),
+                        ->options(FormInputType::class),
 
                     Toggle::make('required')
                         ->columnSpan(1)

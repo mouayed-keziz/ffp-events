@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\ExhibitorFormField;
+use App\Enums\FormField;
 use App\Filament\Resources\ExhibitorFormResource\Components;
 use App\Filament\Resources\ExhibitorFormResource\Pages;
 use App\Filament\Resources\ExhibitorFormResource\RelationManagers;
@@ -130,50 +130,50 @@ class ExhibitorFormResource extends Resource
                                     ->label(__("panel/forms.exhibitors.fields"))
                                     ->addActionLabel(__("panel/forms.exhibitors.add_field"))
                                     ->blocks([
-                                        Components\InputBlock::make(ExhibitorFormField::INPUT->value)
+                                        Components\InputBlock::make(FormField::INPUT->value)
                                             ->icon('heroicon-o-pencil')
                                             ->label(function ($state) {
-                                                return ExhibitorFormField::INPUT->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                                return FormField::INPUT->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
                                             }),
-                                        Components\SelectBlock::make(ExhibitorFormField::SELECT->value)
+                                        Components\SelectBlock::make(FormField::SELECT->value)
                                             ->icon('heroicon-o-bars-3')
                                             ->label(function ($state) {
-                                                return ExhibitorFormField::SELECT->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                                return FormField::SELECT->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
                                             }),
-                                        Components\CheckboxBlock::make(ExhibitorFormField::CHECKBOX->value)
+                                        Components\CheckboxBlock::make(FormField::CHECKBOX->value)
                                             ->icon('heroicon-o-check-circle')
                                             ->label(function ($state) {
-                                                return ExhibitorFormField::CHECKBOX->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                                return FormField::CHECKBOX->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
                                             }),
-                                        Components\RadioBlock::make(ExhibitorFormField::RADIO->value)
+                                        Components\RadioBlock::make(FormField::RADIO->value)
                                             ->icon('heroicon-o-check-circle')
                                             ->label(function ($state) {
-                                                return ExhibitorFormField::RADIO->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                                return FormField::RADIO->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
                                             }),
-                                        Components\UploadBlock::make(ExhibitorFormField::UPLOAD->value)
+                                        Components\UploadBlock::make(FormField::UPLOAD->value)
                                             ->icon('heroicon-o-arrow-up-on-square-stack')
                                             ->label(function ($state) {
-                                                return ExhibitorFormField::UPLOAD->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                                return FormField::UPLOAD->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
                                             }),
-                                        Components\SelectBlockPriced::make(ExhibitorFormField::SELECT_PRICED->value, $currencies)
+                                        Components\SelectBlockPriced::make(FormField::SELECT_PRICED->value, $currencies)
                                             ->icon('heroicon-o-currency-dollar')
                                             ->label(function ($state) {
-                                                return ExhibitorFormField::SELECT_PRICED->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                                return FormField::SELECT_PRICED->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
                                             }),
-                                        Components\CheckboxBlockPriced::make(ExhibitorFormField::CHECKBOX_PRICED->value, $currencies)
+                                        Components\CheckboxBlockPriced::make(FormField::CHECKBOX_PRICED->value, $currencies)
                                             ->icon('heroicon-o-currency-dollar')
                                             ->label(function ($state) {
-                                                return ExhibitorFormField::CHECKBOX_PRICED->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                                return FormField::CHECKBOX_PRICED->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
                                             }),
-                                        Components\RadioBlockPriced::make(ExhibitorFormField::RADIO_PRICED->value, $currencies)
+                                        Components\RadioBlockPriced::make(FormField::RADIO_PRICED->value, $currencies)
                                             ->icon('heroicon-o-currency-dollar')
                                             ->label(function ($state) {
-                                                return ExhibitorFormField::RADIO_PRICED->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                                return FormField::RADIO_PRICED->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
                                             }),
-                                        Components\EcommerceBlock::make(ExhibitorFormField::ECOMMERCE->value, $currencies)
+                                        Components\EcommerceBlock::make(FormField::ECOMMERCE->value, $currencies)
                                             ->icon('heroicon-o-shopping-cart')
                                             ->label(function ($state) {
-                                                return ExhibitorFormField::ECOMMERCE->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                                return FormField::ECOMMERCE->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
                                             }),
                                     ]),
                             ]),

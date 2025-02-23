@@ -4,7 +4,7 @@ namespace App\Enums;
 
 use Filament\Support\Contracts\HasLabel;
 
-enum ExhibitorFormField: string implements HasLabel
+enum FormField: string implements HasLabel
 {
     case INPUT = "input";
     case SELECT = "select";
@@ -18,7 +18,7 @@ enum ExhibitorFormField: string implements HasLabel
 
     public function getLabel(): ?string
     {
-        return trans('panel/forms.exhibitors.form_fields.' . $this->value);
+        return trans('panel/forms.form_fields.' . $this->value);
     }
 
     public function getIcon(): ?string

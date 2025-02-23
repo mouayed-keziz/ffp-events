@@ -2,16 +2,20 @@
 
 namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 
-use App\Enums\VisitorFormFieldType;
+use App\Enums\FormField;
 use App\Filament\Resources\EventAnnouncementResource;
 use App\Models\EventAnnouncement;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
 use Filament\Actions;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Notifications\Notification;
 use Guava\FilamentNestedResources\Concerns\NestedPage;
+use Filament\Forms\Components\Builder as ComponentsBuilder;
+use App\Filament\Resources\ExhibitorFormResource\Components;
 
 class EditEventAnnouncementVisitorForm extends EditRecord
 {
@@ -24,139 +28,79 @@ class EditEventAnnouncementVisitorForm extends EditRecord
     {
         return $form->schema([
             \Filament\Forms\Components\Section::make()->schema([
-                \Filament\Forms\Components\Repeater::make('fields')
-                    ->addActionLabel(__("panel/forms.add_field_action_label"))
+                Repeater::make('sections')
+                    ->collapsed()
                     ->collapsible()
-                    ->collapsed(true)
-                    ->itemLabel(fn($state) => $this->getFieldLabel($state))
-                    ->label("")
+                    ->addActionLabel(__("panel/forms.exhibitors.add_section"))
+                    ->label(__("panel/forms.exhibitors.sections"))
+                    ->itemLabel(function ($state) {
+                        return __("panel/forms.exhibitors.section") . ($state['title'] ? ": " . ($state['title'][app()->getLocale()] ?? '') : '');
+                    })
                     ->schema([
-                        \Filament\Forms\Components\Group::make()->columns(2)->schema([
-                            \Filament\Forms\Components\TextInput::make('label')
-                                ->label(__("panel/forms.field.label"))
-                                ->required()
-                                ->translatable(),
-                            \Filament\Forms\Components\TextInput::make('description')
-                                ->label(__("panel/forms.field.description"))
-                                ->translatable(),
-                        ]),
-                        \Filament\Forms\Components\Group::make()->columns(10)->schema([
-                            \Filament\Forms\Components\Select::make('type')
-                                ->label(__("panel/forms.field.type"))
-                                ->default(VisitorFormFieldType::Text->value)
-                                ->native(false)
-                                ->options(VisitorFormFieldType::class)
-                                ->required()
-                                ->live()
-                                ->columnSpan(8),
-                            \Filament\Forms\Components\Toggle::make('required')
-                                ->label(__("panel/forms.field.required"))
-                                ->default(true)
-                                ->inline(false)
-                                ->columnSpan(1),
-                        ]),
-                        \Filament\Forms\Components\Repeater::make('options')
-                            ->addActionLabel(__("panel/forms.add_option_action_label"))
-                            ->collapsible()
+                        TextInput::make('title')
+                            ->label(__("panel/forms.exhibitors.section_title_label"))
+                            ->required()
+                            ->translatable(),
+                        ComponentsBuilder::make('fields')
                             ->collapsed()
-                            ->itemLabel(fn($state) => $this->getOptionLabel($state))
-                            ->schema([
-                                \Filament\Forms\Components\TextInput::make('value')
-                                    ->label(__("panel/forms.field.option"))
-                                    ->required()
-                                    ->translatable()
-                            ])
-                            ->columnSpanFull()
-                            ->hidden(fn($get) => $this->shouldHideOptions($get)),
-                    ])
-                    ->columnSpanFull(),
+                            ->collapsible()
+                            ->label(__("panel/forms.exhibitors.fields"))
+                            ->addActionLabel(__("panel/forms.exhibitors.add_field"))
+                            ->blocks([
+                                Components\InputBlock::make(FormField::INPUT->value)
+                                    ->icon('heroicon-o-pencil')
+                                    ->label(function ($state) {
+                                        return FormField::INPUT->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                    }),
+                                Components\SelectBlock::make(FormField::SELECT->value)
+                                    ->icon('heroicon-o-bars-3')
+                                    ->label(function ($state) {
+                                        return FormField::SELECT->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                    }),
+                                Components\CheckboxBlock::make(FormField::CHECKBOX->value)
+                                    ->icon('heroicon-o-check-circle')
+                                    ->label(function ($state) {
+                                        return FormField::CHECKBOX->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                    }),
+                                Components\RadioBlock::make(FormField::RADIO->value)
+                                    ->icon('heroicon-o-check-circle')
+                                    ->label(function ($state) {
+                                        return FormField::RADIO->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                    }),
+                                Components\UploadBlock::make(FormField::UPLOAD->value)
+                                    ->icon('heroicon-o-arrow-up-on-square-stack')
+                                    ->label(function ($state) {
+                                        return FormField::UPLOAD->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                    }),
+                            ]),
+                    ]),
             ]),
         ]);
     }
 
-    protected function getFieldLabel(array $state): string
+    // New mount method to pre-fill form with visitorForm sections
+    public function mount($record): void
     {
-        $label = is_array($state['label'])
-            ? ($state['label'][app()->getLocale()] ?? array_values($state['label'])[0])
-            : $state['label'];
-
-        if ($state['type'] && VisitorFormFieldType::from($state['type'])) {
-            return VisitorFormFieldType::from($state['type'])->getLabel() . ' - ' . $label;
-        }
-
-        return $label;
-    }
-
-    protected function getOptionLabel(array $state): string
-    {
-        $label = is_array($state['value'])
-            ? ($state['value'][app()->getLocale()] ?? array_values($state['value'])[0])
-            : $state['value'];
-
-        return $label ?? __('panel/forms.field.option');
-    }
-
-    protected function shouldHideOptions($get): bool
-    {
-        if (null === $get('type')) {
-            return true;
-        }
-        return !VisitorFormFieldType::from($get('type'))?->hasOptions();
-    }
-
-    protected function fillForm(): void
-    {
-        $this->record->load('visitorForm');
-
+        parent::mount($record);
         $this->form->fill([
-            'fields' => $this->record->visitorForm->fields ?? [],
+            'sections' => $this->record->visitorForm ? $this->record->visitorForm->sections : [],
         ]);
     }
 
+    // Override the record update method to handle visitorForm saving
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
-        $this->validateFields($data['fields']);
+        $record = parent::handleRecordUpdate($record, $data);
 
-        $processedFields = $this->processFields($data['fields']);
+        $sections = $data['sections'] ?? [];
 
-        $record->visitorForm->update(['fields' => $processedFields]);
+        if ($record->visitorForm) {
+            $record->visitorForm->sections = $sections;
+            $record->visitorForm->save();
+        } else {
+            $record->visitorForm()->create(['sections' => $sections]);
+        }
 
-        return parent::handleRecordUpdate($record, $data);
-    }
-
-    protected function validateFields(array $fields): void
-    {
-        collect($fields)->each(function ($field) {
-            $fieldType = VisitorFormFieldType::from($field['type']);
-
-            if ($fieldType->hasOptions() && empty($field['options'])) {
-                Notification::make()
-                    ->title(__('panel/forms.visitor.errors.options_required'))
-                    ->danger()
-                    ->send();
-                $this->halt();
-            }
-        });
-    }
-
-    protected function processFields(array $fields): array
-    {
-        return collect($fields)->map(function ($field) {
-            $fieldType = VisitorFormFieldType::from($field['type']);
-
-            if (!$fieldType->hasOptions()) {
-                unset($field['options']);
-            } else {
-                $field['options'] = $this->transformOptions($field['options']);
-            }
-
-            return $field;
-        })->toArray();
-    }
-
-    protected function transformOptions(array $options): array
-    {
-        // Return the options unchanged to preserve the translatable JSON structure.
-        return $options;
+        return $record;
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('visitor_forms', function (Blueprint $table) {
             $table->id();
             $table->foreignId('event_announcement_id')->constrained()->onDelete('cascade');
-            $table->json('fields');
+            $table->json('sections');
             $table->timestamps();
         });
     }

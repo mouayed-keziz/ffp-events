@@ -11,11 +11,11 @@ class VisitorForm extends Model
 
     protected $fillable = [
         'event_announcement_id',
-        'fields',
+        'sections',
     ];
 
     protected $casts = [
-        'fields' => 'array',
+        'sections' => 'array',
     ];
 
     // -------------------- Relationships --------------------
