@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ExhibitorFormResource\Components;
 
+use App\Enums\FileUploadType;
 use App\Filament\Resources\ExhibitorFormResource\Components\Core\DescriptionInput;
 use App\Filament\Resources\ExhibitorFormResource\Components\Core\LabelInput;
 use Filament\Forms\Components\Builder\Block;
@@ -23,11 +24,7 @@ class UploadBlock
                     ->columnSpan(2)
                     ->label('File Type')
                     ->required()
-                    ->options([
-                        'image' => 'Image',
-                        'pdf'   => 'PDF',
-                        'any'   => 'Any',
-                    ]),
+                    ->options(FileUploadType::class),
 
             ]);
     }

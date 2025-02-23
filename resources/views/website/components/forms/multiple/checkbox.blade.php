@@ -15,7 +15,7 @@
         @foreach ($data['options'] as $option)
             <label class="cursor-pointer flex items-center">
                 <input type="checkbox" name="checkboxes[]" value="{{ $option['option'][app()->getLocale()] }}"
-                    class="checkbox mr-2 rounded-md" @if ($data['required'] ?? false) required @endif>
+                    class="checkbox mx-2 rounded-md" @if ($data['required'] ?? false) required @endif>
                 <span>{{ $option['option'][app()->getLocale()] }}</span>
             </label>
         @endforeach

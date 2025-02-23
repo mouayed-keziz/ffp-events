@@ -42,7 +42,9 @@
                                 @break
 
                                 @case(App\Enums\FormField::UPLOAD->value)
-                                    <div>{{ $field['data']['label'][app()->getLocale()] }}</div>
+                                    @include('website.components.forms.file-upload', [
+                                        'data' => $field['data'],
+                                    ])
                                 @break
 
                                 @default

@@ -69,6 +69,16 @@ class EventAnnouncement extends Model implements HasMedia
     {
         return $this->getFirstMediaUrl('image') ? $this->getFirstMediaUrl('image') : null;
     }
+    public function getIsVisitorRegistrationOpenAttribute()
+    {
+        $now = \Carbon\Carbon::now();
+        return !($now->lt($this->visitor_registration_start_date) || $now->gt($this->visitor_registration_end_date));
+    }
+    public function getIsExhibitorRegistrationOpen()
+    {
+        $now = \Carbon\Carbon::now();
+        return !($now->lt($this->exhibitor_registration_start_date) || $now->gt($this->exhibitor_registration_end_date));
+    }
 
     public function getCountdownAttribute()
     {

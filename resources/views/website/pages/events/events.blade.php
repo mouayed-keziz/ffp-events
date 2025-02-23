@@ -5,5 +5,6 @@
         @include('website.components.home.hero')
         @include('website.components.home.events', ['events' => $events])
         @livewire('website.faq')
+        {{-- @livewire('website.test') --}}
     </main>
 @endsection

@@ -36,14 +36,12 @@ class EventController extends Controller
         if (!$event) {
             return redirect()->route('events');
         }
-
-        $now = \Carbon\Carbon::now();
-        if ($now->lt($event->visitor_registration_start_date) || $now->gt($event->visitor_registration_end_date)) {
+        if ($event->is_visitor_registration_open) {
+            return view('website.pages.events.visit-event', [
+                'event' => $event
+            ]);
+        } else {
             return redirect()->route('events');
         }
-
-        return view('website.pages.events.visit-event', [
-            'event' => $event
-        ]);
     }
 }

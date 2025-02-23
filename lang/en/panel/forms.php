@@ -29,6 +29,11 @@ return [
         'radio_priced'     => 'Radio Priced',
         'ecommerce'        => 'E-commerce',
     ],
+    'file_types' => [
+        'image' => 'Image',
+        'pdf'   => 'PDF file',
+        'any'   => 'Not specified',
+    ],
     'exhibitors' => [
         'section_title' => "Exhibitor Form Information",
         'description' => "This is the information about the exhibitor form.",

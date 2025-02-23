@@ -29,6 +29,11 @@ return [
         'radio_priced'     => 'زر راديو بسعر',
         'ecommerce'        => 'تجارة إلكترونية',
     ],
+    'file_types' => [
+        'image' => 'صورة',
+        'pdf'   => 'ملف PDF',
+        'any'   => 'غير محدد',
+    ],
     'exhibitors' => [
         'section_title' => "معلومات نموذج العارض",
         'description' => "هذه هي معلومات حول نموذج العارض.",

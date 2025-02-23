@@ -15,7 +15,7 @@
         @foreach ($data['options'] as $option)
             <label class="cursor-pointer flex items-center">
                 <input type="radio" name="radio-group" value="{{ $option['option'][app()->getLocale()] }}"
-                    class="radio mr-2" @if ($data['required'] ?? false) required @endif>
+                    class="radio mx-2" @if ($data['required'] ?? false) required @endif>
                 <span>{{ $option['option'][app()->getLocale()] }}</span>
             </label>
         @endforeach

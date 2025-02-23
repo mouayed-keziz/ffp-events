@@ -29,6 +29,11 @@ return [
         'radio_priced'     => 'Bouton radio tarifé',
         'ecommerce'        => 'E-commerce',
     ],
+    'file_types' => [
+        'image' => 'Image',
+        'pdf'   => 'Fichier PDF',
+        'any'   => 'Non spécifié',
+    ],
     'exhibitors' => [
         'section_title' => "Informations sur le formulaire d'exposant",
         'description' => "Ceci est l'information sur le formulaire d'exposant.",
