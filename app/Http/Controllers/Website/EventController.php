@@ -20,10 +20,10 @@ class EventController extends Controller
     public static function Event($id)
     {
         $event = EventAnnouncement::find($id);
-        $relatedEvents = EventAnnouncement::where('id', '!=', $id)->inRandomOrder()->limit(4)->get();
         if (!$event) {
             return redirect()->route('events');
         }
+        $relatedEvents = EventAnnouncement::where('id', '!=', $id)->inRandomOrder()->limit(4)->get();
         return view('website.pages.events.event', [
             'event' => $event,
             'relatedEvents' => $relatedEvents
