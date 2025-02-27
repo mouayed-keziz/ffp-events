@@ -47,6 +47,6 @@ class DatabaseSeeder extends Seeder
         $this->call(IseedActivityLogTableSeeder::class);
 
         $this->call(IseedSettingsTableSeeder::class);
-        $this->call(IseedVisitorSubmissionsTableSeeder::class);
+        // $this->call(IseedVisitorSubmissionsTableSeeder::class);
     }
 }
