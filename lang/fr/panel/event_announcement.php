@@ -39,6 +39,7 @@ return [
         "edit_terms" => "Modifier les termes",
         "edit_visitor_form" => "Modifier le formulaire visiteur",
         "manage_exhibitor_forms" => "Gérer les formulaires exposants",
+        "manage_visitor_submissions" => "Gérer les soumissions des visiteurs",
         'delete' => 'Supprimer l\'annonce',
         'view' => 'Détails de l\'annonce',
         'restore' => 'Restaurer l\'annonce',

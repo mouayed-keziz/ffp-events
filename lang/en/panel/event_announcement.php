@@ -39,6 +39,7 @@ return [
         "edit_terms" => "Edit Terms",
         "edit_visitor_form" => "Edit Visitor Form",
         "manage_exhibitor_forms" => "Manage Exhibitor Forms",
+        "manage_visitor_submissions" => "Manage Visitor Submissions",
         'delete' => 'Delete Announcement',
         'view' => 'Announcement Details',
         'restore' => 'Restore Announcement',

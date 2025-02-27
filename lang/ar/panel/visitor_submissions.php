@@ -1,0 +1,40 @@
+<?php
+
+return [
+    'single' => 'تقديم الزائر',
+    'plural' => 'تقديمات الزوار',
+    'fields' => [
+        'event_announcement' => 'إعلان الفعالية',
+        'visitor' => 'الزائر',
+        'status' => 'الحالة',
+        'created_at' => 'تم الإنشاء في',
+    ],
+    'status' => [
+        'pending' => 'قيد الانتظار',
+        'approved' => 'مقبول',
+        'rejected' => 'مرفوض',
+    ],
+    'sections' => [
+        'submission_answers' => 'إجابات التقديم',
+    ],
+    'visitor_details' => 'تفاصيل الزائر',
+    'field_answer' => 'الإجابة',
+    'no_file_uploaded' => 'لم يتم رفع أي ملف',
+    'file_not_found' => 'الملف غير موجود',
+    'file_name' => 'اسم الملف',
+    'file_type' => 'نوع الملف',
+    'file_preview' => 'معاينة',
+    'file_uploaded_id' => 'معرّف الملف',
+    'pdf_file' => 'ملف PDF',
+    'error_loading_file' => 'خطأ في تحميل الملف',
+    'no_selection_made' => 'لم يتم اختيار أي خيار',
+    'no_checkbox_selected' => 'لم يتم تحديد أي خيار',
+    'no_answer_provided' => 'لم يتم تقديم إجابة',
+    'notes_create' => 'ملاحظة: سيحتاج الزائر إلى ملء الإجابات باستخدام النموذج على الواجهة الأمامية. هذا ينشئ سجل تقديم فارغ يمكن تحريره لاحقًا.',
+    'actions' => [
+        'create' => 'إنشاء تقديم',
+        'view' => 'عرض التقديم',
+        'download' => 'تحميل',
+        'title' => 'إجراءات',
+    ],
+];

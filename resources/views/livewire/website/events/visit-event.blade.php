@@ -1,8 +1,7 @@
 <?php
 use Livewire\Volt\Component;
 use App\Models\EventAnnouncement;
-use Illuminate\Support\Arr;
-use Illuminate\Validation\ValidationException;
+use App\Actions\VisitEventFormActions;
 use Livewire\WithFileUploads;
 
 new class extends Component {
@@ -21,229 +20,27 @@ new class extends Component {
 
     protected function initFormData()
     {
-        // Initialize form data structure based on form sections and fields
-        if (!$this->event->visitorForm) {
-            return;
-        }
-
-        $this->formData = [];
-
-        // Create the structured formData with sections and fields
-        foreach ($this->event->visitorForm->sections as $sectionIndex => $section) {
-            $sectionData = [
-                'title' => $section['title'],
-                'fields' => []
-            ];
-
-            foreach ($section['fields'] as $fieldIndex => $field) {
-                $fieldData = [
-                    'type' => $field['type'],
-                    'data' => [
-                        'label' => $field['data']['label'],
-                        'description' => $field['data']['description'] ?? null,
-                    ],
-                    'answer' => null
-                ];
-
-                // Copy any additional field-specific data
-                if (isset($field['data']['type'])) {
-                    $fieldData['data']['type'] = $field['data']['type'];
-                }
-                if (isset($field['data']['required'])) {
-                    $fieldData['data']['required'] = $field['data']['required'];
-                }
-                if (isset($field['data']['options'])) {
-                    $fieldData['data']['options'] = $field['data']['options'];
-                }
-                if (isset($field['data']['file_type'])) {
-                    $fieldData['data']['file_type'] = $field['data']['file_type'];
-                }
-
-                // Initialize answer based on field type
-                if ($field['type'] === \App\Enums\FormField::CHECKBOX->value) {
-                    $fieldData['answer'] = [];
-                } elseif ($field['type'] === \App\Enums\FormField::UPLOAD->value) {
-                    $fieldData['answer'] = null;
-                } else {
-                    $fieldData['answer'] = '';
-                }
-
-                $sectionData['fields'][] = $fieldData;
-            }
-
-            $this->formData[] = $sectionData;
-        }
+        $actions = new VisitEventFormActions();
+        $this->formData = $actions->initFormData($this->event);
     }
 
     public function submitForm()
     {
-        $rules = $this->getValidationRules();
+        $actions = new VisitEventFormActions();
+        
+        // Validate the form data
+        $rules = $actions->getValidationRules($this->event);
         $this->validate($rules);
 
-        // Process answers for select, checkbox, and radio inputs to store as translatable arrays
-        $this->processTranslatableAnswers();
+        // Save the form submission
+        $success = $actions->saveFormSubmission($this->event, $this->formData);
 
-        // Debug: Display the form data
-        dd($this->formData);
-
-        try {
-            // Here you would typically save the form data to your database
-            // For example:
-            // $submission = EventSubmission::create([
-            //     'event_id' => $this->event->id,
-            //     'form_data' => $this->formData,
-            //     'user_id' => auth()->id(), // If user is logged in
-            // ]);
-
+        if ($success) {
             $this->formSubmitted = true;
             $this->successMessage = __('Form submitted successfully!');
-
-            // Optional: Reset form after successful submission
-            // $this->initFormData();
-
-        } catch (\Exception $e) {
+        } else {
             session()->flash('error', 'An error occurred while submitting the form. Please try again.');
         }
-    }
-
-    /**
-     * Process answers for select, checkbox, and radio inputs to store them as translatable arrays
-     */
-    protected function processTranslatableAnswers()
-    {
-        if (empty($this->formData)) {
-            return;
-        }
-
-        foreach ($this->formData as $sectionIndex => $section) {
-            if (!isset($section['fields']) || !is_array($section['fields'])) {
-                continue;
-            }
-
-            foreach ($section['fields'] as $fieldIndex => $field) {
-                // Skip if no answer or not a type we need to process
-                if (!isset($field['answer']) || !in_array($field['type'], [
-                    \App\Enums\FormField::SELECT->value,
-                    \App\Enums\FormField::CHECKBOX->value,
-                    \App\Enums\FormField::RADIO->value
-                ])) {
-                    continue;
-                }
-
-                // Process based on field type
-                switch ($field['type']) {
-                    case \App\Enums\FormField::SELECT->value:
-                    case \App\Enums\FormField::RADIO->value:
-                        // For single select/radio, find the matching option and convert to translatable array
-                        $this->formData[$sectionIndex]['fields'][$fieldIndex]['answer'] =
-                            $this->findOptionTranslations($field['data']['options'] ?? [], $field['answer']);
-                        break;
-
-                    case \App\Enums\FormField::CHECKBOX->value:
-                        // For checkboxes (array of values), convert each selected value
-                        if (is_array($field['answer'])) {
-                            $translatedAnswers = [];
-                            foreach ($field['answer'] as $answer) {
-                                $translatedAnswers[] = $this->findOptionTranslations($field['data']['options'] ?? [], $answer);
-                            }
-                            $this->formData[$sectionIndex]['fields'][$fieldIndex]['answer'] = $translatedAnswers;
-                        }
-                        break;
-                }
-            }
-        }
-    }
-
-    /**
-     * Find the option translations for a given answer value
-     *
-     * @param array $options The options array from the field
-     * @param string $answerValue The current answer value (in current locale)
-     * @return array The translatable option array or empty array if not found
-     */
-    protected function findOptionTranslations(array $options, $answerValue)
-    {
-        $currentLocale = app()->getLocale();
-
-        // Find the option with matching value in current locale
-        foreach ($options as $option) {
-            if (isset($option['option'][$currentLocale]) && $option['option'][$currentLocale] === $answerValue) {
-                return $option['option'];
-            }
-        }
-
-        // Fallback: Return the answer value keyed by current locale
-        return [$currentLocale => $answerValue];
-    }
-
-    protected function getValidationRules()
-    {
-        $rules = [];
-
-        if (!$this->event->visitorForm) {
-            return $rules;
-        }
-
-        foreach ($this->event->visitorForm->sections as $sectionIndex => $section) {
-            foreach ($section['fields'] as $fieldIndex => $field) {
-                $fieldKey = "formData.{$sectionIndex}.fields.{$fieldIndex}.answer";
-                $fieldRules = [];
-
-                // Check if field is required
-                if (Arr::get($field, 'data.required', false)) {
-                    $fieldRules[] = 'required';
-                } else {
-                    $fieldRules[] = 'nullable';
-                }
-
-                // Add specific validation rules based on field type
-                switch ($field['type']) {
-                    case \App\Enums\FormField::INPUT->value:
-                        switch ($field['data']['type']) {
-                            case \App\Enums\FormInputType::EMAIL->value:
-                                $fieldRules[] = 'email';
-                                break;
-                            case \App\Enums\FormInputType::NUMBER->value:
-                                $fieldRules[] = 'numeric';
-                                break;
-                            case \App\Enums\FormInputType::PHONE->value:
-                                $fieldRules[] = 'string';
-                                break;
-                            case \App\Enums\FormInputType::DATE->value:
-                                $fieldRules[] = 'date';
-                                break;
-                            default:
-                                $fieldRules[] = 'string';
-                                break;
-                        }
-                        break;
-                    case \App\Enums\FormField::UPLOAD->value:
-                        $fieldRules[] = 'file';
-
-                        // Add file type validation based on field definition
-                        $fileType = $field['data']['file_type'] ?? \App\Enums\FileUploadType::ANY;
-
-                        if ($fileType === \App\Enums\FileUploadType::IMAGE) {
-                            $fieldRules[] = 'mimes:jpg,jpeg,png,gif,bmp,webp';
-                            $fieldRules[] = 'max:10240'; // 10MB max for images
-                        } elseif ($fileType === \App\Enums\FileUploadType::PDF) {
-                            $fieldRules[] = 'mimes:pdf';
-                            $fieldRules[] = 'max:20480'; // 20MB max for PDFs
-                        } else {
-                            // For any file type, set a general size limit
-                            $fieldRules[] = 'max:25600'; // 25MB general limit
-                        }
-                        break;
-                    case \App\Enums\FormField::CHECKBOX->value:
-                        $fieldRules[] = 'array';
-                        break;
-                }
-
-                $rules[$fieldKey] = implode('|', $fieldRules);
-            }
-        }
-
-        return $rules;
     }
 }; ?>
 
@@ -255,7 +52,8 @@ new class extends Component {
     @endif
 
     @if ($formSubmitted)
-        <div class="alert alert-success mb-4">
+        <div class="rounded-btn alert alert-success mb-4 shadow-md text-white">
+            <x-heroicon-o-check-circle class="w-6 h-6 inline-block mr-2" />
             {{ $successMessage }}
         </div>
     @else

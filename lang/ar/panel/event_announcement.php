@@ -40,6 +40,7 @@ return [
         "edit_terms" => "تعديل الشروط",
         "edit_visitor_form" => "تعديل إستبيان الزائر",
         "manage_exhibitor_forms" => "إدارة إستبيانات العارضين",
+        "manage_visitor_submissions" => "إدارة تسجيلات الزوار",
         'delete' => 'حذف الإعلان',
         'view' => 'تفاصيل الإعلان',
         'restore' => 'استعادة الإعلان',

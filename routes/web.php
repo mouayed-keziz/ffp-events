@@ -18,6 +18,8 @@ Route::get('language/{locale}', function ($locale) {
     return redirect()->back();
 })->name('language.switch');
 
+Route::get('media/download/{id}', [\App\Http\Controllers\MediaController::class, 'download'])->name('media.download');
+
 Route::middleware('local_middleware')->group(function () {
 
     Route::get('/', [EventController::class, 'Events'])->name('events')->middleware();

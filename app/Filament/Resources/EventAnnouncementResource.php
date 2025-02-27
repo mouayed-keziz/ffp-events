@@ -104,6 +104,15 @@ class EventAnnouncementResource extends Resource
                             Pages\ManageEventAnnouncementExhibitorForms::getRouteName(),
                         ])
                     ),
+                PageNavigationItem::make(__('panel/event_announcement.actions.manage_visitor_submissions'))
+                    ->url(fn() => static::getUrl('visitor-submissions', ['record' => $record->id]))
+                    ->icon('heroicon-o-user-group')
+                    ->isActiveWhen(
+                        fn() =>
+                        request()->routeIs([
+                            Pages\ManageEventAnnouncementVisitorSubmissions::getRouteName(),
+                        ])
+                    ),
             ]);
     }
 
@@ -119,9 +128,12 @@ class EventAnnouncementResource extends Resource
 
             'exhibitor-forms' => Pages\ManageEventAnnouncementExhibitorForms::route('/{record}/exhibitor-forms'),
             'exhibitorForms.create' => Pages\CreateEventAnnouncementExhibitorForm::route('/{record}/exhibitor-forms/create'),
-            // 'manage-exhibitor-forms' => Pages\ManageEventAnnouncementExhibitorForms::route('/{record}/exhibitor-forms'),
-            // 'create-exhibitor-form' => Pages\CreateEventAnnouncementExhibitorForm::route('/{record}/exhibitor-forms/create'),
-            // 'edit-exhibitor-form' => Pages\EditEventAnnouncementExhibitorForm::route('/{record}/exhibitor-forms/{exhibitorForm}'),
+
+            // New routes for visitor submissions
+            'visitor-submissions' => Pages\ManageEventAnnouncementVisitorSubmissions::route('/{record}/visitor-submissions'),
+            'visitorSubmissions.create' => Pages\CreateEventAnnouncementVisitorSubmission::route('/{record}/visitor-submissions/create'),
+            // Add route for viewing a single visitor submission
+            'visitor-submission.view' => Pages\ViewVisitorSubmission::route('/{record}/visitor-submissions/{visitorSubmission}'),
         ];
     }
 
