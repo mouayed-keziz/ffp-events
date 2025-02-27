@@ -3,7 +3,9 @@
 namespace App\Filament\Resources\ExhibitorFormResource\Components\Core;
 
 use App\Enums\Currency;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\KeyValue;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Support\Facades\Lang;
 
 class PriceInput
@@ -15,23 +17,23 @@ class PriceInput
             Currency::USD->value => 0,
             Currency::DA->value  => 0,
         ];
-        return  KeyValue::make('price')
-            ->columnSpanFull()
+        return Fieldset::make('price')
             ->label(__('panel/forms.exhibitors.blocks.price'))
+            ->schema([
+                TextInput::make('price.' . Currency::DA->value)
+                    ->label(Currency::DA->value)
+                    ->numeric()
+                    ->default(0),
+                TextInput::make('price.' . Currency::EUR->value)
+                    ->label(Currency::EUR->value)
+                    ->numeric()
+                    ->default(0),
+                TextInput::make('price.' . Currency::USD->value)
+                    ->label(Currency::USD->value)
+                    ->numeric()
+                    ->default(0),
+            ])
             ->columns(3)
-            ->default($fixedCurrencies)
-            ->live() // activate live updates
-            ->afterStateUpdated(function ($state, callable $set, $component) {
-                $filtered = [];
-                foreach ($state as $key => $value) {
-                    if (is_numeric($value)) {
-                        $filtered[$key] = $value;
-                    } else {
-                        $filtered[$key] = 0;
-                    }
-                }
-                // Use component method to update state
-                $component->state($filtered);
-            });
+            ->columnSpanFull();
     }
 }

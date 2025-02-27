@@ -90,17 +90,17 @@
 
         <div @click="triggerFileDialog()" @dragover.prevent="dragActive = true" @dragleave.prevent="dragActive = false"
             @drop="handleDrop($event)"
-            class="w-full aspect-[3] bg-base-100/50 hover:bg-base-100 border border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all"
+            class="w-full p-8 md:p-0 aspect-[3] bg-base-100/50 hover:bg-base-100 border border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all"
             :class="{ 'border-2 border-primary': dragActive, 'border-2 border-error': fileTypeError }">
             @include('website.svg.upload')
-            <p class="text-xl font-bold mt-2" x-text="fileTypeError ? '{{ __('website/forms.file_upload.invalid_file_type', ["type" => \App\Enums\FileUploadType::from($data['file_type'])->getLabel()]) }}' : '{{ __('website/forms.file_upload.drop_or_select') }}'"></p>
-            <p class="text-sm" x-show="!fileTypeError">
+            <p class="md:text-xl font-bold mt-2" x-text="fileTypeError ? '{{ __('website/forms.file_upload.invalid_file_type', ["type" => \App\Enums\FileUploadType::from($data['file_type'])->getLabel()]) }}' : '{{ __('website/forms.file_upload.drop_or_select') }}'"></p>
+            <p class="text-xs md:text-sm" x-show="!fileTypeError">
                 {{ __('website/forms.file_upload.drop_here') }}
                 <a href="javascript:void(0)" class="link link-primary"
                     @click.prevent="triggerFileDialog()">{{ __('website/forms.file_upload.browse') }}
                 </a>.
             </p>
-            <p class="text-sm text-error" x-show="fileTypeError" x-text="getFileTypeMessage()"></p>
+            <p class="text-xs md:text-sm text-error" x-show="fileTypeError" x-text="getFileTypeMessage()"></p>
         </div>
 
         <div x-show="!fileTypeError">
@@ -117,6 +117,6 @@
     </div>
 
     @error("formData.{{ $answerPath }}")
-        <div class="text-error text-sm mt-1">{{ $message }}</div>
+        <div class="text-error text-sm md:text-sm mt-1">{{ $message }}</div>
     @enderror
 </div>

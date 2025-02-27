@@ -27,7 +27,7 @@ new class extends Component {
     public function submitForm()
     {
         $actions = new VisitEventFormActions();
-        
+
         // Validate the form data
         $rules = $actions->getValidationRules($this->event);
         $this->validate($rules);
@@ -44,7 +44,7 @@ new class extends Component {
     }
 }; ?>
 
-<div class="bg-white rounded-xl shadow-lg p-6">
+<div>
     @if (session('error'))
         <div class="alert alert-error mb-4">
             {{ session('error') }}
@@ -69,9 +69,9 @@ new class extends Component {
                             $answerPath = "{$sectionIndex}.fields.{$fieldIndex}.answer";
                         @endphp
 
-                        @include("website.components.forms.fields", [
-                            "fields" => [$field],
-                            "answerPath" => $answerPath,
+                        @include('website.components.forms.fields', [
+                            'fields' => [$field],
+                            'answerPath' => $answerPath,
                         ])
 
                         @error("formData.{$sectionIndex}.fields.{$fieldIndex}.answer")
