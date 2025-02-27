@@ -20,6 +20,7 @@ use Filament\Infolists\Components\Section as InfolistSection;
 use Filament\Infolists\Components\TextEntry;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Route;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class VisitorSubmissionFormDisplay
@@ -167,85 +168,127 @@ class VisitorSubmissionFormDisplay
     }
 
     /**
-     * Create an upload field component
+     * Create an upload field component that displays files from the Media Library
      */
     protected static function createUploadComponent(array $field, string $label, $answer): Components\Component
     {
+        // If no file has been uploaded (no fileId)
         if (empty($answer)) {
             return TextEntry::make('upload')
                 ->label($label)
                 ->state(__('panel/visitor_submissions.no_file_uploaded'));
         }
-        
+
         try {
-            // Get the media directly from the attachments collection
-            $media = Media::where('uuid', $answer)
-                ->where('collection_name', 'attachments')
-                ->first();
-            
+            // Get the visitor submission using the route parameters from the nested resource URL
+            $visitorSubmission = null;
+            $route = request()->route();
+
+            // Try to get the visitor submission from the route parameters
+            // URL pattern: /admin/event-announcements/{record}/visitor-submissions/{visitorSubmission}
+            $visitorSubmissionId = $route->parameter('visitorSubmission');
+
+            if ($visitorSubmissionId) {
+                $visitorSubmission = VisitorSubmission::find($visitorSubmissionId);
+            }
+
+            // If we're on a page that uses Livewire and the visitor submission is available in the component
+            if (!$visitorSubmission && method_exists($route->getController(), 'getRecord')) {
+                $visitorSubmission = $route->getController()->getRecord();
+            }
+
+            // Check if we have an existing record property from a Livewire component
+            if (!$visitorSubmission && request()->has('record') && request()->route('record') instanceof VisitorSubmission) {
+                $visitorSubmission = request()->route('record');
+            }
+
+            // If we still don't have a visitor submission, return an error message
+            if (!$visitorSubmission) {
+                return TextEntry::make('upload')
+                    ->label($label)
+                    ->state(__('panel/visitor_submissions.submission_context_not_found') . ' (ID attempted: ' . $visitorSubmissionId . ')');
+            }
+
+            // Get the media directly from the attachments collection by fileId in custom properties
+            $media = $visitorSubmission->getMedia('attachments')->filter(function ($media) use ($answer) {
+                return isset($media->custom_properties['fileId']) && $media->custom_properties['fileId'] === $answer;
+            })->first();
+
             if (!$media) {
                 return TextEntry::make('upload')
                     ->label($label)
-                    ->state(__('panel/visitor_submissions.file_not_found'));
+                    ->state(__('panel/visitor_submissions.file_not_found') . ' (FileID: ' . $answer . ')');
             }
-            
-            // Get properties from the media custom properties
-            $customProperties = $media->custom_properties ?? [];
+
+            // Get file information
             $fileName = $media->file_name;
             $fileUrl = $media->getUrl();
-            $mimeType = $media->mime_type;
-            $isImage = str_contains($mimeType, 'image/');
-            $isPdf = str_contains($mimeType, 'pdf');
-            
+
+            // Get the file type from custom properties (instead of relying on potentially incorrect mime_type)
+            $fileType = $media->custom_properties['fieldData']['file_type'] ?? \App\Enums\FileUploadType::ANY;
+
+            // Determine if this is an image or PDF based on the file type
+            $lowerFileName = strtolower($fileName);
+            $isImage = $fileType === \App\Enums\FileUploadType::IMAGE ||
+                str_ends_with($lowerFileName, '.jpg') ||
+                str_ends_with($lowerFileName, '.jpeg') ||
+                str_ends_with($lowerFileName, '.png') ||
+                str_ends_with($lowerFileName, '.gif') ||
+                str_ends_with($lowerFileName, '.bmp') ||
+                str_ends_with($lowerFileName, '.webp');
+
+            $isPdf = $fileType === \App\Enums\FileUploadType::PDF || str_ends_with($lowerFileName, '.pdf');
+
             // Create a group with different components based on file type
-            $group = Group::make([
-                // File name
-                TextEntry::make('upload.filename')
+            $components = [
+                // Always show the file name
+                TextEntry::make('file_name')
                     ->label(__('panel/visitor_submissions.file_name'))
                     ->state($fileName),
-                
-                // Display different components based on file type
-                $isImage 
-                    ? ImageEntry::make('upload.preview')
-                        ->label(__('panel/visitor_submissions.file_preview'))
-                        ->src($fileUrl)
-                        ->extraImgAttributes(['class' => 'max-w-sm rounded-lg shadow-md'])
-                    : ($isPdf 
-                        ? TextEntry::make('upload.pdf-preview')
-                            ->label(__('panel/visitor_submissions.file_preview'))
-                            ->html('<div class="flex items-center"><svg class="w-8 h-8 text-red-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M23 13v-2h-2.06A9 9 0 0 0 18 4.95 9 9 0 0 0 11 2c-5 0-9 4-9 9a9 9 0 0 0 9 9 9 9 0 0 0 6-2.3v3.3h2v-6a1 1 0 0 0-1-1H8v2h5.56A7 7 0 0 1 11 18a7 7 0 0 1-7-7 7 7 0 0 1 7-7c3.5 0 6.4 2.6 6.92 6H16v2h7Z"/></svg>' . __('panel/visitor_submissions.pdf_file') . '</div>')
-                        : TextEntry::make('upload.file-type')
-                            ->label(__('panel/visitor_submissions.file_type'))
-                            ->state($mimeType)
-                    ),
-                
-                // Show any additional properties stored in the media
-                isset($customProperties['description']) 
-                    ? TextEntry::make('upload.description')
-                        ->label(__('panel/visitor_submissions.file_description'))
-                        ->state($customProperties['description'])
-                    : null,
-                
-                // Links for view/download
-                TextEntry::make('upload.actions')
-                    ->label(__('panel/visitor_submissions.actions.title'))
-                    ->html(function() use ($fileUrl, $isImage, $isPdf) {
-                        $downloadLink = '<a href="' . $fileUrl . '" class="text-primary-600 hover:text-primary-500" target="_blank" download>' . 
-                            __('panel/visitor_submissions.actions.download') . 
-                            '</a>';
-                            
-                        $viewLink = '';
-                        if ($isImage || $isPdf) {
-                            $viewLink = '<a href="' . $fileUrl . '" class="text-primary-600 hover:text-primary-500 mr-4" target="_blank">' . 
-                                __('panel/visitor_submissions.actions.view') . 
-                                '</a>';
-                        }
-                        
-                        return '<div class="flex items-center">' . $viewLink . $downloadLink . '</div>';
-                    }),
-            ]);
-            
-            return $group->columnSpanFull();
+            ];
+
+            // Add preview component based on file type
+            if ($isImage) {
+                $components[] = TextEntry::make('file_preview')
+                    ->label(__('panel/visitor_submissions.file_preview'))
+                    ->view('panel.components.visitor-submissions.image-upload', [
+                        'fileName' => $fileName,
+                        'fileUrl' => $fileUrl,
+                    ]);
+            } elseif ($isPdf) {
+                // For PDFs, use the PDF Blade template
+                $components[] = TextEntry::make('pdf_preview')
+                    ->label(__('panel/visitor_submissions.file_preview'))
+                    ->view('panel.components.visitor-submissions.pdf-upload', [
+                        'fileName' => $fileName,
+                        'fileUrl' => $fileUrl,
+                    ]);
+            } else {
+                // For other file types, use the generic file template
+                $components[] = TextEntry::make('file_type')
+                    ->label(__('panel/visitor_submissions.file_type'))
+                    ->view('panel.components.visitor-submissions.other-upload', [
+                        'fileName' => $fileName,
+                        'fileUrl' => $fileUrl,
+                        'fileType' => $fileType,
+                    ]);
+            }
+
+            // Show any additional metadata from the media
+            if (isset($media->custom_properties['fieldLabel'])) {
+                $locale = App::getLocale();
+                $fieldLabel = $media->custom_properties['fieldLabel'][$locale] ??
+                    $media->custom_properties['fieldLabel']['en'] ??
+                    $media->custom_properties['fieldLabel']['fr'] ?? null;
+
+                if ($fieldLabel) {
+                    $components[] = TextEntry::make('field_label')
+                        ->label(__('panel/visitor_submissions.field_label'))
+                        ->state($fieldLabel);
+                }
+            }
+
+            return Group::make($components)->columnSpanFull();
         } catch (\Exception $e) {
             return TextEntry::make('upload')
                 ->label($label)

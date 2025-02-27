@@ -44,4 +44,19 @@ class EventController extends Controller
             return redirect()->route('events');
         }
     }
+
+    public static function ExhibitEvent($id)
+    {
+        $event = EventAnnouncement::find($id);
+        if (!$event) {
+            return redirect()->route('events');
+        }
+        if ($event->is_exhibitor_registration_open) {
+            return view('website.pages.events.exhibit-event', [
+                'event' => $event
+            ]);
+        } else {
+            return redirect()->route('events');
+        }
+    }
 }

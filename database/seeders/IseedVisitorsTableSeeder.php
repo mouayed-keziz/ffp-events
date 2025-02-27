@@ -67,6 +67,18 @@ class IseedVisitorsTableSeeder extends Seeder
                 'updated_at' => '2025-02-22 17:35:37',
                 'deleted_at' => NULL,
             ),
+            4 => 
+            array (
+                'id' => 5,
+                'name' => 'Mouayed Keziz',
+                'email' => 'm_keziz@estin.dz',
+                'verified_at' => NULL,
+                'password' => '$2y$12$GvatV3dl0DD/vaoyWwdd9uNPinlu08cN5HbG6gqN/7JmVNz.nZKfW',
+                'remember_token' => NULL,
+                'created_at' => '2025-02-26 18:43:27',
+                'updated_at' => '2025-02-26 18:43:27',
+                'deleted_at' => NULL,
+            ),
         ));
         
         

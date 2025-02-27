@@ -27,7 +27,7 @@ class IseedSettingsTableSeeder extends Seeder
                 'locked' => 0,
                 'payload' => '"FFP-EVENTS"',
                 'created_at' => '2025-02-15 17:47:55',
-                'updated_at' => '2025-02-22 17:54:02',
+                'updated_at' => '2025-02-23 19:22:27',
             ),
             1 => 
             array (
@@ -37,7 +37,7 @@ class IseedSettingsTableSeeder extends Seeder
                 'locked' => 0,
                 'payload' => '"contact@ffpevents.dz"',
                 'created_at' => '2025-02-15 17:47:56',
-                'updated_at' => '2025-02-22 17:54:02',
+                'updated_at' => '2025-02-23 19:22:27',
             ),
             2 => 
             array (
@@ -47,7 +47,7 @@ class IseedSettingsTableSeeder extends Seeder
                 'locked' => 0,
                 'payload' => '"+213555555555"',
                 'created_at' => '2025-02-15 17:47:56',
-                'updated_at' => '2025-02-22 17:54:02',
+                'updated_at' => '2025-02-23 19:22:27',
             ),
             3 => 
             array (
@@ -57,7 +57,7 @@ class IseedSettingsTableSeeder extends Seeder
                 'locked' => 0,
                 'payload' => '"123 Rue Didouche Mourad"',
                 'created_at' => '2025-02-15 17:47:56',
-                'updated_at' => '2025-02-22 17:54:02',
+                'updated_at' => '2025-02-23 19:22:27',
             ),
             4 => 
             array (
@@ -67,7 +67,7 @@ class IseedSettingsTableSeeder extends Seeder
                 'locked' => 0,
                 'payload' => '"Alger"',
                 'created_at' => '2025-02-15 17:47:56',
-                'updated_at' => '2025-02-22 17:54:02',
+                'updated_at' => '2025-02-23 19:22:27',
             ),
             5 => 
             array (
@@ -77,7 +77,7 @@ class IseedSettingsTableSeeder extends Seeder
                 'locked' => 0,
                 'payload' => '"Alger"',
                 'created_at' => '2025-02-15 17:47:56',
-                'updated_at' => '2025-02-22 17:54:02',
+                'updated_at' => '2025-02-23 19:22:27',
             ),
             6 => 
             array (
@@ -87,7 +87,7 @@ class IseedSettingsTableSeeder extends Seeder
                 'locked' => 0,
                 'payload' => '"16000"',
                 'created_at' => '2025-02-15 17:47:56',
-                'updated_at' => '2025-02-22 17:54:02',
+                'updated_at' => '2025-02-23 19:22:27',
             ),
             7 => 
             array (
@@ -97,7 +97,7 @@ class IseedSettingsTableSeeder extends Seeder
                 'locked' => 0,
                 'payload' => '"Algeria"',
                 'created_at' => '2025-02-15 17:47:56',
-                'updated_at' => '2025-02-22 17:54:02',
+                'updated_at' => '2025-02-23 19:22:27',
             ),
             8 => 
             array (
@@ -105,9 +105,9 @@ class IseedSettingsTableSeeder extends Seeder
                 'group' => 'default',
                 'name' => 'faq',
                 'locked' => 0,
-                'payload' => '[{"question":"keziz mouayed","answer":"FFP Events is a platform that allows you to create and manage events."},{"question":"How can I create an event?","answer":"You can create an event by clicking on the \\"Create Event\\" button in the dashboard."},{"question":"How can I manage my events?","answer":"You can manage your events by going to the \\"My Events\\" section in the dashboard."},{"question":"How can I buy tickets for an event?","answer":"You can buy tickets for an event by clicking on the \\"Buy Tickets\\" button on the event page."},{"question":"How can I contact FFP Events?","answer":"You can contact FFP Events by sending an email to"}]',
+                'payload' => '[{"question":"How can I create an event?","answer":"You can create an event by clicking on the \\"Create Event\\" button in the dashboard."},{"question":"keziz mouayed","answer":"FFP Events is a platform that allows you to create and manage events."},{"question":"How can I manage my events?","answer":"You can manage your events by going to the \\"My Events\\" section in the dashboard."},{"question":"How can I buy tickets for an event?","answer":"You can buy tickets for an event by clicking on the \\"Buy Tickets\\" button on the event page."},{"question":"How can I contact FFP Events?","answer":"You can contact FFP Events by sending an email to"}]',
                 'created_at' => '2025-02-15 17:47:56',
-                'updated_at' => '2025-02-22 17:54:02',
+                'updated_at' => '2025-02-23 19:22:27',
             ),
         ));
         

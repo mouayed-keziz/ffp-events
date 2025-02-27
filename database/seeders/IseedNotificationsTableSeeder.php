@@ -41,6 +41,17 @@ class IseedNotificationsTableSeeder extends Seeder
                 'created_at' => '2025-02-16 14:26:43',
                 'updated_at' => '2025-02-16 14:26:43',
             ),
+            2 => 
+            array (
+                'id' => '36b5fc25-ada4-4f43-a46f-5f48dfe2b53d',
+                'type' => 'Filament\\Notifications\\DatabaseNotification',
+                'notifiable_type' => 'App\\Models\\User',
+                'notifiable_id' => 1,
+                'data' => '{"actions":[{"name":"download_csv","color":null,"event":null,"eventData":[],"dispatchDirection":false,"dispatchToComponent":null,"extraAttributes":[],"icon":null,"iconPosition":"before","iconSize":null,"isOutlined":false,"isDisabled":false,"label":"T\\u00e9l\\u00e9charger .csv","shouldClose":false,"shouldMarkAsRead":true,"shouldMarkAsUnread":false,"shouldOpenUrlInNewTab":true,"size":"sm","tooltip":null,"url":"\\/filament\\/exports\\/1\\/download?format=csv","view":"filament-actions::link-action"},{"name":"download_xlsx","color":null,"event":null,"eventData":[],"dispatchDirection":false,"dispatchToComponent":null,"extraAttributes":[],"icon":null,"iconPosition":"before","iconSize":null,"isOutlined":false,"isDisabled":false,"label":"T\\u00e9l\\u00e9charger .xlsx","shouldClose":false,"shouldMarkAsRead":true,"shouldMarkAsUnread":false,"shouldOpenUrlInNewTab":true,"size":"sm","tooltip":null,"url":"\\/filament\\/exports\\/1\\/download?format=xlsx","view":"filament-actions::link-action"}],"body":"Your log export has completed and 25 rows exported.","color":null,"duration":"persistent","icon":"heroicon-o-check-circle","iconColor":"success","status":"success","title":"Exportation termin\\u00e9e","view":"filament-notifications::notification","viewData":[],"format":"filament"}',
+                'read_at' => NULL,
+                'created_at' => '2025-02-23 17:41:29',
+                'updated_at' => '2025-02-23 17:41:29',
+            ),
         ));
         
         

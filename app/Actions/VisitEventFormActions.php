@@ -6,6 +6,7 @@ use App\Models\EventAnnouncement;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
@@ -200,16 +201,6 @@ class VisitEventFormActions
             }
 
             foreach ($section['fields'] as $fieldIndex => $field) {
-                // Process file uploads
-                if (isset($field['type']) && $field['type'] === \App\Enums\FormField::UPLOAD->value && isset($field['answer'])) {
-                    if ($field['answer'] instanceof TemporaryUploadedFile) {
-                        // Store file and save path
-                        $processedFormData[$sectionIndex]['fields'][$fieldIndex]['answer'] =
-                            $this->processFileUpload($field['answer']);
-                    }
-                    continue;
-                }
-
                 // Process choice fields
                 if (!isset($field['answer']) || !in_array($field['type'] ?? '', [
                     \App\Enums\FormField::SELECT->value,
@@ -243,16 +234,6 @@ class VisitEventFormActions
         }
 
         return $processedFormData;
-    }
-
-    /**
-     * Process a file upload and return the stored path
-     */
-    protected function processFileUpload(TemporaryUploadedFile $file): string
-    {
-        // Store the file in a permanent location
-        $path = $file->store('form-uploads', 'public');
-        return $path;
     }
 
     /**
@@ -296,22 +277,19 @@ class VisitEventFormActions
                 if (isset($field['type']) && $field['type'] === \App\Enums\FormField::UPLOAD->value && isset($field['answer'])) {
                     if ($field['answer'] instanceof TemporaryUploadedFile) {
                         // Generate unique identifier for the file
-                        $fileId = (string) \Illuminate\Support\Str::uuid();
+                        $fileId = (string) Str::uuid();
 
                         // Save file information for later processing
                         $filesToProcess[] = [
                             'file' => $field['answer'],
                             'fileId' => $fileId,
+                            'fieldData' => $field['data'] ?? [],
                         ];
 
                         // Replace the file in form data with the identifier
                         $processedFormData[$sectionIndex]['fields'][$fieldIndex]['answer'] = $fileId;
                     }
-                    continue;
                 }
-
-                // Process other field types as before
-                // ... existing code for processing other field types ...
             }
         }
 
@@ -350,15 +328,18 @@ class VisitEventFormActions
                 'status' => 'approved',
             ]);
             Log::info("Submission created: {$submission->id}");
+
             // Process any files by adding them to the Spatie Media Library
             foreach ($filesToProcess as $fileInfo) {
                 $media = $submission->addMedia($fileInfo['file']->getRealPath())
                     ->usingFileName($fileInfo['file']->getClientOriginalName())
                     ->withCustomProperties([
-                        'file_id' => $fileInfo['fileId'],
+                        'fileId' => $fileInfo['fileId'],
+                        'fileType' => $fileInfo['fieldData']['file_type'] ?? null,
+                        'fieldLabel' => $fileInfo['fieldData']['label'] ?? null,
                     ])
                     ->toMediaCollection('attachments');
-                Log::info("Media added: {$media->id}");
+                Log::info("Media added: {$media->id} with fileId: {$fileInfo['fileId']}");
             }
 
             return true;

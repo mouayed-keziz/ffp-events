@@ -97,10 +97,10 @@
 
             {{-- Action Buttons --}}
             <div class="flex flex-col gap-3 pt-4">
-                <a href="#" class="btn text-base font-bold btn-outline border-base-200 border-2 normal-case">
+                <a href="{{route("visit_event", $event)}}" class="btn text-base font-bold btn-outline border-base-200 border-2 normal-case">
                     {{ __('website/event.visit') }}
                 </a>
-                <a href="#" class="btn text-base font-bold btn-primary normal-case">
+                <a href="{{route("exhibit_event", $event)}}" class="btn text-base font-bold btn-primary normal-case">
                     {{ __('website/event.exhibit_and_sponsor') }}
                 </a>
             </div>
