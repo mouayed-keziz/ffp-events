@@ -9,7 +9,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.4",
         "awcodes/light-switch": "^1.0",
         "aymanalhattami/filament-page-with-sidebar": "^2.5",
         "bezhansalleh/filament-language-switch": "^3.1",
