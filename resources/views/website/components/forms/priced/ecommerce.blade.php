@@ -12,39 +12,15 @@
         @endif
     </label>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        @foreach ($data['products'] ?? [] as $product)
-            <div class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow">
-                <div class="card-body">
-                    <h3 class="card-title text-base">{{ $product['product'][app()->getLocale()] ?? '' }}</h3>
-                    <p class="text-sm">{{ $product['description'][app()->getLocale()] ?? '' }}</p>
-                    <p class="font-bold text-primary">{{ number_format($product['price']['DZD'] ?? 0, 2) }} DZD</p>
-                    
-                    <div class="card-actions justify-end mt-2">
-                        <label class="cursor-pointer flex items-center">
-                            <input type="radio" 
-                                class="radio radio-primary mr-2" 
-                                wire:model.defer="formData.{{ $answerPath }}"
-                                value="{{ $product['product'][app()->getLocale()] ?? '' }}" />
-                            {{ __('Select') }}
-                        </label>
-                    </div>
-                </div>
-            </div>
-        @endforeach
-    </div>
+    <div class="p-4 border border-dashed rounded-lg bg-gray-50 text-center">
+        <div class="text-gray-500">
+            <x-heroicon-o-shopping-cart class="w-12 h-12 mx-auto mb-2 text-primary/50" />
+            <p class="font-medium">{{ __('E-commerce Component') }}</p>
+            <p class="text-sm mt-1">{{ __('This feature is under development') }}</p>
+        </div>
 
-    <div class="mt-4">
-        <label class="label">
-            <span class="label-text text-sm">{{ __('Quantity') }}</span>
-        </label>
-        <input type="number" min="1" class="input input-bordered w-full md:w-1/3" 
-            wire:model.defer="formData.{{ str_replace('answer', 'quantity', $answerPath) }}" />
+        <div class="mt-4">
+            <p class="text-xs text-gray-400">TODO: Implement full ecommerce functionality</p>
+        </div>
     </div>
 </div>
-
-{{-- TODO: Implement full ecommerce functionality with:
-    1. Product images
-    2. Product variants (size, color, etc.)
-    3. Add to cart functionality
---}}

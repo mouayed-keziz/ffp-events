@@ -12,29 +12,27 @@
         @endif
     </label>
 
-    <div class="space-y-2">
+    <div class="space-y-3">
         @foreach ($data['options'] ?? [] as $option)
-            <div class="flex items-center space-x-2">
-                <input type="checkbox" 
-                    id="{{ $answerPath }}_{{ $loop->index }}"
-                    class="checkbox checkbox-primary" 
-                    wire:model.defer="formData.{{ $answerPath }}" 
-                    value="{{ $option['option'][app()->getLocale()] ?? '' }}">
-                <label for="{{ $answerPath }}_{{ $loop->index }}" class="cursor-pointer text-sm">
-                    {{ $option['option'][app()->getLocale()] ?? $option['option']['fr'] ?? '' }}
+            <div class="flex items-start">
+                <div class="flex items-center flex-wrap gap-2">
+                    <input type="checkbox" 
+                        id="{{ $answerPath }}_{{ $loop->index }}"
+                        class="checkbox checkbox-primary rounded-md mr-2" 
+                        wire:model.live="formData.{{ $answerPath }}" 
+                        value="{{ $option['option'][app()->getLocale()] ?? '' }}">
+                    <label for="{{ $answerPath }}_{{ $loop->index }}" class="cursor-pointer mr-2">
+                        {{ $option['option'][app()->getLocale()] ?? $option['option']['fr'] ?? '' }}
+                    </label>
+                    
                     @if (isset($option['price']))
-                        - {{ number_format($option['price']['DZD'] ?? 0, 2) }} DZD
+                        @include('website.components.forms.priced.price-badge', [
+                            'price' => $option['price'][$this->preferred_currency] ?? 0,
+                            'currency' => $this->preferred_currency
+                        ])
                     @endif
-                </label>
+                </div>
             </div>
         @endforeach
-    </div>
-    
-    <div class="mt-2">
-        <label class="label">
-            <span class="label-text text-sm">{{ __('Quantity') }} ({{ __('applies to all selected') }})</span>
-        </label>
-        <input type="number" min="1" class="input input-bordered w-full md:w-1/3" 
-            wire:model.defer="formData.{{ str_replace('answer', 'quantity', $answerPath) }}" />
     </div>
 </div>

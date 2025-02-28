@@ -15,7 +15,7 @@ new class extends Component {
     public int $totalSteps = 0;
     public bool $formSubmitted = false;
     public string $successMessage = '';
-    public const PREFERRED_CURRENCY = 'DZD';
+    public string $preferred_currency = 'EUR';
     public float $totalPrice = 0;
 
     public function mount(EventAnnouncement $event)
@@ -23,6 +23,8 @@ new class extends Component {
         $this->event = $event;
         $this->initFormData();
     }
+
+   
 
     protected function initFormData()
     {
@@ -64,7 +66,7 @@ new class extends Component {
     protected function calculateTotalPrice()
     {
         $actions = new ExhibitorFormActions();
-        $this->totalPrice = $actions->calculateTotalPrice($this->formData, self::PREFERRED_CURRENCY);
+        $this->totalPrice = $actions->calculateTotalPrice($this->formData, $this->preferred_currency);
     }
 
     public function submitForm()
@@ -78,7 +80,8 @@ new class extends Component {
         $this->calculateTotalPrice();
 
         // Save the form submission
-        $success = $actions->saveFormSubmission($this->event, $this->formData);
+        dd($this->formData);
+        // $success = $actions->saveFormSubmission($this->event, $this->formData);
 
         if ($success) {
             $this->formSubmitted = true;
@@ -87,13 +90,9 @@ new class extends Component {
             session()->flash('error', 'An error occurred while submitting the form. Please try again.');
         }
     }
-    public function test() {
-        dd($this->formData);
-    }
 }; ?>
 
 <div class="container mx-auto py-8 px-4">
-    <button wire:click="test">Test</button>
     @include('website.components.forms.multi-step-form', [
         'steps' => $formData, 
         'currentStep' => $currentStep, 
@@ -130,15 +129,6 @@ new class extends Component {
                         </div>
                     @endforeach
 
-                    <!-- Total price display -->
-                    <div class="mb-6 p-4 bg-gray-50 rounded-lg">
-                        <div class="flex justify-between items-center">
-                            <span class="font-semibold text-lg">{{ __('Total Price') }}:</span>
-                            <span class="font-bold text-xl text-primary">{{ number_format($totalPrice, 2) }}
-                                {{ self::PREFERRED_CURRENCY }}</span>
-                        </div>
-                    </div>
-
                     <!-- Navigation buttons -->
                     <div class="flex justify-between mt-8">
                         <button type="button" class="btn btn-outline" wire:click="previousStep"
@@ -170,6 +160,23 @@ new class extends Component {
             @endif
         </form>
 
-        <pre class="hidden">{{ var_export($formData, true) }}</pre>
+        <!-- Floating Total Price -->
+        <div class="fixed bottom-4 right-4 z-10 w-full sm:w-80 md:w-96">
+            <div class="bg-white shadow-lg rounded-btn p-4 border">
+                <h3 class="font-semibold mb-4">{{ __('Totale du bon de commande') }}</h3>
+                <div class="mb-2 bg-primary/10 py-2 px-4 rounded-btn">
+                    <div class="text-primary text-xs font-semibold">{{ __('Total HT') }}</div>
+                    <div class="font-bold text-md text-primary">
+                        {{ number_format($totalPrice, 2) }} {{ $this->preferred_currency }}
+                    </div>
+                </div>
+                <div class="bg-primary/10 py-2 px-4 rounded-btn">
+                    <div class="text-primary text-xs font-semibold">{{ __('Total HT') }}</div>
+                    <div class="font-bold text-md text-primary">
+                        {{ number_format($totalPrice, 2) }} {{ $this->preferred_currency }}
+                    </div>
+                </div>
+            </div>
+        </div>
     @endif
 </div>
