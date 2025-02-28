@@ -28,6 +28,7 @@ return [
         'checkbox_priced'  => 'Checkbox Priced',
         'radio_priced'     => 'Radio Priced',
         'ecommerce'        => 'E-commerce',
+        'plan_tier'        => 'Plan Tier',
     ],
     'file_types' => [
         'image' => 'Image',
@@ -48,6 +49,7 @@ return [
         'single' => 'Exhibitor Form',
         'plural' => 'Exhibitor Forms',
         'add_exhibitor_form' => "Add Exhibitor Form",
+        'plan_tier' => 'Select Plan Tier',
         'blocks' => [
             'input' => 'Input',
             'type' => 'Type',

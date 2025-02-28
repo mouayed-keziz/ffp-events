@@ -4,6 +4,7 @@ use Livewire\Volt\Component;
 use App\Models\EventAnnouncement;
 
 new class extends Component {
+    public int $step = 1;
     public EventAnnouncement $event;
     public array $formData = [];
     public bool $formSubmitted = false;

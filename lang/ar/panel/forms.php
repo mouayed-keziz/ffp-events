@@ -28,6 +28,7 @@ return [
         'checkbox_priced'  => 'مربع اختيار بسعر',
         'radio_priced'     => 'زر راديو بسعر',
         'ecommerce'        => 'تجارة إلكترونية',
+        'plan_tier'        => 'مستوى الخطة',
     ],
     'file_types' => [
         'image' => 'صورة',
@@ -48,6 +49,7 @@ return [
         'single' => 'نموذج العارض',
         'plural' => 'نماذج العارضين',
         'add_exhibitor_form' => "إضافة نموذج عارض",
+        'plan_tier' => 'اختر مستوى الخطة',
         'blocks' => [
             'input' => 'حقل',
             'type' => 'النوع',

@@ -175,6 +175,11 @@ class ExhibitorFormResource extends Resource
                                             ->label(function ($state) {
                                                 return FormField::ECOMMERCE->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
                                             }),
+                                        Components\PlanTierBlock::make(FormField::PLAN_TIER->value)
+                                            ->icon('heroicon-o-table-cells')
+                                            ->label(function ($state) {
+                                                return FormField::PLAN_TIER->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                            }),
                                     ]),
                             ]),
                     ]),

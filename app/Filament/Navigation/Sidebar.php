@@ -40,6 +40,14 @@ class Sidebar
         'icon' => 'heroicon-o-arrow-down-tray',
         'sort' => 9
     ];
+    const PRODUCT = [
+        'icon' => 'heroicon-o-shopping-bag',
+        'sort' => 10
+    ];
+    const PLAN_TIER = [
+        'icon' => 'heroicon-o-table-cells',
+        'sort' => 11
+    ];
 
     public static function icon(string $resource): string
     {

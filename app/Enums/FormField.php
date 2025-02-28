@@ -15,6 +15,7 @@ enum FormField: string implements HasLabel
     case CHECKBOX_PRICED = "checkbox_priced";
     case RADIO_PRICED = "radio_priced";
     case ECOMMERCE = "ecommerce";
+    case PLAN_TIER = "plan_tier";
 
     public function getLabel(): ?string
     {
@@ -33,6 +34,7 @@ enum FormField: string implements HasLabel
             self::CHECKBOX_PRICED->value => 'heroicon-o-clipboard-check',
             self::RADIO_PRICED->value    => 'heroicon-o-document-text',
             self::ECOMMERCE->value       => 'heroicon-o-shopping-cart',
+            self::PLAN_TIER->value       => 'heroicon-o-table-cells',
         ];
 
         return $icons[$this->value] ?? 'heroicon-o-question-mark';
