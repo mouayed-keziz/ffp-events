@@ -10,4 +10,4 @@
     </div>
 @endsection
 
-@livewireScriptConfig
+

@@ -37,6 +37,13 @@ Route::middleware('local_middleware')->group(function () {
             Route::get('/restore-account', [AuthController::class, 'RestoreAccount'])->name('restore-account');
             Route::get('/email-sent', [AuthController::class, 'EmailSent'])->name('email-sent');
             Route::get('/reset-password', [AuthController::class, 'ResetPassword'])->name('reset-password');
+            Route::get("/user", function (Request $request) {
+                return [
+                    "user" => Auth::user(),
+                    "visitor" => Auth::guard("visitor")->user(),
+                    "exhibitor" => Auth::guard("exhibitor")->user()
+                ];
+            });
         });
     });
 });
