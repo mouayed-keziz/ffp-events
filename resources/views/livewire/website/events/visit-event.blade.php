@@ -7,8 +7,11 @@ use Livewire\WithFileUploads;
 new class extends Component {
     use WithFileUploads;
 
+    // Event and form data
     public EventAnnouncement $event;
     public array $formData = [];
+    public int $currentStep = 0;
+    public int $totalSteps = 1;  // For visitor forms, we use a single step by default
     public bool $formSubmitted = false;
     public string $successMessage = '';
 
@@ -44,19 +47,16 @@ new class extends Component {
     }
 }; ?>
 
-<div>
-    @if (session('error'))
-        <div class="alert alert-error mb-4">
-            {{ session('error') }}
-        </div>
-    @endif
-
-    @if ($formSubmitted)
-        <div class="rounded-btn alert alert-success mb-4 shadow-md text-white">
-            <x-heroicon-o-check-circle class="w-6 h-6 inline-block mr-2" />
-            {{ $successMessage }}
-        </div>
-    @else
+<div class="container mx-auto py-8 px-4">
+    {{-- @include('website.components.forms.multi-step-form', [
+        'steps' => [['title' => ['en' => 'Visitor Registration', 'fr' => 'Inscription des visiteurs', 'ar' => 'تسجيل الزوار']]],
+        'currentStep' => $currentStep,
+        'errors' => $errors,
+        'formSubmitted' => $formSubmitted,
+        'successMessage' => $successMessage
+    ]) --}}
+    
+    @if (!$formSubmitted)
         <form wire:submit.prevent="submitForm">
             @if ($event->visitorForm)
                 @foreach ($event->visitorForm->sections as $sectionIndex => $section)
@@ -85,10 +85,24 @@ new class extends Component {
                 <div class="flex justify-end mt-6">
                     <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
                         <span wire:loading.remove>{{ __('Submit') }}</span>
-                        <span wire:loading>{{ __('Submitting...') }}</span>
+                        <span wire:loading wire:target="submitForm">
+                            <x-heroicon-o-arrow-path class="w-5 h-5 animate-spin mr-2" />
+                            {{ __('Submitting...') }}
+                        </span>
                     </button>
+                </div>
+            @else
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <p class="text-center text-gray-500">{{ __('No form available for this event.') }}</p>
                 </div>
             @endif
         </form>
+        
+        <pre class="hidden">{{ var_export($formData, true) }}</pre>
+    @else
+        <div class="rounded-btn alert alert-success mb-4 shadow-md text-white">
+            <x-heroicon-o-check-circle class="w-6 h-6 inline-block mr-2" />
+            {{ $successMessage }}
+        </div>
     @endif
 </div>

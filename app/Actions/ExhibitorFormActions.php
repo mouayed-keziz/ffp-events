@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
-class ExhibitorFormActions
+class ExhibitorFormActions extends BaseFormActions
 {
     /**
      * Initialize form data structure based on the event's exhibitor forms
@@ -109,7 +109,7 @@ class ExhibitorFormActions
     /**
      * Get validation rules for the form
      */
-    public function getValidationRules(EventAnnouncement $event, int $currentFormIndex = null): array
+    public function getValidationRules(EventAnnouncement $event, int $currentStep = null): array
     {
         $rules = [];
         $exhibitorForms = $event->exhibitorForms;
@@ -119,13 +119,13 @@ class ExhibitorFormActions
         }
 
         // If we're validating a specific form step
-        if ($currentFormIndex !== null) {
-            $exhibitorForm = $exhibitorForms[$currentFormIndex] ?? null;
+        if ($currentStep !== null) {
+            $exhibitorForm = $exhibitorForms[$currentStep] ?? null;
             if (!$exhibitorForm) {
                 return $rules;
             }
 
-            return $this->getFormValidationRules($exhibitorForm, "formData.{$currentFormIndex}");
+            return $this->getFormValidationRules($exhibitorForm, "formData.{$currentStep}");
         }
 
         // Validating all forms

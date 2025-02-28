@@ -33,6 +33,38 @@
                             'answerPath' => $answerPath ?? null
                         ])
                     @break
+                    
+                    {{-- Priced field types --}}
+                    @case(App\Enums\FormField::SELECT_PRICED->value)
+                        @include('website.components.forms.priced.select', [
+                            'data' => $field['data'],
+                            'answerPath' => $answerPath ?? null
+                        ])
+                    @break
+                    @case(App\Enums\FormField::CHECKBOX_PRICED->value)
+                        @include('website.components.forms.priced.checkbox', [
+                            'data' => $field['data'],
+                            'answerPath' => $answerPath ?? null
+                        ])
+                    @break
+                    @case(App\Enums\FormField::RADIO_PRICED->value)
+                        @include('website.components.forms.priced.radio', [
+                            'data' => $field['data'],
+                            'answerPath' => $answerPath ?? null
+                        ])
+                    @break
+                    @case(App\Enums\FormField::ECOMMERCE->value)
+                        @include('website.components.forms.priced.ecommerce', [
+                            'data' => $field['data'],
+                            'answerPath' => $answerPath ?? null
+                        ])
+                    @break
+                    @case(App\Enums\FormField::PLAN_TIER->value)
+                        @include('website.components.forms.priced.plan_tier', [
+                            'data' => $field['data'],
+                            'answerPath' => $answerPath ?? null
+                        ])
+                    @break
                     @default
                         <div>_</div>
                 @endswitch

@@ -22,7 +22,6 @@ new class extends Component {
     {
         $this->event = $event;
         $this->initFormData();
-        // dd($this->formData);
     }
 
     protected function initFormData()
@@ -88,149 +87,45 @@ new class extends Component {
             session()->flash('error', 'An error occurred while submitting the form. Please try again.');
         }
     }
+    public function test() {
+        dd($this->formData);
+    }
 }; ?>
 
 <div class="container mx-auto py-8 px-4">
-    @if (session('error'))
-        <div class="alert alert-error mb-4">
-            {{ session('error') }}
-        </div>
-    @endif
-
-    @if ($formSubmitted)
-        <div class="rounded-btn alert alert-success mb-4 shadow-md text-white">
-            <x-heroicon-o-check-circle class="w-6 h-6 inline-block mr-2" />
-            {{ $successMessage }}
-            <pre class="hidden">{{ var_export($formData, true) }}</pre>
-        </div>
-    @else
-        <!-- Multi-step progress indicator -->
-        <div class="mb-8">
-            <div class="hidden sm:block">
-                <div class="relative flex items-center justify-between">
-                    @for ($i = 0; $i < $totalSteps; $i++)
-                        <!-- Step indicator -->
-                        <div class="flex flex-col items-center">
-                            <div
-                                class="w-8 h-8 rounded-full flex items-center justify-center {{ $i <= $currentStep ? 'bg-primary' : 'bg-gray-300' }}">
-                                <span class="text-white font-medium">{{ $i + 1 }}</span>
-                            </div>
-                            <div class="mt-2 text-center">
-                                <span class="{{ $i <= $currentStep ? 'font-bold text-primary' : 'text-gray-700' }}">
-                                    {{-- {{ isset($formData[$i]['title']) ? $formData[$i]['title'][app()->getLocale()] ?? $formData[$i]['title'] : '' }} --}}
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Connector line between steps (except after the last step) -->
-                        @if ($i < $totalSteps - 1)
-                            <div class="flex-1 mx-2">
-                                <div class="h-1 rounded-btn {{ $i < $currentStep ? 'bg-primary' : 'bg-gray-300' }}"></div>
-                            </div>
-                        @endif
-                    @endfor
-                </div>
-            </div>
-
-            <!-- Mobile progress indicator (simplified) -->
-            <div class="sm:hidden">
-                <div class="relative flex items-center justify-between">
-                    @for ($i = 0; $i < $totalSteps; $i++)
-                        <!-- Step circle -->
-                        <div
-                            class="w-6 h-6 rounded-full flex items-center justify-center {{ $i <= $currentStep ? 'bg-primary' : 'bg-gray-300' }}">
-                        </div>
-
-                        <!-- Connector line between steps (except after the last step) -->
-                        @if ($i < $totalSteps - 1)
-                            <div class="flex-1">
-                                <div class="h-1 {{ $i < $currentStep ? 'bg-primary' : 'bg-gray-300' }}"></div>
-                            </div>
-                        @endif
-                    @endfor
-                </div>
-            </div>
-        </div>
-
-        <!-- Form content -->
+    <button wire:click="test">Test</button>
+    @include('website.components.forms.multi-step-form', [
+        'steps' => $formData, 
+        'currentStep' => $currentStep, 
+        'errors' => $errors, 
+        'formSubmitted' => $formSubmitted, 
+        'successMessage' => $successMessage
+    ])
+    
+    @if (!$formSubmitted)
         <form wire:submit.prevent="submitForm">
             @if (!empty($formData))
                 <div>
-                    <!-- Current form step title and description -->
-                    <div class="mb-6">
-                        <h2 class="text-xl font-bold">
-                            {{ isset($formData[$currentStep]['title']) ? $formData[$currentStep]['title'][app()->getLocale()] ?? '' : '' }}
-                        </h2>
-                        @if (isset($formData[$currentStep]['description']) && !empty($formData[$currentStep]['description'][app()->getLocale()]))
-                            <p class="text-gray-600 mt-2">
-                                {{ $formData[$currentStep]['description'][app()->getLocale()] }}
-                            </p>
-                        @endif
-                    </div>
-
                     <!-- Current form sections and fields -->
                     @foreach ($formData[$currentStep]['sections'] as $sectionIndex => $section)
                         <div class="mb-8">
-                            <h3 class="text-lg font-semibold mb-4">
-                                {{ $section['title'][app()->getLocale()] ?? ($section['title']['en'] ?? '') }}
-                            </h3>
+                            @include('website.components.forms.input.section_title', [
+                                'title' => $section['title'][app()->getLocale()] ?? ($section['title']['fr'] ?? ''),
+                            ])
 
                             @foreach ($section['fields'] as $fieldIndex => $field)
                                 @php
                                     $answerPath = "{$currentStep}.sections.{$sectionIndex}.fields.{$fieldIndex}.answer";
-                                    $quantityPath = "{$currentStep}.sections.{$sectionIndex}.fields.{$fieldIndex}.quantity";
                                 @endphp
 
-                                <div class="mb-6">
-                                    <div class="form-control w-full">
-                                       
+                                @include('website.components.forms.fields', [
+                                    'fields' => [$field],
+                                    'answerPath' => $answerPath
+                                ])
 
-                                        <!-- Input field based on type -->
-                                        @switch($field['type'])
-                                            @case(App\Enums\FormField::INPUT->value)
-                                                @include('website.components.forms.input.input', [
-                                                    'data' => $field['data'],
-                                                    'answerPath' => $answerPath ?? null,
-                                                ])
-                                            @break
-
-                                            @case(App\Enums\FormField::SELECT->value)
-                                                @include('website.components.forms.multiple.select', [
-                                                    'data' => $field['data'],
-                                                    'answerPath' => $answerPath ?? null,
-                                                ])
-                                            @break
-
-                                            @case(App\Enums\FormField::CHECKBOX->value)
-                                                @include('website.components.forms.multiple.checkbox', [
-                                                    'data' => $field['data'],
-                                                    'answerPath' => $answerPath ?? null,
-                                                ])
-                                            @break
-
-                                            @case(App\Enums\FormField::RADIO->value)
-                                                @include('website.components.forms.multiple.radio', [
-                                                    'data' => $field['data'],
-                                                    'answerPath' => $answerPath ?? null,
-                                                ])
-                                            @break
-
-                                            @case(App\Enums\FormField::UPLOAD->value)
-                                                @include('website.components.forms.file-upload', [
-                                                    'data' => $field['data'],
-                                                    'answerPath' => $answerPath ?? null,
-                                                ])
-                                            @break
-
-                                            @default
-                                                <div>_</div>
-                                        @endswitch
-
-                                        @error("formData.{$answerPath}")
-                                            <div class="text-error text-sm mt-1">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
+                                @error("formData.{$answerPath}")
+                                    <div class="text-error text-sm mt-1">{{ $message }}</div>
+                                @enderror
                             @endforeach
                         </div>
                     @endforeach
@@ -274,5 +169,7 @@ new class extends Component {
                 </div>
             @endif
         </form>
+
+        <pre class="hidden">{{ var_export($formData, true) }}</pre>
     @endif
 </div>

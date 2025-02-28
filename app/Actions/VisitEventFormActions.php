@@ -7,11 +7,10 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
-use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 
-class VisitEventFormActions
+class VisitEventFormActions extends BaseFormActions
 {
     /**
      * Initialize form data structure based on the event's visitor form
@@ -84,7 +83,7 @@ class VisitEventFormActions
     /**
      * Get validation rules for the form
      */
-    public function getValidationRules(EventAnnouncement $event): array
+    public function getValidationRules(EventAnnouncement $event, int $currentStep = null): array
     {
         $rules = [];
 
