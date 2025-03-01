@@ -13,8 +13,8 @@ use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 class ManageCompanyInformations extends SettingsPage
 {
     protected static string $settings = CompanyInformationsSettings::class;
-    protected static ?string $navigationIcon = Sidebar::VISITOR["icon"];
-    protected static ?int $navigationSort = Sidebar::VISITOR["sort"];
+    protected static ?string $navigationIcon = Sidebar::SETTINGS["icon"];
+    protected static ?int $navigationSort = Sidebar::SETTINGS["sort"];
 
     public function getTitle(): string
     {
@@ -34,7 +34,7 @@ class ManageCompanyInformations extends SettingsPage
 
     public static function getNavigationGroup(): ?string
     {
-        return __('panel/nav.groups.settings');
+        return __(Sidebar::SETTINGS["group"]);
     }
 
     public function form(Form $form): Form

@@ -36,6 +36,19 @@ class ProductResource extends Resource
     {
         return 'primary';
     }
+    public static function getNavigationGroup(): ?string
+    {
+        return __(Sidebar::PRODUCT['group']);
+    }
+    // public static function getModelLabel(): string
+    // {
+    //     return __('products/logs.resource.single');
+    // }
+
+    // public static function getPluralModelLabel(): string
+    // {
+    //     return __('panel/products.resource.plural');
+    // }
 
     public static function form(Form $form): Form
     {

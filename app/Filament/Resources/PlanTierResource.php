@@ -44,6 +44,10 @@ class PlanTierResource extends Resource
     {
         return __("panel/plan.tier.plural");
     }
+    public static function getNavigationGroup(): ?string
+    {
+        return __(Sidebar::PLAN_TIER['group']);
+    }
 
     public static function form(Form $form): Form
     {

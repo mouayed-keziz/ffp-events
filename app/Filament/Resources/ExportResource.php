@@ -43,7 +43,7 @@ class ExportResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('panel/nav.groups.management');
+        return __(Sidebar::EXPORT['group']);
     }
     public static function form(Form $form): Form
     {

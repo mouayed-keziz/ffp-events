@@ -6,15 +6,18 @@ class Sidebar
 {
     const EVENT_ANNOUNCEMENT = [
         'icon' => 'heroicon-o-megaphone',
-        'sort' => 1
+        'sort' => 1,
+        'group' => 'panel/nav.groups.event_management',
     ];
     const ARTICLE = [
         'icon' => 'heroicon-o-document-duplicate',
-        'sort' => 2
+        'sort' => 2,
+        'group' => 'panel/nav.groups.articles',
     ];
     const CATEGORY = [
         'icon' => 'heroicon-o-bars-3',
-        'sort' => 3
+        'sort' => 3,
+        'group' => 'panel/nav.groups.articles',
     ];
     const EXHIBITOR = [
         'icon' => 'heroicon-o-users',
@@ -34,19 +37,29 @@ class Sidebar
     ];
     const LOG = [
         'icon' => 'heroicon-o-clipboard-document-list',
-        'sort' => 8
+        'sort' => 8,
+        'group' => 'panel/nav.groups.management'
     ];
     const EXPORT = [
         'icon' => 'heroicon-o-arrow-down-tray',
-        'sort' => 9
+        'sort' => 9,
+        'group' => 'panel/nav.groups.management'
     ];
     const PRODUCT = [
         'icon' => 'heroicon-o-shopping-bag',
-        'sort' => 10
+        'sort' => 10,
+        'group' => 'panel/nav.groups.event_management'
     ];
     const PLAN_TIER = [
         'icon' => 'heroicon-o-table-cells',
-        'sort' => 11
+        'sort' => 11,
+        'group' => 'panel/nav.groups.event_management'
+    ];
+
+    const SETTINGS = [
+        'icon' => 'heroicon-o-cog',
+        'sort' => 12,
+        'group' => 'panel/nav.groups.settings'
     ];
 
     public static function icon(string $resource): string

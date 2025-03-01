@@ -41,7 +41,7 @@ class EventAnnouncementResource extends Resource
     }
     public static function getNavigationGroup(): ?string
     {
-        return __('panel/nav.groups.event_management');
+        return __(Sidebar::EVENT_ANNOUNCEMENT["group"]);
     }
     public static function getModelLabel(): string
     {

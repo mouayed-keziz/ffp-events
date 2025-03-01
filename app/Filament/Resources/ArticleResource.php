@@ -37,7 +37,7 @@ class ArticleResource extends Resource
 
     public static function getNavigationGroup(): ?string
     {
-        return __('panel/nav.groups.articles');
+        return __(Sidebar::ARTICLE['group']);
     }
 
     public static function getModelLabel(): string

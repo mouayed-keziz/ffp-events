@@ -86,13 +86,10 @@ class EventAnnouncementInfolist
                         // Media Tab
                         Tabs\Tab::make(__('panel/event_announcement.tabs.media'))
                             ->schema([
-                                Section::make(__('Image'))
-                                    ->schema([
-                                        Infolists\Components\ImageEntry::make('image')
-                                            ->label(__('panel/event_announcement.fields.image'))
-                                            ->circular()
-                                            ->placeholder(__('panel/event_announcement.empty_states.photo')),
-                                    ])->columns(1),
+                                Infolists\Components\ImageEntry::make('image')
+                                    ->label(__('panel/event_announcement.fields.image'))
+                                    ->circular()
+                                    ->placeholder(__('panel/event_announcement.empty_states.photo')),
                             ]),
                     ]),
             ]);
