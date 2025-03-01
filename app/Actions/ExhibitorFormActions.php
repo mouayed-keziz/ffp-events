@@ -79,28 +79,46 @@ class ExhibitorFormActions extends BaseFormActions
         if (isset($field['data']['plan_tier_id'])) {
             $fieldData['data']['plan_tier_id'] = $field['data']['plan_tier_id'];
         }
+        if (isset($field['data']['price'])) {
+            $fieldData['data']['price'] = $field['data']['price'];
+        }
         if (isset($field['data']['products'])) {
             $fieldData['data']['products'] = $field['data']['products'];
+
+            // Initialize products with empty selection and quantity
+            $fieldData['answer'] = [];
+            foreach ($field['data']['products'] as $product) {
+                $fieldData['answer'][$product['product_id']] = [
+                    'selected' => false,
+                    'quantity' => 1
+                ];
+            }
         }
 
         // Initialize answer based on field type
         switch ($field['type']) {
             case \App\Enums\FormField::CHECKBOX->value:
             case \App\Enums\FormField::CHECKBOX_PRICED->value:
-                $fieldData['answer'] = [];
+                if (!isset($fieldData['answer'])) {
+                    $fieldData['answer'] = [];
+                }
                 break;
             case \App\Enums\FormField::UPLOAD->value:
                 $fieldData['answer'] = null;
                 break;
             case \App\Enums\FormField::SELECT_PRICED->value:
             case \App\Enums\FormField::RADIO_PRICED->value:
-            case \App\Enums\FormField::ECOMMERCE->value:
-            case \App\Enums\FormField::PLAN_TIER->value:
                 $fieldData['answer'] = '';
                 $fieldData['quantity'] = 1;
                 break;
+            case \App\Enums\FormField::PLAN_TIER->value:
+                $fieldData['answer'] = $field['data']['plan_tier_id'] ?? '';
+                $fieldData['quantity'] = 1;
+                break;
             default:
-                $fieldData['answer'] = '';
+                if (!isset($fieldData['answer'])) {
+                    $fieldData['answer'] = '';
+                }
         }
 
         return $fieldData;
@@ -274,6 +292,8 @@ class ExhibitorFormActions extends BaseFormActions
                         \App\Enums\FormField::SELECT_PRICED->value,
                         \App\Enums\FormField::CHECKBOX_PRICED->value,
                         \App\Enums\FormField::RADIO_PRICED->value,
+                        \App\Enums\FormField::ECOMMERCE->value,
+                        \App\Enums\FormField::PLAN_TIER->value,
                     ])) {
                         continue;
                     }
@@ -299,6 +319,44 @@ class ExhibitorFormActions extends BaseFormActions
                                 }
                                 $processedFormData[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'] = $translatedAnswers;
                             }
+                            break;
+
+                        case \App\Enums\FormField::ECOMMERCE->value:
+                            // For ecommerce, process the selected products
+                            if (is_array($field['answer']) && isset($field['data']['products'])) {
+                                $selectedProducts = [];
+                                foreach ($field['answer'] as $productId => $productData) {
+                                    if (!isset($productData['selected']) || $productData['selected'] !== true) {
+                                        continue;
+                                    }
+
+                                    // Find the product in the products list
+                                    $product = null;
+                                    foreach ($field['data']['products'] as $p) {
+                                        if ($p['product_id'] == $productId) {
+                                            $product = $p;
+                                            break;
+                                        }
+                                    }
+
+                                    if ($product) {
+                                        $selectedProducts[$productId] = [
+                                            'product_id' => $productId,
+                                            'quantity' => $productData['quantity'] ?? 1,
+                                            'price' => $product['price'] ?? [],
+                                        ];
+                                    }
+                                }
+
+                                $processedFormData[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'] = $selectedProducts;
+                            }
+                            break;
+
+                        case \App\Enums\FormField::PLAN_TIER->value:
+                            // For plan tier, store the plan_tier_id
+                            $processedFormData[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'] = [
+                                'plan_tier_id' => $field['answer'],
+                            ];
                             break;
                     }
                 }
@@ -388,7 +446,6 @@ class ExhibitorFormActions extends BaseFormActions
             foreach ($form['sections'] as $section) {
                 foreach ($section['fields'] as $field) {
                     $price = 0;
-                    $quantity = $field['quantity'] ?? 1;
 
                     switch ($field['type']) {
                         case \App\Enums\FormField::SELECT_PRICED->value:
@@ -399,40 +456,54 @@ class ExhibitorFormActions extends BaseFormActions
                                     $field['answer'],
                                     $preferredCurrency
                                 );
+                                $quantity = $field['quantity'] ?? 1;
+                                $total += $price * $quantity;
                             }
                             break;
 
                         case \App\Enums\FormField::CHECKBOX_PRICED->value:
                             if (is_array($field['answer'])) {
                                 foreach ($field['answer'] as $answer) {
-                                    $price += $this->getPriceForOption(
+                                    $price = $this->getPriceForOption(
                                         $field['data']['options'] ?? [],
                                         $answer,
                                         $preferredCurrency
                                     );
+                                    $quantity = isset($field['checkbox_quantities']) ? $field['checkbox_quantities'][$answer] ?? 1 : 1;
+                                    $total += $price * $quantity;
                                 }
                             }
                             break;
 
                         case \App\Enums\FormField::ECOMMERCE->value:
-                            if (!empty($field['answer']) && isset($field['data']['products'])) {
-                                foreach ($field['data']['products'] as $product) {
-                                    if ($product['product'][app()->getLocale()] === $field['answer']) {
-                                        $price = $product['price'][$preferredCurrency] ?? 0;
-                                        break;
+                            if (is_array($field['answer']) && !empty($field['answer']) && isset($field['data']['products'])) {
+                                foreach ($field['answer'] as $productId => $productData) {
+                                    if (!isset($productData['selected']) || $productData['selected'] !== true) {
+                                        continue;
+                                    }
+
+                                    // Find the product price
+                                    foreach ($field['data']['products'] as $product) {
+                                        if ($product['product_id'] == $productId) {
+                                            $price = $product['price'][$preferredCurrency] ?? 0;
+                                            $quantity = $productData['quantity'] ?? 1;
+                                            $total += $price * $quantity;
+                                            break;
+                                        }
                                     }
                                 }
                             }
                             break;
 
                         case \App\Enums\FormField::PLAN_TIER->value:
-                            // This would require querying the database for the selected plan
-                            // We'll handle it separately or implement later
-                            $price = 0; // Placeholder
+                            // Get price from the plan tier's price field
+                            if (isset($field['data']['price']) && isset($field['data']['price'][$preferredCurrency])) {
+                                $price = $field['data']['price'][$preferredCurrency];
+                                $quantity = $field['quantity'] ?? 1;
+                                $total += $price * $quantity;
+                            }
                             break;
                     }
-
-                    $total += $price * $quantity;
                 }
             }
         }

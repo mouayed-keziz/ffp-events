@@ -12,15 +12,40 @@
         @endif
     </label>
 
-    <div class="p-4 border border-dashed rounded-lg bg-gray-50 text-center">
-        <div class="text-gray-500">
-            <x-heroicon-o-table-cells class="w-12 h-12 mx-auto mb-2 text-primary/50" />
-            <p class="font-medium">{{ __('Plan Tier Component') }}</p>
-            <p class="text-sm mt-1">{{ __('This feature is under development') }}</p>
-        </div>
-
-        <div class="mt-4">
-            <p class="text-xs text-gray-400">TODO: Implement dynamic plan tier loading from the database</p>
-        </div>
+    <div class="bg-white border rounded-lg p-4">
+        @if(isset($data['plan_tier_id']))
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="font-medium">{{ __('Plan Tier') }}</div>
+                    <div class="text-xs text-gray-500">ID: {{ $data['plan_tier_id'] }}</div>
+                    <input type="hidden" wire:model="{{ $answerPath }}" value="{{ $data['plan_tier_id'] }}" />
+                </div>
+                
+                <div class="flex items-center">
+                    <label class="text-xs text-gray-500 me-2">{{ __('Qty') }}:</label>
+                    <input 
+                        type="number" 
+                        min="1" 
+                        wire:model="{{ Str::replaceLast('.answer', '.quantity', $answerPath) }}"
+                        class="input input-bordered input-xs w-16 text-center" 
+                    />
+                </div>
+            </div>
+            
+            <div class="mt-4 bg-primary/10 p-3 rounded-md">
+                <div class="flex justify-between text-sm">
+                    <span class="font-medium">{{ __('Price') }}:</span>
+                    <span class="font-bold text-primary">
+                        {{ number_format($data['price'][Livewire::getComponent($this->_instance)->preferred_currency] ?? 0, 2) }} 
+                        {{ Livewire::getComponent($this->_instance)->preferred_currency }}
+                    </span>
+                </div>
+            </div>
+        @else
+            <div class="text-gray-500 text-center py-4">
+                <x-heroicon-o-table-cells class="w-8 h-8 mx-auto mb-2 text-primary/50" />
+                <p>{{ __('No plan tier selected') }}</p>
+            </div>
+        @endif
     </div>
 </div>

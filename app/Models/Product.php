@@ -23,7 +23,7 @@ class Product extends Model implements HasMedia
     // Accessor to get image URL if image media exists
     public function getImageAttribute()
     {
-        return $this->hasMedia('image') ? $this->getFirstMediaUrl('image') : null;
+        return $this->hasMedia('image') ? $this->getFirstMediaUrl('image') : asset("placeholder.png");
     }
 
     // Optionally register the media collection for the image.

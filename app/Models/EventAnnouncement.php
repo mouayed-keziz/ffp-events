@@ -67,7 +67,7 @@ class EventAnnouncement extends Model implements HasMedia
 
     public function getImageAttribute()
     {
-        return $this->getFirstMediaUrl('image') ? $this->getFirstMediaUrl('image') : "https://astrotowing.ca/wp-content/uploads/2020/08/Horizontal-Placeholder-Image.jpg";
+        return $this->getFirstMediaUrl('image') ? $this->getFirstMediaUrl('image') : asset("placeholder_wide.png");
     }
     public function getIsVisitorRegistrationOpenAttribute()
     {

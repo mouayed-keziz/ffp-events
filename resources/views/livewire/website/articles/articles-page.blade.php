@@ -63,7 +63,7 @@ new class extends Component {
                 'slug' => $article->slug,
                 'date' => $article->published_at ? $article->published_at->format('d F Y') : '',
                 'views' => $article->views,
-                'image' => $article->getFirstMediaUrl('image') ?: 'https://placehold.co/600x400',
+                'image' => $article->getFirstMediaUrl('image') ?: asset('placeholder.png'),
             ])
         @endforeach
     </div>

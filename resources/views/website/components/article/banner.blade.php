@@ -2,7 +2,7 @@
 
 <div class="relative w-full h-[60vh] min-h-[400px]">
     {{-- Background Image --}}
-    <img src="{{ $article->getFirstMediaUrl('image') ?: 'https://placehold.co/600x400' }}" alt="{{ $article['title'] }}" class="w-full h-full object-cover">
+    <img src="{{ $article->image }}" alt="{{ $article['title'] }}" class="w-full h-full object-cover">
 
     {{-- Overlay Content --}}
     <div class="absolute inset-0 bg-black/30">

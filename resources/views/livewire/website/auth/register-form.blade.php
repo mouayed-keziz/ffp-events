@@ -17,7 +17,7 @@ new class extends Component {
 
         $validated = $this->validate([
             'name' => 'required|string',
-            'email' => 'required|email|unique:visitors,email',
+            'email' => 'required|email|unique:visitors,email|unique:users,email|unique:exhibitors,email',
             'password' => 'required|min:6|confirmed',
             'terms_accepted' => 'accepted',
         ]);

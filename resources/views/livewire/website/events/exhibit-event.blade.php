@@ -15,7 +15,7 @@ new class extends Component {
     public int $totalSteps = 0;
     public bool $formSubmitted = false;
     public string $successMessage = '';
-    public string $preferred_currency = 'EUR';
+    public string $preferred_currency = 'DZD';
     public float $totalPrice = 0;
 
     public function mount(EventAnnouncement $event)
@@ -24,7 +24,12 @@ new class extends Component {
         $this->initFormData();
     }
 
-   
+    public function updated($name)
+    {
+        if (str_starts_with($name, 'formData')) {
+            $this->calculateTotalPrice();
+        }
+    }
 
     protected function initFormData()
     {
@@ -129,29 +134,12 @@ new class extends Component {
                         </div>
                     @endforeach
 
-                    <!-- Navigation buttons -->
-                    <div class="flex justify-between mt-8">
-                        <button type="button" class="btn btn-outline" wire:click="previousStep"
-                            {{ $currentStep === 0 ? 'disabled' : '' }}>
-                            <x-heroicon-o-arrow-left class="w-5 h-5 mr-2" />
-                            {{ __('Previous') }}
-                        </button>
-
-                        @if ($currentStep < $totalSteps - 1)
-                            <button type="button" class="btn btn-primary" wire:click="nextStep">
-                                {{ __('Next') }}
-                                <x-heroicon-o-arrow-right class="w-5 h-5 ml-2" />
-                            </button>
-                        @else
-                            <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
-                                <span wire:loading.remove>{{ __('Submit') }}</span>
-                                <span wire:loading wire:target="submitForm">
-                                    <x-heroicon-o-arrow-path class="w-5 h-5 animate-spin mr-2" />
-                                    {{ __('Submitting...') }}
-                                </span>
-                            </button>
-                        @endif
-                    </div>
+                    <!-- Form Navigation Component -->
+                    @include('website.components.forms.form-navigation', [ 
+                        "currentStep" => $currentStep ,
+                        "totalSteps" => $totalSteps ,
+                        "isLastStep" => $currentStep === $totalSteps - 1 
+                    ])
                 </div>
             @else
                 <div class="bg-white p-6 rounded-lg shadow-md">
@@ -160,23 +148,10 @@ new class extends Component {
             @endif
         </form>
 
-        <!-- Floating Total Price -->
-        <div class="fixed bottom-4 right-4 z-10 w-full sm:w-80 md:w-96">
-            <div class="bg-white shadow-lg rounded-btn p-4 border">
-                <h3 class="font-semibold mb-4">{{ __('Totale du bon de commande') }}</h3>
-                <div class="mb-2 bg-primary/10 py-2 px-4 rounded-btn">
-                    <div class="text-primary text-xs font-semibold">{{ __('Total HT') }}</div>
-                    <div class="font-bold text-md text-primary">
-                        {{ number_format($totalPrice, 2) }} {{ $this->preferred_currency }}
-                    </div>
-                </div>
-                <div class="bg-primary/10 py-2 px-4 rounded-btn">
-                    <div class="text-primary text-xs font-semibold">{{ __('Total HT') }}</div>
-                    <div class="font-bold text-md text-primary">
-                        {{ number_format($totalPrice, 2) }} {{ $this->preferred_currency }}
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Floating Price Indicator Component -->
+        @include("website.components.forms.price-indicator", [ 
+            "totalPrice" => $totalPrice,
+            "currency" => $preferred_currency,
+        ])
     @endif
 </div>

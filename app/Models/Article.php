@@ -47,7 +47,7 @@ class Article extends Model implements HasMedia
     }
     public function getImageAttribute()
     {
-        return $this->getFirstMediaUrl('image');
+        return $this->getFirstMediaUrl('image') ? $this->getFirstMediaUrl('image') : asset("placeholder_wide.png");
     }
 
     public function scopeDraft(Builder $query): Builder
