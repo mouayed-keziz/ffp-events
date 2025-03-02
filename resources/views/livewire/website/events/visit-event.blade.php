@@ -58,10 +58,10 @@ new class extends Component {
             {{ $successMessage }}
         </div>
     @else
-        <div class="mb-6">
+        {{-- <div class="mb-6">
             <h2 class="text-2xl font-bold mb-2">{{ __('Visitor Registration') }}</h2>
             <p class="text-gray-600">{{ __('Please fill out the form below to register for this event.') }}</p>
-        </div>
+        </div> --}}
         
         <form wire:submit.prevent="submitForm">
             @if ($event->visitorForm)

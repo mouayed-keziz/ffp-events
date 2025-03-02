@@ -3,6 +3,9 @@
 namespace App\Actions;
 
 use App\Models\EventAnnouncement;
+use App\Enums\FormField;
+use App\Enums\FileUploadType;
+use App\Enums\FormInputType;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -31,7 +34,10 @@ class VisitEventFormActions extends BaseFormActions
             ];
 
             foreach ($section['fields'] as $field) {
-                $sectionData['fields'][] = $this->initializeField($field);
+                $fieldType = FormField::tryFrom($field['type']);
+                $sectionData['fields'][] = $fieldType
+                    ? $fieldType->initializeField($field)
+                    : $this->initializeField($field);
             }
 
             $formData[] = $sectionData;
@@ -41,7 +47,7 @@ class VisitEventFormActions extends BaseFormActions
     }
 
     /**
-     * Initialize a single field structure
+     * Initialize a single field structure (fallback method)
      */
     protected function initializeField(array $field): array
     {
@@ -69,9 +75,9 @@ class VisitEventFormActions extends BaseFormActions
         }
 
         // Initialize answer based on field type
-        if ($field['type'] === \App\Enums\FormField::CHECKBOX->value) {
+        if ($field['type'] === FormField::CHECKBOX->value) {
             $fieldData['answer'] = [];
-        } elseif ($field['type'] === \App\Enums\FormField::UPLOAD->value) {
+        } elseif ($field['type'] === FormField::UPLOAD->value) {
             $fieldData['answer'] = null;
         } else {
             $fieldData['answer'] = '';
@@ -106,6 +112,13 @@ class VisitEventFormActions extends BaseFormActions
      */
     protected function getFieldValidationRules(array $field): string
     {
+        $fieldType = FormField::tryFrom($field['type']);
+
+        if ($fieldType) {
+            return implode('|', $fieldType->getValidationRules($field));
+        }
+
+        // Fallback if field type is not recognized
         $fieldRules = [];
 
         // Check if field is required
@@ -115,72 +128,7 @@ class VisitEventFormActions extends BaseFormActions
             $fieldRules[] = 'nullable';
         }
 
-        // Add specific validation rules based on field type
-        switch ($field['type']) {
-            case \App\Enums\FormField::INPUT->value:
-                $fieldRules = array_merge($fieldRules, $this->getInputFieldRules($field));
-                break;
-            case \App\Enums\FormField::UPLOAD->value:
-                $fieldRules = array_merge($fieldRules, $this->getFileUploadRules($field));
-                break;
-            case \App\Enums\FormField::CHECKBOX->value:
-                $fieldRules[] = 'array';
-                break;
-        }
-
         return implode('|', $fieldRules);
-    }
-
-    /**
-     * Get validation rules for input fields based on input type
-     */
-    protected function getInputFieldRules(array $field): array
-    {
-        $rules = [];
-
-        switch ($field['data']['type'] ?? '') {
-            case \App\Enums\FormInputType::EMAIL->value:
-                $rules[] = 'email';
-                break;
-            case \App\Enums\FormInputType::NUMBER->value:
-                $rules[] = 'numeric';
-                break;
-            case \App\Enums\FormInputType::PHONE->value:
-                $rules[] = 'string';
-                break;
-            case \App\Enums\FormInputType::DATE->value:
-                $rules[] = 'date';
-                break;
-            default:
-                $rules[] = 'string';
-                break;
-        }
-
-        return $rules;
-    }
-
-    /**
-     * Get validation rules for file upload fields
-     */
-    protected function getFileUploadRules(array $field): array
-    {
-        $rules = ['file'];
-
-        // Add file type validation based on field definition
-        $fileType = $field['data']['file_type'] ?? \App\Enums\FileUploadType::ANY;
-
-        if ($fileType === \App\Enums\FileUploadType::IMAGE) {
-            $rules[] = 'mimes:jpg,jpeg,png,gif,bmp,webp';
-            $rules[] = 'max:10240'; // 10MB max for images
-        } elseif ($fileType === \App\Enums\FileUploadType::PDF) {
-            $rules[] = 'mimes:pdf';
-            $rules[] = 'max:20480'; // 20MB max for PDFs
-        } else {
-            // For any file type, set a general size limit
-            $rules[] = 'max:25600'; // 25MB general limit
-        }
-
-        return $rules;
     }
 
     /**
@@ -200,57 +148,19 @@ class VisitEventFormActions extends BaseFormActions
             }
 
             foreach ($section['fields'] as $fieldIndex => $field) {
-                // Process choice fields
-                if (!isset($field['answer']) || !in_array($field['type'] ?? '', [
-                    \App\Enums\FormField::SELECT->value,
-                    \App\Enums\FormField::CHECKBOX->value,
-                    \App\Enums\FormField::RADIO->value
-                ])) {
+                if (!isset($field['type']) || !isset($field['answer'])) {
                     continue;
                 }
 
-                // Process based on field type
-                switch ($field['type']) {
-                    case \App\Enums\FormField::SELECT->value:
-                    case \App\Enums\FormField::RADIO->value:
-                        // For single select/radio, find the matching option and convert to translatable array
-                        $processedFormData[$sectionIndex]['fields'][$fieldIndex]['answer'] =
-                            $this->findOptionTranslations($field['data']['options'] ?? [], $field['answer']);
-                        break;
-
-                    case \App\Enums\FormField::CHECKBOX->value:
-                        // For checkboxes (array of values), convert each selected value
-                        if (is_array($field['answer'])) {
-                            $translatedAnswers = [];
-                            foreach ($field['answer'] as $answer) {
-                                $translatedAnswers[] = $this->findOptionTranslations($field['data']['options'] ?? [], $answer);
-                            }
-                            $processedFormData[$sectionIndex]['fields'][$fieldIndex]['answer'] = $translatedAnswers;
-                        }
-                        break;
+                $fieldType = FormField::tryFrom($field['type']);
+                if ($fieldType) {
+                    $processedFormData[$sectionIndex]['fields'][$fieldIndex]['answer'] =
+                        $fieldType->processFieldAnswer($field['answer'], $field['data'] ?? []);
                 }
             }
         }
 
         return $processedFormData;
-    }
-
-    /**
-     * Find the option translations for a given answer value
-     */
-    protected function findOptionTranslations(array $options, $answerValue): array
-    {
-        $currentLocale = app()->getLocale();
-
-        // Find the option with matching value in current locale
-        foreach ($options as $option) {
-            if (isset($option['option'][$currentLocale]) && $option['option'][$currentLocale] === $answerValue) {
-                return $option['option'];
-            }
-        }
-
-        // Fallback: Return the answer value keyed by current locale
-        return [$currentLocale => $answerValue];
     }
 
     /**
@@ -273,7 +183,7 @@ class VisitEventFormActions extends BaseFormActions
 
             foreach ($section['fields'] as $fieldIndex => $field) {
                 // Process file uploads
-                if (isset($field['type']) && $field['type'] === \App\Enums\FormField::UPLOAD->value && isset($field['answer'])) {
+                if (isset($field['type']) && $field['type'] === FormField::UPLOAD->value && isset($field['answer'])) {
                     if ($field['answer'] instanceof TemporaryUploadedFile) {
                         // Generate unique identifier for the file
                         $fileId = (string) Str::uuid();
