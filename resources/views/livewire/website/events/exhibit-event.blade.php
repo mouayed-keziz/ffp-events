@@ -36,6 +36,10 @@ new class extends Component {
         $actions = new ExhibitorFormActions();
         $this->formData = $actions->initFormData($this->event);
         $this->totalSteps = count($this->formData);
+
+        if ($this->totalSteps > 0) {
+            $this->calculateTotalPrice();
+        }
     }
 
     public function nextStep()
@@ -84,8 +88,15 @@ new class extends Component {
         // Calculate final price
         $this->calculateTotalPrice();
 
-        // Save the form submission
-        dd($this->formData);
+        $formData = $this->formData;
+        $formData['total_prices'] = [
+            'DZD' => $actions->calculateTotalPrice($this->formData, 'DZD'),
+            'EUR' => $actions->calculateTotalPrice($this->formData, 'EUR'),
+            'USD' => $actions->calculateTotalPrice($this->formData, 'USD'),
+        ];
+        
+        // Dump and die to display the form data
+        dd($formData);
         // $success = $actions->saveFormSubmission($this->event, $this->formData);
 
         if ($success) {

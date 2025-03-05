@@ -70,6 +70,54 @@ enum FormField: string implements HasLabel
         if (isset($field['data']['file_type'])) {
             $fieldData['data']['file_type'] = $field['data']['file_type'];
         }
+        if (isset($field['data']['plan_tier_id'])) {
+            $fieldData['data']['plan_tier_id'] = $field['data']['plan_tier_id'];
+        }
+        if (isset($field['data']['price'])) {
+            $fieldData['data']['price'] = $field['data']['price'];
+        }
+        if (isset($field['data']['products'])) {
+            $fieldData['data']['products'] = $field['data']['products'];
+
+            // Enhance products with data from the Product model
+            if ($this === self::ECOMMERCE) {
+                foreach ($fieldData['data']['products'] as $index => $product) {
+                    if (isset($product['product_id'])) {
+                        $productModel = \App\Models\Product::find($product['product_id']);
+                        if ($productModel) {
+                            $fieldData['data']['products'][$index]['product_details'] = [
+                                'name' => $productModel->name,
+                                'image' => $productModel->image,
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+
+        // Add quantity field for priced fields
+        if (in_array($this, [self::SELECT_PRICED, self::RADIO_PRICED, self::PLAN_TIER])) {
+            $fieldData['quantity'] = 1;
+        }
+
+        // For plan tier, get associated plans
+        if ($this === self::PLAN_TIER && isset($field['data']['plan_tier_id'])) {
+            $planTier = \App\Models\PlanTier::with('plans')->find($field['data']['plan_tier_id']);
+            if ($planTier) {
+                $fieldData['data']['plan_tier_details'] = [
+                    'title' => $planTier->title,
+                    'plans' => $planTier->plans->map(function ($plan) {
+                        return [
+                            'id' => $plan->id,
+                            'title' => $plan->title,
+                            'content' => $plan->content,
+                            'price' => $plan->price,
+                            'image' => $plan->image,
+                        ];
+                    })->toArray(),
+                ];
+            }
+        }
 
         return $fieldData;
     }
@@ -80,9 +128,11 @@ enum FormField: string implements HasLabel
     public function getDefaultAnswer(array $field = [])
     {
         return match ($this) {
-            self::CHECKBOX => [],
+            self::CHECKBOX, self::CHECKBOX_PRICED => [],
             self::UPLOAD => null,
             self::INPUT => $this->getInputDefaultAnswer($field),
+            self::ECOMMERCE => [], // Empty array for ecommerce products
+            self::SELECT_PRICED, self::RADIO_PRICED, self::PLAN_TIER => '',
             default => '',
         };
     }
@@ -119,7 +169,8 @@ enum FormField: string implements HasLabel
         $additionalRules = match ($this) {
             self::INPUT => $this->getInputValidationRules($field),
             self::UPLOAD => $this->getFileUploadValidationRules($field),
-            self::CHECKBOX => ['array'],
+            self::CHECKBOX, self::CHECKBOX_PRICED => ['array'],
+            self::ECOMMERCE => ['array'],
             default => []
         };
 
@@ -165,12 +216,64 @@ enum FormField: string implements HasLabel
             return $this->findOptionTranslations($fieldData['options'] ?? [], $answer);
         }
 
-        if ($this === self::CHECKBOX && is_array($answer)) {
+        if (in_array($this, [self::SELECT_PRICED, self::RADIO_PRICED]) && !empty($answer)) {
+            $option = $this->findOptionTranslations($fieldData['options'] ?? [], $answer);
+            // Include price information for priced options
+            foreach ($fieldData['options'] ?? [] as $optionItem) {
+                if ($optionItem['option'][app()->getLocale()] === $answer) {
+                    return [
+                        'option' => $option,
+                        'price' => $optionItem['price'] ?? []
+                    ];
+                }
+            }
+            return ['option' => $option, 'price' => []];
+        }
+
+        if (in_array($this, [self::CHECKBOX, self::CHECKBOX_PRICED]) && is_array($answer)) {
             $translatedAnswers = [];
             foreach ($answer as $selectedValue) {
-                $translatedAnswers[] = $this->findOptionTranslations($fieldData['options'] ?? [], $selectedValue);
+                if ($this === self::CHECKBOX_PRICED) {
+                    $option = $this->findOptionTranslations($fieldData['options'] ?? [], $selectedValue);
+                    // Include price information for priced options
+                    foreach ($fieldData['options'] ?? [] as $optionItem) {
+                        if ($optionItem['option'][app()->getLocale()] === $selectedValue) {
+                            $translatedAnswers[] = [
+                                'option' => $option,
+                                'price' => $optionItem['price'] ?? []
+                            ];
+                            break;
+                        }
+                    }
+                } else {
+                    $translatedAnswers[] = $this->findOptionTranslations($fieldData['options'] ?? [], $selectedValue);
+                }
             }
             return $translatedAnswers;
+        }
+
+        if ($this === self::ECOMMERCE && is_array($answer)) {
+            $processedAnswer = [];
+            foreach ($answer as $productId => $productData) {
+                if (!empty($productData['selected']) && $productData['selected'] === true) {
+                    $product = \App\Models\Product::find($productId);
+                    $processedAnswer[$productId] = [
+                        'product_id' => $productId,
+                        'name' => $product ? $product->name : null,
+                        'quantity' => $productData['quantity'] ?? 1,
+                        'selected' => true,
+                    ];
+                }
+            }
+            return $processedAnswer;
+        }
+
+        if ($this === self::PLAN_TIER && !empty($answer)) {
+            $planTier = \App\Models\PlanTier::find($answer);
+            return [
+                'plan_tier_id' => $answer,
+                'title' => $planTier ? $planTier->title : null,
+            ];
         }
 
         return $answer;

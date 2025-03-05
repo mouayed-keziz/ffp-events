@@ -47,12 +47,11 @@
         e.preventDefault();
         this.currentX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
     },
-
     endDrag() {
         if (!this.isDragging) return;
         const diff = this.startX - this.currentX;
         if (Math.abs(diff) > this.threshold) {
-            if(this.isRTL) {
+            if (this.isRTL) {
                 diff > 0 ? this.prev() : this.next();
             } else {
                 diff > 0 ? this.next() : this.prev();

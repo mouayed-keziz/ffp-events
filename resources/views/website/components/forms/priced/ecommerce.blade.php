@@ -15,48 +15,99 @@
     <div class="bg-white border rounded-lg p-4">
         @if(isset($data['products']) && is_array($data['products']) && count($data['products']) > 0)
             <div class="space-y-3">
-                @foreach($data['products'] as $index => $product)
-                    <div class="flex items-center justify-between border-b pb-3">
-                        <div class="flex items-center">
-                            <input 
-                                type="checkbox" 
-                                id="product_{{ $index }}_{{ Str::random(5) }}"
-                                wire:model.live="{{ $answerPath }}.{{ $product['product_id'] }}.selected"
-                                class="checkbox checkbox-sm checkbox-primary mr-3"
-                            />
-                            <label for="product_{{ $index }}_{{ Str::random(5) }}" class="cursor-pointer">
-                                <div class="font-medium">
-                                    {{ __('Product ID') }}: {{ $product['product_id'] }}
+                @foreach($data['products'] as $product)
+                    @php
+                        $productId = $product['product_id'];
+                        $productName = isset($product['product_details']) ? 
+                            ($product['product_details']['name'][app()->getLocale()] ?? $product['product_details']['name']['fr'] ?? "Product {$productId}") : 
+                            "Product {$productId}";
+                        $productImage = isset($product['product_details']) ? 
+                            $product['product_details']['image'] : 
+                            null;
+                    @endphp
+                    
+                    <div class="border rounded-lg overflow-hidden">
+                        <div class="flex flex-wrap md:flex-nowrap">
+                            <!-- Product Image -->
+                            @if($productImage)
+                                <div class="w-full md:w-40 h-40 bg-gray-100">
+                                    <img src="{{ $productImage }}" alt="{{ $productName }}" 
+                                        class="w-full h-full object-cover object-center">
                                 </div>
-                            </label>
-                        </div>
-                        
-                        <div class="flex items-center space-x-3">
-                            <div>
-                                @include('website.components.forms.priced.price-badge', [
-                                    'price' => $product['price'][$this->preferred_currency] ?? 0,
-                                    'currency' => $this->preferred_currency
-                                ])
-                            </div>
+                            @else
+                                <div class="w-full md:w-40 h-40 bg-gray-100 flex items-center justify-center">
+                                    <x-heroicon-o-shopping-bag class="w-12 h-12 text-gray-300" />
+                                </div>
+                            @endif
                             
-                            <div class="flex items-center">
-                                <label class="text-xs text-gray-500 me-2">{{ __('Qty') }}:</label>
-                                <input 
-                                    type="number" 
-                                    min="1" 
-                                    wire:model.live="{{ $answerPath }}.{{ $product['product_id'] }}.quantity"
-                                    class="input input-bordered input-xs w-16 text-center" 
-                                    {{ !isset($this->formData[$answerPath][$product['product_id']]['selected']) || 
-                                      !$this->formData[$answerPath][$product['product_id']]['selected'] ? 'disabled' : '' }}
-                                />
+                            <!-- Product Info -->
+                            <div class="flex-grow p-4">
+                                <div class="flex flex-wrap justify-between items-start">
+                                    <div class="mb-2">
+                                        <div class="font-medium text-lg">{{ $productName }}</div>
+                                        <div class="text-sm text-gray-500">{{ __('ID') }}: {{ $productId }}</div>
+                                    </div>
+                                    
+                                    <div class="text-right">
+                                        @include('website.components.forms.priced.price-badge', [
+                                            'price' => $product['price'][$this->preferred_currency] ?? 0,
+                                            'currency' => $this->preferred_currency
+                                        ])
+                                    </div>
+                                </div>
+                                
+                                <!-- Selection & Quantity -->
+                                <div class="flex flex-wrap mt-4 md:mt-8 items-center justify-between">
+                                    <div class="flex items-center">
+                                        <input 
+                                            type="checkbox" 
+                                            id="product_{{ $productId }}"
+                                            wire:model.live="{{ $answerPath }}.{{ $productId }}.selected"
+                                            class="checkbox checkbox-sm checkbox-primary mr-3" 
+                                        />
+                                        <label for="product_{{ $productId }}" class="cursor-pointer select-none">
+                                            {{ __('Select Product') }}
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="flex items-center mt-2 md:mt-0">
+                                        <label class="text-xs text-gray-500 me-2">{{ __('Quantity') }}:</label>
+                                        <div class="join">
+                                            <button type="button"
+                                                class="join-item btn btn-xs btn-outline"
+                                                wire:click="$set('{{ $answerPath }}.{{ $productId }}.quantity', 
+                                                    Math.max(1, parseInt({{ $answerPath }}.{{ $productId }}.quantity || 1) - 1))"
+                                                {{ !isset($this->formData[$answerPath][$productId]['selected']) || 
+                                                    !$this->formData[$answerPath][$productId]['selected'] ? 'disabled' : '' }}
+                                            >-</button>
+                                            
+                                            <input 
+                                                type="number" 
+                                                min="1" 
+                                                wire:model.live="{{ $answerPath }}.{{ $productId }}.quantity"
+                                                class="join-item input input-xs input-bordered w-16 text-center" 
+                                                {{ !isset($this->formData[$answerPath][$productId]['selected']) || 
+                                                    !$this->formData[$answerPath][$productId]['selected'] ? 'disabled' : '' }}
+                                            />
+                                            
+                                            <button type="button"
+                                                class="join-item btn btn-xs btn-outline"
+                                                wire:click="$set('{{ $answerPath }}.{{ $productId }}.quantity', 
+                                                    parseInt({{ $answerPath }}.{{ $productId }}.quantity || 1) + 1)"
+                                                {{ !isset($this->formData[$answerPath][$productId]['selected']) || 
+                                                    !$this->formData[$answerPath][$productId]['selected'] ? 'disabled' : '' }}
+                                            >+</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 @endforeach
             </div>
         @else
-            <div class="text-gray-500 text-center py-4">
-                <x-heroicon-o-shopping-cart class="w-8 h-8 mx-auto mb-2 text-primary/50" />
+            <div class="text-gray-500 text-center py-8">
+                <x-heroicon-o-shopping-cart class="w-12 h-12 mx-auto mb-2 text-primary/50" />
                 <p>{{ __('No products available') }}</p>
             </div>
         @endif
