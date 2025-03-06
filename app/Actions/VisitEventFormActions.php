@@ -120,11 +120,16 @@ class VisitEventFormActions extends BaseFormActions
                 if (isset($field['type']) && isset($field['answer'])) {
                     $fieldType = FormField::tryFrom($field['type']);
                     if ($fieldType) {
-                        $processedFormData[$sectionIndex]['fields'][$fieldIndex]['answer'] =
-                            $fieldType->processFieldAnswer(
-                                $field['answer'],
-                                $field['data'] ?? []
-                            );
+                        // if its file upload then put the answer as file id
+                        if ($fieldType === FormField::UPLOAD) {
+                            $processedFormData[$sectionIndex]['fields'][$fieldIndex]['answer'] = $fileId;
+                        } else {
+                            $processedFormData[$sectionIndex]['fields'][$fieldIndex]['answer'] =
+                                $fieldType->processFieldAnswer(
+                                    $field['answer'],
+                                    $field['data'] ?? []
+                                );
+                        }
                     }
                 }
             }

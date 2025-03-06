@@ -223,13 +223,8 @@ enum FormField: string implements HasLabel
         $currentLocale = app()->getLocale();
 
         // Special case for file uploads
-        if ($this === self::UPLOAD) {
-            if ($answer instanceof TemporaryUploadedFile) {
-                // File uploads are handled separately with a UUID
-                return (string) Str::uuid();
-            }
-            return $answer; // Return the fileId if it's already processed
-        }
+        // i
+
 
         // Process different field types
         switch ($this) {

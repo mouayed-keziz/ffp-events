@@ -97,7 +97,7 @@ class ExhibitorFormResource extends Resource
                             ->label(__("panel/forms.exhibitors.title"))
                             ->translatable(),
                         TextInput::make('description')
-                            ->label(__("panel/forms.exhibitors.title"))
+                            ->label(__("panel/forms.exhibitors.description"))
                             ->translatable(),
                     ]),
                 Section::make(__("panel/forms.exhibitors.images"))

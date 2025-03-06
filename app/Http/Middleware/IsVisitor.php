@@ -15,7 +15,6 @@ class IsVisitor
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Ensure the user is authenticated with the visitor guard
         if (auth()->guard('visitor')->check()) {
             return $next($request);
         }

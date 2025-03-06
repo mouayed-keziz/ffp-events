@@ -3,7 +3,7 @@
 <div class="mb-4">
     <label class="label">
         <span class="label-text font-medium {{ isset($data['required']) && $data['required'] ? 'required' : '' }}">
-            {{ $data['label'][app()->getLocale()] ?? $data['label']['fr'] ?? '' }}
+            {{ $data['label'][app()->getLocale()] ?? ($data['label']['fr'] ?? '') }}
         </span>
         @if (isset($data['description']) && !empty($data['description'][app()->getLocale()]))
             <span class="label-text-alt text-xs text-gray-500">
@@ -12,103 +12,114 @@
         @endif
     </label>
 
-    <div class="bg-white border rounded-lg p-4">
-        @if(isset($data['plan_tier_id']))
-            <div class="flex items-center justify-between">
-                <div>
-                    @if(isset($data['plan_tier_details']['title']))
-                        <div class="font-medium text-lg">
-                            {{ $data['plan_tier_details']['title'][app()->getLocale()] ?? 
-                               $data['plan_tier_details']['title']['fr'] ?? 
-                               __('Plan Tier') }}
-                        </div>
-                    @else
-                        <div class="font-medium">{{ __('Plan Tier') }}</div>
-                    @endif
-                    <div class="text-xs text-gray-500">ID: {{ $data['plan_tier_id'] }}</div>
-                    <input type="hidden" wire:model="{{ $answerPath }}" value="{{ $data['plan_tier_id'] }}" />
-                </div>
-                
-                <div class="flex items-center">
-                    <label class="text-xs text-gray-500 me-2">{{ __('Qty') }}:</label>
-                    <div class="join">
-                        <button type="button"
-                            class="join-item btn btn-xs btn-outline"
-                            wire:click="$set('{{ Str::replaceLast('.answer', '.quantity', $answerPath) }}', 
-                                Math.max(1, parseInt({{ Str::replaceLast('.answer', '.quantity', $answerPath) }} || 1) - 1))"
-                        >-</button>
-                        
-                        <input 
-                            type="number" 
-                            min="1" 
-                            wire:model.live="{{ Str::replaceLast('.answer', '.quantity', $answerPath) }}"
-                            class="join-item input input-xs input-bordered w-16 text-center" 
-                        />
-                        
-                        <button type="button"
-                            class="join-item btn btn-xs btn-outline"
-                            wire:click="$set('{{ Str::replaceLast('.answer', '.quantity', $answerPath) }}', 
-                                parseInt({{ Str::replaceLast('.answer', '.quantity', $answerPath) }} || 1) + 1)"
-                        >+</button>
-                    </div>
-                </div>
-            </div>
-            
-            @if(isset($data['plan_tier_details']['plans']) && count($data['plan_tier_details']['plans']) > 0)
-                <div class="mt-4 space-y-3">
-                    <div class="font-medium text-sm text-gray-600">{{ __('Available Plans:') }}</div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                        @foreach($data['plan_tier_details']['plans'] as $plan)
-                            <div class="border rounded-md p-3 bg-gray-50">
-                                @if(isset($plan['image']) && $plan['image'])
-                                    <div class="mb-2 h-24 bg-gray-200 rounded overflow-hidden">
-                                        <img src="{{ $plan['image'] }}" alt="" class="w-full h-full object-cover">
-                                    </div>
-                                @endif
-                                
-                                <div class="font-medium">
-                                    {{ $plan['title'][app()->getLocale()] ?? $plan['title']['fr'] ?? 'Plan' }}
-                                </div>
-                                
-                                @if(isset($plan['content']) && !empty($plan['content'][app()->getLocale()]))
-                                    <div class="text-xs text-gray-600 line-clamp-2 my-1">
-                                        {{ $plan['content'][app()->getLocale()] }}
-                                    </div>
-                                @endif
-                                
-                                <div class="mt-2">
-                                    @include('website.components.forms.priced.price-badge', [
-                                        'price' => $plan['price'][$this->preferred_currency] ?? 0,
-                                        'currency' => $this->preferred_currency,
-                                        'quantity' => $this->formData[Str::replaceLast('.answer', '.quantity', $answerPath)] ?? 1
-                                    ])
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
+    <div>
+        @if (isset($data['plan_tier_id']))
+            @if (isset($data['plan_tier_details']['title']))
+                <div class="font-medium text-lg mb-4">
+                    {{ $data['plan_tier_details']['title'][app()->getLocale()] ??
+                        ($data['plan_tier_details']['title']['fr'] ?? __('Plan Tier')) }}
                 </div>
             @endif
-            
-            <div class="mt-4 bg-primary/10 p-3 rounded-md">
-                <div class="flex justify-between text-sm">
-                    <span class="font-medium">{{ __('Price') }}:</span>
-                    <span class="font-bold text-primary">
+
+            @if (isset($data['plan_tier_details']['plans']) && count($data['plan_tier_details']['plans']) > 0)
+                @php
+                    $selectedPlanId = $this->{$answerPath} ?? null;
+                    $dir = app()->getLocale() === 'ar' ? 'rtl' : 'ltr';
+                    $chevronClass = $dir === 'rtl' ? 'ms-1' : 'me-1';
+                @endphp
+
+                <div class="space-y-3">
+                    @foreach ($data['plan_tier_details']['plans'] as $plan)
                         @php
-                            $planPrice = 0;
-                            if (isset($data['price'][$this->preferred_currency])) {
-                                $planPrice = $data['price'][$this->preferred_currency];
-                            } elseif (isset($data['plan_tier_details']['plans'][0]['price'][$this->preferred_currency])) {
-                                $planPrice = $data['plan_tier_details']['plans'][0]['price'][$this->preferred_currency];
-                            }
-                            $quantity = $this->formData[Str::replaceLast('.answer', '.quantity', $answerPath)] ?? 1;
+                            $isSelected = $selectedPlanId == $plan['id'];
                         @endphp
-                        
-                        {{ number_format($planPrice * $quantity, 2) }} 
-                        {{ $this->preferred_currency }}
-                    </span>
+                        <div x-data="{ expanded: false }"
+                            class="w-full rounded-xl transition-all {{ $isSelected ? 'bg-primary/10 border-2 border-primary/70' : '' }}">
+                            <!-- Plan option row with radio button -->
+                            <div class="flex items-center justify-between py-3 px-3 rounded-xl">
+                                <div class="flex items-center gap-3">
+                                    <input type="radio" id="plan_{{ $plan['id'] }}" name="plan_selection"
+                                        value="{{ $plan['id'] }}" wire:model="{{ $answerPath }}"
+                                        class="radio radio-sm" />
+                                    <label for="plan_{{ $plan['id'] }}" class="font-medium cursor-pointer">
+                                        {{ $plan['title'][app()->getLocale()] ?? ($plan['title']['fr'] ?? 'Plan') }}
+                                    </label>
+
+                                    <div>
+                                        @include('website.components.forms.priced.price-badge', [
+                                            'price' => $plan['price'][$this->preferred_currency ?? 'DZD'] ?? 0,
+                                            'currency' => $this->preferred_currency ?? 'DZD',
+                                        ])
+                                    </div>
+                                </div>
+
+                                <button type="button" class="text-sm font-bold text-black hover:text-primary"
+                                    x-on:click="expanded = !expanded" dir="{{ $dir }}">
+                                    <span x-show="!expanded">
+                                        @if ($dir === 'rtl')
+                                            {{ __('See more') }}
+                                            <x-heroicon-o-chevron-left
+                                                class="w-4 h-4 inline-block {{ $chevronClass }}" />
+                                        @else
+                                            <x-heroicon-o-chevron-right
+                                                class="w-4 h-4 inline-block {{ $chevronClass }}" />
+                                            {{ __('See more') }}
+                                        @endif
+                                    </span>
+                                    <span x-show="expanded">
+                                        @if ($dir === 'rtl')
+                                            {{ __('See less') }}
+                                            <x-heroicon-o-chevron-up
+                                                class="w-4 h-4 inline-block {{ $chevronClass }}" />
+                                        @else
+                                            <x-heroicon-o-chevron-up
+                                                class="w-4 h-4 inline-block {{ $chevronClass }}" />
+                                            {{ __('See less') }}
+                                        @endif
+                                    </span>
+                                </button>
+                            </div>
+
+                            <!-- Expandable content -->
+                            <div x-show="expanded" x-collapse class="py-3 px-3">
+                                <div class="grid grid-cols-8 gap-4">
+                                    <!-- Plan Image (3 columns) -->
+                                    <div class="col-span-3">
+                                        @if (isset($plan['image']) && $plan['image'])
+                                            <img src="{{ $plan['image'] }}"
+                                                alt="{{ $plan['title'][app()->getLocale()] ?? ($plan['title']['fr'] ?? 'Plan') }}"
+                                                class="w-full h-auto rounded-lg object-cover">
+                                        @else
+                                            <div
+                                                class="w-full aspect-[4/3] bg-gray-100 rounded-lg flex items-center justify-center">
+                                                <x-heroicon-o-document-text class="w-12 h-12 text-gray-300" />
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <!-- Plan Content (5 columns) -->
+                                    <div class="col-span-5">
+                                        <div class="font-medium text-lg mb-2">
+                                            {{ $plan['title'][app()->getLocale()] ?? ($plan['title']['fr'] ?? 'Plan') }}
+                                        </div>
+
+                                        @if (isset($plan['content']) && !empty($plan['content'][app()->getLocale()]))
+                                            <div
+                                                class="prose prose-sm max-w-none prose-headings:text-primary prose-headings:font-bold">
+                                                {!! $plan['content'][app()->getLocale()] !!}
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
-            </div>
+            @else
+                <div class="text-gray-500 text-center py-4">
+                    {{ __('No plans available') }}
+                </div>
+            @endif
         @else
             <div class="text-gray-500 text-center py-4">
                 <x-heroicon-o-table-cells class="w-8 h-8 mx-auto mb-2 text-primary/50" />

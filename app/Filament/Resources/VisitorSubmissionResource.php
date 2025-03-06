@@ -157,8 +157,8 @@ class VisitorSubmissionResource extends Resource
     {
         return [
             'index' => Pages\ListVisitorSubmissions::route('/'),
-            'create' => Pages\CreateVisitorSubmission::route('/create'),
-            'edit' => Pages\EditVisitorSubmission::route('/{record}/edit'),
+            // 'create' => Pages\CreateVisitorSubmission::route('/create'),
+            // 'edit' => Pages\EditVisitorSubmission::route('/{record}/edit'),
         ];
     }
 }
