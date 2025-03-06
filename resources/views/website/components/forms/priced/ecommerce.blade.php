@@ -13,7 +13,7 @@
     </label>
 
     @if (isset($data['products']) && is_array($data['products']) && count($data['products']) > 0)
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             @foreach ($data['products'] as $product)
                 @php
                     $productId = $product['product_id'];
@@ -23,28 +23,34 @@
                         : "Product {$productId}";
                     $productCode = isset($product['product_details']) ? $product['product_details']['code'] : null;
                     $productImage = isset($product['product_details']) ? $product['product_details']['image'] : null;
-                    $isSelected =
-                        isset($this->formData[$answerPath][$productId]['selected']) &&
-                        $this->formData[$answerPath][$productId]['selected'];
+
+                    // Safely access nested array values using dot notation through wire model path
+                    $fullPath = "{$answerPath}.{$productId}";
+                    $selectedPath = "formData.{$fullPath}.selected";
+                    $quantityPath = "formData.{$fullPath}.quantity";
+
+                    $isSelected = isset($this->{$selectedPath}) ? $this->{$selectedPath} : false;
+                    $quantity = isset($this->{$quantityPath}) ? $this->{$quantityPath} : 1;
                 @endphp
 
                 <div x-data="{
                     productId: {{ $productId }},
-                    selected: @js($isSelected),
-                    quantity: @js($this->formData[$answerPath][$productId]['quantity'] ?? 1),
+                    selected: {{ $isSelected ? 'true' : 'false' }},
+                    quantity: {{ $quantity }},
                     updateProduct() {
-                        this.$wire.set('{{ $answerPath }}.{{ $productId }}.selected', this.selected);
-                        this.$wire.set('{{ $answerPath }}.{{ $productId }}.quantity', this.quantity);
+                        $wire.set('formData.{{ $answerPath }}.{{ $productId }}.selected', this.selected);
+                        $wire.set('formData.{{ $answerPath }}.{{ $productId }}.quantity', this.quantity);
                     }
-                }" x-init="$watch('selected', value => updateProduct())"
-                    x-bind:class="selected ? 'border-2 border-primary bg-primary/10' : ''"
-                    class="rounded-lg shadow-sm overflow-hidden transition-all">
+                }" x-init="$watch('selected', () => updateProduct());
+                $watch('quantity', () => updateProduct())"
+                    x-bind:class="selected ? 'border-2 border-primary/60 bg-primary/10' : ''"
+                    class="rounded-xl overflow-hidden transition-all">
 
                     <!-- Product Image -->
-                    <div class="aspect-[4/3] bg-gray-100">
+                    <div class="aspect-[56/43]">
                         @if ($productImage)
                             <img src="{{ $productImage }}" alt="{{ $productName }}"
-                                class="w-full h-full object-cover object-center rounded-t-lg">
+                                class="w-full h-full object-cover object-center rounded-xl">
                         @else
                             <div class="h-full flex items-center justify-center">
                                 <x-heroicon-o-shopping-bag class="w-12 h-12 text-gray-300" />
@@ -56,7 +62,7 @@
                     <div class="p-4">
                         <div class="flex items-center space-x-2 mb-1">
                             <input type="checkbox" id="product_{{ $productId }}" x-model="selected"
-                                class="checkbox checkbox-primary rounded-md" />
+                                class="checkbox checkbox-sm rounded-md" />
 
                             <label for="product_{{ $productId }}"
                                 class="font-medium text-base truncate cursor-pointer"
@@ -65,18 +71,18 @@
 
                         <div class="text-sm text-gray-500 mb-2">{{ __('Code') }}: {{ $productCode ?? '-' }}</div>
 
-                        <div class="flex items-center justify-between">
-                            <div>
-                                @include('website.components.forms.priced.price-badge', [
-                                    'price' => $product['price'][$this->preferred_currency] ?? 0,
-                                    'currency' => $this->preferred_currency,
-                                ])
+                        <div class="grid grid-cols-7 gap-2 items-center">
+                            <div class="col-span-4">
+                                <input class="input input-sm input-bordered rounded-md w-full" type="number"
+                                    x-model="quantity" min="1" step="1" x-bind:disabled="!selected"
+                                    x-bind:class="!selected ? 'opacity-60' : ''" placeholder="{{ __('Qty') }}" />
                             </div>
 
-                            <div x-show="selected" x-transition>
-                                <input class="input input-sm input-bordered rounded-md w-24" type="number"
-                                    x-model="quantity" min="1" step="1"
-                                    placeholder="{{ __('Qty') }}" />
+                            <div class="col-span-3 text-right">
+                                @include('website.components.forms.priced.price-badge', [
+                                    'price' => $product['price'][$this->preferred_currency ?? 'DZD'] ?? 0,
+                                    'currency' => $this->preferred_currency ?? 'DZD',
+                                ])
                             </div>
                         </div>
                     </div>
