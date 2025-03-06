@@ -46,6 +46,15 @@ class IseedProductsTableSeeder extends Seeder
                 'updated_at' => '2025-02-17 19:36:12',
                 'deleted_at' => NULL,
             ),
+            3 => 
+            array (
+                'id' => 4,
+                'name' => '{"fr":"something special","en":"something special","ar":"something special"}',
+                'code' => 'something-special',
+                'created_at' => '2025-03-06 15:19:27',
+                'updated_at' => '2025-03-06 15:19:27',
+                'deleted_at' => NULL,
+            ),
         ));
         
         

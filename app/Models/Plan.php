@@ -39,6 +39,6 @@ class Plan extends Model implements HasMedia
 
     public function getImageAttribute()
     {
-        return $this->hasMedia('image') ? $this->getFirstMediaUrl('image') : null;
+        return $this->hasMedia('image') ? $this->getFirstMediaUrl('image') : asset("placeholder.png");
     }
 }

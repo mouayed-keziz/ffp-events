@@ -462,7 +462,7 @@ enum FormField: string implements HasLabel
                 $planId = is_array($answer) && isset($answer['plan_id']) ? $answer['plan_id'] : $answer;
 
                 // Get price from plan tier details
-                if (isset($fieldData['plan_tier_details'])) {
+                if (isset($fieldData['plan_tier_details']) && isset($fieldData['plan_tier_details']['plans'])) {
                     foreach ($fieldData['plan_tier_details']['plans'] ?? [] as $plan) {
                         if ($plan['id'] == $planId) {
                             $planPrice = floatval($plan['price'][$preferredCurrency] ?? 0);

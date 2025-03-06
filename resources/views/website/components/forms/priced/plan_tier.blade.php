@@ -1,5 +1,5 @@
 @props(['data', 'answerPath'])
-
+{{-- {{ dd($data) }}     --}}
 <div class="mb-4">
     <label class="label">
         <span class="label-text font-medium {{ isset($data['required']) && $data['required'] ? 'required' : '' }}">
@@ -34,7 +34,7 @@
                             $isSelected = $selectedPlanId == $plan['id'];
                         @endphp
                         <div x-data="{ expanded: false }"
-                            class="w-full rounded-xl transition-all {{ $isSelected ? 'bg-primary/10 border-2 border-primary/70' : '' }}">
+                            class="w-full rounded-xl transition-all {{ $isSelected ? 'border-primary/60 bg-primary/10' : '' }}">
                             <!-- Plan option row with radio button -->
                             <div class="flex items-center justify-between py-3 px-3 rounded-xl">
                                 <div class="flex items-center gap-3">
@@ -42,7 +42,7 @@
                                         value="{{ $plan['id'] }}" wire:model="{{ $answerPath }}"
                                         class="radio radio-sm" />
                                     <label for="plan_{{ $plan['id'] }}" class="font-medium cursor-pointer">
-                                        {{ $plan['title'][app()->getLocale()] ?? ($plan['title']['fr'] ?? 'Plan') }}
+                                        {{ $plan['title'] }}
                                     </label>
 
                                     <div>
@@ -58,10 +58,10 @@
                                     <span x-show="!expanded">
                                         @if ($dir === 'rtl')
                                             {{ __('See more') }}
-                                            <x-heroicon-o-chevron-left
+                                            <x-heroicon-o-chevron-down
                                                 class="w-4 h-4 inline-block {{ $chevronClass }}" />
                                         @else
-                                            <x-heroicon-o-chevron-right
+                                            <x-heroicon-o-chevron-down
                                                 class="w-4 h-4 inline-block {{ $chevronClass }}" />
                                             {{ __('See more') }}
                                         @endif
@@ -81,14 +81,14 @@
                             </div>
 
                             <!-- Expandable content -->
-                            <div x-show="expanded" x-collapse class="py-3 px-3">
+                            <div x-show="expanded" x-collapse
+                                class="py-3 px-3 {{ $isSelected ? 'border-primary/60 bg-primary/10' : '' }}">
                                 <div class="grid grid-cols-8 gap-4">
                                     <!-- Plan Image (3 columns) -->
                                     <div class="col-span-3">
                                         @if (isset($plan['image']) && $plan['image'])
-                                            <img src="{{ $plan['image'] }}"
-                                                alt="{{ $plan['title'][app()->getLocale()] ?? ($plan['title']['fr'] ?? 'Plan') }}"
-                                                class="w-full h-auto rounded-lg object-cover">
+                                            <img src="{{ $plan['image'] }}" alt="{{ $plan['title'] }}"
+                                                class="w-full aspect-[55/43] h-auto rounded-lg object-cover">
                                         @else
                                             <div
                                                 class="w-full aspect-[4/3] bg-gray-100 rounded-lg flex items-center justify-center">
@@ -100,7 +100,7 @@
                                     <!-- Plan Content (5 columns) -->
                                     <div class="col-span-5">
                                         <div class="font-medium text-lg mb-2">
-                                            {{ $plan['title'][app()->getLocale()] ?? ($plan['title']['fr'] ?? 'Plan') }}
+                                            {!! $plan['content'] !!}
                                         </div>
 
                                         @if (isset($plan['content']) && !empty($plan['content'][app()->getLocale()]))

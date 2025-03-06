@@ -29,7 +29,20 @@ class IseedExhibitorsTableSeeder extends Seeder
                 'remember_token' => NULL,
                 'currency' => 'DZD',
                 'created_at' => '2025-02-21 17:18:15',
-                'updated_at' => '2025-02-22 17:28:31',
+                'updated_at' => '2025-03-06 16:07:21',
+                'deleted_at' => '2025-03-06 16:07:21',
+            ),
+            1 => 
+            array (
+                'id' => 2,
+                'name' => 'redspot',
+                'email' => 'redspot@yopmail.com',
+                'verified_at' => NULL,
+                'password' => '$2y$12$vTp7WGz/9ccLOjskOL48FulEd/0JTn8cOOmA7f9NlxvddDiIi5Mtu',
+                'remember_token' => NULL,
+                'currency' => 'DZD',
+                'created_at' => '2025-03-06 16:07:37',
+                'updated_at' => '2025-03-06 16:07:37',
                 'deleted_at' => NULL,
             ),
         ));

@@ -394,6 +394,21 @@ class IseedActivityLogTableSeeder extends Seeder
                 'event' => 'modification',
                 'batch_uuid' => NULL,
             ),
+            25 => 
+            array (
+                'id' => 26,
+                'log_name' => 'event_announcements',
+                'description' => 'Modification de l\'événement',
+                'subject_type' => 'App\\Models\\EventAnnouncement',
+                'subject_id' => 2,
+                'causer_type' => 'App\\Models\\User',
+                'causer_id' => 1,
+            'properties' => '{"title":{"fr":{"ancien":"a","nouveau":"SIFFP"},"en":{"ancien":"b","nouveau":"SIFFP"},"ar":{"ancien":"c","nouveau":"SIFFP"}},"description":{"fr":{"ancien":"d","nouveau":"5eme salon international pour le professionnels de la fa\\u00e7ade, la fenetre et la porte"},"en":{"ancien":"e","nouveau":"5eme salon international pour le professionnels de la fa\\u00e7ade, la fenetre et la porte"},"ar":{"ancien":"f","nouveau":"5eme salon international pour le professionnels de la fa\\u00e7ade, la fenetre et la porte"}},"content":{"fr":{"ancien":"<p>g<\\/p>","nouveau":"<p>27 \\/ 09 \\/ 2023<\\/p><p>5eme salon international pour le professionnels de la fa\\u00e7ade, la fenetre et la porte<\\/p><p>Statut d\\u2019inscription<\\/p><p>Non enregistr\\u00e9(e)<\\/p><p>Les inscriptions sont ouvertes jusqu\\u2019\\u00e0<\\/p><p>30 \\/ 08 \\/ 2023<\\/p>"},"en":{"ancien":"<p>h<\\/p>","nouveau":"<p>27 \\/ 09 \\/ 2023<\\/p><p>5eme salon international pour le professionnels de la fa\\u00e7ade, la fenetre et la porte<\\/p><p>Statut d\\u2019inscription<\\/p><p>Non enregistr\\u00e9(e)<\\/p><p>Les inscriptions sont ouvertes jusqu\\u2019\\u00e0<\\/p><p>30 \\/ 08 \\/ 2023<\\/p>"},"ar":{"ancien":"<p>i<\\/p>","nouveau":"<p>27 \\/ 09 \\/ 2023<\\/p><p>5eme salon international pour le professionnels de la fa\\u00e7ade, la fenetre et la porte<\\/p><p>Statut d\\u2019inscription<\\/p><p>Non enregistr\\u00e9(e)<\\/p><p>Les inscriptions sont ouvertes jusqu\\u2019\\u00e0<\\/p><p>30 \\/ 08 \\/ 2023<\\/p>"}}}',
+                'created_at' => '2025-03-06 14:46:21',
+                'updated_at' => '2025-03-06 14:46:21',
+                'event' => 'modification',
+                'batch_uuid' => NULL,
+            ),
         ));
         
         

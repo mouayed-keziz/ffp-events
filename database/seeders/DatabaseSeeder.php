@@ -48,5 +48,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call(IseedSettingsTableSeeder::class);
         // $this->call(IseedVisitorSubmissionsTableSeeder::class);
+        $this->call(IseedExhibitorSubmissionsTableSeeder::class);
     }
 }

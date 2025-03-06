@@ -26,7 +26,7 @@ class GenerateSeeder extends Command
     public function handle()
     {
         $this->call('iseed', [
-            'tables' => 'users,categories,event_announcements,articles,article_category,activity_log,roles,permissions,model_has_permissions,model_has_roles,role_has_permissions,notifications,settings,visitor_forms,products,exhibitor_forms,exhibitors,visitors,visitor_submissions',
+            'tables' => 'users,categories,event_announcements,articles,article_category,activity_log,roles,permissions,model_has_permissions,model_has_roles,role_has_permissions,notifications,settings,visitor_forms,products,exhibitor_forms,exhibitors,visitors,visitor_submissions,exhibitor_submissions',
             '--clean' => true,
             '--force' => true,
             '--classnameprefix' => 'Iseed', // all generated classes will share this prefix

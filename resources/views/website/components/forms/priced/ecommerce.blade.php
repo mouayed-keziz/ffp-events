@@ -17,13 +17,9 @@
             @foreach ($data['products'] as $product)
                 @php
                     $productId = $product['product_id'];
-                    $productName = isset($product['product_details'])
-                        ? $product['product_details']['name'][app()->getLocale()] ??
-                            ($product['product_details']['name']['fr'] ?? "Product {$productId}")
-                        : "Product {$productId}";
+                    $productName = isset($product['product_details']) ? $product['product_details']['name'] : null;
                     $productCode = isset($product['product_details']) ? $product['product_details']['code'] : null;
                     $productImage = isset($product['product_details']) ? $product['product_details']['image'] : null;
-
                     // Safely access nested array values using dot notation through wire model path
                     $fullPath = "{$answerPath}.{$productId}";
                     $selectedPath = "formData.{$fullPath}.selected";
@@ -66,7 +62,7 @@
                                 x-bind:class="selected ? 'checkbox-primary' : ''" />
 
                             <label for="product_{{ $productId }}"
-                                class="font-medium text-base truncate cursor-pointer"
+                                class="font-medium text-sm text-base truncate cursor-pointer"
                                 title="{{ $productName }}">{{ $productName }}</label>
                         </div>
 
