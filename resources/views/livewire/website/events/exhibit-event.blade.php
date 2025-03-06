@@ -18,19 +18,29 @@ new class extends Component {
     public string $preferred_currency = 'DZD';
     public float $totalPrice = 0;
 
+    /**
+     * Initialize the component
+     */
     public function mount(EventAnnouncement $event)
     {
         $this->event = $event;
         $this->initFormData();
     }
 
+    /**
+     * Listen for any updates to form data and recalculate the price
+     */
     public function updated($name)
     {
+        // When any formData property changes, trigger price recalculation
         if (str_starts_with($name, 'formData')) {
             $this->calculateTotalPrice();
         }
     }
 
+    /**
+     * Initialize form data from the event's exhibitor forms
+     */
     protected function initFormData()
     {
         $actions = new ExhibitorFormActions();
@@ -42,6 +52,9 @@ new class extends Component {
         }
     }
 
+    /**
+     * Move to the next step in the form
+     */
     public function nextStep()
     {
         // Validate the current step before proceeding
@@ -51,10 +64,13 @@ new class extends Component {
             $this->currentStep++;
         }
 
-        // Calculate total price
+        // Calculate total price when moving to a new step
         $this->calculateTotalPrice();
     }
 
+    /**
+     * Move to the previous step in the form
+     */
     public function previousStep()
     {
         if ($this->currentStep > 0) {
@@ -65,6 +81,9 @@ new class extends Component {
         $this->calculateTotalPrice();
     }
 
+    /**
+     * Validate the current form step
+     */
     protected function validateCurrentStep()
     {
         $actions = new ExhibitorFormActions();
@@ -72,12 +91,29 @@ new class extends Component {
         $this->validate($rules);
     }
 
-    protected function calculateTotalPrice()
+    /**
+     * Calculate the total price for all selected items
+     */
+    public function calculateTotalPrice()
     {
         $actions = new ExhibitorFormActions();
         $this->totalPrice = $actions->calculateTotalPrice($this->formData, $this->preferred_currency);
     }
 
+    /**
+     * Change the preferred currency and recalculate prices
+     */
+    public function changeCurrency($currency)
+    {
+        if (in_array($currency, ['DZD', 'EUR', 'USD'])) {
+            $this->preferred_currency = $currency;
+            $this->calculateTotalPrice();
+        }
+    }
+
+    /**
+     * Submit the entire form
+     */
     public function submitForm()
     {
         // Validate the final step
@@ -85,19 +121,8 @@ new class extends Component {
 
         $actions = new ExhibitorFormActions();
 
-        // Calculate final price
-        $this->calculateTotalPrice();
-
-        $formData = $this->formData;
-        $formData['total_prices'] = [
-            'DZD' => $actions->calculateTotalPrice($this->formData, 'DZD'),
-            'EUR' => $actions->calculateTotalPrice($this->formData, 'EUR'),
-            'USD' => $actions->calculateTotalPrice($this->formData, 'USD'),
-        ];
-        
-        // Dump and die to display the form data
-        dd($formData);
-        // $success = $actions->saveFormSubmission($this->event, $this->formData);
+        // Process and save the form submission
+        $success = $actions->saveFormSubmission($this->event, $this->formData);
 
         if ($success) {
             $this->formSubmitted = true;
@@ -110,13 +135,13 @@ new class extends Component {
 
 <div class="container mx-auto py-8 px-4">
     @include('website.components.forms.multi-step-form', [
-        'steps' => $formData, 
-        'currentStep' => $currentStep, 
-        'errors' => $errors, 
-        'formSubmitted' => $formSubmitted, 
-        'successMessage' => $successMessage
+        'steps' => $formData,
+        'currentStep' => $currentStep,
+        'errors' => $errors,
+        'formSubmitted' => $formSubmitted,
+        'successMessage' => $successMessage,
     ])
-    
+
     @if (!$formSubmitted)
         <form wire:submit.prevent="submitForm">
             @if (!empty($formData))
@@ -125,17 +150,19 @@ new class extends Component {
                     @foreach ($formData[$currentStep]['sections'] as $sectionIndex => $section)
                         <div class="mb-8">
                             @include('website.components.forms.input.section_title', [
-                                'title' => $section['title'][app()->getLocale()] ?? ($section['title']['fr'] ?? ''),
+                                'title' =>
+                                    $section['title'][app()->getLocale()] ?? ($section['title']['fr'] ?? ''),
                             ])
 
                             @foreach ($section['fields'] as $fieldIndex => $field)
                                 @php
                                     $answerPath = "{$currentStep}.sections.{$sectionIndex}.fields.{$fieldIndex}.answer";
+                                    $fieldType = App\Enums\FormField::tryFrom($field['type']);
                                 @endphp
 
                                 @include('website.components.forms.fields', [
                                     'fields' => [$field],
-                                    'answerPath' => $answerPath
+                                    'answerPath' => $answerPath,
                                 ])
 
                                 @error("formData.{$answerPath}")
@@ -146,10 +173,10 @@ new class extends Component {
                     @endforeach
 
                     <!-- Form Navigation Component -->
-                    @include('website.components.forms.form-navigation', [ 
-                        "currentStep" => $currentStep ,
-                        "totalSteps" => $totalSteps ,
-                        "isLastStep" => $currentStep === $totalSteps - 1 
+                    @include('website.components.forms.form-navigation', [
+                        'currentStep' => $currentStep,
+                        'totalSteps' => $totalSteps,
+                        'isLastStep' => $currentStep === $totalSteps - 1,
                     ])
                 </div>
             @else
@@ -159,10 +186,10 @@ new class extends Component {
             @endif
         </form>
 
-        <!-- Floating Price Indicator Component -->
-        @include("website.components.forms.price-indicator", [ 
-            "totalPrice" => $totalPrice,
-            "currency" => $preferred_currency,
+        <!-- Floating Price Indicator Component with Currency Selector -->
+        @include('website.components.forms.price-indicator', [
+            'totalPrice' => $totalPrice,
+            'currency' => $preferred_currency,
         ])
     @endif
 </div>

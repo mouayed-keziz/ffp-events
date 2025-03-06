@@ -4,14 +4,9 @@ namespace App\Actions;
 
 use App\Models\EventAnnouncement;
 use App\Enums\FormField;
-use App\Enums\FileUploadType;
-use App\Enums\FormInputType;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
-
 
 class VisitEventFormActions extends BaseFormActions
 {
@@ -48,42 +43,18 @@ class VisitEventFormActions extends BaseFormActions
 
     /**
      * Initialize a single field structure (fallback method)
+     * This is a legacy method that shouldn't be needed with the enhanced enums
      */
     protected function initializeField(array $field): array
     {
-        $fieldData = [
+        return [
             'type' => $field['type'],
             'data' => [
-                'label' => $field['data']['label'],
+                'label' => $field['data']['label'] ?? '',
                 'description' => $field['data']['description'] ?? null,
             ],
             'answer' => null
         ];
-
-        // Copy any additional field-specific data
-        if (isset($field['data']['type'])) {
-            $fieldData['data']['type'] = $field['data']['type'];
-        }
-        if (isset($field['data']['required'])) {
-            $fieldData['data']['required'] = $field['data']['required'];
-        }
-        if (isset($field['data']['options'])) {
-            $fieldData['data']['options'] = $field['data']['options'];
-        }
-        if (isset($field['data']['file_type'])) {
-            $fieldData['data']['file_type'] = $field['data']['file_type'];
-        }
-
-        // Initialize answer based on field type
-        if ($field['type'] === FormField::CHECKBOX->value) {
-            $fieldData['answer'] = [];
-        } elseif ($field['type'] === FormField::UPLOAD->value) {
-            $fieldData['answer'] = null;
-        } else {
-            $fieldData['answer'] = '';
-        }
-
-        return $fieldData;
     }
 
     /**
@@ -100,7 +71,11 @@ class VisitEventFormActions extends BaseFormActions
         foreach ($event->visitorForm->sections as $sectionIndex => $section) {
             foreach ($section['fields'] as $fieldIndex => $field) {
                 $fieldKey = "formData.{$sectionIndex}.fields.{$fieldIndex}.answer";
-                $rules[$fieldKey] = $this->getFieldValidationRules($field);
+
+                $fieldType = FormField::tryFrom($field['type']);
+                if ($fieldType) {
+                    $rules[$fieldKey] = implode('|', $fieldType->getValidationRules($field));
+                }
             }
         }
 
@@ -108,81 +83,22 @@ class VisitEventFormActions extends BaseFormActions
     }
 
     /**
-     * Get validation rules for a specific field
+     * Process form data for saving, specific to visitor form
+     * Simplified to rely on the FormField enum's processFieldAnswer method
      */
-    protected function getFieldValidationRules(array $field): string
+    public function processFormDataForSubmission(array $formData, bool $shouldCalculatePrice = false): array
     {
-        $fieldType = FormField::tryFrom($field['type']);
-
-        if ($fieldType) {
-            return implode('|', $fieldType->getValidationRules($field));
-        }
-
-        // Fallback if field type is not recognized
-        $fieldRules = [];
-
-        // Check if field is required
-        if (Arr::get($field, 'data.required', false)) {
-            $fieldRules[] = 'required';
-        } else {
-            $fieldRules[] = 'nullable';
-        }
-
-        return implode('|', $fieldRules);
-    }
-
-    /**
-     * Process form data before saving
-     */
-    public function processFormData(array $formData): array
-    {
-        if (empty($formData)) {
-            return $formData;
-        }
-
-        $processedFormData = $formData;
-
-        foreach ($processedFormData as $sectionIndex => $section) {
-            if (!isset($section['fields']) || !is_array($section['fields'])) {
-                continue;
-            }
-
-            foreach ($section['fields'] as $fieldIndex => $field) {
-                if (!isset($field['type']) || !isset($field['answer'])) {
-                    continue;
-                }
-
-                $fieldType = FormField::tryFrom($field['type']);
-                if ($fieldType) {
-                    $processedFormData[$sectionIndex]['fields'][$fieldIndex]['answer'] =
-                        $fieldType->processFieldAnswer($field['answer'], $field['data'] ?? []);
-                }
-            }
-        }
-
-        return $processedFormData;
-    }
-
-    /**
-     * Process form data for saving, handling file uploads through Spatie Media Library
-     */
-    public function processFormDataForSubmission(array $formData): array
-    {
-        if (empty($formData)) {
-            return $formData;
-        }
-
         $processedFormData = $formData;
         $filesToProcess = [];
 
-        // First pass: identify all files and replace them with unique identifiers
+        // Process file uploads in the single-form structure and handle field answers
         foreach ($processedFormData as $sectionIndex => $section) {
             if (!isset($section['fields']) || !is_array($section['fields'])) {
                 continue;
             }
 
             foreach ($section['fields'] as $fieldIndex => $field) {
-                // Process file uploads
+                // Process file uploads first
                 if (isset($field['type']) && $field['type'] === FormField::UPLOAD->value && isset($field['answer'])) {
                     if ($field['answer'] instanceof TemporaryUploadedFile) {
                         // Generate unique identifier for the file
@@ -199,13 +115,21 @@ class VisitEventFormActions extends BaseFormActions
                         $processedFormData[$sectionIndex]['fields'][$fieldIndex]['answer'] = $fileId;
                     }
                 }
+
+                // Now process the field answer using the FormField enum's enhanced method
+                if (isset($field['type']) && isset($field['answer'])) {
+                    $fieldType = FormField::tryFrom($field['type']);
+                    if ($fieldType) {
+                        $processedFormData[$sectionIndex]['fields'][$fieldIndex]['answer'] =
+                            $fieldType->processFieldAnswer(
+                                $field['answer'],
+                                $field['data'] ?? []
+                            );
+                    }
+                }
             }
         }
 
-        // Process choice fields and other data types
-        $processedFormData = $this->processFormData($processedFormData);
-
-        // Return both the processed form data and the files to be processed
         return [
             'processedData' => $processedFormData,
             'filesToProcess' => $filesToProcess
@@ -236,7 +160,7 @@ class VisitEventFormActions extends BaseFormActions
                 'answers' => $processedData,
                 'status' => 'approved',
             ]);
-            Log::info("Submission created: {$submission->id}");
+            Log::info("Visitor Submission created: {$submission->id}");
 
             // Process any files by adding them to the Spatie Media Library
             foreach ($filesToProcess as $fileInfo) {

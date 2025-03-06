@@ -88,17 +88,23 @@ enum FormField: string implements HasLabel
                             $fieldData['data']['products'][$index]['product_details'] = [
                                 'name' => $productModel->name,
                                 'image' => $productModel->image,
+                                'code' => $productModel->code,
                             ];
                         }
                     }
                 }
+
+                // Initialize products with empty selection and quantity
+                $fieldData['answer'] = [];
+                foreach ($field['data']['products'] as $product) {
+                    $fieldData['answer'][$product['product_id']] = [
+                        'selected' => false,
+                        'quantity' => 1
+                    ];
+                }
             }
         }
 
-        // Add quantity field for priced fields
-        if (in_array($this, [self::SELECT_PRICED, self::RADIO_PRICED, self::PLAN_TIER])) {
-            $fieldData['quantity'] = 1;
-        }
 
         // For plan tier, get associated plans
         if ($this === self::PLAN_TIER && isset($field['data']['plan_tier_id'])) {
@@ -204,79 +210,131 @@ enum FormField: string implements HasLabel
 
     /**
      * Process field answer for submission
+     * 
+     * This enhanced version includes all translations and price information
+     * to ensure the submitted data has complete information
      */
     public function processFieldAnswer($answer, array $fieldData = [])
     {
-        if ($this === self::UPLOAD && $answer instanceof TemporaryUploadedFile) {
-            // Generate and return a unique identifier for the file
-            return (string) Str::uuid();
+        if ($answer === null || (is_array($answer) && empty($answer))) {
+            return $answer;
         }
 
-        if (in_array($this, [self::SELECT, self::RADIO]) && !empty($answer)) {
-            return $this->findOptionTranslations($fieldData['options'] ?? [], $answer);
-        }
+        $currentLocale = app()->getLocale();
 
-        if (in_array($this, [self::SELECT_PRICED, self::RADIO_PRICED]) && !empty($answer)) {
-            $option = $this->findOptionTranslations($fieldData['options'] ?? [], $answer);
-            // Include price information for priced options
-            foreach ($fieldData['options'] ?? [] as $optionItem) {
-                if ($optionItem['option'][app()->getLocale()] === $answer) {
-                    return [
-                        'option' => $option,
-                        'price' => $optionItem['price'] ?? []
-                    ];
-                }
+        // Special case for file uploads
+        if ($this === self::UPLOAD) {
+            if ($answer instanceof TemporaryUploadedFile) {
+                // File uploads are handled separately with a UUID
+                return (string) Str::uuid();
             }
-            return ['option' => $option, 'price' => []];
+            return $answer; // Return the fileId if it's already processed
         }
 
-        if (in_array($this, [self::CHECKBOX, self::CHECKBOX_PRICED]) && is_array($answer)) {
-            $translatedAnswers = [];
-            foreach ($answer as $selectedValue) {
-                if ($this === self::CHECKBOX_PRICED) {
-                    $option = $this->findOptionTranslations($fieldData['options'] ?? [], $selectedValue);
-                    // Include price information for priced options
-                    foreach ($fieldData['options'] ?? [] as $optionItem) {
-                        if ($optionItem['option'][app()->getLocale()] === $selectedValue) {
-                            $translatedAnswers[] = [
-                                'option' => $option,
-                                'price' => $optionItem['price'] ?? []
+        // Process different field types
+        switch ($this) {
+            case self::SELECT:
+            case self::RADIO:
+                // Single option selection - return with all translations
+                return $this->findOptionTranslations($fieldData['options'] ?? [], $answer);
+
+            case self::SELECT_PRICED:
+            case self::RADIO_PRICED:
+                // Priced single option - return both option and price data
+                $option = $this->findOptionTranslations($fieldData['options'] ?? [], $answer);
+                $price = $this->findOptionPrice($fieldData['options'] ?? [], $answer);
+
+                return [
+                    'option' => $option,
+                    'price' => $price
+                ];
+
+            case self::CHECKBOX:
+                // Multiple options - return array of translated options
+                if (is_array($answer)) {
+                    $translatedAnswers = [];
+                    foreach ($answer as $selectedValue) {
+                        $translatedAnswers[] = $this->findOptionTranslations($fieldData['options'] ?? [], $selectedValue);
+                    }
+                    return $translatedAnswers;
+                }
+                return $answer;
+
+            case self::CHECKBOX_PRICED:
+                // Multiple priced options
+                if (is_array($answer)) {
+                    $translatedAnswers = [];
+                    foreach ($answer as $selectedValue) {
+                        $option = $this->findOptionTranslations($fieldData['options'] ?? [], $selectedValue);
+                        $price = $this->findOptionPrice($fieldData['options'] ?? [], $selectedValue);
+
+                        $translatedAnswers[] = [
+                            'option' => $option,
+                            'price' => $price
+                        ];
+                    }
+                    return $translatedAnswers;
+                }
+                return $answer;
+
+            case self::ECOMMERCE:
+                // E-commerce products with quantities
+                if (is_array($answer)) {
+                    $processedAnswer = [];
+                    foreach ($answer as $productId => $productData) {
+                        if (!empty($productData['selected']) && $productData['selected'] === true) {
+                            $product = \App\Models\Product::find($productId);
+
+                            // Find product price from field data
+                            $price = [];
+                            foreach ($fieldData['products'] ?? [] as $productItem) {
+                                if ($productItem['product_id'] == $productId) {
+                                    $price = $productItem['price'] ?? [];
+                                    break;
+                                }
+                            }
+
+                            $processedAnswer[$productId] = [
+                                'product_id' => $productId,
+                                'name' => $product ? $product->name : null,
+                                'code' => $product ? $product->code : null,
+                                'quantity' => $productData['quantity'] ?? 1,
+                                'selected' => true,
+                                'price' => $price
                             ];
+                        }
+                    }
+                    return $processedAnswer;
+                }
+                return $answer;
+
+            case self::PLAN_TIER:
+                // Plan tier with pricing
+                $planTier = \App\Models\PlanTier::find($fieldData['plan_tier_id'] ?? null);
+                $planId = $answer;
+
+                // Find plan price
+                $price = [];
+                if (isset($fieldData['plan_tier_details'])) {
+                    foreach ($fieldData['plan_tier_details']['plans'] ?? [] as $plan) {
+                        if ($plan['id'] == $planId) {
+                            $price = $plan['price'] ?? [];
                             break;
                         }
                     }
-                } else {
-                    $translatedAnswers[] = $this->findOptionTranslations($fieldData['options'] ?? [], $selectedValue);
                 }
-            }
-            return $translatedAnswers;
-        }
 
-        if ($this === self::ECOMMERCE && is_array($answer)) {
-            $processedAnswer = [];
-            foreach ($answer as $productId => $productData) {
-                if (!empty($productData['selected']) && $productData['selected'] === true) {
-                    $product = \App\Models\Product::find($productId);
-                    $processedAnswer[$productId] = [
-                        'product_id' => $productId,
-                        'name' => $product ? $product->name : null,
-                        'quantity' => $productData['quantity'] ?? 1,
-                        'selected' => true,
-                    ];
-                }
-            }
-            return $processedAnswer;
-        }
+                return [
+                    'plan_tier_id' => $fieldData['plan_tier_id'] ?? null,
+                    'plan_id' => $planId,
+                    'title' => $planTier ? $planTier->title : null,
+                    'price' => $price
+                ];
 
-        if ($this === self::PLAN_TIER && !empty($answer)) {
-            $planTier = \App\Models\PlanTier::find($answer);
-            return [
-                'plan_tier_id' => $answer,
-                'title' => $planTier ? $planTier->title : null,
-            ];
+            default:
+                // For other field types, just return the answer as is
+                return $answer;
         }
-
-        return $answer;
     }
 
     /**
@@ -289,11 +347,164 @@ enum FormField: string implements HasLabel
         // Find the option with matching value in current locale
         foreach ($options as $option) {
             if (isset($option['option'][$currentLocale]) && $option['option'][$currentLocale] === $answerValue) {
-                return $option['option'];
+                return $option['option']; // Return all translations
             }
         }
 
         // Fallback: Return the answer value keyed by current locale
         return [$currentLocale => $answerValue];
+    }
+
+    /**
+     * Find the price data for a given option
+     */
+    private function findOptionPrice(array $options, $answerValue): array
+    {
+        $currentLocale = app()->getLocale();
+
+        // Find the option with matching value in current locale
+        foreach ($options as $option) {
+            if (isset($option['option'][$currentLocale]) && $option['option'][$currentLocale] === $answerValue) {
+                return $option['price'] ?? []; // Return price data
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * Calculate price for this field based on the answers and preferred currency
+     */
+    public function calculateFieldPrice($answer, array $fieldData, string $preferredCurrency): float
+    {
+        $price = 0;
+
+        switch ($this) {
+            case self::SELECT_PRICED:
+            case self::RADIO_PRICED:
+                if (!empty($answer)) {
+                    $optionPrice = 0;
+                    $currentLocale = app()->getLocale();
+
+                    // Handle different answer formats
+                    if (is_array($answer) && isset($answer['option'])) {
+                        // Handle processed answers
+                        foreach ($fieldData['options'] ?? [] as $option) {
+                            if ($option['option'][$currentLocale] === $answer['option'][$currentLocale]) {
+                                $optionPrice = floatval($option['price'][$preferredCurrency] ?? 0);
+                                break;
+                            }
+                        }
+                    } else {
+                        // Handle raw answers (string)
+                        foreach ($fieldData['options'] ?? [] as $option) {
+                            if ($option['option'][$currentLocale] === $answer) {
+                                $optionPrice = floatval($option['price'][$preferredCurrency] ?? 0);
+                                break;
+                            }
+                        }
+                    }
+                    $price = $optionPrice;
+                }
+                break;
+
+            case self::CHECKBOX_PRICED:
+                if (is_array($answer)) {
+                    foreach ($answer as $selectedOption) {
+                        $optionPrice = 0;
+                        $currentLocale = app()->getLocale();
+
+                        // Handle different answer formats
+                        if (is_array($selectedOption) && isset($selectedOption['option'])) {
+                            // Already processed answers
+                            foreach ($fieldData['options'] ?? [] as $option) {
+                                if ($option['option'][$currentLocale] === $selectedOption['option'][$currentLocale]) {
+                                    $optionPrice = floatval($option['price'][$preferredCurrency] ?? 0);
+                                    break;
+                                }
+                            }
+                        } else {
+                            // Raw answers (string)
+                            foreach ($fieldData['options'] ?? [] as $option) {
+                                if ($option['option'][$currentLocale] === $selectedOption) {
+                                    $optionPrice = floatval($option['price'][$preferredCurrency] ?? 0);
+                                    break;
+                                }
+                            }
+                        }
+
+                        $price += $optionPrice;
+                    }
+                }
+                break;
+
+            case self::ECOMMERCE:
+                if (is_array($answer)) {
+                    foreach ($answer as $productId => $productData) {
+                        if (!isset($productData['selected']) || $productData['selected'] !== true) {
+                            continue;
+                        }
+
+                        // Find the product price
+                        foreach ($fieldData['products'] ?? [] as $product) {
+                            if ($product['product_id'] == $productId) {
+                                $productPrice = floatval($product['price'][$preferredCurrency] ?? 0);
+                                $quantity = intval($productData['quantity'] ?? 1);
+                                $price += $productPrice * $quantity;
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+
+            case self::PLAN_TIER:
+                if (empty($answer)) {
+                    break;
+                }
+
+                // Handle different answer formats
+                $planId = is_array($answer) && isset($answer['plan_id']) ? $answer['plan_id'] : $answer;
+
+                // Get price from plan tier details
+                if (isset($fieldData['plan_tier_details'])) {
+                    foreach ($fieldData['plan_tier_details']['plans'] ?? [] as $plan) {
+                        if ($plan['id'] == $planId) {
+                            $planPrice = floatval($plan['price'][$preferredCurrency] ?? 0);
+                            $price = $planPrice;
+                            break;
+                        }
+                    }
+                }
+                // Fallback to direct price
+                else if (isset($fieldData['price']) && isset($fieldData['price'][$preferredCurrency])) {
+                    $price = floatval($fieldData['price'][$preferredCurrency]);
+                }
+                break;
+        }
+
+        return $price;
+    }
+
+    /**
+     * Check if this field type is priced (has monetary value)
+     */
+    public function isPriced(): bool
+    {
+        return in_array($this, [
+            self::SELECT_PRICED,
+            self::RADIO_PRICED,
+            self::CHECKBOX_PRICED,
+            self::ECOMMERCE,
+            self::PLAN_TIER
+        ]);
+    }
+
+    /**
+     * Check if this field type needs quantity field
+     */
+    public function needsQuantity(): bool
+    {
+        return $this === self::ECOMMERCE;
     }
 }
