@@ -83,11 +83,14 @@ class VisitEventFormActions extends BaseFormActions
     }
 
     /**
-     * Process form data for saving, specific to visitor form
-     * Simplified to rely on the FormField enum's processFieldAnswer method
+     * Process form data for submission
      */
     public function processFormDataForSubmission(array $formData, bool $shouldCalculatePrice = false): array
     {
+        if (empty($formData)) {
+            return ['processedData' => $formData, 'filesToProcess' => []];
+        }
+
         $processedFormData = $formData;
         $filesToProcess = [];
 
@@ -120,16 +123,11 @@ class VisitEventFormActions extends BaseFormActions
                 if (isset($field['type']) && isset($field['answer'])) {
                     $fieldType = FormField::tryFrom($field['type']);
                     if ($fieldType) {
-                        // if its file upload then put the answer as file id
-                        if ($fieldType === FormField::UPLOAD) {
-                            $processedFormData[$sectionIndex]['fields'][$fieldIndex]['answer'] = $fileId;
-                        } else {
-                            $processedFormData[$sectionIndex]['fields'][$fieldIndex]['answer'] =
-                                $fieldType->processFieldAnswer(
-                                    $field['answer'],
-                                    $field['data'] ?? []
-                                );
-                        }
+                        $processedFormData[$sectionIndex]['fields'][$fieldIndex]['answer'] =
+                            $fieldType->processFieldAnswer(
+                                $field['answer'],
+                                $field['data'] ?? []
+                            );
                     }
                 }
             }

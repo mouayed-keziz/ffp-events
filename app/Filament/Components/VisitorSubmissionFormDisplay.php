@@ -17,6 +17,7 @@ use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section as InfolistSection;
+use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
@@ -33,7 +34,7 @@ class VisitorSubmissionFormDisplay
      */
     public static function make(array $formData): array
     {
-        $components = [];
+        $tabs = [];
 
         foreach ($formData as $sectionIndex => $section) {
             $sectionTitle = $section['title'][App::getLocale()] ?? $section['title']['en'] ?? $section['title']['fr'] ?? 'Section';
@@ -47,12 +48,14 @@ class VisitorSubmissionFormDisplay
                 }
             }
 
-            $components[] = InfolistSection::make($sectionTitle)
-                ->schema($sectionFields)
-                ->collapsible();
+            $tabs[] = Tabs\Tab::make($sectionTitle)
+                ->schema($sectionFields);
         }
 
-        return $components;
+        return [
+            Tabs::make('Sections')
+                ->tabs($tabs)->columnSpanFull()
+        ];
     }
 
     /**
@@ -96,32 +99,16 @@ class VisitorSubmissionFormDisplay
     {
         $locale = App::getLocale();
 
-        // If the answer is an array with locale keys
-        if (is_array($answer) && isset($answer[$locale])) {
-            $displayValue = $answer[$locale];
-        }
-        // If the answer is just a plain value
-        else {
-            // Try to find the matching option to display its translated value
-            if (isset($field['data']['options']) && is_array($field['data']['options'])) {
-                foreach ($field['data']['options'] as $option) {
-                    // For single select, the answer might be the exact option value
-                    if (isset($option['option'][$locale]) && $option['option'][$locale] == $answer) {
-                        $displayValue = $option['option'][$locale];
-                        break;
-                    }
-                }
-            }
-
-            // Default fallback
-            if (!isset($displayValue)) {
-                $displayValue = $answer;
-            }
+        if (!empty($answer) && isset($answer['selected_option']['option'][$locale])) {
+            $selectedOption = $answer['selected_option']['option'][$locale];
+            return TextEntry::make('select')
+                ->label($label)
+                ->state($selectedOption);
         }
 
         return TextEntry::make('select')
             ->label($label)
-            ->state($displayValue);
+            ->state(__('panel/visitor_submissions.no_selection'));
     }
 
     /**
@@ -130,22 +117,21 @@ class VisitorSubmissionFormDisplay
     protected static function createCheckboxComponent(array $field, string $label, $answer): Components\Component
     {
         $locale = App::getLocale();
-        $displayValues = [];
+        $selectedOptions = [];
 
-        // Handle multiple checkbox answers
-        if (is_array($answer)) {
-            foreach ($answer as $value) {
-                if (is_array($value) && isset($value[$locale])) {
-                    $displayValues[] = $value[$locale];
-                } else {
-                    $displayValues[] = $value;
+        if (!empty($answer['selected_options'])) {
+            foreach ($answer['selected_options'] as $selectedOption) {
+                if (isset($selectedOption['option'][$locale])) {
+                    $selectedOptions[] = $selectedOption['option'][$locale];
                 }
             }
         }
 
         return TextEntry::make('checkbox')
             ->label($label)
-            ->state(implode(', ', $displayValues));
+            ->state(empty($selectedOptions) ?
+                __('panel/visitor_submissions.no_selection') :
+                implode(', ', $selectedOptions));
     }
 
     /**
@@ -155,16 +141,16 @@ class VisitorSubmissionFormDisplay
     {
         $locale = App::getLocale();
 
-        // If the answer is an array with locale keys
-        if (is_array($answer) && isset($answer[$locale])) {
-            $displayValue = $answer[$locale];
-        } else {
-            $displayValue = $answer;
+        if (!empty($answer) && isset($answer['selected_option']['option'][$locale])) {
+            $selectedOption = $answer['selected_option']['option'][$locale];
+            return TextEntry::make('radio')
+                ->label($label)
+                ->state($selectedOption);
         }
 
         return TextEntry::make('radio')
             ->label($label)
-            ->state($displayValue);
+            ->state(__('panel/visitor_submissions.no_selection'));
     }
 
     /**

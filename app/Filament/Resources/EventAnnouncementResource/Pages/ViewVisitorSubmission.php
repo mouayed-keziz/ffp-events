@@ -94,7 +94,9 @@ class ViewVisitorSubmission extends ViewRecord
         return $infolist
             ->schema([
                 $visitorDetailsSection,
+                // Section::make("stuff")->schema([
                 ...(VisitorSubmissionFormDisplay::make($sections)),
+                // ])
             ]);
     }
 

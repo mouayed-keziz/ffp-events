@@ -4,7 +4,6 @@ namespace App\Forms;
 
 use App\Models\EventAnnouncement;
 use App\Enums\FormField;
-use App\Models\ExhibitorForm;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
@@ -16,22 +15,19 @@ class ExhibitorFormActions extends BaseFormActions
      */
     public function initFormData(EventAnnouncement $event): array
     {
-        $exhibitorForms = $event->exhibitorForms;
-
-        if ($exhibitorForms->isEmpty()) {
+        if (!$event->exhibitorForms || $event->exhibitorForms->isEmpty()) {
             return [];
         }
 
         $formData = [];
 
-        foreach ($exhibitorForms as $formIndex => $exhibitorForm) {
+        foreach ($event->exhibitorForms as $formIndex => $exhibitorForm) {
             $formData[$formIndex] = [
                 'title' => $exhibitorForm->title,
                 'description' => $exhibitorForm->description,
                 'sections' => []
             ];
 
-            // Create the structured formData with sections and fields
             foreach ($exhibitorForm->sections as $section) {
                 $sectionData = [
                     'title' => $section['title'],
@@ -54,7 +50,6 @@ class ExhibitorFormActions extends BaseFormActions
 
     /**
      * Initialize a single field structure (fallback method)
-     * This is a legacy method that shouldn't be needed with the enhanced enums
      */
     protected function initializeField(array $field): array
     {
@@ -74,58 +69,25 @@ class ExhibitorFormActions extends BaseFormActions
     public function getValidationRules(EventAnnouncement $event, int $currentStep = null): array
     {
         $rules = [];
-        $exhibitorForms = $event->exhibitorForms;
 
-        if ($exhibitorForms->isEmpty()) {
+        if (!$event->exhibitorForms || $event->exhibitorForms->isEmpty()) {
             return $rules;
         }
 
-        // If we're validating a specific form step
+        // If a specific step is provided, only validate that form
         if ($currentStep !== null) {
-            $exhibitorForm = $exhibitorForms[$currentStep] ?? null;
+            $exhibitorForm = $event->exhibitorForms[$currentStep] ?? null;
             if (!$exhibitorForm) {
                 return $rules;
             }
 
-            return $this->getFormValidationRules($exhibitorForm, "formData.{$currentStep}");
-        }
+            foreach ($exhibitorForm->sections as $sectionIndex => $section) {
+                foreach ($section['fields'] as $fieldIndex => $field) {
+                    $fieldKey = "formData.{$currentStep}.sections.{$sectionIndex}.fields.{$fieldIndex}.answer";
 
-        // Validating all forms
-        foreach ($exhibitorForms as $formIndex => $exhibitorForm) {
-            $formRules = $this->getFormValidationRules($exhibitorForm, "formData.{$formIndex}");
-            $rules = array_merge($rules, $formRules);
-        }
-
-        return $rules;
-    }
-
-    /**
-     * Get validation rules for a specific exhibitor form
-     */
-    protected function getFormValidationRules(ExhibitorForm $exhibitorForm, string $formPrefix): array
-    {
-        $rules = [];
-
-        foreach ($exhibitorForm->sections as $sectionIndex => $section) {
-            foreach ($section['fields'] as $fieldIndex => $field) {
-                $fieldKey = "{$formPrefix}.sections.{$sectionIndex}.fields.{$fieldIndex}.answer";
-                $fieldType = FormField::tryFrom($field['type']);
-
-                if ($fieldType) {
-                    $rules[$fieldKey] = implode('|', $fieldType->getValidationRules($field));
-                }
-
-                // Only ecommerce fields need quantity validation
-                if ($fieldType && $fieldType->needsQuantity()) {
-                    // For ecommerce, validate each product's quantity when selected
-                    if ($field['type'] === FormField::ECOMMERCE->value) {
-                        // Using the simplified structure with products array
-                        $productsKey = "{$formPrefix}.sections.{$sectionIndex}.fields.{$fieldIndex}.answer.products";
-                        $rules[$productsKey] = "array";
-
-                        // Add specific validation rules for each product's quantity when selected
-                        $rules[$productsKey . ".*"] = "array";
-                        $rules[$productsKey . ".*.quantity"] = "integer|min:1";
+                    $fieldType = FormField::tryFrom($field['type']);
+                    if ($fieldType) {
+                        $rules[$fieldKey] = implode('|', $fieldType->getValidationRules($field));
                     }
                 }
             }
@@ -135,15 +97,18 @@ class ExhibitorFormActions extends BaseFormActions
     }
 
     /**
-     * Process form data for saving, specific to exhibitor form
-     * Override to ensure pricing calculations are included and titles are preserved
+     * Process form data for submission
      */
-    public function processFormDataForSubmission(array $formData, bool $shouldCalculatePrice = true): array
+    public function processFormDataForSubmission(array $formData, bool $shouldCalculatePrice = false): array
     {
+        if (empty($formData)) {
+            return ['processedData' => $formData, 'filesToProcess' => []];
+        }
+
         $processedFormData = $formData;
         $filesToProcess = [];
 
-        // Process file uploads and field answers in the multi-form structure
+        // Process multi-form structure (exhibitor forms)
         foreach ($processedFormData as $formIndex => $form) {
             if (!isset($form['sections']) || !is_array($form['sections'])) {
                 continue;
@@ -155,7 +120,7 @@ class ExhibitorFormActions extends BaseFormActions
                 }
 
                 foreach ($section['fields'] as $fieldIndex => $field) {
-                    // Process file uploads first
+                    // Process file uploads
                     if (isset($field['type']) && $field['type'] === FormField::UPLOAD->value && isset($field['answer'])) {
                         if ($field['answer'] instanceof TemporaryUploadedFile) {
                             // Generate unique identifier for the file
@@ -173,7 +138,7 @@ class ExhibitorFormActions extends BaseFormActions
                         }
                     }
 
-                    // Process the field answer using the FormField enum's method that now returns simplified data
+                    // Process field answers
                     if (isset($field['type']) && isset($field['answer'])) {
                         $fieldType = FormField::tryFrom($field['type']);
                         if ($fieldType) {
@@ -188,20 +153,9 @@ class ExhibitorFormActions extends BaseFormActions
             }
         }
 
-        // Now calculate total price if applicable
+        // Calculate total price if needed
         if ($shouldCalculatePrice) {
-            $totalPrices = $this->calculateTotalPricesAllCurrencies($processedFormData);
-            $processedFormData['total_prices'] = $totalPrices;
-        }
-
-        // Preserve the form titles and descriptions which are translatable
-        foreach ($processedFormData as $formIndex => $form) {
-            if (isset($formData[$formIndex]['title'])) {
-                $processedFormData[$formIndex]['title'] = $formData[$formIndex]['title'];
-            }
-            if (isset($formData[$formIndex]['description'])) {
-                $processedFormData[$formIndex]['description'] = $formData[$formIndex]['description'];
-            }
+            $processedFormData['total_prices'] = $this->calculateTotalPricesAllCurrencies($processedFormData);
         }
 
         return [
@@ -216,8 +170,8 @@ class ExhibitorFormActions extends BaseFormActions
     public function saveFormSubmission(EventAnnouncement $event, array $formData): bool
     {
         try {
-            // Process the form data (handle file uploads, translatable fields, etc.)
-            $processResult = $this->processFormDataForSubmission($formData);
+            // Process the form data with price calculation
+            $processResult = $this->processFormDataForSubmission($formData, true);
             $processedData = $processResult['processedData'];
             $filesToProcess = $processResult['filesToProcess'];
 
@@ -226,28 +180,29 @@ class ExhibitorFormActions extends BaseFormActions
             if (auth('exhibitor')->check()) {
                 $exhibitorId = auth('exhibitor')->user()->id;
             }
-            dd($processedData);
-            // Create a new submission with nullable exhibitor_id
-            // $submission = \App\Models\ExhibitorSubmission::create([
-            //     'exhibitor_id' => $exhibitorId,
-            //     'event_announcement_id' => $event->id,
-            //     'answers' => $processedData,
-            //     'status' => 'pending',
-            // ]);
-            // Log::info("Exhibitor Submission created: {$submission->id}");
 
-            // Process any files by adding them to the Spatie Media Library
-            // foreach ($filesToProcess as $fileInfo) {
-            //     $media = $submission->addMedia($fileInfo['file']->getRealPath())
-            //         ->usingFileName($fileInfo['file']->getClientOriginalName())
-            //         ->withCustomProperties([
-            //             'fileId' => $fileInfo['fileId'],
-            //             'fileType' => $fileInfo['fieldData']['file_type'] ?? null,
-            //             'fieldLabel' => $fileInfo['fieldData']['label'] ?? null,
-            //         ])
-            //         ->toMediaCollection('attachments');
-            //     Log::info("Media added: {$media->id} with fileId: {$fileInfo['fileId']}");
-            // }
+            // Create submission with total prices
+            $submission = \App\Models\ExhibitorSubmission::create([
+                'exhibitor_id' => $exhibitorId,
+                'event_announcement_id' => $event->id,
+                'answers' => $processedData,
+                'total_prices' => $processedData['total_prices'] ?? null,
+                'status' => 'pending',
+            ]);
+            Log::info("Exhibitor Submission created: {$submission->id}");
+
+            // Process files using Media Library
+            foreach ($filesToProcess as $fileInfo) {
+                $media = $submission->addMedia($fileInfo['file']->getRealPath())
+                    ->usingFileName($fileInfo['file']->getClientOriginalName())
+                    ->withCustomProperties([
+                        'fileId' => $fileInfo['fileId'],
+                        'fileType' => $fileInfo['fieldData']['file_type'] ?? null,
+                        'fieldLabel' => $fileInfo['fieldData']['label'] ?? null,
+                    ])
+                    ->toMediaCollection('attachments');
+                Log::info("Media added: {$media->id} with fileId: {$fileInfo['fileId']}");
+            }
 
             return true;
         } catch (\Exception $e) {
