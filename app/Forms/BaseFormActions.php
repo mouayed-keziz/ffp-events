@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions;
+namespace App\Forms;
 
 use App\Enums\FormField;
 use App\Models\EventAnnouncement;

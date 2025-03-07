@@ -2,7 +2,7 @@
 
 use Livewire\Volt\Component;
 use App\Models\EventAnnouncement;
-use App\Actions\ExhibitorFormActions;
+use App\Forms\ExhibitorFormActions;
 use Livewire\WithFileUploads;
 
 new class extends Component {

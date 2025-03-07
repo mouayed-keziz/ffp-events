@@ -1,7 +1,7 @@
 <?php
 use Livewire\Volt\Component;
 use App\Models\EventAnnouncement;
-use App\Actions\VisitEventFormActions;
+use App\Forms\VisitEventFormActions;
 use Livewire\WithFileUploads;
 
 new class extends Component {
@@ -62,7 +62,7 @@ new class extends Component {
             <h2 class="text-2xl font-bold mb-2">{{ __('Visitor Registration') }}</h2>
             <p class="text-gray-600">{{ __('Please fill out the form below to register for this event.') }}</p>
         </div> --}}
-        
+
         <form wire:submit.prevent="submitForm">
             @if ($event->visitorForm)
                 @foreach ($event->visitorForm->sections as $sectionIndex => $section)

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions;
+namespace App\Forms;
 
 use App\Models\EventAnnouncement;
 use App\Enums\FormField;
@@ -225,28 +225,28 @@ class ExhibitorFormActions extends BaseFormActions
             if (auth('exhibitor')->check()) {
                 $exhibitorId = auth('exhibitor')->user()->id;
             }
-            dd($processedData);
-            // Create a new submission with nullable exhibitor_id
-            // $submission = \App\Models\ExhibitorSubmission::create([
-            //     'exhibitor_id' => $exhibitorId,
-            //     'event_announcement_id' => $event->id,
-            //     'answers' => $processedData,
-            //     'status' => 'pending',
-            // ]);
-            // Log::info("Exhibitor Submission created: {$submission->id}");
 
-            // // Process any files by adding them to the Spatie Media Library
-            // foreach ($filesToProcess as $fileInfo) {
-            //     $media = $submission->addMedia($fileInfo['file']->getRealPath())
-            //         ->usingFileName($fileInfo['file']->getClientOriginalName())
-            //         ->withCustomProperties([
-            //             'fileId' => $fileInfo['fileId'],
-            //             'fileType' => $fileInfo['fieldData']['file_type'] ?? null,
-            //             'fieldLabel' => $fileInfo['fieldData']['label'] ?? null,
-            //         ])
-            //         ->toMediaCollection('attachments');
-            //     Log::info("Media added: {$media->id} with fileId: {$fileInfo['fileId']}");
-            // }
+            // Create a new submission with nullable exhibitor_id
+            $submission = \App\Models\ExhibitorSubmission::create([
+                'exhibitor_id' => $exhibitorId,
+                'event_announcement_id' => $event->id,
+                'answers' => $processedData,
+                'status' => 'pending',
+            ]);
+            Log::info("Exhibitor Submission created: {$submission->id}");
+
+            // Process any files by adding them to the Spatie Media Library
+            foreach ($filesToProcess as $fileInfo) {
+                $media = $submission->addMedia($fileInfo['file']->getRealPath())
+                    ->usingFileName($fileInfo['file']->getClientOriginalName())
+                    ->withCustomProperties([
+                        'fileId' => $fileInfo['fileId'],
+                        'fileType' => $fileInfo['fieldData']['file_type'] ?? null,
+                        'fieldLabel' => $fileInfo['fieldData']['label'] ?? null,
+                    ])
+                    ->toMediaCollection('attachments');
+                Log::info("Media added: {$media->id} with fileId: {$fileInfo['fileId']}");
+            }
 
             return true;
         } catch (\Exception $e) {

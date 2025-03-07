@@ -1,5 +1,5 @@
 @props(['data', 'answerPath'])
-{{-- {{ dd($data) }}     --}}
+{{-- {{ dd(['selectedPlanId' => $this->{$answerPath}, 'plans' => $data['plan_tier_details']['plans']]) }} --}}
 <div class="mb-4">
     <label class="label">
         <span class="label-text font-medium {{ isset($data['required']) && $data['required'] ? 'required' : '' }}">
@@ -34,7 +34,7 @@
                             $isSelected = $selectedPlanId == $plan['id'];
                         @endphp
                         <div x-data="{ expanded: false }"
-                            class="w-full rounded-xl transition-all {{ $isSelected ? 'border-primary/60 bg-primary/10' : '' }}">
+                            class="w-full border rounded-xl transition-all {{ $isSelected ? 'border-primary/60 bg-primary/10' : 'border-gray-200' }}">
                             <!-- Plan option row with radio button -->
                             <div class="flex items-center justify-between py-3 px-3 rounded-xl">
                                 <div class="flex items-center gap-3">
@@ -82,7 +82,7 @@
 
                             <!-- Expandable content -->
                             <div x-show="expanded" x-collapse
-                                class="py-3 px-3 {{ $isSelected ? 'border-primary/60 bg-primary/10' : '' }}">
+                                class="py-3 px-3 border-t {{ $isSelected ? 'border-primary/60 bg-primary/10' : 'border-gray-200' }}">
                                 <div class="grid grid-cols-8 gap-4">
                                     <!-- Plan Image (3 columns) -->
                                     <div class="col-span-3">

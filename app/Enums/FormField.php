@@ -138,7 +138,8 @@ enum FormField: string implements HasLabel
             self::UPLOAD => null,
             self::INPUT => $this->getInputDefaultAnswer($field),
             self::ECOMMERCE => [], // Empty array for ecommerce products
-            self::SELECT_PRICED, self::RADIO_PRICED, self::PLAN_TIER => '',
+            self::SELECT_PRICED, self::RADIO_PRICED => '',
+            self::PLAN_TIER => null, // Changed from empty string to null
             default => '',
         };
     }
@@ -222,10 +223,6 @@ enum FormField: string implements HasLabel
 
         $currentLocale = app()->getLocale();
 
-        // Special case for file uploads
-        // i
-
-
         // Process different field types
         switch ($this) {
             case self::SELECT:
@@ -308,11 +305,18 @@ enum FormField: string implements HasLabel
                 $planTier = \App\Models\PlanTier::find($fieldData['plan_tier_id'] ?? null);
                 $planId = $answer;
 
-                // Find plan price
+                if (empty($planId)) {
+                    return null;
+                }
+
+                // Find plan details
+                $planDetails = null;
                 $price = [];
-                if (isset($fieldData['plan_tier_details'])) {
-                    foreach ($fieldData['plan_tier_details']['plans'] ?? [] as $plan) {
+
+                if (isset($fieldData['plan_tier_details']['plans'])) {
+                    foreach ($fieldData['plan_tier_details']['plans'] as $plan) {
                         if ($plan['id'] == $planId) {
+                            $planDetails = $plan;
                             $price = $plan['price'] ?? [];
                             break;
                         }
@@ -322,7 +326,8 @@ enum FormField: string implements HasLabel
                 return [
                     'plan_tier_id' => $fieldData['plan_tier_id'] ?? null,
                     'plan_id' => $planId,
-                    'title' => $planTier ? $planTier->title : null,
+                    'plan_title' => $planDetails ? $planDetails['title'] : null,
+                    'tier_title' => $planTier ? $planTier->title : null,
                     'price' => $price
                 ];
 
@@ -459,21 +464,24 @@ enum FormField: string implements HasLabel
                 }
 
                 // Handle different answer formats
-                $planId = is_array($answer) && isset($answer['plan_id']) ? $answer['plan_id'] : $answer;
+                if (is_array($answer) && isset($answer['plan_id'])) {
+                    // Already processed answer
+                    $planPrice = floatval($answer['price'][$preferredCurrency] ?? 0);
+                    $price = $planPrice;
+                } else {
+                    // Raw answer (just the plan ID)
+                    $planId = $answer;
 
-                // Get price from plan tier details
-                if (isset($fieldData['plan_tier_details']) && isset($fieldData['plan_tier_details']['plans'])) {
-                    foreach ($fieldData['plan_tier_details']['plans'] ?? [] as $plan) {
-                        if ($plan['id'] == $planId) {
-                            $planPrice = floatval($plan['price'][$preferredCurrency] ?? 0);
-                            $price = $planPrice;
-                            break;
+                    // Get price from plan tier details
+                    if (isset($fieldData['plan_tier_details']) && isset($fieldData['plan_tier_details']['plans'])) {
+                        foreach ($fieldData['plan_tier_details']['plans'] as $plan) {
+                            if ($plan['id'] == $planId) {
+                                $planPrice = floatval($plan['price'][$preferredCurrency] ?? 0);
+                                $price = $planPrice;
+                                break;
+                            }
                         }
                     }
-                }
-                // Fallback to direct price
-                else if (isset($fieldData['price']) && isset($fieldData['price'][$preferredCurrency])) {
-                    $price = floatval($fieldData['price'][$preferredCurrency]);
                 }
                 break;
         }
