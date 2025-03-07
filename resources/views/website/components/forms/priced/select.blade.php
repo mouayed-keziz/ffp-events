@@ -77,7 +77,4 @@
             @endforeach
         </div>
     </div>
-    @include('website.components.forms.debug-path', [
-        'answerPath' => $answerPath,
-    ])
 </div>

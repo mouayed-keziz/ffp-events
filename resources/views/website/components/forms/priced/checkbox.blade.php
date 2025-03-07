@@ -71,9 +71,4 @@ if (empty($optionsData)) {
             </div>
         @endforeach
     </div>
-
-    {{-- Debug information to help troubleshoot --}}
-    @include('website.components.forms.debug-path', [
-        'answerPath' => $answerPath,
-    ])
 </div>

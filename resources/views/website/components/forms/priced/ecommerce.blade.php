@@ -113,11 +113,6 @@ if (empty($productsData)) {
                 </div>
             @endforeach
         </div>
-
-        {{-- Debug information to help troubleshoot --}}
-        @include('website.components.forms.debug-path', [
-            'answerPath' => $answerPath,
-        ])
     @else
         <div class="bg-white border rounded-lg p-8 text-center">
             <x-heroicon-o-shopping-cart class="w-12 h-12 mx-auto mb-2 text-primary/50" />

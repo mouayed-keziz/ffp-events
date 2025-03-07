@@ -69,16 +69,17 @@ class ExhibitorFormActions extends BaseFormActions
     public function getValidationRules(EventAnnouncement $event, int $currentStep = null): array
     {
         $rules = [];
+        $attributes = [];
 
         if (!$event->exhibitorForms || $event->exhibitorForms->isEmpty()) {
-            return $rules;
+            return ['rules' => $rules, 'attributes' => $attributes];
         }
 
         // If a specific step is provided, only validate that form
         if ($currentStep !== null) {
             $exhibitorForm = $event->exhibitorForms[$currentStep] ?? null;
             if (!$exhibitorForm) {
-                return $rules;
+                return ['rules' => $rules, 'attributes' => $attributes];
             }
 
             foreach ($exhibitorForm->sections as $sectionIndex => $section) {
@@ -88,12 +89,17 @@ class ExhibitorFormActions extends BaseFormActions
                     $fieldType = FormField::tryFrom($field['type']);
                     if ($fieldType) {
                         $rules[$fieldKey] = implode('|', $fieldType->getValidationRules($field));
+                        // Add attribute name using the field's label in current locale
+                        $attributes[$fieldKey] = $field['data']['label'][app()->getLocale()] ?? '';
                     }
                 }
             }
         }
 
-        return $rules;
+        return [
+            'rules' => $rules,
+            'attributes' => $attributes
+        ];
     }
 
     /**

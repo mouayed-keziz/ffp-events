@@ -47,7 +47,4 @@
         @default
             <div>_</div>
     @endswitch
-    @include('website.components.forms.debug-path', [
-        'answerPath' => $answerPath,
-    ])
 </div>

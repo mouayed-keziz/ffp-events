@@ -87,8 +87,8 @@ new class extends Component {
     protected function validateCurrentStep()
     {
         $actions = new ExhibitorFormActions();
-        $rules = $actions->getValidationRules($this->event, $this->currentStep);
-        $this->validate($rules);
+        $validation = $actions->getValidationRules($this->event, $this->currentStep);
+        $this->validate($validation['rules'], [], $validation['attributes']);
     }
 
     /**
@@ -298,6 +298,11 @@ new class extends Component {
                                 @error("formData.{$currentStep}.sections.{$sectionIndex}.fields.{$fieldIndex}.answer")
                                     <div class="text-error text-sm mt-1">{{ $message }}</div>
                                 @enderror
+
+                                {{-- Debug information to help troubleshoot --}}
+                                @include('website.components.forms.debug-path', [
+                                    'answerPath' => $answerPath,
+                                ])
                             @endforeach
                         </div>
                     @endforeach

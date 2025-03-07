@@ -60,9 +60,4 @@ $selectedValue = data_get($this, 'formData.' . $answerPath . '.selectedValue');
             </label>
         @endforeach
     </div>
-
-    {{-- Debug information to help troubleshoot --}}
-    @include('website.components.forms.debug-path', [
-        'answerPath' => $answerPath,
-    ])
 </div>

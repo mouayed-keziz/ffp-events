@@ -13,7 +13,7 @@ class EventAnnouncementObserver
     {
         // Create visitor form with empty fields
         $eventAnnouncement->visitorForm()->create([
-            'fields' => []
+            'sections' => []
         ]);
 
         $properties = [

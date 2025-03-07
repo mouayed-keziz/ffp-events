@@ -63,9 +63,10 @@ class VisitEventFormActions extends BaseFormActions
     public function getValidationRules(EventAnnouncement $event, int $currentStep = null): array
     {
         $rules = [];
+        $attributes = [];
 
         if (!$event->visitorForm) {
-            return $rules;
+            return ['rules' => $rules, 'attributes' => $attributes];
         }
 
         foreach ($event->visitorForm->sections as $sectionIndex => $section) {
@@ -75,11 +76,16 @@ class VisitEventFormActions extends BaseFormActions
                 $fieldType = FormField::tryFrom($field['type']);
                 if ($fieldType) {
                     $rules[$fieldKey] = implode('|', $fieldType->getValidationRules($field));
+                    // Add attribute name using the field's label in current locale
+                    $attributes[$fieldKey] = $field['data']['label'][app()->getLocale()] ?? '';
                 }
             }
         }
 
-        return $rules;
+        return [
+            'rules' => $rules,
+            'attributes' => $attributes
+        ];
     }
 
     /**

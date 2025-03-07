@@ -144,11 +144,6 @@ $chevronClass = $dir === 'rtl' ? 'ms-1' : 'me-1';
                         </div>
                     @endforeach
                 </div>
-
-                {{-- Debug information to help troubleshoot --}}
-                @include('website.components.forms.debug-path', [
-                    'answerPath' => $answerPath,
-                ])
             @else
                 <div class="text-gray-500 text-center py-4">
                     {{ __('No plans available') }}

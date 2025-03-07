@@ -75,9 +75,4 @@ foreach ($optionsData as $idx => $optionData) {
             </option>
         @endforeach
     </select>
-
-    {{-- Debug information to help troubleshoot --}}
-    @include('website.components.forms.debug-path', [
-        'answerPath' => $answerPath,
-    ])
 </div>

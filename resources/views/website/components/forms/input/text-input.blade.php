@@ -9,7 +9,6 @@
         </span>
     </label>
     <input type="{{ $data['type'] ?? 'text' }}" placeholder="{{ $data['description'][app()->getLocale()] ?? '' }}"
-        class="input input-bordered bg-white mb-2 rounded-md"
-        wire:model.lazy="formData.{{ $answerPath }}"
-        @if ($data['required'] ?? false) required @endif>
+        class="input input-bordered bg-white mb-2 rounded-md" wire:model.lazy="formData.{{ $answerPath }}"
+        {{-- @if ($data['required'] ?? false) required @endif --}}>
 </div>

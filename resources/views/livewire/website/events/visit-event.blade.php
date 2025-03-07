@@ -25,11 +25,7 @@ new class extends Component {
         $actions = new VisitEventFormActions();
         $user = auth()->guard('visitor')->user();
         $submission = VisitorSubmission::where('event_announcement_id', $this->event->id)->where('visitor_id', $user->id)->first();
-        // if ($submission) {
-
-        // }
         $this->formData = $actions->initFormData($this->event);
-        $this->formData = $submission->answers;
     }
 
     public function updateRadioSelection($answerPath, $selectedValue)
@@ -92,9 +88,9 @@ new class extends Component {
     {
         $actions = new VisitEventFormActions();
 
-        // Validate the form data
-        $rules = $actions->getValidationRules($this->event);
-        $this->validate($rules);
+        // Validate the form data with proper attributes
+        $validation = $actions->getValidationRules($this->event);
+        $this->validate($validation['rules'], [], $validation['attributes']);
 
         // Save the form submission
         $success = $actions->saveFormSubmission($this->event, $this->formData);
@@ -146,6 +142,11 @@ new class extends Component {
                         @error("formData.{$sectionIndex}.fields.{$fieldIndex}.answer")
                             <div class="text-error text-sm mt-1">{{ $message }}</div>
                         @enderror
+
+                        {{-- Debug information to help troubleshoot --}}
+                        @include('website.components.forms.debug-path', [
+                            'answerPath' => $answerPath,
+                        ])
                     @endforeach
 
                     <div class="h-8"></div>
