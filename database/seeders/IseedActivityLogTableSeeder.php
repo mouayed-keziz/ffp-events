@@ -409,6 +409,21 @@ class IseedActivityLogTableSeeder extends Seeder
                 'event' => 'modification',
                 'batch_uuid' => NULL,
             ),
+            26 => 
+            array (
+                'id' => 27,
+                'log_name' => 'event_announcements',
+                'description' => 'Création d\'un nouvel événement',
+                'subject_type' => 'App\\Models\\EventAnnouncement',
+                'subject_id' => 3,
+                'causer_type' => 'App\\Models\\User',
+                'causer_id' => 1,
+                'properties' => '{"fr":{"title":"azd","description":"qsd","content":"<p>azd<\\/p>","terms":""},"en":{"title":"qsd","description":"qsd","content":"<p>qsd<\\/p>","terms":""},"ar":{"title":"qsd","description":"qsd","content":"<p>qsd<\\/p>","terms":""}}',
+                'created_at' => '2025-03-07 23:10:11',
+                'updated_at' => '2025-03-07 23:10:11',
+                'event' => 'creation',
+                'batch_uuid' => NULL,
+            ),
         ));
         
         

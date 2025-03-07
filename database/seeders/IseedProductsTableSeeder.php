@@ -22,10 +22,10 @@ class IseedProductsTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'name' => '{"fr":"Table scandinave 20 x 80 CM pour 4 personnes","en":"Table scandinave 20 x 80 CM pour 4 personnes","ar":"Table scandinave 20 x 80 CM pour 4 personnes"}',
+                'name' => '{"fr":"Table","en":"Table scandinave 20 x 80 CM pour 4 personnes","ar":"Table scandinave 20 x 80 CM pour 4 personnes"}',
                 'code' => 'table01',
                 'created_at' => '2025-02-17 19:35:01',
-                'updated_at' => '2025-02-17 19:35:01',
+                'updated_at' => '2025-03-07 21:06:46',
                 'deleted_at' => NULL,
             ),
             1 => 

@@ -44,20 +44,20 @@ class IseedExhibitorFormsTableSeeder extends Seeder
                 'id' => 5,
                 'title' => '{"fr":"Sponsoring","en":"Sponsoring","ar":"Sponsoring"}',
                 'description' => '{"ar":null}',
-                'sections' => '[]',
+                'sections' => '[{"title":{"fr":"azd","en":"qsd","ar":"qsd"},"fields":[{"type":"input","data":{"label":{"fr":"azd","en":"qsd","ar":"qsd"},"description":{"fr":null,"en":null,"ar":null},"type":"text","required":false}}]}]',
                 'event_announcement_id' => 1,
                 'created_at' => '2025-02-19 12:39:08',
-                'updated_at' => '2025-02-19 12:39:08',
+                'updated_at' => '2025-03-07 21:56:01',
             ),
             3 => 
             array (
                 'id' => 6,
                 'title' => '{"fr":"Aménagement des stands et conception 3D","en":"Aménagement des stands et conception 3D","ar":"Aménagement des stands et conception 3D"}',
-                'description' => '{"ar":null}',
-                'sections' => '[]',
+                'description' => '{"fr":"qsd","en":"qsd","ar":"qsd"}',
+                'sections' => '[{"title":{"fr":"azd","en":"qsd","ar":"qsd"},"fields":[{"type":"ecommerce","data":{"label":{"fr":"azd","en":"qsd","ar":"qsd"},"description":{"fr":null,"en":null,"ar":null},"products":[{"product_id":"2","price":{"DZD":"50","EUR":"500","USD":"5000"}},{"product_id":"3","price":{"DZD":"55","EUR":"550","USD":"5500"}}]}}]}]',
                 'event_announcement_id' => 1,
                 'created_at' => '2025-02-19 12:39:23',
-                'updated_at' => '2025-02-19 12:39:23',
+                'updated_at' => '2025-03-07 21:56:39',
             ),
             4 => 
             array (
@@ -68,6 +68,16 @@ class IseedExhibitorFormsTableSeeder extends Seeder
                 'event_announcement_id' => 2,
                 'created_at' => '2025-02-28 16:36:11',
                 'updated_at' => '2025-03-06 15:20:59',
+            ),
+            5 => 
+            array (
+                'id' => 9,
+                'title' => '{"fr":"deuxieme","en":"deuxieme","ar":"deuxieme"}',
+                'description' => '{"ar":null}',
+                'sections' => '[{"title":{"fr":"hello world","en":"hello world","ar":"hello world"},"fields":[{"type":"plan_tier","data":{"label":{"fr":"azd","en":"qsd","ar":"wxc"},"description":{"fr":null,"en":null,"ar":null},"plan_tier_id":"1"}},{"type":"ecommerce","data":{"label":{"fr":"qsc","en":"qsc","ar":"qsc"},"description":{"fr":null,"en":null,"ar":null},"products":[{"product_id":"2","price":{"DZD":"80","EUR":"800","USD":"8000"}},{"product_id":"1","price":{"DZD":"90","EUR":"900","USD":"9000"}}]}}]}]',
+                'event_announcement_id' => 2,
+                'created_at' => '2025-03-07 20:02:53',
+                'updated_at' => '2025-03-07 20:02:53',
             ),
         ));
         
