@@ -73,7 +73,7 @@ class ManageEventAnnouncementVisitorSubmissions extends ManageRelatedRecords
                         'record' => $record->eventAnnouncement->id,
                         'visitorSubmission' => $record->id,
                     ])),
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([

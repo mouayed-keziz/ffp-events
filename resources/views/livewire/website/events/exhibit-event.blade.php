@@ -112,6 +112,135 @@ new class extends Component {
     }
 
     /**
+     * Update plan selection for plan_tier field
+     * This ensures only one plan can be selected at a time (radio behavior)
+     *
+     * @param string $answerPath The path to the answer in formData
+     * @param string|int $selectedPlanId The ID of the selected plan
+     */
+    public function updatePlanSelection($answerPath, $selectedPlanId)
+    {
+        // Get the plans array from the answer path - prepend formData. to the path
+        $plans = data_get($this, 'formData.' . $answerPath . '.plans', []);
+        if (empty($plans)) {
+            return;
+        }
+
+        // Update the plans to ensure only the selected one has selected=true
+        foreach ($plans as $index => $plan) {
+            $isCurrentPlanSelected = $plan['plan_id'] == $selectedPlanId;
+            $plans[$index]['selected'] = $isCurrentPlanSelected;
+        }
+
+        // Set the updated plans back to the form data
+        data_set($this, 'formData.' . $answerPath . '.plans', $plans);
+
+        // Recalculate price after changing selection
+        $this->calculateTotalPrice();
+    }
+
+    /**
+     * Update product selection and quantity for ecommerce fields
+     *
+     * @param string $answerPath The path to the answer in formData
+     * @param string|int $productId The ID of the product
+     * @param int $quantity The quantity to set if selected, 0 if unselected
+     */
+    public function updateProductQuantity($answerPath, $productId, $quantity = 1)
+    {
+        // Get the products array from the answer path
+        $products = data_get($this, 'formData.' . $answerPath . '.products', []);
+        if (empty($products)) {
+            return;
+        }
+
+        // Find product by ID and update its properties
+        foreach ($products as $index => $product) {
+            if ($product['product_id'] == $productId) {
+                // If quantity is 0, it means the checkbox was unchecked
+                // otherwise, update the quantity to the specified value
+                if ($quantity <= 0) {
+                    $products[$index]['selected'] = false;
+                } else {
+                    $products[$index]['selected'] = true;
+                    // Make sure quantity is at least 1
+                    $products[$index]['quantity'] = max(1, intval($quantity));
+                }
+            }
+        }
+
+        // Set the updated products back to the form data
+        data_set($this, 'formData.' . $answerPath . '.products', $products);
+
+        // Recalculate price after changing selection
+        $this->calculateTotalPrice();
+    }
+
+    /**
+     * Update radio selection for RADIO_PRICED field
+     * This ensures only one option can be selected at a time (radio behavior)
+     *
+     * @param string $answerPath The path to the answer in formData
+     * @param string $selectedValue The value of the selected option
+     */
+    public function updateRadioSelection($answerPath, $selectedValue)
+    {
+        // Store the selected value in the selectedValue property
+        data_set($this, 'formData.' . $answerPath . '.selectedValue', $selectedValue);
+
+        // Get the options array from the answer path
+        $options = data_get($this, 'formData.' . $answerPath . '.options', []);
+        if (empty($options)) {
+            return;
+        }
+
+        // Update the options to ensure only the selected one has selected=true
+        foreach ($options as $index => $option) {
+            $isCurrentOptionSelected = $option['value'] == $selectedValue;
+            $options[$index]['selected'] = $isCurrentOptionSelected;
+        }
+
+        // Set the updated options back to the form data
+        data_set($this, 'formData.' . $answerPath . '.options', $options);
+
+        // Recalculate price after changing selection
+        $this->calculateTotalPrice();
+    }
+
+    /**
+     * Update select option for SELECT_PRICED field
+     *
+     * @param string $answerPath The path to the answer in formData
+     * @param string $selectedValue The value of the selected option
+     */
+    public function updateSelectOption($answerPath, $selectedValue)
+    {
+        // Get the options array from the answer path
+        $options = data_get($this, 'formData.' . $answerPath . '.options', []);
+        if (empty($options)) {
+            return;
+        }
+
+        // Update the options to ensure only the selected one has selected=true
+        foreach ($options as $index => $option) {
+            $isCurrentOptionSelected = $option['value'] == $selectedValue;
+            $options[$index]['selected'] = $isCurrentOptionSelected;
+        }
+
+        // Set the updated options back to the form data
+        data_set($this, 'formData.' . $answerPath . '.options', $options);
+
+        // Dispatch a browser event to inform Alpine.js of the change
+        $this->dispatch('selected-changed', [
+            'path' => $answerPath,
+            'label' => $selectedValue,
+        ]);
+
+        // Recalculate price after changing selection
+        $this->calculateTotalPrice();
+    }
+
+    /**
      * Submit the entire form
      */
     public function submitForm()
@@ -156,6 +285,7 @@ new class extends Component {
 
                             @foreach ($section['fields'] as $fieldIndex => $field)
                                 @php
+                                    // Remove the formData. prefix from the answerPath
                                     $answerPath = "{$currentStep}.sections.{$sectionIndex}.fields.{$fieldIndex}.answer";
                                     $fieldType = App\Enums\FormField::tryFrom($field['type']);
                                 @endphp
@@ -165,7 +295,7 @@ new class extends Component {
                                     'answerPath' => $answerPath,
                                 ])
 
-                                @error("formData.{$answerPath}")
+                                @error("formData.{$currentStep}.sections.{$sectionIndex}.fields.{$fieldIndex}.answer")
                                     <div class="text-error text-sm mt-1">{{ $message }}</div>
                                 @enderror
                             @endforeach

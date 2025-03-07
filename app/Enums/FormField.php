@@ -95,16 +95,50 @@ enum FormField: string implements HasLabel
                 }
 
                 // Initialize products with empty selection and quantity
-                $fieldData['answer'] = [];
-                foreach ($field['data']['products'] as $product) {
-                    $fieldData['answer'][$product['product_id']] = [
-                        'selected' => false,
-                        'quantity' => 1
-                    ];
-                }
+                $fieldData['answer'] = [
+                    'products' => collect($field['data']['products'])->map(function ($product) {
+                        $productModel = \App\Models\Product::find($product['product_id'] ?? null);
+                        return [
+                            'product_id' => $product['product_id'] ?? null,
+                            'name' => $productModel ? $productModel->name : null,
+                            'code' => $productModel ? $productModel->code : null,
+                            'selected' => false,
+                            'quantity' => 1,
+                            'price' => $product['price'] ?? []
+                        ];
+                    })->toArray()
+                ];
             }
         }
 
+        // Initialize structured answers for regular select, radio, checkbox fields
+        if (in_array($this, [self::SELECT, self::RADIO, self::CHECKBOX])) {
+            if (isset($field['data']['options'])) {
+                // Initialize the answer with all available options (none selected)
+                $fieldData['answer']['options'] = collect($field['data']['options'])->map(function ($option) {
+                    return [
+                        'option' => $option['option'] ?? [],
+                        'selected' => false,
+                        'value' => $option['option'][app()->getLocale()] ?? ($option['option']['fr'] ?? '')
+                    ];
+                })->toArray();
+            }
+        }
+
+        // Initialize structured answers for priced select, radio, checkbox fields
+        if (in_array($this, [self::SELECT_PRICED, self::RADIO_PRICED, self::CHECKBOX_PRICED])) {
+            if (isset($field['data']['options'])) {
+                // Initialize the answer with all available options (none selected)
+                $fieldData['answer']['options'] = collect($field['data']['options'])->map(function ($option) {
+                    return [
+                        'option' => $option['option'] ?? [],
+                        'price' => $option['price'] ?? [],
+                        'selected' => false,
+                        'value' => $option['option'][app()->getLocale()] ?? ($option['option']['fr'] ?? '')
+                    ];
+                })->toArray();
+            }
+        }
 
         // For plan tier, get associated plans
         if ($this === self::PLAN_TIER && isset($field['data']['plan_tier_id'])) {
@@ -122,6 +156,17 @@ enum FormField: string implements HasLabel
                         ];
                     })->toArray(),
                 ];
+
+                // Initialize the answer with all available plans (none selected)
+                $fieldData['answer'] = [
+                    'plans' => collect($fieldData['data']['plan_tier_details']['plans'] ?? [])->map(function ($plan) {
+                        return [
+                            'plan_id' => $plan['id'],
+                            'selected' => false,
+                            'price' => $plan['price'] ?? []
+                        ];
+                    })->toArray()
+                ];
             }
         }
 
@@ -134,12 +179,32 @@ enum FormField: string implements HasLabel
     public function getDefaultAnswer(array $field = [])
     {
         return match ($this) {
-            self::CHECKBOX, self::CHECKBOX_PRICED => [],
+            self::CHECKBOX => [
+                'options' => [] // New structured format for checkbox
+            ],
+            self::CHECKBOX_PRICED => [
+                'options' => [] // Structured format for checkbox priced
+            ],
             self::UPLOAD => null,
             self::INPUT => $this->getInputDefaultAnswer($field),
-            self::ECOMMERCE => [], // Empty array for ecommerce products
-            self::SELECT_PRICED, self::RADIO_PRICED => '',
-            self::PLAN_TIER => null, // Changed from empty string to null
+            self::ECOMMERCE => [
+                'products' => [] // Structure with products array
+            ],
+            self::SELECT => [
+                'options' => [] // New structured format for select
+            ],
+            self::RADIO => [
+                'options' => [] // New structured format for radio
+            ],
+            self::SELECT_PRICED => [
+                'options' => [] // Structured format for select priced
+            ],
+            self::RADIO_PRICED => [
+                'options' => [] // Structured format for radio priced
+            ],
+            self::PLAN_TIER => [
+                'plans' => [] // Structure with plans array
+            ],
             default => '',
         };
     }
@@ -211,9 +276,6 @@ enum FormField: string implements HasLabel
 
     /**
      * Process field answer for submission
-     * 
-     * This enhanced version includes all translations and price information
-     * to ensure the submitted data has complete information
      */
     public function processFieldAnswer($answer, array $fieldData = [])
     {
@@ -227,109 +289,88 @@ enum FormField: string implements HasLabel
         switch ($this) {
             case self::SELECT:
             case self::RADIO:
-                // Single option selection - return with all translations
-                return $this->findOptionTranslations($fieldData['options'] ?? [], $answer);
+                // Use the structured answer with options array
+                if (empty($answer['options'])) {
+                    return ['options' => []];
+                }
+
+                // Find the selected option and prepare for submission
+                $selectedOptions = [];
+                foreach ($answer['options'] as $option) {
+                    if (!empty($option['selected']) && $option['selected'] === true) {
+                        $selectedOptions[] = [
+                            'option' => $option['option'],
+                            'selected' => true,
+                            'value' => $option['value']
+                        ];
+                    }
+                }
+
+                // For radio/select, we only expect one selected option
+                return [
+                    'options' => $answer['options'],
+                    'selected_option' => $selectedOptions[0] ?? null
+                ];
 
             case self::SELECT_PRICED:
             case self::RADIO_PRICED:
-                // Priced single option - return both option and price data
-                $option = $this->findOptionTranslations($fieldData['options'] ?? [], $answer);
-                $price = $this->findOptionPrice($fieldData['options'] ?? [], $answer);
-
-                return [
-                    'option' => $option,
-                    'price' => $price
-                ];
-
-            case self::CHECKBOX:
-                // Multiple options - return array of translated options
-                if (is_array($answer)) {
-                    $translatedAnswers = [];
-                    foreach ($answer as $selectedValue) {
-                        $translatedAnswers[] = $this->findOptionTranslations($fieldData['options'] ?? [], $selectedValue);
-                    }
-                    return $translatedAnswers;
+                // Just return the structured answer with options array
+                if (empty($answer['options'])) {
+                    return ['options' => []];
                 }
+
+                // Return the options array with selected info
                 return $answer;
 
-            case self::CHECKBOX_PRICED:
-                // Multiple priced options
-                if (is_array($answer)) {
-                    $translatedAnswers = [];
-                    foreach ($answer as $selectedValue) {
-                        $option = $this->findOptionTranslations($fieldData['options'] ?? [], $selectedValue);
-                        $price = $this->findOptionPrice($fieldData['options'] ?? [], $selectedValue);
+            case self::CHECKBOX:
+                // Use the structured answer with options array for checkboxes
+                if (empty($answer['options'])) {
+                    return ['options' => []];
+                }
 
-                        $translatedAnswers[] = [
-                            'option' => $option,
-                            'price' => $price
+                // Find all selected options and prepare for submission
+                $selectedOptions = [];
+                foreach ($answer['options'] as $option) {
+                    if (!empty($option['selected']) && $option['selected'] === true) {
+                        $selectedOptions[] = [
+                            'option' => $option['option'],
+                            'selected' => true,
+                            'value' => $option['value']
                         ];
                     }
-                    return $translatedAnswers;
                 }
+
+                return [
+                    'options' => $answer['options'],
+                    'selected_options' => $selectedOptions
+                ];
+
+            case self::CHECKBOX_PRICED:
+                // Just return the structured answer with options array
+                if (empty($answer['options'])) {
+                    return ['options' => []];
+                }
+
+                // Return the options array with selected info
                 return $answer;
 
             case self::ECOMMERCE:
-                // E-commerce products with quantities
-                if (is_array($answer)) {
-                    $processedAnswer = [];
-                    foreach ($answer as $productId => $productData) {
-                        if (!empty($productData['selected']) && $productData['selected'] === true) {
-                            $product = \App\Models\Product::find($productId);
-
-                            // Find product price from field data
-                            $price = [];
-                            foreach ($fieldData['products'] ?? [] as $productItem) {
-                                if ($productItem['product_id'] == $productId) {
-                                    $price = $productItem['price'] ?? [];
-                                    break;
-                                }
-                            }
-
-                            $processedAnswer[$productId] = [
-                                'product_id' => $productId,
-                                'name' => $product ? $product->name : null,
-                                'code' => $product ? $product->code : null,
-                                'quantity' => $productData['quantity'] ?? 1,
-                                'selected' => true,
-                                'price' => $price
-                            ];
-                        }
-                    }
-                    return $processedAnswer;
+                // Simplified structure - just return the products array directly
+                if (empty($answer['products'])) {
+                    return ['products' => []];
                 }
+
+                // Return the products array as is
                 return $answer;
 
             case self::PLAN_TIER:
-                // Plan tier with pricing
-                $planTier = \App\Models\PlanTier::find($fieldData['plan_tier_id'] ?? null);
-                $planId = $answer;
-
-                if (empty($planId)) {
-                    return null;
+                // Simplified structure - just return the plans array directly
+                if (empty($answer['plans'])) {
+                    return ['plans' => []];
                 }
 
-                // Find plan details
-                $planDetails = null;
-                $price = [];
-
-                if (isset($fieldData['plan_tier_details']['plans'])) {
-                    foreach ($fieldData['plan_tier_details']['plans'] as $plan) {
-                        if ($plan['id'] == $planId) {
-                            $planDetails = $plan;
-                            $price = $plan['price'] ?? [];
-                            break;
-                        }
-                    }
-                }
-
-                return [
-                    'plan_tier_id' => $fieldData['plan_tier_id'] ?? null,
-                    'plan_id' => $planId,
-                    'plan_title' => $planDetails ? $planDetails['title'] : null,
-                    'tier_title' => $planTier ? $planTier->title : null,
-                    'price' => $price
-                ];
+                // Return the plans array as is
+                return $answer;
 
             default:
                 // For other field types, just return the answer as is
@@ -382,105 +423,63 @@ enum FormField: string implements HasLabel
         switch ($this) {
             case self::SELECT_PRICED:
             case self::RADIO_PRICED:
-                if (!empty($answer)) {
-                    $optionPrice = 0;
-                    $currentLocale = app()->getLocale();
+                // Handle the new structure with options array
+                if (empty($answer) || empty($answer['options'])) {
+                    break;
+                }
 
-                    // Handle different answer formats
-                    if (is_array($answer) && isset($answer['option'])) {
-                        // Handle processed answers
-                        foreach ($fieldData['options'] ?? [] as $option) {
-                            if ($option['option'][$currentLocale] === $answer['option'][$currentLocale]) {
-                                $optionPrice = floatval($option['price'][$preferredCurrency] ?? 0);
-                                break;
-                            }
-                        }
-                    } else {
-                        // Handle raw answers (string)
-                        foreach ($fieldData['options'] ?? [] as $option) {
-                            if ($option['option'][$currentLocale] === $answer) {
-                                $optionPrice = floatval($option['price'][$preferredCurrency] ?? 0);
-                                break;
-                            }
-                        }
+                // For select/radio, find and add the single selected option price
+                foreach ($answer['options'] as $optionData) {
+                    if (!empty($optionData['selected']) && $optionData['selected'] === true) {
+                        $optionPrice = floatval($optionData['price'][$preferredCurrency] ?? 0);
+                        $price = $optionPrice;
+                        break;
                     }
-                    $price = $optionPrice;
                 }
                 break;
 
             case self::CHECKBOX_PRICED:
-                if (is_array($answer)) {
-                    foreach ($answer as $selectedOption) {
-                        $optionPrice = 0;
-                        $currentLocale = app()->getLocale();
+                // Handle the new structure with options array
+                if (empty($answer) || empty($answer['options'])) {
+                    break;
+                }
 
-                        // Handle different answer formats
-                        if (is_array($selectedOption) && isset($selectedOption['option'])) {
-                            // Already processed answers
-                            foreach ($fieldData['options'] ?? [] as $option) {
-                                if ($option['option'][$currentLocale] === $selectedOption['option'][$currentLocale]) {
-                                    $optionPrice = floatval($option['price'][$preferredCurrency] ?? 0);
-                                    break;
-                                }
-                            }
-                        } else {
-                            // Raw answers (string)
-                            foreach ($fieldData['options'] ?? [] as $option) {
-                                if ($option['option'][$currentLocale] === $selectedOption) {
-                                    $optionPrice = floatval($option['price'][$preferredCurrency] ?? 0);
-                                    break;
-                                }
-                            }
-                        }
-
+                // For checkbox, sum up the prices of all selected options
+                foreach ($answer['options'] as $optionData) {
+                    if (!empty($optionData['selected']) && $optionData['selected'] === true) {
+                        $optionPrice = floatval($optionData['price'][$preferredCurrency] ?? 0);
                         $price += $optionPrice;
                     }
                 }
                 break;
 
             case self::ECOMMERCE:
-                if (is_array($answer)) {
-                    foreach ($answer as $productId => $productData) {
-                        if (!isset($productData['selected']) || $productData['selected'] !== true) {
-                            continue;
-                        }
+                // Handle the simplified structure with products array
+                if (empty($answer) || empty($answer['products'])) {
+                    break;
+                }
 
-                        // Find the product price
-                        foreach ($fieldData['products'] ?? [] as $product) {
-                            if ($product['product_id'] == $productId) {
-                                $productPrice = floatval($product['price'][$preferredCurrency] ?? 0);
-                                $quantity = intval($productData['quantity'] ?? 1);
-                                $price += $productPrice * $quantity;
-                                break;
-                            }
-                        }
+                foreach ($answer['products'] as $product) {
+                    if (!empty($product['selected']) && $product['selected'] === true) {
+                        $quantity = max(1, intval($product['quantity'] ?? 1));
+                        $productPrice = floatval($product['price'][$preferredCurrency] ?? 0);
+                        $price += $productPrice * $quantity;
                     }
                 }
                 break;
 
             case self::PLAN_TIER:
-                if (empty($answer)) {
+                // Handle simplified structure with plans array
+                if (empty($answer) || empty($answer['plans'])) {
                     break;
                 }
 
-                // Handle different answer formats
-                if (is_array($answer) && isset($answer['plan_id'])) {
-                    // Already processed answer
-                    $planPrice = floatval($answer['price'][$preferredCurrency] ?? 0);
-                    $price = $planPrice;
-                } else {
-                    // Raw answer (just the plan ID)
-                    $planId = $answer;
-
-                    // Get price from plan tier details
-                    if (isset($fieldData['plan_tier_details']) && isset($fieldData['plan_tier_details']['plans'])) {
-                        foreach ($fieldData['plan_tier_details']['plans'] as $plan) {
-                            if ($plan['id'] == $planId) {
-                                $planPrice = floatval($plan['price'][$preferredCurrency] ?? 0);
-                                $price = $planPrice;
-                                break;
-                            }
-                        }
+                // Find the selected plan
+                foreach ($answer['plans'] as $plan) {
+                    if (!empty($plan['selected']) && $plan['selected'] === true) {
+                        // Get price from plan details
+                        $price = floatval($plan['price'][$preferredCurrency] ?? 0);
+                        break;
                     }
                 }
                 break;

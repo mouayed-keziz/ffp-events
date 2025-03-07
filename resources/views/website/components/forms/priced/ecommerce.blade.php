@@ -13,34 +13,56 @@
     </label>
 
     @if (isset($data['products']) && is_array($data['products']) && count($data['products']) > 0)
+        @php
+            // Initialize products array in answer structure if it doesn't exist
+// Prepend formData. to the answerPath when accessing data
+$productsData = data_get($this, 'formData.' . $answerPath . '.products', []);
+if (empty($productsData)) {
+    // Initialize the answer with all available products
+    $productsData = collect($data['products'])
+        ->map(function ($product) {
+            $productModel = isset($product['product_details']) ? $product['product_details'] : [];
+            return [
+                'product_id' => $product['product_id'] ?? null,
+                'name' => $productModel['name'] ?? null,
+                'code' => $productModel['code'] ?? null,
+                'selected' => false,
+                'quantity' => 1,
+                'price' => $product['price'] ?? [],
+            ];
+        })
+        ->toArray();
+
+    // Set the initial products data in the model - prepend formData. to the path
+    data_set($this, 'formData.' . $answerPath . '.products', $productsData);
+            }
+        @endphp
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            @foreach ($data['products'] as $product)
+            @foreach ($data['products'] as $productIndex => $product)
                 @php
+                    // Find the corresponding product in our answer structure
+                    $productAnswerIndex = -1;
+                    $isSelected = false;
+                    $quantity = 1;
+
+                    foreach (data_get($this, 'formData.' . $answerPath . '.products', []) as $idx => $productData) {
+                        if ($productData['product_id'] == $product['product_id']) {
+                            $productAnswerIndex = $idx;
+                            $isSelected = !empty($productData['selected']) && $productData['selected'] === true;
+                            $quantity = intval($productData['quantity'] ?? 1);
+                            break;
+                        }
+                    }
+
                     $productId = $product['product_id'];
                     $productName = isset($product['product_details']) ? $product['product_details']['name'] : null;
                     $productCode = isset($product['product_details']) ? $product['product_details']['code'] : null;
                     $productImage = isset($product['product_details']) ? $product['product_details']['image'] : null;
-                    // Safely access nested array values using dot notation through wire model path
-                    $fullPath = "{$answerPath}.{$productId}";
-                    $selectedPath = "formData.{$fullPath}.selected";
-                    $quantityPath = "formData.{$fullPath}.quantity";
-
-                    $isSelected = isset($this->{$selectedPath}) ? $this->{$selectedPath} : false;
-                    $quantity = isset($this->{$quantityPath}) ? $this->{$quantityPath} : 1;
                 @endphp
 
-                <div x-data="{
-                    productId: {{ $productId }},
-                    selected: {{ $isSelected ? 'true' : 'false' }},
-                    quantity: {{ $quantity }},
-                    updateProduct() {
-                        $wire.set('formData.{{ $answerPath }}.{{ $productId }}.selected', this.selected);
-                        $wire.set('formData.{{ $answerPath }}.{{ $productId }}.quantity', this.quantity);
-                    }
-                }" x-init="$watch('selected', () => updateProduct());
-                $watch('quantity', () => updateProduct())"
-                    x-bind:class="selected ? 'border-2 border-primary/60 bg-primary/10' : ''"
-                    class="rounded-xl overflow-hidden transition-all">
+                <div wire:key="product-{{ $productId }}"
+                    class="rounded-xl overflow-hidden transition-all {{ $isSelected ? 'border-2 border-primary/60 bg-primary/10' : 'border border-gray-200' }}">
 
                     <!-- Product Image -->
                     <div class="aspect-[56/43] px-1.5 pt-1.5">
@@ -57,9 +79,11 @@
                     <!-- Product Info -->
                     <div class="px-4 py-2">
                         <div class="flex items-center space-x-2 mb-1">
-                            <input type="checkbox" id="product_{{ $productId }}" x-model="selected"
+                            <input type="checkbox" id="product_{{ $productId }}"
+                                wire:model.live="formData.{{ $answerPath }}.products.{{ $productAnswerIndex }}.selected"
+                                wire:change="updateProductQuantity('{{ $answerPath }}', {{ $productId }}, $event.target.checked ? {{ $quantity }} : 0)"
                                 class="checkbox checkbox-sm rounded-md {{ App::getLocale() === 'ar' ? 'ml-2' : '' }}"
-                                x-bind:class="selected ? 'checkbox-primary' : ''" />
+                                class="checkbox checkbox-sm {{ $isSelected ? 'checkbox-primary' : '' }}" />
 
                             <label for="product_{{ $productId }}"
                                 class="font-medium text-sm text-base truncate cursor-pointer"
@@ -71,8 +95,11 @@
                         <div class="grid grid-cols-7 gap-2 items-center">
                             <div class="col-span-7 sm:col-span-4">
                                 <input class="input input-sm input-bordered rounded-md w-full" type="number"
-                                    x-model="quantity" min="1" step="1" x-bind:disabled="!selected"
-                                    x-bind:class="!selected ? 'opacity-60' : ''" placeholder="{{ __('Qty') }}" />
+                                    wire:model.live="formData.{{ $answerPath }}.products.{{ $productAnswerIndex }}.quantity"
+                                    wire:change="$refresh" min="1" step="1"
+                                    {{ !$isSelected ? 'disabled' : '' }}
+                                    class="{{ !$isSelected ? 'opacity-60' : '' }}"
+                                    placeholder="{{ __('Qty') }}" />
                             </div>
 
                             <div class="col-span-7 sm:col-span-3 text-right">
@@ -86,6 +113,14 @@
                 </div>
             @endforeach
         </div>
+
+        {{-- Debug information to help troubleshoot --}}
+        @if (config('app.debug'))
+            <div class="mt-2 p-2 bg-gray-100 text-xs rounded">
+                <p>Debug - Answer Path: {{ $answerPath }}</p>
+                <pre>@json(data_get($this, 'formData.' . $answerPath), JSON_PRETTY_PRINT)</pre>
+            </div>
+        @endif
     @else
         <div class="bg-white border rounded-lg p-8 text-center">
             <x-heroicon-o-shopping-cart class="w-12 h-12 mx-auto mb-2 text-primary/50" />

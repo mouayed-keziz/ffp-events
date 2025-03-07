@@ -1,4 +1,5 @@
 @props(['data', 'answerPath'])
+
 <div class="form-control">
     <label class="label">
         <span class="label-text">
@@ -8,16 +9,78 @@
             @endif
         </span>
     </label>
+
+    @php
+        // Initialize options array in answer structure if it doesn't exist
+$optionsData = data_get($this, 'formData.' . $answerPath . '.options', []);
+if (empty($optionsData)) {
+    // Initialize the answer with all available options
+    $optionsData = collect($data['options'] ?? [])
+        ->map(function ($option) {
+            return [
+                'option' => $option['option'] ?? [],
+                'selected' => false,
+                'value' => $option['option'][app()->getLocale()] ?? ($option['option']['fr'] ?? ''),
+            ];
+        })
+        ->toArray();
+
+    // Set the initial options data in the model
+    data_set($this, 'formData.' . $answerPath . '.options', $optionsData);
+}
+
+// Find the currently selected option
+$selectedOptionIndex = -1;
+$selectedOptionLabel = '';
+
+foreach ($optionsData as $idx => $optionData) {
+    if (!empty($optionData['selected']) && $optionData['selected'] === true) {
+        $selectedOptionIndex = $idx;
+        $selectedOptionLabel = $optionData['value'] ?? '';
+                break;
+            }
+        }
+    @endphp
+
     <select class="select select-bordered bg-white mb-2 rounded-md"
-        wire:model.lazy="formData.{{ $answerPath }}"
+        wire:change="updateSelectOption('{{ $answerPath }}', $event.target.value)"
         @if ($data['required'] ?? false) required @endif>
+
         {{-- If description exists, display a default disabled option --}}
-        @if ($data['description'][app()->getLocale()] ?? false)
-            <option value="" disabled selected>{{ $data['description'][app()->getLocale()] }}</option>
-        @endif
+        <option value="" {{ $selectedOptionLabel ? '' : 'selected' }} disabled>
+            {{ $data['description'][app()->getLocale()] ?? __('Select an option') }}
+        </option>
+
         {{-- Loop through options --}}
-        @foreach ($data['options'] as $option)
-            <option value="{{ $option['option'][app()->getLocale()] }}">{{ $option['option'][app()->getLocale()] }}</option>
+        @foreach ($data['options'] as $optionIndex => $option)
+            @php
+                // Find the corresponding option in our answer structure
+                $optionAnswerIndex = -1;
+                $isSelected = false;
+
+                foreach (data_get($this, 'formData.' . $answerPath . '.options', []) as $idx => $optionData) {
+                    $currentValue = $option['option'][app()->getLocale()] ?? ($option['option']['fr'] ?? '');
+                    if ($optionData['value'] == $currentValue) {
+                        $optionAnswerIndex = $idx;
+                        $isSelected = !empty($optionData['selected']) && $optionData['selected'] === true;
+                        break;
+                    }
+                }
+
+                $optionLabel = $option['option'][app()->getLocale()] ?? ($option['option']['fr'] ?? '');
+            @endphp
+
+            <option value="{{ $optionLabel }}" {{ $isSelected ? 'selected' : '' }}>
+                {{ $optionLabel }}
+            </option>
         @endforeach
     </select>
+
+    {{-- Debug information to help troubleshoot --}}
+    @if (config('app.debug'))
+        <div class="mt-2 p-2 bg-gray-100 text-xs rounded">
+            <p>Debug - Answer Path: {{ $answerPath }}</p>
+            <pre>@json(data_get($this, 'formData.' . $answerPath), JSON_PRETTY_PRINT)</pre>
+        </div>
+    @endif
 </div>

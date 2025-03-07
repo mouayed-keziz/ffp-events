@@ -117,14 +117,15 @@ class ExhibitorFormActions extends BaseFormActions
 
                 // Only ecommerce fields need quantity validation
                 if ($fieldType && $fieldType->needsQuantity()) {
-                    // For ecommerce, validate each product's quantity
+                    // For ecommerce, validate each product's quantity when selected
                     if ($field['type'] === FormField::ECOMMERCE->value) {
-                        foreach ($field['data']['products'] ?? [] as $product) {
-                            $productQuantityKey = "{$formPrefix}.sections.{$sectionIndex}.fields.{$fieldIndex}.answer.{$product['product_id']}.quantity";
-                            $productSelectedKey = "{$formPrefix}.sections.{$sectionIndex}.fields.{$fieldIndex}.answer.{$product['product_id']}.selected";
+                        // Using the simplified structure with products array
+                        $productsKey = "{$formPrefix}.sections.{$sectionIndex}.fields.{$fieldIndex}.answer.products";
+                        $rules[$productsKey] = "array";
 
-                            $rules[$productQuantityKey] = "required_if:{$productSelectedKey},1|integer|min:1";
-                        }
+                        // Add specific validation rules for each product's quantity when selected
+                        $rules[$productsKey . ".*"] = "array";
+                        $rules[$productsKey . ".*.quantity"] = "integer|min:1";
                     }
                 }
             }
@@ -172,7 +173,7 @@ class ExhibitorFormActions extends BaseFormActions
                         }
                     }
 
-                    // Now process the field answer using the FormField enum's enhanced method
+                    // Process the field answer using the FormField enum's method that now returns simplified data
                     if (isset($field['type']) && isset($field['answer'])) {
                         $fieldType = FormField::tryFrom($field['type']);
                         if ($fieldType) {
@@ -225,28 +226,28 @@ class ExhibitorFormActions extends BaseFormActions
             if (auth('exhibitor')->check()) {
                 $exhibitorId = auth('exhibitor')->user()->id;
             }
-
+            dd($processedData);
             // Create a new submission with nullable exhibitor_id
-            $submission = \App\Models\ExhibitorSubmission::create([
-                'exhibitor_id' => $exhibitorId,
-                'event_announcement_id' => $event->id,
-                'answers' => $processedData,
-                'status' => 'pending',
-            ]);
-            Log::info("Exhibitor Submission created: {$submission->id}");
+            // $submission = \App\Models\ExhibitorSubmission::create([
+            //     'exhibitor_id' => $exhibitorId,
+            //     'event_announcement_id' => $event->id,
+            //     'answers' => $processedData,
+            //     'status' => 'pending',
+            // ]);
+            // Log::info("Exhibitor Submission created: {$submission->id}");
 
             // Process any files by adding them to the Spatie Media Library
-            foreach ($filesToProcess as $fileInfo) {
-                $media = $submission->addMedia($fileInfo['file']->getRealPath())
-                    ->usingFileName($fileInfo['file']->getClientOriginalName())
-                    ->withCustomProperties([
-                        'fileId' => $fileInfo['fileId'],
-                        'fileType' => $fileInfo['fieldData']['file_type'] ?? null,
-                        'fieldLabel' => $fileInfo['fieldData']['label'] ?? null,
-                    ])
-                    ->toMediaCollection('attachments');
-                Log::info("Media added: {$media->id} with fileId: {$fileInfo['fileId']}");
-            }
+            // foreach ($filesToProcess as $fileInfo) {
+            //     $media = $submission->addMedia($fileInfo['file']->getRealPath())
+            //         ->usingFileName($fileInfo['file']->getClientOriginalName())
+            //         ->withCustomProperties([
+            //             'fileId' => $fileInfo['fileId'],
+            //             'fileType' => $fileInfo['fieldData']['file_type'] ?? null,
+            //             'fieldLabel' => $fileInfo['fieldData']['label'] ?? null,
+            //         ])
+            //         ->toMediaCollection('attachments');
+            //     Log::info("Media added: {$media->id} with fileId: {$fileInfo['fileId']}");
+            // }
 
             return true;
         } catch (\Exception $e) {
