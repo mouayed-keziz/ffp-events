@@ -115,12 +115,9 @@ if (empty($productsData)) {
         </div>
 
         {{-- Debug information to help troubleshoot --}}
-        @if (config('app.debug'))
-            <div class="mt-2 p-2 bg-gray-100 text-xs rounded">
-                <p>Debug - Answer Path: {{ $answerPath }}</p>
-                <pre>@json(data_get($this, 'formData.' . $answerPath), JSON_PRETTY_PRINT)</pre>
-            </div>
-        @endif
+        @include('website.components.forms.debug-path', [
+            'answerPath' => $answerPath,
+        ])
     @else
         <div class="bg-white border rounded-lg p-8 text-center">
             <x-heroicon-o-shopping-cart class="w-12 h-12 mx-auto mb-2 text-primary/50" />

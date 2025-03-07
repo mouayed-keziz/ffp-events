@@ -25,47 +25,54 @@
         <!-- Multi-step progress indicator -->
         <div class="mb-8">
             <div class="hidden sm:block">
-                <!-- Circles and connector lines -->
-                <div class="flex justify-between items-center mb-2">
-                    <!-- Step indicators and connector lines in correct order -->
-                    @for ($i = 0; $i < count($steps); $i++)
-                        @if ($i > 0)
-                            <div class="flex-1 h-1 rounded-btn {{ $i <= $currentStep ? 'bg-primary' : 'bg-gray-300' }}"></div>
-                        @endif
-                        
-                        <div class="w-8 h-8 rounded-full flex items-center justify-center {{ $i <= $currentStep ? 'bg-primary' : 'bg-gray-300' }}">
-                            <span class="text-white font-medium">{{ $i + 1 }}</span>
+                <div class="relative" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
+                    <!-- Progress bar container with connectors -->
+                    <div class="relative">
+                        <!-- Connector lines layer -->
+                        <div class="absolute inset-x-0 top-4 flex justify-center items-center">
+                            <div class="w-full mx-8 flex">
+                                @for ($i = 0; $i < count($steps) - 1; $i++)
+                                    <div class="flex-1 h-1 {{ $i < $currentStep ? 'bg-primary' : 'bg-gray-300' }}">
+                                    </div>
+                                @endfor
+                            </div>
                         </div>
-                    @endfor
-                </div>
-                
-                <!-- Step titles properly aligned with circles -->
-                <div class="flex justify-between">
-                    @for ($i = 0; $i < count($steps); $i++)
-                        <div class="text-center w-8 {{ $i < count($steps)-1 ? 'flex-1' : '' }}">
-                            <span class="{{ $i <= $currentStep ? 'font-bold text-primary' : 'text-gray-700' }} text-sm">
-                                {{$steps[$i]['title']}}
-                                {{ isset($steps[$i]['title']) ? $steps[$i]['title'][app()->getLocale()] ?? ($steps[$i]['title']['fr'] ?? ($steps[$i]['title']['en'] ?? '')) : '' }}
-                            </span>
+
+                        <!-- Circles and labels -->
+                        <div class="grid relative z-10"
+                            style="grid-template-columns: repeat({{ count($steps) }}, 1fr);">
+                            @for ($i = 0; $i < count($steps); $i++)
+                                <div class="flex flex-col items-center">
+                                    <div
+                                        class="w-8 h-8 rounded-full flex items-center justify-center {{ $i <= $currentStep ? 'bg-primary' : 'bg-gray-300' }}">
+                                        <span class="text-white font-medium">{{ $i + 1 }}</span>
+                                    </div>
+                                    <div class="mt-2 px-2 w-full">
+                                        <span
+                                            class="text-sm text-center break-words inline-block w-full {{ $i === $currentStep ? 'font-bold text-gray-900' : 'text-gray-500' }}">
+                                            {{ isset($steps[$i]['title']) ? $steps[$i]['title'] ?? ($steps[$i]['title'][app()->getLocale()] ?? ($steps[$i]['title']['fr'] ?? '')) : '' }}
+                                        </span>
+                                    </div>
+                                </div>
+                            @endfor
                         </div>
-                    @endfor
+                    </div>
                 </div>
             </div>
 
-            <!-- Mobile progress indicator (simplified) -->
+            <!-- Mobile progress indicator -->
             <div class="sm:hidden">
                 <div class="flex items-center justify-between mb-2">
                     @for ($i = 0; $i < count($steps); $i++)
                         @if ($i > 0)
                             <div class="flex-1 h-1 {{ $i <= $currentStep ? 'bg-primary' : 'bg-gray-300' }}"></div>
                         @endif
-                        
-                        <div class="w-6 h-6 rounded-full flex items-center justify-center {{ $i <= $currentStep ? 'bg-primary' : 'bg-gray-300' }}">
+                        <div
+                            class="w-6 h-6 rounded-full flex items-center justify-center {{ $i <= $currentStep ? 'bg-primary' : 'bg-gray-300' }}">
                             <span class="text-white text-xs">{{ $i + 1 }}</span>
                         </div>
                     @endfor
                 </div>
-                <!-- Current step title on mobile -->
                 <div class="text-center">
                     <span class="font-bold text-primary text-sm">
                         {{ isset($steps[$currentStep]['title']) ? $steps[$currentStep]['title'][app()->getLocale()] ?? ($steps[$currentStep]['title']['fr'] ?? ($steps[$currentStep]['title']['en'] ?? '')) : '' }}
@@ -74,10 +81,10 @@
             </div>
         </div>
 
-        <!-- Display the current step's title and description -->
+        <!-- Current step title and description -->
         <div class="mb-6">
             <h2 class="text-xl font-bold">
-                {{ isset($steps[$currentStep]['title']) ? $steps[$currentStep]['title'][app()->getLocale()] ?? ($steps[$currentStep]['title']['fr'] ?? ($steps[$currentStep]['title']['en'] ?? '')) : '' }}
+                {{ isset($steps[$currentStep]['title']) ? $steps[$currentStep]['title'] ?? ($steps[$currentStep]['title'][app()->getLocale()] ?? ($steps[$currentStep]['title']['fr'] ?? '')) : '' }}
             </h2>
             @if (isset($steps[$currentStep]['description']) && !empty($steps[$currentStep]['description'][app()->getLocale()]))
                 <p class="text-gray-600 mt-2">

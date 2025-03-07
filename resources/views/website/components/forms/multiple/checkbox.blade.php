@@ -63,10 +63,7 @@ if (empty($optionsData)) {
     </div>
 
     {{-- Debug information to help troubleshoot --}}
-    @if (config('app.debug'))
-        <div class="mt-2 p-2 bg-gray-100 text-xs rounded">
-            <p>Debug - Answer Path: {{ $answerPath }}</p>
-            <pre>@json(data_get($this, 'formData.' . $answerPath), JSON_PRETTY_PRINT)</pre>
-        </div>
-    @endif
+    @include('website.components.forms.debug-path', [
+        'answerPath' => $answerPath,
+    ])
 </div>

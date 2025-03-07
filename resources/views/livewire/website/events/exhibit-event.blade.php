@@ -231,7 +231,7 @@ new class extends Component {
         data_set($this, 'formData.' . $answerPath . '.options', $options);
 
         // Dispatch a browser event to inform Alpine.js of the change
-        $this->dispatch('selected-changed', [
+        $this->dispatch('selectedchanged', [
             'path' => $answerPath,
             'label' => $selectedValue,
         ]);
@@ -262,7 +262,7 @@ new class extends Component {
     }
 }; ?>
 
-<div class="container mx-auto py-8 px-4">
+<div class="container mx-auto py-8 md:px-4">
     @include('website.components.forms.multi-step-form', [
         'steps' => $formData,
         'currentStep' => $currentStep,
