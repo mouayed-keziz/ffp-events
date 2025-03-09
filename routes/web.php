@@ -25,6 +25,7 @@ Route::middleware('local_middleware')->group(function () {
     Route::get('/', [EventController::class, 'Events'])->name('events');
     Route::get('/event/{id}', [EventController::class, 'Event'])->name('event_details');
     Route::get('/event/{id}/visit', [EventController::class, 'VisitEvent'])->name('visit_event')->middleware("is_visitor");
+    Route::get('/event/{id}/visit-event-form-submitted', [EventController::class, 'VisitFormSubmitted'])->name('visit_event_form_submitted')->middleware("is_visitor");
     Route::get('/event/{id}/exhibit', [EventController::class, 'ExhibitEvent'])->name('exhibit_event')->middleware("is_exhibitor");
 
     Route::prefix("auth")->group(function () {

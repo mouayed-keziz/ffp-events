@@ -18,4 +18,10 @@ return [
     // Terms and conditions
     'terms_acceptance' => 'J\'accepte les termes et conditions de participation et exposition de SIFFP 7ème édition',
     'terms_and_conditions' => 'Termes et conditions',
+
+    // Success page
+    'registration_success' => 'Félicitations, vous êtes inscrits comme visiteur de :event',
+    'badge_instructions' => 'Vous pouvez télécharger votre badge de partificipation et l\'imprimer pour pouvoir le présenter le jour de l\'évènement, vous pouvez télécharger votre badge également depuis votre profile, ou bien via l\'email que vous venez de recevoir.',
+    'download_badge' => 'Télécharger le badge',
+    'go_to_home' => 'Retour à l\'accueil',
 ];

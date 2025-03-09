@@ -48,42 +48,20 @@ new class extends Component {
         <label tabindex="0" class="pt-1 btn btn-link btn-sm btn-circle">
             @include('website.svg.profile')
         </label>
-        <ul tabindex="0" class="z-[1] p-4 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52 gap-2">
-            <div class="px-3 py-2 border-b mb-2 flex items-center gap-2">
-                @if (checkUser() && currentUser()->image)
-                    <div class="w-10 rounded-full">
-                        <img src="{{ currentUser()->image }}" alt="User Profile Photo" />
-                    </div>
-                @else
-                    @php
-                        $name = currentUser()->name;
-                        $parts = explode(' ', $name);
-                        $initials =
-                            count($parts) > 1
-                                ? implode('', array_map(fn($n) => strtoupper($n[0]), $parts))
-                                : strtoupper($parts[0][0]);
-                    @endphp
-                    <div class="avatar placeholder">
-                        <div class="bg-neutral text-neutral-content w-10 rounded-full">
-                            <span class="text-xl">{{ $initials }}</span>
-                        </div>
-                    </div>
-                @endif
-                <div>
-                    <div class="font-bold">{{ currentUser()->name }}</div>
-                    <div class="text-xs">{{ currentUser()?->email }}</div>
-                </div>
+        <ul tabindex="0" class="z-[1] p-1 shadow menu menu-sm dropdown-content bg-white rounded-box w-52">
+            <div class="space-y-1">
+                <a href="#" class="block px-3 py-1.5 rounded font-semibold hover:bg-gray-300/20">
+                    {{ __('website/navbar.my_profile') }}
+                </a>
+                <a href="#" class="block px-3 py-1.5 rounded font-semibold hover:bg-gray-300/20">
+                    {{ __('website/navbar.my_registrations') }}
+                </a>
+                <a wire:click="logout"
+                    class="cursor-pointer px-3 py-1.5 rounded font-normal text-sm text-red-500 bg-primary/10 hover:bg-red-100 flex items-center gap-2">
+                    @include('website.svg.logout')
+                    <span>{{ __('website/navbar.logout') }}</span>
+                </a>
             </div>
-            <li>
-                <a href="#" class="justify-between">
-                    {{ __('website/navbar.profile') }}
-                </a>
-            </li>
-            <li>
-                <a wire:click="logout" class="justify-between">
-                    {{ __('website/navbar.logout') }}
-                </a>
-            </li>
         </ul>
     </div>
 

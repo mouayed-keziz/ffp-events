@@ -21,7 +21,7 @@
                     {{ $event['title'] }}
                 </h1>
                 <div
-                    class="bg-black/10 backdrop-blur-md text-white text-sm px-3 py-1 rounded flex items-center gap-2 mt-2">
+                    class="bg-white/15 backdrop-blur-md text-white text-sm px-3 py-1 rounded-md flex items-center gap-2 mt-2">
                     @include('website.svg.event.callendar-white')
                     <span>{{ __('website/visit-event.visitor_registration_end_date') }} :
                         <span>
