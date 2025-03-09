@@ -17,7 +17,7 @@
     </div>
 @endif
 
-<footer class="bg-neutral text-white py-8 md:py-12">
+<footer class="bg-[#1C1C1C] text-white py-8 md:py-12">
     <div class="w-full max-w-7xl mx-auto px-4">
         @if (!empty($hasContactCard))
             <div class="mt-24"></div>
