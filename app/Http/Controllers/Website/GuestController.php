@@ -24,4 +24,18 @@ class GuestController extends Controller
             'similarArticles' => $similarArticles
         ]);
     }
+
+    public static function Terms()
+    {
+        return view("website.pages.guest.terms");
+    }
+
+    public static function RedirectToFFPEvents()
+    {
+        return redirect()->away('https://ffp-events.com/');
+    }
+    public static function RedirectToFFPEventsContact()
+    {
+        return redirect()->away('https://ffp-events.com/contact/');
+    }
 }

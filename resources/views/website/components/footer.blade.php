@@ -1,11 +1,17 @@
 {{-- resources/views/website/components/footer.blade.php --}}
+@php
+    use App\Settings\CompanyInformationsSettings;
+    $settings = app(CompanyInformationsSettings::class);
+@endphp
+
 @if (!empty($hasContactCard))
     <div class="relative -mb-24 z-10">
         <div class="container mx-auto px-4">
             <div class="max-w-xl mx-auto bg-white rounded-xl shadow-2xl p-6 text-center">
                 <h2 class="text-xl font-bold mb-2">Vous avez d'autres questions?</h2>
                 <p class="text-gray-600 text-sm mb-4">Contactez nous pour avoir les détails de votre demande</p>
-                <a href="#" class="btn btn-neutral normal-case text-sm">Nous contacter</a>
+                <a href="{{ route('redirect_to_ffp_events_contact') }}" class="btn btn-neutral normal-case text-sm">Nous
+                    contacter</a>
             </div>
         </div>
     </div>
@@ -26,17 +32,17 @@
                 <div class="space-y-2">
                     <div class="flex items-center gap-2">
                         <span class="text-sm font-bold">Tel:</span>
-                        <a href="tel:+213558335723"
+                        <a href="tel:{{ $settings->phone }}"
                             class="text-sm text-neutral-400 hover:text-primary transition-colors">
-                            +213 558 33 57 23
+                            {{ $settings->phone }}
                         </a>
                     </div>
 
                     <div class="flex items-center gap-2">
                         <span class="text-sm font-bold">Email:</span>
-                        <a href="mailto:+213558335723"
+                        <a href="mailto:{{ $settings->email }}"
                             class="text-sm text-neutral-400 hover:text-primary transition-colors">
-                            +213 558 33 57 23
+                            {{ $settings->email }}
                         </a>
                     </div>
                 </div>
@@ -47,13 +53,16 @@
                 <h3 class="text-neutral-400 text-[0.9rem] mb-4">Liens rapides</h3>
                 <ul class="space-y-2">
                     <li>
-                        <a href="#" class="text-sm hover:text-primary transition-colors">Nos évènements</a>
+                        <a href="{{ route('events') }}" class="text-sm hover:text-primary transition-colors">Nos
+                            évènements</a>
                     </li>
                     <li>
-                        <a href="#" class="text-sm hover:text-primary transition-colors">Nos articles</a>
+                        <a href="{{ route('articles') }}" class="text-sm hover:text-primary transition-colors">Nos
+                            articles</a>
                     </li>
                     <li>
-                        <a href="#" class="text-sm hover:text-primary transition-colors">Termes et conditions</a>
+                        <a href="{{ route('terms') }}" class="text-sm hover:text-primary transition-colors">Termes et
+                            conditions</a>
                     </li>
                 </ul>
             </div>
@@ -63,17 +72,27 @@
                 <h3 class="text-neutral-400 text-[0.9rem] mb-4">Entreprise</h3>
                 <ul class="space-y-2">
                     <li>
-                        <a href="#"
-                            class="text-sm hover:text-primary transition-colors inline-flex items-center gap-2">
-                            ffp-events.com
-                            <x-heroicon-o-plus class="w-4 h-4" />
+                        <a href="{{ route('redirect_to_ffp_events') }}"
+                            class="text-sm hover:text-primary transition-colors inline-flex items-center gap-2 group">
+                            {{ $settings->name }}
+                            <span class="block group-hover:hidden">
+                                @include('website.svg.footer.goto')
+                            </span>
+                            <span class="hidden group-hover:block">
+                                @include('website.svg.footer.goto_active')
+                            </span>
                         </a>
                     </li>
                     <li>
-                        <a href="#"
-                            class="text-sm hover:text-primary transition-colors inline-flex items-center gap-2">
+                        <a href="{{ route('redirect_to_ffp_events_contact') }}"
+                            class="text-sm hover:text-primary transition-colors inline-flex items-center gap-2 group">
                             Nous contacter
-                            <x-heroicon-o-plus class="w-4 h-4" />
+                            <span class="block group-hover:hidden">
+                                @include('website.svg.footer.goto')
+                            </span>
+                            <span class="hidden group-hover:block">
+                                @include('website.svg.footer.goto_active')
+                            </span>
                         </a>
                     </li>
                 </ul>
@@ -85,19 +104,31 @@
         {{-- Footer Bottom --}}
         <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="text-xs text-gray-400">
-                Droits d'auteur © 2024 <a href="#" class="text-primary">FFP Events</a>. Tous droits réservés.
+                Droits d'auteur © {{ date('Y') }} <a href="{{ route('redirect_to_ffp_events') }}"
+                    class="text-primary">{{ $settings->name }}</a>. Tous droits réservés.
             </div>
 
             <div class="flex items-center gap-4">
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                    <x-heroicon-o-plus class="w-5 h-5" />
-                </a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                    <x-heroicon-o-plus class="w-5 h-5" />
-                </a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                    <x-heroicon-o-plus class="w-5 h-5" />
-                </a>
+                @if ($settings->facebookLink)
+                    <a href="{{ $settings->facebookLink }}" target="_blank" rel="noopener noreferrer"
+                        class="text-gray-400 hover:text-white transition-colors">
+                        @include('website.svg.footer.facebook')
+                    </a>
+                @endif
+
+                @if ($settings->instagramLink)
+                    <a href="{{ $settings->instagramLink }}" target="_blank" rel="noopener noreferrer"
+                        class="text-gray-400 hover:text-white transition-colors">
+                        @include('website.svg.footer.instagram')
+                    </a>
+                @endif
+
+                @if ($settings->linkedinLink)
+                    <a href="{{ $settings->linkedinLink }}" target="_blank" rel="noopener noreferrer"
+                        class="text-gray-400 hover:text-white transition-colors">
+                        @include('website.svg.footer.linkedin')
+                    </a>
+                @endif
             </div>
         </div>
     </div>

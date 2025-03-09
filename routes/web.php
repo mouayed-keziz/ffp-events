@@ -22,13 +22,10 @@ Route::get('media/download/{id}', [\App\Http\Controllers\MediaController::class,
 
 Route::middleware('local_middleware')->group(function () {
 
-    Route::get('/', [EventController::class, 'Events'])->name('events')->middleware();
+    Route::get('/', [EventController::class, 'Events'])->name('events');
     Route::get('/event/{id}', [EventController::class, 'Event'])->name('event_details');
     Route::get('/event/{id}/visit', [EventController::class, 'VisitEvent'])->name('visit_event')->middleware("is_visitor");
-    Route::get('/event/{id}/exhibit', [EventController::class, 'ExhibitEvent'])->name('exhibit_event');
-
-    Route::get('/articles', [GuestController::class, 'Articles'])->name('articles');
-    Route::get('/article/{slug}', [GuestController::class, 'Article'])->name('article');
+    Route::get('/event/{id}/exhibit', [EventController::class, 'ExhibitEvent'])->name('exhibit_event')->middleware("is_exhibitor");
 
     Route::prefix("auth")->group(function () {
         Route::middleware("is_guest")->group(function () {
@@ -37,13 +34,12 @@ Route::middleware('local_middleware')->group(function () {
             Route::get('/restore-account', [AuthController::class, 'RestoreAccount'])->name('restore-account');
             Route::get('/email-sent', [AuthController::class, 'EmailSent'])->name('email-sent');
             Route::get('/reset-password', [AuthController::class, 'ResetPassword'])->name('reset-password');
-            Route::get("/user", function (Request $request) {
-                return [
-                    "user" => Auth::user(),
-                    "visitor" => Auth::guard("visitor")->user(),
-                    "exhibitor" => Auth::guard("exhibitor")->user()
-                ];
-            });
         });
     });
+
+    Route::get('/articles', [GuestController::class, 'Articles'])->name('articles');
+    Route::get('/article/{slug}', [GuestController::class, 'Article'])->name('article');
+    Route::get("/terms", [GuestController::class, 'Terms'])->name('terms');
+    Route::get("/redirect-to-ffp-events", [GuestController::class, 'RedirectToFFPEvents'])->name('redirect_to_ffp_events');
+    Route::get("/redirect-to-ffp-events-contact", [GuestController::class, 'RedirectToFFPEventsContact'])->name('redirect_to_ffp_events_contact');
 });

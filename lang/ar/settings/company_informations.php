@@ -7,6 +7,9 @@ return [
     'navigation_group' => 'الإعدادات',
     'tabs' => [
         'general_information' => 'معلومات عامة',
+        'social_links' => 'روابط التواصل الاجتماعي',
+        'faq' => 'الأسئلة الشائعة',
+        'terms' => 'الشروط والأحكام',
     ],
     'fields' => [
         'name' => [
@@ -40,6 +43,30 @@ return [
         'zip' => [
             'label' => 'الرمز البريدي',
             'placeholder' => 'أدخل الرمز البريدي'
+        ],
+        'facebookLink' => [
+            'label' => 'رابط فيسبوك',
+            'placeholder' => 'أدخل رابط صفحة الفيسبوك'
+        ],
+        'linkedinLink' => [
+            'label' => 'رابط لينكد إن',
+            'placeholder' => 'أدخل رابط الملف الشخصي على لينكد إن'
+        ],
+        'instagramLink' => [
+            'label' => 'رابط انستغرام',
+            'placeholder' => 'أدخل رابط الملف الشخصي على انستغرام'
+        ],
+        'applicationTerms' => [
+            'label' => 'شروط وأحكام التطبيق',
+            'placeholder' => 'أدخل شروط وأحكام التطبيق هنا'
+        ],
+        'faq' => [
+            'question' => [
+                'label' => 'السؤال'
+            ],
+            'answer' => [
+                'label' => 'الإجابة'
+            ]
         ],
     ],
 ];

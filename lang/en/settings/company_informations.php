@@ -7,6 +7,9 @@ return [
     'navigation_group' => 'Settings',
     'tabs' => [
         'general_information' => 'General Information',
+        'social_links' => 'Social Links',
+        'faq' => 'FAQ',
+        'terms' => 'Terms & Conditions',
     ],
     'fields' => [
         'name' => [
@@ -40,6 +43,30 @@ return [
         'zip' => [
             'label' => 'Zip Code',
             'placeholder' => 'Enter zip code'
+        ],
+        'facebookLink' => [
+            'label' => 'Facebook Link',
+            'placeholder' => 'Enter Facebook page URL'
+        ],
+        'linkedinLink' => [
+            'label' => 'LinkedIn Link',
+            'placeholder' => 'Enter LinkedIn profile URL'
+        ],
+        'instagramLink' => [
+            'label' => 'Instagram Link',
+            'placeholder' => 'Enter Instagram profile URL'
+        ],
+        'applicationTerms' => [
+            'label' => 'Application Terms & Conditions',
+            'placeholder' => 'Enter your application terms and conditions here'
+        ],
+        'faq' => [
+            'question' => [
+                'label' => 'Question'
+            ],
+            'answer' => [
+                'label' => 'Answer'
+            ]
         ],
     ],
 ];

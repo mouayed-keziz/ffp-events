@@ -70,7 +70,6 @@ class ManageCompanyInformations extends SettingsPage
                                         'lg' => 6
                                     ]),
 
-                                // Forms\Components\TextInput::make('phone')
                                 PhoneInput::make("phone")
                                     ->label(__('settings/company_informations.fields.phone.label'))
                                     ->required()
@@ -111,8 +110,6 @@ class ManageCompanyInformations extends SettingsPage
                                         'lg' => 6
                                     ]),
 
-
-
                                 Forms\Components\TextInput::make('zip')
                                     ->label(__('settings/company_informations.fields.zip.label'))
                                     ->required()
@@ -134,17 +131,46 @@ class ManageCompanyInformations extends SettingsPage
                                     ]),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make('faq')
+                        Forms\Components\Tabs\Tab::make(__('settings/company_informations.tabs.social_links'))
+                            ->schema([
+                                Forms\Components\TextInput::make('facebookLink')
+                                    ->label(__('settings/company_informations.fields.facebookLink.label'))
+                                    ->url()
+                                    ->placeholder(__('settings/company_informations.fields.facebookLink.placeholder'))
+                                    ->columnSpan(12),
+
+                                Forms\Components\TextInput::make('linkedinLink')
+                                    ->label(__('settings/company_informations.fields.linkedinLink.label'))
+                                    ->url()
+                                    ->placeholder(__('settings/company_informations.fields.linkedinLink.placeholder'))
+                                    ->columnSpan(12),
+
+                                Forms\Components\TextInput::make('instagramLink')
+                                    ->label(__('settings/company_informations.fields.instagramLink.label'))
+                                    ->url()
+                                    ->placeholder(__('settings/company_informations.fields.instagramLink.placeholder'))
+                                    ->columnSpan(12),
+                            ]),
+
+                        Forms\Components\Tabs\Tab::make(__('settings/company_informations.tabs.faq'))
                             ->schema([
                                 Forms\Components\Repeater::make("faq")->schema([
-                                    Forms\Components\TextInput::make("question"),
+                                    Forms\Components\TextInput::make("question")
+                                        ->label(__('settings/company_informations.fields.faq.question.label'))
+                                        ->required(),
                                     Forms\Components\TextInput::make("answer")
+                                        ->label(__('settings/company_informations.fields.faq.answer.label'))
+                                        ->required()
                                 ])
                             ]),
 
-                        Forms\Components\Tabs\Tab::make('Tab 3 (vide)')
+                        Forms\Components\Tabs\Tab::make(__('settings/company_informations.tabs.terms'))
                             ->schema([
-                                // Reserved for future use
+                                Forms\Components\RichEditor::make('applicationTerms')
+                                    ->label(__('settings/company_informations.fields.applicationTerms.label'))
+                                    ->required()
+                                    ->placeholder(__('settings/company_informations.fields.applicationTerms.placeholder'))
+                                    ->columnSpan(12),
                             ]),
                     ])->columnSpan([
                         'default' => 1,

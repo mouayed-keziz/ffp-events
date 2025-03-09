@@ -315,8 +315,9 @@ new class extends Component {
                     ])
                 </div>
             @else
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                    <p class="text-center text-gray-500">{{ __('No forms available for this event.') }}</p>
+                <div class="rounded-lg">
+                    <p class="text:xl md:text-2xl text-center text-gray-500">
+                        {{ __('No forms available for this event.') }}</p>
                 </div>
             @endif
         </form>

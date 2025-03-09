@@ -38,23 +38,21 @@ if (empty($optionsData)) {
 $selectedValue = data_get($this, 'formData.' . $answerPath . '.selectedValue');
     @endphp
 
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2" x-data="{ selected: @entangle('formData.' . $answerPath . '.selectedValue') }">
         @php
             $radioName = 'radio_' . str_replace('.', '_', $answerPath);
         @endphp
 
         @foreach ($data['options'] as $option)
             @php
-                // Get the current option value
                 $optionLabel = $option['option'][app()->getLocale()] ?? ($option['option']['fr'] ?? '');
-                $isSelected = $selectedValue === $optionLabel;
             @endphp
 
             <label class="cursor-pointer flex items-center">
                 <input type="radio" name="{{ $radioName }}" value="{{ $optionLabel }}"
-                    wire:model.live="formData.{{ $answerPath }}.selectedValue"
+                    wire:model.live="formData.{{ $answerPath }}.selectedValue" x-model="selected"
                     wire:change="updateRadioSelection('{{ $answerPath }}', $event.target.value)"
-                    {{ $isSelected ? 'checked' : '' }} class="radio mx-2"
+                    :class="{ 'radio-primary': selected === '{{ $optionLabel }}' }" class="radio mx-2"
                     @if ($data['required'] ?? false) required @endif>
                 <span>{{ $optionLabel }}</span>
             </label>

@@ -7,6 +7,9 @@ return [
     'navigation_group' => 'Paramètres',
     'tabs' => [
         'general_information' => 'Informations générales',
+        'social_links' => 'Liens sociaux',
+        'faq' => 'FAQ',
+        'terms' => 'Conditions générales',
     ],
     'fields' => [
         'name' => [
@@ -40,6 +43,30 @@ return [
         'zip' => [
             'label' => 'Code postal',
             'placeholder' => 'Entrez le code postal'
+        ],
+        'facebookLink' => [
+            'label' => 'Lien Facebook',
+            'placeholder' => 'Entrez l\'URL de la page Facebook'
+        ],
+        'linkedinLink' => [
+            'label' => 'Lien LinkedIn',
+            'placeholder' => 'Entrez l\'URL du profil LinkedIn'
+        ],
+        'instagramLink' => [
+            'label' => 'Lien Instagram',
+            'placeholder' => 'Entrez l\'URL du profil Instagram'
+        ],
+        'applicationTerms' => [
+            'label' => 'Conditions générales d\'utilisation',
+            'placeholder' => 'Entrez vos conditions générales d\'utilisation ici'
+        ],
+        'faq' => [
+            'question' => [
+                'label' => 'Question'
+            ],
+            'answer' => [
+                'label' => 'Réponse'
+            ]
         ],
     ],
 ];

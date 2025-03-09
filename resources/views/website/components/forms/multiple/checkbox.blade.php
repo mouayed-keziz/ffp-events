@@ -12,39 +12,16 @@
     @if ($data['description'][app()->getLocale()] ?? false)
         <small class="mb-2">{{ $data['description'][app()->getLocale()] }}</small>
     @endif
-
-    @php
-        // Initialize options array in answer structure if it doesn't exist
-$optionsData = data_get($this, 'formData.' . $answerPath . '.options', []);
-if (empty($optionsData)) {
-    // Initialize the answer with all available options
-    $optionsData = collect($data['options'] ?? [])
-        ->map(function ($option) {
-            return [
-                'option' => $option['option'] ?? [],
-                'selected' => false,
-                'value' => $option['option'][app()->getLocale()] ?? ($option['option']['fr'] ?? ''),
-            ];
-        })
-        ->toArray();
-
-    // Set the initial options data in the model
-    data_set($this, 'formData.' . $answerPath . '.options', $optionsData);
-        }
-    @endphp
-
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2" x-data="{ options: @entangle('formData.' . $answerPath . '.options') }">
         @foreach ($data['options'] as $optionIndex => $option)
             @php
                 // Find the corresponding option in our answer structure
                 $optionAnswerIndex = -1;
-                $isSelected = false;
 
                 foreach (data_get($this, 'formData.' . $answerPath . '.options', []) as $idx => $optionData) {
                     $currentValue = $option['option'][app()->getLocale()] ?? ($option['option']['fr'] ?? '');
                     if ($optionData['value'] == $currentValue) {
                         $optionAnswerIndex = $idx;
-                        $isSelected = !empty($optionData['selected']) && $optionData['selected'] === true;
                         break;
                     }
                 }
@@ -55,8 +32,9 @@ if (empty($optionsData)) {
             <label class="cursor-pointer flex items-center">
                 <input type="checkbox" id="{{ $answerPath }}_{{ $loop->index }}"
                     wire:model.live="formData.{{ $answerPath }}.options.{{ $optionAnswerIndex }}.selected"
-                    class="checkbox mx-2 rounded-md" {{ $isSelected ? 'checked' : '' }}
-                    @if ($data['required'] ?? false) required @endif>
+                    x-model="options[{{ $optionAnswerIndex }}].selected"
+                    :class="{ 'checkbox-primary': options[{{ $optionAnswerIndex }}].selected }"
+                    class="checkbox mx-2 rounded-md" @if ($data['required'] ?? false) required @endif>
                 <span>{{ $optionLabel }}</span>
             </label>
         @endforeach

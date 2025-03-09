@@ -12,22 +12,26 @@
 
                     <div class="navbar-center hidden md:flex flex-none gap-8">
                         <a href="{{ route('events') }}"
-                            class="flex items-center gap-2 font-bold {{ request()->routeIs('events') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
-                            @if (request()->routeIs('events'))
-                                @include('website.svg.events_active')
-                            @else
+                            class="group flex items-center gap-2 font-bold {{ request()->routeIs('events') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
+                            <span class="{{ !request()->routeIs('events') ? 'group-hover:hidden' : 'hidden' }}">
                                 @include('website.svg.events')
-                            @endif
+                            </span>
+                            <span
+                                class="{{ request()->routeIs('events') || !request()->routeIs('events') ? 'group-hover:block' : '' }} {{ request()->routeIs('events') ? 'block' : 'hidden' }}">
+                                @include('website.svg.events_active')
+                            </span>
                             <span>{{ __('website/navbar.events') }}</span>
                         </a>
 
                         <a href="{{ route('articles') }}"
-                            class="flex items-center gap-2 font-bold {{ request()->routeIs('articles') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
-                            @if (request()->routeIs('articles'))
-                                @include('website.svg.articles_active')
-                            @else
+                            class="group flex items-center gap-2 font-bold {{ request()->routeIs('articles') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
+                            <span class="{{ !request()->routeIs('articles') ? 'group-hover:hidden' : 'hidden' }}">
                                 @include('website.svg.articles')
-                            @endif
+                            </span>
+                            <span
+                                class="{{ request()->routeIs('articles') || !request()->routeIs('articles') ? 'group-hover:block' : '' }} {{ request()->routeIs('articles') ? 'block' : 'hidden' }}">
+                                @include('website.svg.articles_active')
+                            </span>
                             <span>{{ __('website/navbar.articles') }}</span>
                         </a>
                     </div>
@@ -68,21 +72,25 @@
         <div class="menu p-4 w-80 min-h-full bg-white">
             <div class="flex flex-col gap-4">
                 <a href="{{ route('events') }}"
-                    class="flex items-center gap-2 font-bold {{ request()->routeIs('events') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
-                    @if (request()->routeIs('events'))
-                        @include('website.svg.events_active')
-                    @else
+                    class="group flex items-center gap-2 font-bold {{ request()->routeIs('events') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
+                    <span class="{{ !request()->routeIs('events') ? 'group-hover:hidden' : 'hidden' }}">
                         @include('website.svg.events')
-                    @endif
+                    </span>
+                    <span
+                        class="{{ request()->routeIs('events') || !request()->routeIs('events') ? 'group-hover:block' : '' }} {{ request()->routeIs('events') ? 'block' : 'hidden' }}">
+                        @include('website.svg.events_active')
+                    </span>
                     <span class="text-lg">{{ __('website/navbar.events') }}</span>
                 </a>
                 <a href="{{ route('articles') }}"
-                    class="flex items-center gap-2 font-bold {{ request()->routeIs('articles') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
-                    @if (request()->routeIs('articles'))
-                        @include('website.svg.articles_active')
-                    @else
+                    class="group flex items-center gap-2 font-bold {{ request()->routeIs('articles') ? 'text-primary' : 'text-gray-700 hover:text-primary' }}">
+                    <span class="{{ !request()->routeIs('articles') ? 'group-hover:hidden' : 'hidden' }}">
                         @include('website.svg.articles')
-                    @endif
+                    </span>
+                    <span
+                        class="{{ request()->routeIs('articles') || !request()->routeIs('articles') ? 'group-hover:block' : '' }} {{ request()->routeIs('articles') ? 'block' : 'hidden' }}">
+                        @include('website.svg.articles_active')
+                    </span>
                     <span class="text-lg">{{ __('website/navbar.articles') }}</span>
                 </a>
                 <div class="border-t my-4"></div>

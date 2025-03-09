@@ -24,6 +24,14 @@ class CompanyInformationsSettings extends Settings
 
     public array $faq;
 
+    public string $applicationTerms;
+
+    public ?string $facebookLink;
+
+    public ?string $linkedinLink;
+
+    public ?string $instagramLink;
+
     public static function group(): string
     {
         return 'default';

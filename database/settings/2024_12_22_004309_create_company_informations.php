@@ -14,6 +14,10 @@ return new class extends SettingsMigration
         $this->migrator->add('default.state', 'Alger');
         $this->migrator->add('default.zip', '16000');
         $this->migrator->add('default.country', 'Algeria');
+        $this->migrator->add('default.applicationTerms', '<p>These are the default application terms and conditions.</p>');
+        $this->migrator->add('default.facebookLink', 'https://www.facebook.com/ffpevents');
+        $this->migrator->add('default.linkedinLink', 'https://www.linkedin.com/company/ffpevents');
+        $this->migrator->add('default.instagramLink', 'https://www.instagram.com/ffpevents');
         $this->migrator->add('default.faq', [
             [
                 'question' => 'What is FFP Events?',
