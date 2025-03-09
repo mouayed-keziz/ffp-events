@@ -23,7 +23,7 @@
                             class="btn font-semibold btn-sm rounded-md btn-outline border-base-200 border-2">
                             {{ __('website/visit-event.go_to_home') }}
                         </a>
-                        <a href="#" class="btn font-semibold btn-sm rounded-md btn-primary">
+                        <a href="#" disabled class="btn font-semibold btn-sm rounded-md btn-primary">
                             {{ __('website/visit-event.download_badge') }}
                         </a>
                     </div>

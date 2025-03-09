@@ -109,6 +109,7 @@ new class extends Component {
 
         if ($success) {
             $this->formSubmitted = true;
+            $this->redirect(route('visit_event_form_submitted', $this->event->id));
             $this->successMessage = __('website/visit-event.form_success');
         } else {
             session()->flash('error', __('website/visit-event.form_error'));
@@ -124,10 +125,10 @@ new class extends Component {
     @endif
 
     @if ($formSubmitted)
-        <div class="rounded-btn alert alert-success mb-4 shadow-md text-white">
+        {{-- <div class="rounded-btn alert alert-success mb-4 shadow-md text-white">
             <x-heroicon-o-check-circle class="w-6 h-6 inline-block mr-2" />
             {{ $successMessage }}
-        </div>
+        </div> --}}
     @else
         {{-- <div class="mb-6">
             <h2 class="text-2xl font-bold mb-2">{{ __('website/visit-event.visitor_registration') }}</h2>
