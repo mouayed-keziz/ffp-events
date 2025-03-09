@@ -109,6 +109,46 @@ class IseedSettingsTableSeeder extends Seeder
                 'created_at' => '2025-02-15 17:47:56',
                 'updated_at' => '2025-02-23 19:22:27',
             ),
+            9 => 
+            array (
+                'id' => 19,
+                'group' => 'default',
+                'name' => 'applicationTerms',
+                'locked' => 0,
+                'payload' => '"<p>These are the default application terms and conditions.<\\/p>"',
+                'created_at' => '2025-03-09 20:37:07',
+                'updated_at' => '2025-03-09 20:37:07',
+            ),
+            10 => 
+            array (
+                'id' => 20,
+                'group' => 'default',
+                'name' => 'facebookLink',
+                'locked' => 0,
+                'payload' => '"https:\\/\\/www.facebook.com\\/ffpevents"',
+                'created_at' => '2025-03-09 20:37:07',
+                'updated_at' => '2025-03-09 20:37:07',
+            ),
+            11 => 
+            array (
+                'id' => 21,
+                'group' => 'default',
+                'name' => 'linkedinLink',
+                'locked' => 0,
+                'payload' => '"https:\\/\\/www.linkedin.com\\/company\\/ffpevents"',
+                'created_at' => '2025-03-09 20:37:07',
+                'updated_at' => '2025-03-09 20:37:07',
+            ),
+            12 => 
+            array (
+                'id' => 22,
+                'group' => 'default',
+                'name' => 'instagramLink',
+                'locked' => 0,
+                'payload' => '"https:\\/\\/www.instagram.com\\/ffpevents"',
+                'created_at' => '2025-03-09 20:37:07',
+                'updated_at' => '2025-03-09 20:37:07',
+            ),
         ));
         
         

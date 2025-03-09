@@ -79,6 +79,26 @@ class IseedExhibitorFormsTableSeeder extends Seeder
                 'created_at' => '2025-03-07 20:02:53',
                 'updated_at' => '2025-03-07 20:02:53',
             ),
+            6 => 
+            array (
+                'id' => 10,
+                'title' => '{"fr":"ad","en":"db","ar":"sd"}',
+                'description' => '{"fr":"sd","en":"qsd","ar":"qsd"}',
+                'sections' => '[{"title":{"fr":"azd","en":"qsd","ar":"wxc"},"fields":[]}]',
+                'event_announcement_id' => 3,
+                'created_at' => '2025-03-07 23:56:11',
+                'updated_at' => '2025-03-07 23:56:11',
+            ),
+            7 => 
+            array (
+                'id' => 11,
+                'title' => '{"fr":"azd","en":"qsd","ar":"wxc"}',
+                'description' => '{"fr":"wxc","en":"qsd","ar":"azd"}',
+                'sections' => '[{"title":{"fr":"azd","en":"qsd","ar":"wxc"},"fields":[]}]',
+                'event_announcement_id' => 3,
+                'created_at' => '2025-03-07 23:56:36',
+                'updated_at' => '2025-03-07 23:56:36',
+            ),
         ));
         
         

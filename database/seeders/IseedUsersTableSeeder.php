@@ -26,7 +26,7 @@ class IseedUsersTableSeeder extends Seeder
                 'email' => 'admin@admin.dev',
                 'verified_at' => '2025-02-15 17:47:56',
                 'password' => '$2y$12$lWJt6bEL4ZZ2c2UqSsLwmeD1En8MJOVuMW4a/iEIKx9iD2eTn9Hxu',
-                'remember_token' => 'D17SrkQH2Hj7HFmwqihhEe6aczKHXmmHFJD9Od8qHOoOnqdu7wBMU2Xz6be4',
+                'remember_token' => 'iFUYNCBasNWwMMjJhmMeQuTiu1VDDYEHsToaFutYJTYaACRMxR2FxVOZCqIO',
                 'created_at' => '2025-02-15 17:47:56',
                 'updated_at' => '2025-03-06 14:44:09',
                 'deleted_at' => NULL,
