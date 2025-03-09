@@ -69,9 +69,10 @@ new class extends Component {
             </div>
             <!-- Action Buttons -->
             <div class="flex gap-4">
-                <button type="button" class="btn btn-outline text-[1rem] border-base-200 border-2">
+                <a href="{{ route('login') }}" type="button"
+                    class="btn btn-outline text-[1rem] border-base-200 border-2">
                     {{ __('website/restore_account.cancel_button') }}
-                </button>
+                </a>
                 <button type="submit" class="btn btn-neutral flex-1">
                     {{ __('website/restore_account.submit_button') }}
                 </button>

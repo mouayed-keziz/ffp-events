@@ -87,7 +87,8 @@ new class extends Component {
                         class="checkbox rounded-lg {{ $errors->has('terms_accepted') ? 'checkbox-error' : '' }}">
                     <span class="label-text font-semibold text-neutral">
                         {{ __('website/register.terms_acceptance') }}
-                        <a class="link link-primary">{{ __('website/register.terms_and_conditions') }}</a>
+                        <a target="_blank" href="{{ route('terms') }}"
+                            class="link link-primary">{{ __('website/register.terms_and_conditions') }}</a>
                     </span>
                 </div>
                 @error('terms_accepted')
@@ -112,7 +113,8 @@ new class extends Component {
                 </div>
                 <span class="text-start ml-2 text-xs font-semibold leading-relaxed">
                     {{ __('website/register.account_type_alert') }}
-                    <a href="#" class="font-bold underline">{{ __('website/register.contact_team') }}</a>
+                    <a target="_blank" href="{{ route('redirect_to_ffp_events_contact') }}"
+                        class="font-bold underline">{{ __('website/register.contact_team') }}</a>
                 </span>
             </div>
 

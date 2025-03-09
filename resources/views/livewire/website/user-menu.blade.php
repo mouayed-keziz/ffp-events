@@ -25,7 +25,8 @@ new class extends Component {
             <label tabindex="0" class="btn btn-link btn-sm">
                 <div class="indicator">
                     @include('website.svg.notifications')
-                    <span class="badge badge-xs badge-error indicator-item">2</span>
+                    <span
+                        class="absolute -top-3 -right-3 inline-flex items-center justify-center w-6 h-6 text-xs text-white bg-red-500 rounded-full">2</span>
                 </div>
             </label>
             <div tabindex="0" class="mt-3 z-[1] card compact dropdown-content w-96 bg-base-100 shadow">

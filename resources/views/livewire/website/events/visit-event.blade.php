@@ -13,6 +13,7 @@ new class extends Component {
     public array $formData = [];
     public bool $formSubmitted = false;
     public string $successMessage = '';
+    public bool $terms_accepted = false;
 
     public function mount(EventAnnouncement $event)
     {
@@ -92,14 +93,25 @@ new class extends Component {
         $validation = $actions->getValidationRules($this->event);
         $this->validate($validation['rules'], [], $validation['attributes']);
 
+        // Add terms acceptance validation
+        $this->validate(
+            [
+                'terms_accepted' => 'accepted',
+            ],
+            [],
+            [
+                'terms_accepted' => __('website/visit-event.terms_and_conditions'),
+            ],
+        );
+
         // Save the form submission
         $success = $actions->saveFormSubmission($this->event, $this->formData);
 
         if ($success) {
             $this->formSubmitted = true;
-            $this->successMessage = __('Form submitted successfully!');
+            $this->successMessage = __('website/visit-event.form_success');
         } else {
-            session()->flash('error', 'An error occurred while submitting the form. Please try again.');
+            session()->flash('error', __('website/visit-event.form_error'));
         }
     }
 }; ?>
@@ -118,8 +130,8 @@ new class extends Component {
         </div>
     @else
         {{-- <div class="mb-6">
-            <h2 class="text-2xl font-bold mb-2">{{ __('Visitor Registration') }}</h2>
-            <p class="text-gray-600">{{ __('Please fill out the form below to register for this event.') }}</p>
+            <h2 class="text-2xl font-bold mb-2">{{ __('website/visit-event.visitor_registration') }}</h2>
+            <p class="text-gray-600">{{ __('website/visit-event.fill_form_instruction') }}</p>
         </div> --}}
 
         <form wire:submit.prevent="submitForm">
@@ -152,18 +164,33 @@ new class extends Component {
                     <div class="h-8"></div>
                 @endforeach
 
-                <div class="flex justify-end mt-6">
-                    <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
-                        <span wire:loading.remove>{{ __('Submit') }}</span>
-                        <span wire:loading wire:target="submitForm">
-                            <x-heroicon-o-arrow-path class="w-5 h-5 animate-spin mr-2" />
-                            {{ __('Submitting...') }}
-                        </span>
-                    </button>
+                <div class="flex justify-start mt-6">
+                    <div class="flex flex-col gap-4 w-full">
+                        <div class="flex justify-start items-center gap-2">
+                            <input type="checkbox" name="terms_accepted" wire:model="terms_accepted"
+                                class="checkbox rounded-lg {{ $errors->has('terms_accepted') ? 'checkbox-error' : '' }}">
+                            <span class="label-text font-semibold text-neutral">
+                                {{ __('website/visit-event.terms_acceptance') }}
+                                <a target="_blank" href="#"
+                                    class="link link-primary">{{ __('website/visit-event.terms_and_conditions') }}</a>
+                            </span>
+                        </div>
+                        @error('terms_accepted')
+                            <div class="text-error text-sm">{{ $message }}</div>
+                        @enderror
+
+                        <div class="flex justify-start">
+                            <button type="submit" class="btn btn-md rounded-md btn-primary"
+                                wire:loading.attr="disabled">
+                                <span wire:loading class="loading loading-spinner"></span>
+                                <span>{{ __('website/visit-event.submit') }}</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             @else
                 <div class="bg-white p-6 rounded-lg shadow-md">
-                    <p class="text-center text-gray-500">{{ __('No form available for this event.') }}</p>
+                    <p class="text-center text-gray-500">{{ __('website/visit-event.no_form_available') }}</p>
                 </div>
             @endif
         </form>

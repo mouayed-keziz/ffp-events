@@ -8,7 +8,7 @@
 
             <div class="space-y-2">
                 <div
-                    class="flex items-center gap-2 bg-base-100 text-neutral-600 rounded-btn py-1 px-3 border-transparent w-fit">
+                    class="flex items-center gap-2 font-light bg-base-100 text-neutral-600 rounded-btn py-1 px-3 border-transparent w-fit">
                     <div class="flex-shrink-0">
                         @include('website.svg.location')
                     </div>
@@ -16,7 +16,7 @@
                 </div>
 
                 <div
-                    class="flex items-center gap-2 bg-base-100 text-neutral-600 rounded-btn py-1 px-3 border-transparent w-fit">
+                    class="flex items-center gap-2 font-light bg-base-100 text-neutral-600 rounded-btn py-1 px-3 border-transparent w-fit">
                     <div class="flex-shrink-0">
                         @include('website.svg.calendar')
                     </div>
