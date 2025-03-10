@@ -29,7 +29,7 @@
                     ])
                 </div>
                 <button class="btn btn-primary btn-circle btn-md md:btn-lg shrink-0">
-                    @include('website.svg.event.share')
+                    @livewire('website.share')
                 </button>
             </div>
         </div>

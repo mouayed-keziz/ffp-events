@@ -1,3 +1,11 @@
+<?php
+
+use Livewire\Volt\Component;
+
+new class extends Component {
+    //
+}; ?>
+
 <div x-data="{ open: false }" class="relative">
     <!-- Main share button -->
     <button @click="open = !open" class="btn btn-primary btn-circle btn-md md:btn-md shrink-0 z-10 relative">
