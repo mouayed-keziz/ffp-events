@@ -49,7 +49,7 @@ window.addEventListener('resize', updateScroll)">
         class="flex gap-2 overflow-x-auto scrollbar-hide relative min-w-0 w-full">
         <button wire:click="$set('selectedCategories', [])"
             class="btn rounded-badge {{ empty($selectedCategories) ? 'btn-neutral' : 'bg-white' }} border-zinc-200 whitespace-nowrap">
-            Tous
+            {{ __('website/articles.filters.all') }}
         </button>
 
         @foreach ($categories as $category)

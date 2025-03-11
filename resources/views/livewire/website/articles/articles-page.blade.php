@@ -14,7 +14,7 @@ new class extends Component {
     public $search = '';
 
     #[Url]
-    public $sortBy = 'Les plus récents';
+    public $sortBy = 'newest';
 
     #[Url]
     public $selectedCategories = [];
@@ -74,20 +74,21 @@ new class extends Component {
                             ->orWhere('description->ar', 'like', '%' . $this->search . '%');
                     });
                 })
-                ->when($this->sortBy === 'Les plus récents', fn($query) => $query->orderBy('published_at', 'desc'))
-                ->when($this->sortBy === 'Les plus anciens', fn($query) => $query->orderBy('published_at', 'asc'))
-                ->when($this->sortBy === 'Les plus vus', fn($query) => $query->orderByDesc('views'))
-                ->when($this->sortBy === 'Les plus partagés', function ($query) {
+                ->when($this->sortBy === 'newest', fn($query) => $query->orderBy('published_at', 'desc'))
+                ->when($this->sortBy === 'oldest', fn($query) => $query->orderBy('published_at', 'asc'))
+                ->when($this->sortBy === 'most_viewed', fn($query) => $query->orderByDesc('views'))
+                ->when($this->sortBy === 'most_shared', function ($query) {
                     // TODO: Implement shares count sorting when available
                     $query->orderBy('published_at', 'desc');
                 })
                 ->paginate(8),
         ];
     }
-}; ?>
+};
+?>
 
 <div class="space-y-8">
-    <h1 class="text-2xl font-bold">Nos Articles</h1>
+    <h1 class="text-2xl font-bold">{{ __('website/articles.title') }}</h1>
 
     <!-- Search and filters section -->
     <div class="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between">
@@ -107,7 +108,7 @@ new class extends Component {
             @include('website.components.articles.article-card', [
                 'title' => $article->title,
                 'slug' => $article->slug,
-                'date' => $article->published_at ? $article->published_at->format('d F Y') : '',
+                'date' => $article->published_at,
                 'views' => $article->views,
                 'image' => $article->getFirstMediaUrl('image') ?: asset('placeholder.png'),
             ])

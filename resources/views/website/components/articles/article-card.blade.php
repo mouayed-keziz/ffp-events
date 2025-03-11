@@ -10,17 +10,16 @@
     </div>
 
     <div class="card-body p-6 mt-6">
-        <p class="text-xs text-gray-500">{{ $date }}</p>
+        <p class="text-xs text-gray-500">{{ \Carbon\Carbon::parse($date)->translatedFormat('d F Y') }}</p>
         <h2 class="font-bold text-sm">{{ $title }}</h2>
         <div class="flex justify-end items-center gap-3 text-xs text-gray-600 mt-4">
             <div class="flex items-center gap-1">
                 @include('website.svg.eye')
-                {{-- <x-heroicon-o-eye class="h-4 w-4" /> --}}
-                <span>{{ $views }}</span>
+                <span>{{ $views }} {{ __('website/articles.card.views') }}</span>
             </div>
             <div class="flex items-center gap-1">
                 @include('website.svg.share')
-                <span>0</span>
+                <span>0 {{ __('website/articles.card.shares') }}</span>
             </div>
         </div>
     </div>
