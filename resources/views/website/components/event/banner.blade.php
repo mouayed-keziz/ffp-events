@@ -28,9 +28,11 @@
                         'size' => 'lg',
                     ])
                 </div>
-                <button class="btn btn-primary btn-circle btn-md md:btn-lg shrink-0">
-                    @livewire('website.share')
-                </button>
+                @livewire('website.share', [
+                    'title' => $event->title,
+                    'description' => $event->description,
+                    'url' => route('event_details', $event),
+                ])
             </div>
         </div>
     </div>

@@ -1,11 +1,83 @@
 <?php
 
 use Livewire\Volt\Component;
+use App\Settings\CompanyInformationsSettings;
 
 new class extends Component {
+    public $title;
+    public $description;
+    public $instagramLink;
+    public $url;
+    public function mount($title = '', $description = '', $url = '')
+    {
+        $this->title = $title;
+        $this->description = $description;
+        $this->url = $url;
+        // Get instagram link from settings
+        $settings = app(CompanyInformationsSettings::class);
+        $this->instagramLink = $settings->instagramLink;
+    }
+
     public function isRtl()
     {
         return in_array(app()->getLocale(), ['ar', 'arabic']);
+    }
+
+    public function shareToFacebook()
+    {
+        // Open in new tab instead of redirecting
+        $url = 'https://www.facebook.com/dialog/share?app_id=87741124305&display=popup&href=' . urlencode($this->url);
+        $this->js("window.open('$url', '_blank')");
+    }
+
+    public function shareToInstagram()
+    {
+        // Open in new tab instead of redirecting
+        $url = $this->instagramLink ?? 'https://www.instagram.com/';
+        $this->js("window.open('$url', '_blank')");
+    }
+
+    public function shareToLinkedin()
+    {
+        // Open in new tab instead of redirecting
+        $url = 'https://www.linkedin.com/feed/?shareActive=true&shareUrl=' . urlencode($this->url);
+        $this->js("window.open('$url', '_blank')");
+    }
+
+    public function shareToTwitter()
+    {
+        // Open in new tab instead of redirecting
+        $url = 'https://twitter.com/intent/tweet?url=' . urlencode($this->url);
+        $this->js("window.open('$url', '_blank')");
+    }
+
+    public function copyToClipboard()
+    {
+        // Copy to clipboard and show visual feedback
+        $this->js(
+            "
+            const copyBtn = document.getElementById('copy-url-btn');
+            const originalInnerHTML = copyBtn.innerHTML;
+            
+            navigator.clipboard.writeText(\"" .
+                $this->url .
+                "\")
+                .then(() => {
+                    copyBtn.classList.add('copied');
+                    copyBtn.innerHTML = `<svg xmlns=\"http://www.w3.org/2000/svg\" class=\"h-5 w-5\" viewBox=\"0 0 20 20\" fill=\"currentColor\">
+                      <path fill-rule=\"evenodd\" d=\"M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z\" clip-rule=\"evenodd\" />
+                    </svg>`;
+                    
+                    setTimeout(() => {
+                        copyBtn.classList.remove('copied');
+                        copyBtn.innerHTML = originalInnerHTML;
+                    }, 2000);
+                })
+                .catch(err => {
+                    console.error('Could not copy text: ', err);
+                });
+        ",
+        );
     }
 }; ?>
 
@@ -32,8 +104,7 @@ new class extends Component {
             x-transition:leave-start="opacity-100 translate-x-0 translate-y-0 scale-90"
             x-transition:leave-end="opacity-0 {{ $this->isRtl() ? 'md:-translate-x-4' : 'md:translate-x-4' }} -translate-y-4 md:translate-y-0 scale-50"
             class="btn btn-circle btn-md md:btn-md bg-white text-blue-600 shadow-md transform scale-90 mb-1 md:mb-0 md:mx-0.5 hover:scale-100 hover:bg-blue-50 transition-all"
-            style="transition-delay: 120ms;"
-            @click="navigator.share ? navigator.share({url: window.location.href, title: document.title}) : window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href), '_blank')">
+            style="transition-delay: 120ms;" wire:click="shareToFacebook">
             @include('website.svg.share.facebook')
         </button>
 
@@ -45,7 +116,7 @@ new class extends Component {
             x-transition:leave-start="opacity-100 translate-x-0 translate-y-0 scale-90"
             x-transition:leave-end="opacity-0 {{ $this->isRtl() ? 'md:-translate-x-4' : 'md:translate-x-4' }} -translate-y-4 md:translate-y-0 scale-50"
             class="btn btn-circle btn-md md:btn-md bg-white text-gray-800 shadow-md transform scale-90 mb-1 md:mb-0 md:mx-0.5 hover:scale-100 hover:bg-gray-50 transition-all"
-            style="transition-delay: 80ms;" @click="window.open('https://www.instagram.com/', '_blank')">
+            style="transition-delay: 80ms;" wire:click="shareToInstagram">
             @include('website.svg.share.instagram')
         </button>
 
@@ -57,9 +128,32 @@ new class extends Component {
             x-transition:leave-start="opacity-100 translate-x-0 translate-y-0 scale-90"
             x-transition:leave-end="opacity-0 {{ $this->isRtl() ? 'md:-translate-x-4' : 'md:translate-x-4' }} -translate-y-4 md:translate-y-0 scale-50"
             class="btn btn-circle btn-md md:btn-md bg-white text-blue-700 shadow-md transform scale-90 mb-1 md:mb-0 md:mx-0.5 hover:scale-100 hover:bg-blue-50 transition-all"
-            style="transition-delay: 40ms;"
-            @click="window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(window.location.href), '_blank')">
+            style="transition-delay: 40ms;" wire:click="shareToLinkedin">
             @include('website.svg.share.linkedin')
+        </button>
+
+        <!-- X -->
+        <button x-show="open" x-transition:enter="transition ease-out duration-300 transform"
+            x-transition:enter-start="opacity-0 {{ $this->isRtl() ? 'md:-translate-x-4' : 'md:translate-x-4' }} -translate-y-4 md:translate-y-0 scale-50"
+            x-transition:enter-end="opacity-100 translate-x-0 translate-y-0 scale-90"
+            x-transition:leave="transition ease-in duration-200 transform"
+            x-transition:leave-start="opacity-100 translate-x-0 translate-y-0 scale-90"
+            x-transition:leave-end="opacity-0 {{ $this->isRtl() ? 'md:-translate-x-4' : 'md:translate-x-4' }} -translate-y-4 md:translate-y-0 scale-50"
+            class="btn btn-circle btn-md md:btn-md bg-white text-blue-700 shadow-md transform scale-90 mb-1 md:mb-0 md:mx-0.5 hover:scale-100 hover:bg-blue-50 transition-all"
+            style="transition-delay: 40ms;" wire:click="shareToTwitter">
+            @include('website.svg.share.x')
+        </button>
+
+        <!-- Copy URL -->
+        <button id="copy-url-btn" x-show="open" x-transition:enter="transition ease-out duration-300 transform"
+            x-transition:enter-start="opacity-0 {{ $this->isRtl() ? 'md:-translate-x-4' : 'md:translate-x-4' }} -translate-y-4 md:translate-y-0 scale-50"
+            x-transition:enter-end="opacity-100 translate-x-0 translate-y-0 scale-90"
+            x-transition:leave="transition ease-in duration-200 transform"
+            x-transition:leave-start="opacity-100 translate-x-0 translate-y-0 scale-90"
+            x-transition:leave-end="opacity-0 {{ $this->isRtl() ? 'md:-translate-x-4' : 'md:translate-x-4' }} -translate-y-4 md:translate-y-0 scale-50"
+            class="btn btn-circle btn-md md:btn-md bg-white text-gray-800 shadow-md transform scale-90 mb-1 md:mb-0 md:mx-0.5 hover:scale-100 hover:bg-gray-50 transition-all"
+            style="transition-delay: 0ms;" wire:click="copyToClipboard">
+            @include('website.svg.share.copy')
         </button>
     </div>
 </div>

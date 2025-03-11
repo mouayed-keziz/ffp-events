@@ -36,7 +36,11 @@
                     </div>
                 </div>
                 {{-- Share Button --}}
-                @livewire('website.share')
+                @livewire('website.share', [
+                    'title' => $article->title,
+                    'description' => $article->description,
+                    'url' => route('article', $article),
+                ])
             </div>
         </div>
     </div>
