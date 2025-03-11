@@ -2,6 +2,7 @@
 
 use Livewire\Volt\Component;
 use App\Models\Article;
+use App\Models\Category;
 use Livewire\WithPagination;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\Url;
@@ -13,7 +14,18 @@ new class extends Component {
     public $search = '';
 
     #[Url]
-    public $sortBy = 'Date';
+    public $sortBy = 'Les plus récents';
+
+    #[Url]
+    public $selectedCategories = [];
+
+    public function mount()
+    {
+        // Ensure selectedCategories is an array if it comes from query params
+        if (!is_array($this->selectedCategories)) {
+            $this->selectedCategories = $this->selectedCategories ? [$this->selectedCategories] : [];
+        }
+    }
 
     public function updatedSearch()
     {
@@ -25,16 +37,50 @@ new class extends Component {
         $this->resetPage();
     }
 
+    public function updatedSelectedCategories()
+    {
+        $this->resetPage();
+    }
+
+    public function toggleCategory($categoryId)
+    {
+        if (in_array($categoryId, $this->selectedCategories)) {
+            $this->selectedCategories = array_values(array_diff($this->selectedCategories, [$categoryId]));
+        } else {
+            $this->selectedCategories[] = $categoryId;
+        }
+    }
+
     public function with(): array
     {
         return [
+            'categories' => Category::all(),
             'articles' => Article::query()
-                // ->published()
-                ->when($this->search, function (Builder $query) {
-                    $query->where('title->fr', 'like', '%' . $this->search . '%')->orWhere('description->fr', 'like', '%' . $this->search . '%');
+                ->published() // Only get published articles
+                ->when(!empty($this->selectedCategories), function (Builder $query) {
+                    $query->whereHas('categories', function (Builder $q) {
+                        $q->whereIn('categories.id', $this->selectedCategories);
+                    });
                 })
-                ->when($this->sortBy === 'Date', fn($query) => $query->orderBy('published_at', 'desc'))
-                ->when($this->sortBy === 'Popularité', fn($query) => $query->orderByDesc('views'))
+                ->when($this->search, function (Builder $query) {
+                    // Search in all languages by using JSON contains
+                    $query->where(function (Builder $q) {
+                        $q->whereJsonContains('title', $this->search)
+                            ->orWhere('title->en', 'like', '%' . $this->search . '%')
+                            ->orWhere('title->fr', 'like', '%' . $this->search . '%')
+                            ->orWhere('title->ar', 'like', '%' . $this->search . '%')
+                            ->orWhere('description->en', 'like', '%' . $this->search . '%')
+                            ->orWhere('description->fr', 'like', '%' . $this->search . '%')
+                            ->orWhere('description->ar', 'like', '%' . $this->search . '%');
+                    });
+                })
+                ->when($this->sortBy === 'Les plus récents', fn($query) => $query->orderBy('published_at', 'desc'))
+                ->when($this->sortBy === 'Les plus anciens', fn($query) => $query->orderBy('published_at', 'asc'))
+                ->when($this->sortBy === 'Les plus vus', fn($query) => $query->orderByDesc('views'))
+                ->when($this->sortBy === 'Les plus partagés', function ($query) {
+                    // TODO: Implement shares count sorting when available
+                    $query->orderBy('published_at', 'desc');
+                })
                 ->paginate(8),
         ];
     }

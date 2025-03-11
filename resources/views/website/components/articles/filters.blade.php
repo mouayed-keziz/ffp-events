@@ -28,12 +28,13 @@
         // In RTL, scroll right button scrolls left
         this.$refs.scrollContainer.scrollBy({ left: this.isRTL ? -200 : 200, behavior: 'smooth' });
     }
-}" x-init="updateScroll(); window.addEventListener('resize', updateScroll)">
+}" x-init="updateScroll();
+window.addEventListener('resize', updateScroll)">
     <!-- Left scroll button -->
-    <button
-        @click="scrollLeft()"
-        x-show="isRTL ? canScrollRight : canScrollLeft"
-        :class="isRTL ? 'absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white shadow-lg border border-base-200 flex items-center justify-center transition-opacity duration-200' : 'absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white shadow-lg border border-base-200 flex items-center justify-center transition-opacity duration-200'">
+    <button @click="scrollLeft()" x-show="isRTL ? canScrollRight : canScrollLeft"
+        :class="isRTL ?
+            'absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white shadow-lg border border-base-200 flex items-center justify-center transition-opacity duration-200' :
+            'absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white shadow-lg border border-base-200 flex items-center justify-center transition-opacity duration-200'">
         <!-- Conditionally swap chevron icon -->
         <template x-if="isRTL">
             <x-heroicon-o-chevron-right class="h-4 w-4 sm:h-6 sm:w-6" />
@@ -46,23 +47,24 @@
     <!-- Buttons container with custom scrollbar -->
     <div x-ref="scrollContainer" @scroll="updateScroll()"
         class="flex gap-2 overflow-x-auto scrollbar-hide relative min-w-0 w-full">
-        <button class="btn rounded-badge btn-neutral border-zinc-200 whitespace-nowrap">Tous</button>
-        <button class="btn rounded-badge bg-white border-zinc-200 whitespace-nowrap">Actualités</button>
-        <button class="btn rounded-badge bg-white border-zinc-200 whitespace-nowrap">Événements</button>
-        <button class="btn rounded-badge bg-white border-zinc-200 whitespace-nowrap">Événements</button>
-        <button class="btn rounded-badge bg-white border-zinc-200 whitespace-nowrap">Événements</button>
-        <button class="btn rounded-badge bg-white border-zinc-200 whitespace-nowrap">Événements</button>
-        <button class="btn rounded-badge bg-white border-zinc-200 whitespace-nowrap">Événements</button>
-        <button class="btn rounded-badge bg-white border-zinc-200 whitespace-nowrap">Événements</button>
-        <button class="btn rounded-badge bg-white border-zinc-200 whitespace-nowrap">Événements</button>
-        <button class="btn rounded-badge bg-white border-zinc-200 whitespace-nowrap">Événements</button>
+        <button wire:click="$set('selectedCategories', [])"
+            class="btn rounded-badge {{ empty($selectedCategories) ? 'btn-neutral' : 'bg-white' }} border-zinc-200 whitespace-nowrap">
+            Tous
+        </button>
+
+        @foreach ($categories as $category)
+            <button wire:click="toggleCategory({{ $category->id }})"
+                class="btn rounded-badge {{ in_array($category->id, $selectedCategories) ? 'btn-neutral' : 'bg-white' }} border-zinc-200 whitespace-nowrap">
+                {{ $category->name }}
+            </button>
+        @endforeach
     </div>
 
     <!-- Right scroll button -->
-    <button
-        @click="scrollRight()"
-        x-show="isRTL ? canScrollLeft : canScrollRight"
-        :class="isRTL ? 'absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white shadow-lg border border-base-200 flex items-center justify-center transition-opacity duration-200' : 'absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white shadow-lg border border-base-200 flex items-center justify-center transition-opacity duration-200'">
+    <button @click="scrollRight()" x-show="isRTL ? canScrollLeft : canScrollRight"
+        :class="isRTL ?
+            'absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white shadow-lg border border-base-200 flex items-center justify-center transition-opacity duration-200' :
+            'absolute right-0 top-1/2 translate-x-1/2 -translate-y-1/2 z-10 w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white shadow-lg border border-base-200 flex items-center justify-center transition-opacity duration-200'">
         <!-- Conditionally swap chevron icon -->
         <template x-if="isRTL">
             <x-heroicon-o-chevron-left class="h-4 w-4 sm:h-6 sm:w-6" />
