@@ -32,6 +32,7 @@
                     'title' => $event->title,
                     'description' => $event->description,
                     'url' => route('event_details', $event),
+                    'model' => $event,
                 ])
             </div>
         </div>

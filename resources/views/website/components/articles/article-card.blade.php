@@ -19,7 +19,7 @@
             </div>
             <div class="flex items-center gap-1">
                 @include('website.svg.share')
-                <span>0 {{ __('website/articles.card.shares') }}</span>
+                <span>{{ $shares }} {{ __('website/articles.card.shares') }}</span>
             </div>
         </div>
     </div>

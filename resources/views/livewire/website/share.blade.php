@@ -2,13 +2,16 @@
 
 use Livewire\Volt\Component;
 use App\Settings\CompanyInformationsSettings;
+use App\Models\Share;
 
 new class extends Component {
     public $title;
     public $description;
     public $instagramLink;
     public $url;
-    public function mount($title = '', $description = '', $url = '')
+    public $model;
+
+    public function mount($title = '', $description = '', $url = '', $model = null)
     {
         $this->title = $title;
         $this->description = $description;
@@ -16,6 +19,14 @@ new class extends Component {
         // Get instagram link from settings
         $settings = app(CompanyInformationsSettings::class);
         $this->instagramLink = $settings->instagramLink;
+        $this->model = $model;
+    }
+
+    protected function recordShare($platform)
+    {
+        if ($this->model) {
+            $this->model->shares()->create(['platform' => $platform]);
+        }
     }
 
     public function isRtl()
@@ -25,6 +36,7 @@ new class extends Component {
 
     public function shareToFacebook()
     {
+        $this->recordShare('facebook');
         // Open in new tab instead of redirecting
         $url = 'https://www.facebook.com/dialog/share?app_id=87741124305&display=popup&href=' . urlencode($this->url);
         $this->js("window.open('$url', '_blank')");
@@ -32,6 +44,7 @@ new class extends Component {
 
     public function shareToInstagram()
     {
+        $this->recordShare('instagram');
         // Open in new tab instead of redirecting
         $url = $this->instagramLink ?? 'https://www.instagram.com/';
         $this->js("window.open('$url', '_blank')");
@@ -39,6 +52,7 @@ new class extends Component {
 
     public function shareToLinkedin()
     {
+        $this->recordShare('linkedin');
         // Open in new tab instead of redirecting
         $url = 'https://www.linkedin.com/feed/?shareActive=true&shareUrl=' . urlencode($this->url);
         $this->js("window.open('$url', '_blank')");
@@ -46,6 +60,7 @@ new class extends Component {
 
     public function shareToTwitter()
     {
+        $this->recordShare('twitter');
         // Open in new tab instead of redirecting
         $url = 'https://twitter.com/intent/tweet?url=' . urlencode($this->url);
         $this->js("window.open('$url', '_blank')");

@@ -12,13 +12,19 @@ use App\Enums\ArticleStatus;
 use App\Traits\HasRichMedia;
 use Spatie\Translatable\HasTranslations;
 use App\Observers\ArticleObserver;
+use Coderflex\Laravisit\Concerns\CanVisit;
+use Coderflex\Laravisit\Concerns\HasVisits;
+use App\Traits\Shareable;
 
-class Article extends Model implements HasMedia
+class Article extends Model implements HasMedia, CanVisit
 {
     use HasFactory;
     use SoftDeletes;
     use InteractsWithMedia;
     use HasTranslations;
+    use HasVisits;
+    use Shareable;
+
     // use HasRichMedia;
 
     // public static $richFields = ['content'];
@@ -68,7 +74,7 @@ class Article extends Model implements HasMedia
 
     public function getViewsAttribute()
     {
-        return 999;
+        return $this->visits()->count();
     }
     public function getRecordTitleAttribute()
     {

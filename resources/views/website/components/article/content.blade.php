@@ -12,6 +12,7 @@
             'title' => $article->title,
             'description' => $article->description,
             'url' => route('article', $article),
+            'model' => $article
         ]) --}}
     </div>
     <hr class="border-t-1 border-dashed border-gray-300">

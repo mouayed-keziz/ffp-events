@@ -76,10 +76,11 @@ new class extends Component {
                 })
                 ->when($this->sortBy === 'newest', fn($query) => $query->orderBy('published_at', 'desc'))
                 ->when($this->sortBy === 'oldest', fn($query) => $query->orderBy('published_at', 'asc'))
-                ->when($this->sortBy === 'most_viewed', fn($query) => $query->orderByDesc('views'))
+                ->when($this->sortBy === 'most_viewed', function ($query) {
+                    $query->withCount('visits')->orderByDesc('visits_count');
+                })
                 ->when($this->sortBy === 'most_shared', function ($query) {
-                    // TODO: Implement shares count sorting when available
-                    $query->orderBy('published_at', 'desc');
+                    $query->withCount('shares')->orderByDesc('shares_count');
                 })
                 ->paginate(8),
         ];
@@ -110,6 +111,7 @@ new class extends Component {
                 'slug' => $article->slug,
                 'date' => $article->published_at,
                 'views' => $article->views,
+                'shares' => $article->shares_count,
                 'image' => $article->getFirstMediaUrl('image') ?: asset('placeholder.png'),
             ])
         @endforeach

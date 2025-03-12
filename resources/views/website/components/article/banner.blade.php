@@ -31,7 +31,8 @@
                         </div>
                         <div class="text-white space-y-1">
                             <div class="font-bold text-sm">{{ config('app.name') }}</div>
-                            <div class="text-xs">{{ $article->created_at->format('d M Y') }}</div>
+                            <div class="text-xs">
+                                {{ \Carbon\Carbon::parse($article->published_at)->translatedFormat('d F Y') }}</div>
                         </div>
                     </div>
                 </div>
@@ -40,6 +41,7 @@
                     'title' => $article->title,
                     'description' => $article->description,
                     'url' => route('article', $article),
+                    'model' => $article,
                 ])
             </div>
         </div>

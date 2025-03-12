@@ -7,6 +7,7 @@
                 'slug' => $article->slug,
                 'date' => $article->published_at ? $article->published_at->format('d F Y') : '',
                 'views' => $article->views,
+                'shares' => $article->shares_count,
                 'image' => $article->getFirstMediaUrl('image') ?: asset('placeholder.png'),
             ])
         @endforeach
