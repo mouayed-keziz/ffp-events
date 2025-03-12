@@ -8,16 +8,21 @@
     <div class="absolute inset-0 bg-black/30">
         <div class="container mx-auto h-full max-w-6xl relative px-4">
             {{-- Return Link and Title --}}
-            <div class="absolute top-12 left-4 space-y-4">
-                <a href="{{ route('events') }}"
+            <!-- Go Back Link and Title Container -->
+            <div class="flex flex-col justify-start items-start py-12"
+                class="absolute top-12 left-4 right-4 flex items-center @if (app()->getLocale() === 'ar') flex-row-reverse @endif">
+                <a href="{{ route('articles') }}"
                     class="flex items-center gap-2 text-white hover:text-primary transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                        stroke="currentColor" class="w-5 h-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-                    </svg>
-                    Retourner
+                    @if (app()->getLocale() === 'ar')
+                        @include('website.svg.event.chevron-right')
+                    @else
+                        @include('website.svg.event.chevron-left')
+                    @endif
+                    {{ __('website/event.goback') }}
                 </a>
-                <h1 class="text-white text-2xl md:text-4xl font-bold max-w-2xl">{{ $article['title'] }}</h1>
+                <h1 class="text-white text-2xl md:text-4xl font-bold max-w-2xl mt-8">
+                    {{ $article['title'] }}
+                </h1>
             </div>
 
             {{-- Bottom Container --}}

@@ -2,6 +2,7 @@
 
 return [
     'title' => 'مقالاتنا',
+    'similar_articles' => 'مقالات مشابهة',
     'search' => 'بحث...',
     'filters' => [
         'all' => 'الكل',

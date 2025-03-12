@@ -9,18 +9,17 @@
 .fi-sidebar {
     /* @apply dark:bg-gray-900 bg-white dark:ring-white/10 ring-gray-950/5; */
 }
+
 .fi-sidebar-nav {
-    @apply bg-white dark:bg-gray-900 shadow-sm ring-1 ring-gray-950/5  dark:ring-white/10 my-1 rounded-sm;
+    @apply bg-white dark:bg-gray-900 shadow-sm ring-1 ring-gray-950/5 dark:ring-white/10 my-1 rounded-sm;
 }
 
-.fi-btn {
-}
+.fi-btn {}
 
-.fi-badge {
-}
+.fi-badge {}
 
-.fi-body {
-}
+.fi-body {}
+
 /* fi-body fi-panel-dashboard {
 
 } */
@@ -34,30 +33,31 @@
 }
 
 .fi-layout {
-    /* @apply bg-[#efeff4] dark:bg-[#000000]; */
+    @apply bg-[#efeff4] dark:bg-[#000000];
 }
 
-/* .fi-ta-table > thead > tr {
+/* .fi-ta-table>thead>tr {
     @apply divide-x divide-gray-200 dark:divide-white/5;
 }
+
 .fi-ta-row {
     @apply divide-x divide-gray-200 dark:divide-white/5;
 } */
 
-/* .fi-ta-table > tbody {
+/* .fi-ta-table>tbody {
     @apply divide-none;
 } */
 
 .fi-ta-text {
-    @apply py-1;
+    @apply py-2;
 }
 
-.fi-ta-table > .whitesoace-nowrap {
-    @apply py-1;
+.fi-ta-table>.whitesoace-nowrap {
+    @apply py-2;
 }
 
-.fi-ta-cell > div:has(.flex) {
-    @apply py-1;
+.fi-ta-cell>div:has(.flex) {
+    @apply py-2;
 }
 
 /*----------------------------------------------------*/

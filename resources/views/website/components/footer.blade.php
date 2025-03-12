@@ -8,10 +8,11 @@
     <div class="relative -mb-24 z-10">
         <div class="container mx-auto px-4">
             <div class="max-w-xl mx-auto bg-white rounded-xl shadow-2xl p-6 text-center">
-                <h2 class="text-xl font-bold mb-2">Vous avez d'autres questions?</h2>
-                <p class="text-gray-600 text-sm mb-4">Contactez nous pour avoir les détails de votre demande</p>
-                <a href="{{ route('redirect_to_ffp_events_contact') }}" class="btn btn-neutral normal-case text-sm">Nous
-                    contacter</a>
+                <h2 class="text-xl font-bold mb-2">{{ __('website/footer.contact_card.title') }}</h2>
+                <p class="text-gray-600 text-sm mb-4">{{ __('website/footer.contact_card.description') }}</p>
+                <a href="{{ route('redirect_to_ffp_events_contact') }}" class="btn btn-neutral normal-case text-sm">
+                    {{ __('website/footer.contact_card.button') }}
+                </a>
             </div>
         </div>
     </div>
@@ -23,7 +24,6 @@
             <div class="mt-24"></div>
         @endif
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-            {{-- Logo and Contact Info --}}
             <div class="space-y-4">
                 <div class="h-16 mb-8 md:mb-0">
                     @include('website.components.brand.logo-dark')
@@ -31,7 +31,7 @@
 
                 <div class="space-y-2">
                     <div class="flex items-center gap-2">
-                        <span class="text-sm font-bold">Tel:</span>
+                        <span class="text-sm font-bold">{{ __('website/footer.contact_info.phone') }}</span>
                         <a href="tel:{{ $settings->phone }}"
                             class="text-sm text-neutral-400 hover:text-primary transition-colors">
                             {{ $settings->phone }}
@@ -39,7 +39,7 @@
                     </div>
 
                     <div class="flex items-center gap-2">
-                        <span class="text-sm font-bold">Email:</span>
+                        <span class="text-sm font-bold">{{ __('website/footer.contact_info.email') }}</span>
                         <a href="mailto:{{ $settings->email }}"
                             class="text-sm text-neutral-400 hover:text-primary transition-colors">
                             {{ $settings->email }}
@@ -48,28 +48,29 @@
                 </div>
             </div>
 
-            {{-- Quick Links --}}
             <div class="md:col-start-3">
-                <h3 class="text-neutral-400 text-[0.9rem] mb-4">Liens rapides</h3>
+                <h3 class="text-neutral-400 text-[0.9rem] mb-4">{{ __('website/footer.quick_links.title') }}</h3>
                 <ul class="space-y-2">
                     <li>
-                        <a href="{{ route('events') }}" class="text-sm hover:text-primary transition-colors">Nos
-                            évènements</a>
+                        <a href="{{ route('events') }}" class="text-sm hover:text-primary transition-colors">
+                            {{ __('website/footer.quick_links.events') }}
+                        </a>
                     </li>
                     <li>
-                        <a href="{{ route('articles') }}" class="text-sm hover:text-primary transition-colors">Nos
-                            articles</a>
+                        <a href="{{ route('articles') }}" class="text-sm hover:text-primary transition-colors">
+                            {{ __('website/footer.quick_links.articles') }}
+                        </a>
                     </li>
                     <li>
-                        <a href="{{ route('terms') }}" class="text-sm hover:text-primary transition-colors">Termes et
-                            conditions</a>
+                        <a href="{{ route('terms') }}" class="text-sm hover:text-primary transition-colors">
+                            {{ __('website/footer.quick_links.terms') }}
+                        </a>
                     </li>
                 </ul>
             </div>
 
-            {{-- Enterprise Links --}}
             <div>
-                <h3 class="text-neutral-400 text-[0.9rem] mb-4">Entreprise</h3>
+                <h3 class="text-neutral-400 text-[0.9rem] mb-4">{{ __('website/footer.company.title') }}</h3>
                 <ul class="space-y-2">
                     <li>
                         <a href="{{ route('redirect_to_ffp_events') }}"
@@ -86,7 +87,7 @@
                     <li>
                         <a href="{{ route('redirect_to_ffp_events_contact') }}"
                             class="text-sm hover:text-primary transition-colors inline-flex items-center gap-2 group">
-                            Nous contacter
+                            {{ __('website/footer.company.contact_us') }}
                             <span class="block group-hover:hidden">
                                 @include('website.svg.footer.goto')
                             </span>
@@ -104,8 +105,7 @@
         {{-- Footer Bottom --}}
         <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <div class="text-xs text-gray-400">
-                Droits d'auteur © {{ date('Y') }} <a href="{{ route('redirect_to_ffp_events') }}"
-                    class="text-primary">{{ $settings->name }}</a>. Tous droits réservés.
+                {!! __('website/footer.copyright', ['year' => date('Y'), 'company' => $settings->name]) !!}
             </div>
 
             <div class="flex items-center gap-4">

@@ -2,6 +2,7 @@
 
 return [
     'title' => 'Nos Articles',
+    'similar_articles' => 'Articles similaires',
     'search' => 'Rechercher...',
     'filters' => [
         'all' => 'Tous',
