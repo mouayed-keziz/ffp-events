@@ -95,7 +95,6 @@ class ArticleTable
     public static function table(Table $table): Table
     {
         return $table
-            ->striped()
             ->columns(self::ArticleColumns())
             ->filters([
                 // Tables\Filters\TrashedFilter::make(),

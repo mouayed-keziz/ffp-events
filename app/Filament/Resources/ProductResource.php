@@ -36,6 +36,19 @@ class ProductResource extends Resource
     {
         return 'primary';
     }
+    public static function getNavigationLabel(): string
+    {
+        return __("panel/product.plural");
+    }
+    public static function getModelLabel(): string
+    {
+        return __("panel/product.single");
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __("panel/product.plural");
+    }
     public static function getNavigationGroup(): ?string
     {
         return __(Sidebar::PRODUCT['group']);
@@ -59,27 +72,28 @@ class ProductResource extends Resource
                         // First section: spans 3 columns
                         Grid::make(3)
                             ->schema([
-                                Section::make("Product Information")
+                                Section::make(__("panel/product.informations"))
+                                    ->columnSpan(2)
                                     ->schema([
                                         TextInput::make('name')
-                                            ->label('Name')
+                                            ->label(__("panel/product.name"))
                                             ->translatable(),
                                         TextInput::make('code')
-                                            ->label('Code')
-                                            ->disabledOn("edit")
-                                    ])
-                            ]),
-                        // Second section: spans 2 columns
-                        Grid::make(2)
-                            ->schema([
-                                Section::make("Product Image")
+                                            ->label(__("panel/product.code"))
+                                            ->disabledOn("edit"),
+                                    ]),
+                                Section::make(__("panel/product.image"))
+                                    ->columnSpan(1)
                                     ->schema([
                                         SpatieMediaLibraryFileUpload::make('image')
                                             ->label("")
                                             ->collection('image')
                                             ->imageEditor()
                                     ])
-                            ])
+                            ]),
+                        // Second section: spans 2 columns
+                        Grid::make(2)
+                            ->schema([])
                     ])
             ]);
     }
@@ -89,11 +103,14 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 ImageColumn::make('image')
+                    ->label(__("panel/product.image"))
                     ->circular(),
                 TextColumn::make('name')
+                    ->label(__("panel/product.name"))
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('code')
+                    ->label(__("panel/product.code"))
                     ->searchable()
                     ->sortable()
                     ->badge()

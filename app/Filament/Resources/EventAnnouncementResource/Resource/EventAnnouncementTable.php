@@ -11,7 +11,6 @@ class EventAnnouncementTable
     public static function table(Table $table): Table
     {
         return $table
-            ->striped()
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
                     ->label(__('panel/event_announcement.fields.image'))
