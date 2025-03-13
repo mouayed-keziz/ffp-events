@@ -64,8 +64,8 @@ class ManageEventAnnouncementVisitorSubmissions extends ManageRelatedRecords
                     ->label(__("panel/visitor_submissions.fields.status")),
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()
-                    ->label(__("panel/visitor_submissions.actions.create")),
+                // Tables\Actions\CreateAction::make()
+                //     ->label(__("panel/visitor_submissions.actions.create")),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()

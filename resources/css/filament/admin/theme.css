@@ -48,17 +48,6 @@
     @apply divide-none;
 } */
 
-.fi-ta-text {
-    @apply py-2;
-}
-
-.fi-ta-table>.whitesoace-nowrap {
-    @apply py-2;
-}
-
-.fi-ta-cell>div:has(.flex) {
-    @apply py-2;
-}
 
 /*----------------------------------------------------*/
 

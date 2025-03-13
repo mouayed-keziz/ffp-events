@@ -62,9 +62,12 @@ class EventAnnouncementResource extends Resource
 
     public static function sidebar(EventAnnouncement $record): FilamentPageSidebar
     {
+        $EDIT_GROUP = "edit";
+        $EDIT_FORMS = "forms";
+        $SUBMISSIONS = "submissions";
         return FilamentPageSidebar::make()
             ->setTitle("{$record->title}")
-            // ->setDescription("{$record->description}")
+            ->setDescription("{$record->description}")
             // ->topbarNavigation()
             ->sidebarNavigation()
             ->setNavigationItems([
@@ -77,6 +80,7 @@ class EventAnnouncementResource extends Resource
                 PageNavigationItem::make(__('panel/event_announcement.actions.edit'))
                     ->url(fn() => static::getUrl('edit', ['record' => $record->id]))
                     ->icon('heroicon-o-pencil')
+                    ->group($EDIT_GROUP)
                     ->isActiveWhen(
                         fn() =>
                         request()->routeIs(Pages\EditEventAnnouncement::getRouteName())
@@ -84,6 +88,7 @@ class EventAnnouncementResource extends Resource
                 PageNavigationItem::make(__('panel/event_announcement.actions.edit_terms'))
                     ->url(fn() => static::getUrl('edit-terms', ['record' => $record->id]))
                     ->icon('heroicon-o-document-text')
+                    ->group($EDIT_GROUP)
                     ->isActiveWhen(
                         fn() =>
                         request()->routeIs(Pages\EditEventAnnouncementTerms::getRouteName())
@@ -91,6 +96,7 @@ class EventAnnouncementResource extends Resource
                 PageNavigationItem::make(__('panel/event_announcement.actions.edit_visitor_form'))
                     ->url(fn() => static::getUrl('edit-visitor-form', ['record' => $record->id]))
                     ->icon('heroicon-o-clipboard-document-check')
+                    ->group($EDIT_FORMS)
                     ->isActiveWhen(
                         fn() =>
                         request()->routeIs(Pages\EditEventAnnouncementVisitorForm::getRouteName())
@@ -98,6 +104,7 @@ class EventAnnouncementResource extends Resource
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_forms'))
                     ->url(fn() => static::getUrl('exhibitor-forms', ['record' => $record->id]))
                     ->icon('heroicon-o-clipboard-document-list')
+                    ->group($EDIT_FORMS)
                     ->isActiveWhen(
                         fn() =>
                         request()->routeIs([
@@ -107,6 +114,7 @@ class EventAnnouncementResource extends Resource
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_visitor_submissions'))
                     ->url(fn() => static::getUrl('visitor-submissions', ['record' => $record->id]))
                     ->icon('heroicon-o-user-group')
+                    ->group($SUBMISSIONS)
                     ->isActiveWhen(
                         fn() =>
                         request()->routeIs([
@@ -116,6 +124,7 @@ class EventAnnouncementResource extends Resource
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_forms'))
                     ->url(fn() => static::getUrl('exhibitor-submissions', ['record' => $record->id]))
                     ->icon('heroicon-o-user-group')
+                    ->group($SUBMISSIONS)
                     ->isActiveWhen(
                         fn() =>
                         request()->routeIs([
