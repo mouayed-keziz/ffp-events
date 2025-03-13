@@ -105,6 +105,10 @@ class EventAnnouncement extends Model implements HasMedia
     {
         return $this->hasMany(ExhibitorForm::class);
     }
+    public function exhibitorPostPaymentForms(): HasMany
+    {
+        return $this->hasMany(ExhibitorPostPaymentForm::class);
+    }
 
     /**
      * Get the visitor submissions for the event announcement.

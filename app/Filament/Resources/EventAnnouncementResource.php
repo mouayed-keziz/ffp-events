@@ -105,32 +105,25 @@ class EventAnnouncementResource extends Resource
                     ->url(fn() => static::getUrl('exhibitor-forms', ['record' => $record->id]))
                     ->icon('heroicon-o-clipboard-document-list')
                     ->group($EDIT_FORMS)
-                    ->isActiveWhen(
-                        fn() =>
-                        request()->routeIs([
-                            Pages\ManageEventAnnouncementExhibitorForms::getRouteName(),
-                        ])
-                    ),
+                    ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementExhibitorForms::getRouteName()])),
+
+                PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_post_payment_forms'))
+                    ->url(fn() => static::getUrl('exhibitor-post-payment-forms', ['record' => $record->id]))
+                    ->icon('heroicon-o-clipboard-document-list')
+                    ->group($EDIT_FORMS)
+                    ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementExhibitorPostPaymentForms::getRouteName()])),
+
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_visitor_submissions'))
                     ->url(fn() => static::getUrl('visitor-submissions', ['record' => $record->id]))
                     ->icon('heroicon-o-user-group')
                     ->group($SUBMISSIONS)
-                    ->isActiveWhen(
-                        fn() =>
-                        request()->routeIs([
-                            Pages\ManageEventAnnouncementVisitorSubmissions::getRouteName(),
-                        ])
-                    ),
-                PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_forms'))
+                    ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementVisitorSubmissions::getRouteName()])),
+
+                PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_submissions'))
                     ->url(fn() => static::getUrl('exhibitor-submissions', ['record' => $record->id]))
                     ->icon('heroicon-o-user-group')
                     ->group($SUBMISSIONS)
-                    ->isActiveWhen(
-                        fn() =>
-                        request()->routeIs([
-                            Pages\ManageEventAnnouncementExhibitorSubmissions::getRouteName(),
-                        ])
-                    ),
+                    ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementExhibitorSubmissions::getRouteName()])),
             ]);
     }
 
@@ -146,6 +139,9 @@ class EventAnnouncementResource extends Resource
 
             'exhibitor-forms' => Pages\ManageEventAnnouncementExhibitorForms::route('/{record}/exhibitor-forms'),
             'exhibitorForms.create' => Pages\CreateEventAnnouncementExhibitorForm::route('/{record}/exhibitor-forms/create'),
+
+            'exhibitor-post-payment-forms' => Pages\ManageEventAnnouncementExhibitorPostPaymentForms::route('/{record}/exhibitor-post-payment-forms'),
+            'exhibitorPostPaymentForms.create' => Pages\CreateEventAnnouncementExhibitorPostPaymentForm::route('/{record}/exhibitor-post-payment-forms/create'),
 
             // New routes for visitor submissions
             'visitor-submissions' => Pages\ManageEventAnnouncementVisitorSubmissions::route('/{record}/visitor-submissions'),
