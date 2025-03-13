@@ -48,6 +48,9 @@
     @apply divide-none;
 } */
 
+.debugpath {
+    @apply bg-gray-800 text-gray-200;
+}
 
 /*----------------------------------------------------*/
 
