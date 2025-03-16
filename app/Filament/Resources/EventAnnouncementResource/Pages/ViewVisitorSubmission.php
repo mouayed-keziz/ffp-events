@@ -21,7 +21,7 @@ class ViewVisitorSubmission extends ViewRecord
 
     protected static string $resource = EventAnnouncementResource::class;
 
-    protected static string $view = 'filament.resources.event-announcement-resource.pages.view-visitor-submission';
+    protected static string $view = 'filament.resources.view-visitor-submission';
 
     /**
      * Get a fresh instance of the model represented by the resource.

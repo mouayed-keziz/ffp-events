@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ExhibitorSubmissionStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -18,14 +19,29 @@ class ExhibitorSubmission extends Model implements HasMedia
         'exhibitor_id',
         'event_announcement_id',
         'answers',
+        'post_answers',
         'status',
-        'can_update'
+        'edit_deadline',
     ];
 
     protected $casts = [
         'answers' => 'array',
-        'can_update' => 'boolean'
+        'post_answers' => 'array',
+        'edit_deadline' => 'datetime',
+        'status' => ExhibitorSubmissionStatus::class
     ];
+
+    /**
+     * Determine if the submission can be edited based on deadline and permission
+     */
+    public function isEditable(): bool
+    {
+        if ($this->edit_deadline && now()->greaterThan($this->edit_deadline)) {
+            return false;
+        }
+
+        return true;
+    }
 
     /**
      * Get the exhibitor that owns the submission.
@@ -49,5 +65,9 @@ class ExhibitorSubmission extends Model implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('attachments');
+    }
+    public function paymentSlices()
+    {
+        return $this->hasMany(ExhibitorPaymentSlice::class);
     }
 }

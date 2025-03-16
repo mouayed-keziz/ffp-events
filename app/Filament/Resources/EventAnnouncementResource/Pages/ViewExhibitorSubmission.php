@@ -21,7 +21,7 @@ class ViewExhibitorSubmission extends ViewRecord
 
     protected static string $resource = EventAnnouncementResource::class;
 
-    protected static string $view = 'filament.resources.event-announcement-resource.pages.view-visitor-submission';
+    protected static string $view = 'filament.resources.view-exhibitor-submission';
 
     /**
      * Get a fresh instance of the model represented by the resource.
@@ -77,13 +77,7 @@ class ViewExhibitorSubmission extends ViewRecord
                     ->label(__('panel/visitors.form.email')),
                 \Filament\Infolists\Components\TextEntry::make('status')
                     ->label(__('panel/visitor_submissions.fields.status'))
-                    ->badge()
-                    ->color(fn(string $state): string => match ($state) {
-                        'pending' => 'warning',
-                        'approved' => 'success',
-                        'rejected' => 'danger',
-                        default => 'gray',
-                    }),
+                    ->badge(),
                 \Filament\Infolists\Components\TextEntry::make('created_at')
                     ->label(__('panel/visitor_submissions.fields.created_at'))
                     ->dateTime(),

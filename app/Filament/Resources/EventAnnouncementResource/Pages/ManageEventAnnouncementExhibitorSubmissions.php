@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 
+use App\Enums\ExhibitorSubmissionStatus;
 use App\Filament\Resources\EventAnnouncementResource;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
 use Filament\Actions;
@@ -43,11 +44,6 @@ class ManageEventAnnouncementExhibitorSubmissions extends ManageRelatedRecords
                     ->label(__("panel/visitor_submissions.fields.visitor")),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->color(fn(string $state): string => match ($state) {
-                        'pending' => 'warning',
-                        'approved' => 'success',
-                        'rejected' => 'danger',
-                    })
                     ->label(__("panel/visitor_submissions.fields.status")),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -56,11 +52,7 @@ class ManageEventAnnouncementExhibitorSubmissions extends ManageRelatedRecords
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
-                    ->options([
-                        'pending' => __("panel/visitor_submissions.status.pending"),
-                        'approved' => __("panel/visitor_submissions.status.approved"),
-                        'rejected' => __("panel/visitor_submissions.status.rejected"),
-                    ])
+                    ->options(ExhibitorSubmissionStatus::class)
                     ->label(__("panel/visitor_submissions.fields.status")),
             ])
             ->headerActions([
