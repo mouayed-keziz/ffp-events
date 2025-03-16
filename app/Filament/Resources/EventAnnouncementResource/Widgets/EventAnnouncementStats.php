@@ -35,19 +35,19 @@ class EventAnnouncementStats extends BaseWidget
                 ])
                 ->chartColor('primary'),
 
-            Stat::make(__('panel/event_announcement.stats.active_events'), EventAnnouncement::active()->count())
+            Stat::make(__('panel/event_announcement.stats.active_events'), EventAnnouncement::count())
                 ->icon('heroicon-o-play')
                 ->color('success')
                 // ->description($description)
                 // ->descriptionIcon('heroicon-o-arrow-trending-up', $descriptionIconPosition)
                 ->chart([
-                    EventAnnouncement::active()->where('start_date', '>=', now()->subDays(6))->count(),
-                    EventAnnouncement::active()->where('start_date', '>=', now()->subDays(5))->count(),
-                    EventAnnouncement::active()->where('start_date', '>=', now()->subDays(4))->count(),
-                    EventAnnouncement::active()->where('start_date', '>=', now()->subDays(3))->count(),
-                    EventAnnouncement::active()->where('start_date', '>=', now()->subDays(2))->count(),
-                    EventAnnouncement::active()->where('start_date', '>=', now()->subDays(1))->count(),
-                    EventAnnouncement::active()->where('start_date', '>=', now())->count(),
+                    EventAnnouncement::where('start_date', '>=', now()->subDays(6))->count(),
+                    EventAnnouncement::where('start_date', '>=', now()->subDays(5))->count(),
+                    EventAnnouncement::where('start_date', '>=', now()->subDays(4))->count(),
+                    EventAnnouncement::where('start_date', '>=', now()->subDays(3))->count(),
+                    EventAnnouncement::where('start_date', '>=', now()->subDays(2))->count(),
+                    EventAnnouncement::where('start_date', '>=', now()->subDays(1))->count(),
+                    EventAnnouncement::where('start_date', '>=', now())->count(),
                 ])
                 ->chartColor('success'),
 

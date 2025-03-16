@@ -102,4 +102,25 @@ class Radio
     {
         return false;
     }
+
+    /**
+     * Update radio options based on selection
+     * 
+     * @param array $options Current options array
+     * @param mixed $selectedValue Value to be selected
+     * @return array Updated options with selected state
+     */
+    public static function updateOptions(array $options, $selectedValue): array
+    {
+        if (empty($options)) {
+            return [];
+        }
+
+        foreach ($options as $index => $option) {
+            $isCurrentOptionSelected = $option['value'] == $selectedValue;
+            $options[$index]['selected'] = $isCurrentOptionSelected;
+        }
+
+        return $options;
+    }
 }

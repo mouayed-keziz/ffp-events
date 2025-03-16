@@ -62,7 +62,7 @@ if (empty($productsData)) {
                 @endphp
 
                 <div wire:key="product-{{ $productId }}"
-                    class="rounded-xl overflow-hidden transition-all {{ $isSelected ? 'border-2 border-primary/60 bg-primary/10' : 'border border-gray-200' }}">
+                    class="rounded-xl overflow-hidden transition-all {{ $isSelected ? 'border-2 border-primary/60 bg-primary/10' : '' }}">
 
                     <!-- Product Image -->
                     <div class="aspect-[56/43] px-1.5 pt-1.5">

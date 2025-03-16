@@ -107,7 +107,22 @@ class VisitEventFormActions extends BaseFormActions
             }
 
             foreach ($section['fields'] as $fieldIndex => $field) {
-                // Process file uploads first
+                // First process non-file field answers
+                if (isset($field['type']) && isset($field['answer'])) {
+                    $fieldType = FormField::tryFrom($field['type']);
+                    if ($fieldType) {
+                        // Skip Upload fields for now, we'll handle them separately
+                        if ($field['type'] !== FormField::UPLOAD->value) {
+                            $processedFormData[$sectionIndex]['fields'][$fieldIndex]['answer'] =
+                                $fieldType->processFieldAnswer(
+                                    $field['answer'],
+                                    $field['data'] ?? []
+                                );
+                        }
+                    }
+                }
+
+                // Then process file uploads specifically
                 if (isset($field['type']) && $field['type'] === FormField::UPLOAD->value && isset($field['answer'])) {
                     if ($field['answer'] instanceof TemporaryUploadedFile) {
                         // Generate unique identifier for the file
@@ -122,18 +137,6 @@ class VisitEventFormActions extends BaseFormActions
 
                         // Replace the file in form data with the identifier
                         $processedFormData[$sectionIndex]['fields'][$fieldIndex]['answer'] = $fileId;
-                    }
-                }
-
-                // Now process the field answer using the FormField enum's enhanced method
-                if (isset($field['type']) && isset($field['answer'])) {
-                    $fieldType = FormField::tryFrom($field['type']);
-                    if ($fieldType) {
-                        $processedFormData[$sectionIndex]['fields'][$fieldIndex]['answer'] =
-                            $fieldType->processFieldAnswer(
-                                $field['answer'],
-                                $field['data'] ?? []
-                            );
                     }
                 }
             }

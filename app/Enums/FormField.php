@@ -182,4 +182,24 @@ enum FormField: string implements HasLabel
             self::PLAN_TIER => PlanTier::needsQuantity(),
         };
     }
+
+    /**
+     * Update field options based on selection
+     * 
+     * @param array $options Current options array
+     * @param mixed $selectedValue Value to be selected
+     * @return array Updated options with selected state
+     */
+    public function updateOptions(array $options, $selectedValue): array
+    {
+        return match ($this) {
+            self::SELECT => Select::updateOptions($options, $selectedValue),
+            self::RADIO => Radio::updateOptions($options, $selectedValue),
+            self::SELECT_PRICED => SelectPriced::updateOptions($options, $selectedValue),
+            self::RADIO_PRICED => RadioPriced::updateOptions($options, $selectedValue),
+            self::PLAN_TIER => PlanTier::updatePlans($options, $selectedValue),
+            self::ECOMMERCE => Ecommerce::updateProducts($options, $selectedValue),
+            default => $options
+        };
+    }
 }

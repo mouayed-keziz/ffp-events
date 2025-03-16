@@ -126,7 +126,22 @@ class ExhibitorFormActions extends BaseFormActions
                 }
 
                 foreach ($section['fields'] as $fieldIndex => $field) {
-                    // Process file uploads
+                    // First process field answers
+                    if (isset($field['type']) && isset($field['answer'])) {
+                        $fieldType = FormField::tryFrom($field['type']);
+                        if ($fieldType) {
+                            // Skip Upload fields for now, we'll handle them separately
+                            if ($field['type'] !== FormField::UPLOAD->value) {
+                                $processedFormData[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'] =
+                                    $fieldType->processFieldAnswer(
+                                        $field['answer'],
+                                        $field['data'] ?? []
+                                    );
+                            }
+                        }
+                    }
+
+                    // Then process file uploads specifically
                     if (isset($field['type']) && $field['type'] === FormField::UPLOAD->value && isset($field['answer'])) {
                         if ($field['answer'] instanceof TemporaryUploadedFile) {
                             // Generate unique identifier for the file
@@ -141,18 +156,6 @@ class ExhibitorFormActions extends BaseFormActions
 
                             // Replace the file in form data with the identifier
                             $processedFormData[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'] = $fileId;
-                        }
-                    }
-
-                    // Process field answers
-                    if (isset($field['type']) && isset($field['answer'])) {
-                        $fieldType = FormField::tryFrom($field['type']);
-                        if ($fieldType) {
-                            $processedFormData[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'] =
-                                $fieldType->processFieldAnswer(
-                                    $field['answer'],
-                                    $field['data'] ?? []
-                                );
                         }
                     }
                 }

@@ -121,4 +121,25 @@ class PlanTier
     {
         return false;
     }
+
+    /**
+     * Update plan tier selections based on the selected plan
+     * 
+     * @param array $plans Current plans array 
+     * @param mixed $selectedPlanId ID of the plan to select
+     * @return array Updated plans with selected state
+     */
+    public static function updatePlans(array $plans, $selectedPlanId): array
+    {
+        if (empty($plans)) {
+            return [];
+        }
+
+        foreach ($plans as $index => $plan) {
+            $isCurrentPlanSelected = $plan['plan_id'] == $selectedPlanId;
+            $plans[$index]['selected'] = $isCurrentPlanSelected;
+        }
+
+        return $plans;
+    }
 }

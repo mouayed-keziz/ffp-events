@@ -3,6 +3,7 @@
 namespace App\Enums\Fields;
 
 use App\Enums\FileUploadType;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class Upload
 {
@@ -55,6 +56,19 @@ class Upload
 
     public static function processFieldAnswer($answer, array $fieldData = [])
     {
+        // If the answer is a string (likely a fileId from previous processing)
+        // we should preserve it as is
+        if (is_string($answer) && !empty($answer)) {
+            return $answer;
+        }
+
+        // If the answer is a TemporaryUploadedFile, it will be handled by
+        // the FormActions class, so we can just return it
+        if ($answer instanceof TemporaryUploadedFile) {
+            return $answer;
+        }
+
+        // For null or empty answers, return as is
         return $answer;
     }
 

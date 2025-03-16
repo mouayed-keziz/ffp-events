@@ -61,7 +61,7 @@ $chevronClass = $dir === 'rtl' ? 'ms-1' : 'me-1';
                         @endphp
 
                         <div x-data="{ expanded: false }"
-                            class="w-full rounded-xl border transition-all {{ $isSelected ? 'border-primary/70 bg-primary/10' : 'border-gray-200' }}">
+                            class="w-full rounded-xl transition-all {{ $isSelected ? 'border-2 border-primary/70 bg-primary/10' : '' }}">
                             <!-- Plan option row with radio button -->
                             <div class="flex items-center justify-between py-3 px-3 rounded-xl">
                                 <div class="flex items-center gap-3">
@@ -110,8 +110,7 @@ $chevronClass = $dir === 'rtl' ? 'ms-1' : 'me-1';
                             </div>
 
                             <!-- Expandable content -->
-                            <div x-show="expanded" x-collapse
-                                class="py-3 px-3 {{ $isSelected ? 'border-primary/70 bg-primary/10' : '' }}">
+                            <div x-show="expanded" x-collapse class="py-3 px-3 {{ $isSelected ? '' : '' }}">
                                 <div class="grid grid-cols-8 gap-4">
                                     <!-- Plan Image (3 columns) -->
                                     <div class="col-span-8 md:col-span-3">

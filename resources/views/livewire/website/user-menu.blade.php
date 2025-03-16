@@ -15,7 +15,7 @@ new class extends Component {
         session()->invalidate();
         session()->regenerateToken();
 
-        $this->redirectRoute('events');
+        $this->redirectRoute('login');
     }
 }; ?>
 

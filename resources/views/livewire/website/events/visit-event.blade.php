@@ -3,6 +3,7 @@ use Livewire\Volt\Component;
 use App\Models\EventAnnouncement;
 use App\Models\VisitorSubmission;
 use App\Forms\VisitEventFormActions;
+use App\Actions\Forms\FormFieldActions;
 use Livewire\WithFileUploads;
 
 new class extends Component {
@@ -31,58 +32,18 @@ new class extends Component {
 
     public function updateRadioSelection($answerPath, $selectedValue)
     {
-        // Store the selected value in the selectedValue property
-        data_set($this, 'formData.' . $answerPath . '.selectedValue', $selectedValue);
-
-        // Get the options array from the answer path
-        $options = data_get($this, 'formData.' . $answerPath . '.options', []);
-        if (empty($options)) {
-            return;
-        }
-
-        // Update the options to ensure only the selected one has selected=true
-        foreach ($options as $index => $option) {
-            $isCurrentOptionSelected = $option['value'] == $selectedValue;
-            $options[$index]['selected'] = $isCurrentOptionSelected;
-        }
-
-        // Set the updated options back to the form data
-        data_set($this, 'formData.' . $answerPath . '.options', $options);
-
-        // Recalculate price after changing selection
-        // $this->calculateTotalPrice();
+        $this->formData = FormFieldActions::updateOptionSelection($this->formData, $answerPath, $selectedValue);
     }
 
-    /**
-     * Update select option for SELECT_PRICED field
-     *
-     * @param string $answerPath The path to the answer in formData
-     * @param string $selectedValue The value of the selected option
-     */
     public function updateSelectOption($answerPath, $selectedValue)
     {
-        // Get the options array from the answer path
-        $options = data_get($this, 'formData.' . $answerPath . '.options', []);
-        if (empty($options)) {
-            return;
-        }
-
-        // Update the options to ensure only the selected one has selected=true
-        foreach ($options as $index => $option) {
-            $isCurrentOptionSelected = $option['value'] == $selectedValue;
-            $options[$index]['selected'] = $isCurrentOptionSelected;
-        }
-
-        // Set the updated options back to the form data
-        data_set($this, 'formData.' . $answerPath . '.options', $options);
+        $this->formData = FormFieldActions::updateOptionSelection($this->formData, $answerPath, $selectedValue);
 
         // Dispatch a browser event to inform Alpine.js of the change
         $this->dispatch('selectedchanged', [
             'path' => $answerPath,
             'label' => $selectedValue,
         ]);
-
-        // Recalculate price after changing selection
     }
 
     public function submitForm()

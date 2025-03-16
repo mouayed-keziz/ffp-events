@@ -121,4 +121,58 @@ class Ecommerce
     {
         return true;
     }
+
+    /**
+     * Update product selection and quantity
+     * 
+     * @param array $products Current products array
+     * @param mixed $productData Can be a product ID to toggle selection, or an array with [id, quantity]
+     * @return array Updated products with selected state and quantity
+     */
+    public static function updateProducts(array $products, $productData): array
+    {
+        if (empty($products)) {
+            return [];
+        }
+
+        // Handle the case where $productData is just an ID (toggle selection)
+        if (!is_array($productData)) {
+            $productId = $productData;
+
+            foreach ($products as $index => $product) {
+                if ($product['product_id'] == $productId) {
+                    // Toggle selection status
+                    $products[$index]['selected'] = !($product['selected'] ?? false);
+
+                    // If newly selected, ensure quantity is at least 1
+                    if ($products[$index]['selected'] && (!isset($products[$index]['quantity']) || $products[$index]['quantity'] < 1)) {
+                        $products[$index]['quantity'] = 1;
+                    }
+                }
+            }
+
+            return $products;
+        }
+
+        // Handle case where $productData is [id, quantity]
+        if (is_array($productData) && count($productData) >= 2) {
+            $productId = $productData[0];
+            $quantity = intval($productData[1]);
+
+            foreach ($products as $index => $product) {
+                if ($product['product_id'] == $productId) {
+                    if ($quantity <= 0) {
+                        // If quantity is 0 or negative, unselect the product
+                        $products[$index]['selected'] = false;
+                    } else {
+                        // Update quantity and ensure product is selected
+                        $products[$index]['selected'] = true;
+                        $products[$index]['quantity'] = $quantity;
+                    }
+                }
+            }
+        }
+
+        return $products;
+    }
 }
