@@ -5,6 +5,8 @@ namespace App\Filament\Resources\ExhibitorSubmissionResource\Pages;
 use App\Filament\Resources\ExhibitorSubmissionResource;
 use Filament\Actions;
 use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\Tabs;
+use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Guava\FilamentNestedResources\Concerns\NestedPage;
@@ -55,7 +57,15 @@ class ViewExhibitorSubmission extends ViewRecord
         // Create the infolist schema
         return $infolist
             ->schema([
-                $exhibitorDetailsSection,
+                Tabs::make("tabs")->columnSpanFull()
+                    ->schema([
+                        Tab::make("details")
+                            ->schema([
+                                $exhibitorDetailsSection
+                            ]),
+                        Tab::make("answers")
+                            ->schema([])
+                    ])
                 // Section::make("stuff")->schema([
                 // ...(VisitorSubmissionFormDisplay::make($sections)),
                 // ])

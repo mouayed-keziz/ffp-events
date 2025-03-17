@@ -197,12 +197,11 @@ class ExhibitorFormActions extends BaseFormActions
             if (auth('exhibitor')->check()) {
                 $exhibitorId = auth('exhibitor')->user()->id;
             }
-
             // Create submission with total prices
             $submission = \App\Models\ExhibitorSubmission::create([
                 'exhibitor_id' => $exhibitorId,
                 'event_announcement_id' => $event->id,
-                'answers' => $processedData,
+                'answers' => array_values($processedData),
                 'total_prices' => $processedData['total_prices'] ?? null,
                 'status' => 'pending',
             ]);

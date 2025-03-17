@@ -17,7 +17,6 @@ use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\ImageEntry;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\Section as InfolistSection;
-use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\TextEntry;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
@@ -34,7 +33,7 @@ class VisitorSubmissionFormDisplay
      */
     public static function make(array $formData): array
     {
-        $tabs = [];
+        $sections = [];
 
         foreach ($formData as $sectionIndex => $section) {
             $sectionTitle = $section['title'][App::getLocale()] ?? $section['title']['en'] ?? $section['title']['fr'] ?? 'Section';
@@ -48,14 +47,13 @@ class VisitorSubmissionFormDisplay
                 }
             }
 
-            $tabs[] = Tabs\Tab::make($sectionTitle)
-                ->schema($sectionFields);
+            $sections[] = InfolistSection::make($sectionTitle)
+                ->schema($sectionFields)
+                ->collapsible()
+                ->collapsed();
         }
 
-        return [
-            Tabs::make('Sections')
-                ->tabs($tabs)->columnSpanFull()
-        ];
+        return $sections;
     }
 
     /**
