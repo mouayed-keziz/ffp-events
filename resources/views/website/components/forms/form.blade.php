@@ -1,3 +1,4 @@
+@props(['disabled'])
 <form wire:submit.prevent="submitForm">
     @if (!empty($formData))
         <div>
@@ -18,6 +19,7 @@
                         @include('website.components.forms.fields', [
                             'fields' => [$field],
                             'answerPath' => $answerPath,
+                            'disabled' => $disabled ?? false,
                         ])
 
                         @error("formData.{$currentStep}.sections.{$sectionIndex}.fields.{$fieldIndex}.answer")

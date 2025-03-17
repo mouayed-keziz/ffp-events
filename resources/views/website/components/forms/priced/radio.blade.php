@@ -1,4 +1,4 @@
-@props(['data', 'answerPath'])
+@props(['data', 'answerPath', 'disabled' => false])
 
 <div class="mb-4">
     <label class="label">
@@ -60,15 +60,17 @@ $selectedValue = data_get($this, 'formData.' . $answerPath . '.selectedValue');
                 }
             @endphp
 
-            <div class="flex items-start">
+            <div class="flex items-start {{ $disabled ? 'opacity-60' : '' }}">
                 <div class="flex items-center flex-wrap gap-2">
-                    <input type="radio" id="{{ $radioName }}_{{ $loop->index }}" class="radio radio-primary mr-2"
+                    <input type="radio" id="{{ $radioName }}_{{ $loop->index }}"
+                        class="radio radio-primary mr-2 {{ $disabled ? 'cursor-not-allowed' : '' }}"
                         name="{{ $radioName }}" value="{{ $optionValue }}"
                         wire:model.live="formData.{{ $answerPath }}.selectedValue"
                         wire:change="updateRadioSelection('{{ $answerPath }}', $event.target.value)"
-                        {{ $isSelected ? 'checked' : '' }}>
+                        {{ $isSelected ? 'checked' : '' }} {{ $disabled ? 'disabled' : '' }}>
 
-                    <label for="{{ $radioName }}_{{ $loop->index }}" class="cursor-pointer mr-2">
+                    <label for="{{ $radioName }}_{{ $loop->index }}"
+                        class="cursor-pointer mr-2 {{ $disabled ? 'cursor-not-allowed' : '' }}">
                         {{ $optionValue }}
                     </label>
 

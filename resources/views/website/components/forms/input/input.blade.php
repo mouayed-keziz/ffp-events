@@ -1,4 +1,4 @@
-@props(['data', 'answerPath' => null])
+@props(['data', 'answerPath' => null, 'disabled' => false])
 
 <div>
     @switch($data['type'])
@@ -6,6 +6,7 @@
             @include('website.components.forms.input.text-input', [
                 'data' => $data,
                 'answerPath' => $answerPath,
+                'disabled' => $disabled ?? false,
             ])
         @break
 
@@ -13,6 +14,7 @@
             @include('website.components.forms.input.email-input', [
                 'data' => $data,
                 'answerPath' => $answerPath,
+                'disabled' => $disabled ?? false,
             ])
         @break
 
@@ -20,6 +22,7 @@
             @include('website.components.forms.input.number-input', [
                 'data' => $data,
                 'answerPath' => $answerPath,
+                'disabled' => $disabled ?? false,
             ])
         @break
 
@@ -27,6 +30,7 @@
             @include('website.components.forms.input.phone-input', [
                 'data' => $data,
                 'answerPath' => $answerPath,
+                'disabled' => $disabled ?? false,
             ])
         @break
 
@@ -34,6 +38,7 @@
             @include('website.components.forms.input.date-input', [
                 'data' => $data,
                 'answerPath' => $answerPath,
+                'disabled' => $disabled ?? false,
             ])
         @break
 
@@ -41,6 +46,7 @@
             @include('website.components.forms.input.paragraph-input', [
                 'data' => $data,
                 'answerPath' => $answerPath,
+                'disabled' => $disabled ?? false,
             ])
         @break
 

@@ -1,4 +1,4 @@
-@props(['data', 'answerPath'])
+@props(['data', 'answerPath', 'disabled' => false])
 <div class="form-control my-4">
     <label class="label">
         <span class="label-text">
@@ -52,8 +52,9 @@ $selectedValue = data_get($this, 'formData.' . $answerPath . '.selectedValue');
                 <input type="radio" name="{{ $radioName }}" value="{{ $optionLabel }}"
                     wire:model.live="formData.{{ $answerPath }}.selectedValue" x-model="selected"
                     wire:change="updateRadioSelection('{{ $answerPath }}', $event.target.value)"
-                    :class="{ 'radio-primary': selected === '{{ $optionLabel }}' }" class="radio mx-2"
-                    @if ($data['required'] ?? false) required @endif>
+                    :class="{ 'radio-primary': selected === '{{ $optionLabel }}', 'opacity-60 cursor-not-allowed': disabled }"
+                    class="radio mx-2" @if ($data['required'] ?? false) required @endif
+                    {{ $disabled ? 'disabled' : '' }}>
                 <span>{{ $optionLabel }}</span>
             </label>
         @endforeach

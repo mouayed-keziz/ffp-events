@@ -1,4 +1,4 @@
-@props(['data', 'answerPath'])
+@props(['data', 'answerPath', 'disabled' => false])
 
 <div class="mb-4">
     <label class="label">
@@ -62,7 +62,7 @@ if (empty($productsData)) {
                 @endphp
 
                 <div wire:key="product-{{ $productId }}"
-                    class="rounded-xl overflow-hidden transition-all {{ $isSelected ? 'border-2 border-primary/60 bg-primary/10' : '' }}">
+                    class="rounded-xl overflow-hidden transition-all {{ $isSelected ? 'border-2 border-primary/60 bg-primary/10' : '' }} {{ $disabled ? 'opacity-60' : '' }}">
 
                     <!-- Product Image -->
                     <div class="aspect-[56/43] px-1.5 pt-1.5">
@@ -82,11 +82,12 @@ if (empty($productsData)) {
                             <input type="checkbox" id="product_{{ $productId }}"
                                 wire:model.live="formData.{{ $answerPath }}.products.{{ $productAnswerIndex }}.selected"
                                 wire:change="updateProductQuantity('{{ $answerPath }}', {{ $productId }}, $event.target.checked ? {{ $quantity }} : 0)"
-                                class="checkbox checkbox-sm rounded-md {{ App::getLocale() === 'ar' ? 'ml-2' : '' }}"
+                                class="checkbox checkbox-sm rounded-md {{ App::getLocale() === 'ar' ? 'ml-2' : '' }} {{ $disabled ? 'cursor-not-allowed' : '' }}"
+                                {{ $disabled ? 'disabled' : '' }}
                                 class="checkbox checkbox-sm {{ $isSelected ? 'checkbox-primary' : '' }}" />
 
                             <label for="product_{{ $productId }}"
-                                class="font-medium text-sm text-base truncate cursor-pointer"
+                                class="font-medium text-sm text-base truncate {{ $disabled ? 'cursor-not-allowed' : 'cursor-pointer' }}"
                                 title="{{ $productName }}">{{ $productName }}</label>
                         </div>
 
@@ -94,11 +95,13 @@ if (empty($productsData)) {
 
                         <div class="grid grid-cols-7 gap-2 items-center">
                             <div class="col-span-7 sm:col-span-4">
-                                <input class="input input-sm input-bordered rounded-md w-full" type="number"
+                                <input
+                                    class="input input-sm input-bordered rounded-md w-full {{ $disabled ? 'cursor-not-allowed' : '' }}"
+                                    type="number"
                                     wire:model.live="formData.{{ $answerPath }}.products.{{ $productAnswerIndex }}.quantity"
                                     wire:change="$refresh" min="1" step="1"
-                                    {{ !$isSelected ? 'disabled' : '' }}
-                                    class="{{ !$isSelected ? 'opacity-60' : '' }}"
+                                    {{ !$isSelected || $disabled ? 'disabled' : '' }}
+                                    class="{{ !$isSelected || $disabled ? 'opacity-60' : '' }}"
                                     placeholder="{{ __('Qty') }}" />
                             </div>
 

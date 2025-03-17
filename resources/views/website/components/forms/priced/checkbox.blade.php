@@ -1,4 +1,4 @@
-@props(['data', 'answerPath'])
+@props(['data', 'answerPath', 'disabled' => false])
 
 <div class="mb-4">
     <label class="label">
@@ -55,7 +55,8 @@ if (empty($optionsData)) {
                     <input type="checkbox" id="{{ $answerPath }}_{{ $loop->index }}"
                         class="checkbox checkbox-primary rounded-md mr-2"
                         wire:model.live="formData.{{ $answerPath }}.options.{{ $optionAnswerIndex }}.selected"
-                        {{ $isSelected ? 'checked' : '' }}>
+                        {{ $isSelected ? 'checked' : '' }} {{ $disabled ? 'disabled' : '' }}
+                        class="{{ $disabled ? 'opacity-60 cursor-not-allowed' : '' }}">
 
                     <label for="{{ $answerPath }}_{{ $loop->index }}" class="cursor-pointer mr-2">
                         {{ $option['option'][app()->getLocale()] ?? ($option['option']['fr'] ?? '') }}

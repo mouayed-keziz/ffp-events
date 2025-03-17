@@ -2,6 +2,7 @@
 
 use Livewire\Volt\Component;
 use App\Models\EventAnnouncement;
+use App\Models\ExhibitorSubmission;
 use App\Forms\ExhibitorFormActions;
 use App\Actions\Forms\FormFieldActions;
 use Livewire\WithFileUploads;
@@ -16,7 +17,8 @@ new class extends Component {
     use HasFormFieldUpdates;
 
     public EventAnnouncement $event;
-    public $disabled = false;
+    public ExhibitorSubmission $submission;
+    public $disabled = true;
     public array $formData = [];
     public array $postForms = [];
     public int $currentStep = 0;
@@ -26,20 +28,19 @@ new class extends Component {
     public string $preferred_currency = 'EUR';
     public float $totalPrice = 0;
 
-    public function mount(EventAnnouncement $event)
+    public function mount(EventAnnouncement $event, ExhibitorSubmission $submission)
     {
         $this->event = $event;
+        $this->submission = $submission;
         $this->initFormData();
         $this->postForms = $event->exhibitorPostPaymentForms->toArray();
     }
-
     public function updated($name)
     {
         if (str_starts_with($name, 'formData')) {
             $this->calculateTotalPrice();
         }
     }
-
     protected function initFormData()
     {
         $actions = new ExhibitorFormActions();
@@ -55,8 +56,8 @@ new class extends Component {
     {
         $this->validateCurrentStep();
         $actions = new ExhibitorFormActions();
-        $success = $actions->saveFormSubmission($this->event, $this->formData);
-
+        // $success = $actions->saveFormSubmission($this->event, $this->formData);
+        dd($this->event, $this->formData);
         if ($success) {
             // Instead of showing success message, redirect to info validation
             return redirect()->route('info_validation', ['id' => $this->event->id]);

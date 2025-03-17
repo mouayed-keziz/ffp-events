@@ -1,4 +1,4 @@
-@props(['data', 'answerPath'])
+@props(['data', 'answerPath', 'disabled' => false])
 
 <div class="form-control my-4">
     <label class="label">
@@ -29,12 +29,13 @@
                 $optionLabel = $option['option'][app()->getLocale()] ?? ($option['option']['fr'] ?? '');
             @endphp
 
-            <label class="cursor-pointer flex items-center">
+            <label class="cursor-pointer flex items-center {{ $disabled ? 'opacity-60 cursor-not-allowed' : '' }}">
                 <input type="checkbox" id="{{ $answerPath }}_{{ $loop->index }}"
                     wire:model.live="formData.{{ $answerPath }}.options.{{ $optionAnswerIndex }}.selected"
                     x-model="options[{{ $optionAnswerIndex }}].selected"
                     :class="{ 'checkbox-primary': options[{{ $optionAnswerIndex }}].selected }"
-                    class="checkbox mx-2 rounded-md" @if ($data['required'] ?? false) required @endif>
+                    class="checkbox mx-2 rounded-md" @if ($data['required'] ?? false) required @endif
+                    {{ $disabled ? 'disabled' : '' }}>
                 <span>{{ $optionLabel }}</span>
             </label>
         @endforeach

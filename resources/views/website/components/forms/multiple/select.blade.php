@@ -1,4 +1,4 @@
-@props(['data', 'answerPath'])
+@props(['data', 'answerPath', 'disabled' => false])
 
 <div class="form-control">
     <label class="label">
@@ -42,9 +42,10 @@ foreach ($optionsData as $idx => $optionData) {
         }
     @endphp
 
-    <select class="select select-bordered bg-white mb-2 rounded-md"
+    <select
+        class="select select-bordered bg-white mb-2 rounded-md {{ $disabled ? 'opacity-60 cursor-not-allowed' : '' }}"
         wire:change="updateSelectOption('{{ $answerPath }}', $event.target.value)"
-        @if ($data['required'] ?? false) required @endif>
+        @if ($data['required'] ?? false) required @endif {{ $disabled ? 'disabled' : '' }}>
 
         {{-- If description exists, display a default disabled option --}}
         <option value="" {{ $selectedOptionLabel ? '' : 'selected' }} disabled>

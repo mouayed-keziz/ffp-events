@@ -1,4 +1,4 @@
-@props(['data', 'answerPath'])
+@props(['data', 'answerPath', 'disabled' => false])
 <div class="mb-4">
     <label class="label">
         <span class="label-text font-medium {{ isset($data['required']) && $data['required'] ? 'required' : '' }}">
@@ -61,7 +61,7 @@ $chevronClass = $dir === 'rtl' ? 'ms-1' : 'me-1';
                         @endphp
 
                         <div x-data="{ expanded: false }"
-                            class="w-full rounded-xl transition-all {{ $isSelected ? 'border-2 border-primary/70 bg-primary/10' : '' }}">
+                            class="w-full rounded-xl transition-all {{ $isSelected ? 'border-2 border-primary/70 bg-primary/10' : '' }} {{ $disabled ? 'opacity-70' : '' }}">
                             <!-- Plan option row with radio button -->
                             <div class="flex items-center justify-between py-3 px-3 rounded-xl">
                                 <div class="flex items-center gap-3">
@@ -69,7 +69,8 @@ $chevronClass = $dir === 'rtl' ? 'ms-1' : 'me-1';
                                         value="{{ $plan['id'] }}"
                                         wire:model.live="formData.{{ $answerPath }}.plans.{{ $planAnswerIndex }}.selected"
                                         wire:change="updatePlanSelection('{{ $answerPath }}', '{{ $plan['id'] }}')"
-                                        {{ $isSelected ? 'checked' : '' }} class="radio radio-sm radio-primary" />
+                                        {{ $isSelected ? 'checked' : '' }} {{ $disabled ? 'disabled' : '' }}
+                                        class="radio radio-sm radio-primary" />
                                     <label for="plan_{{ $plan['id'] }}" class="font-medium cursor-pointer">
                                         {{ $plan['title'] }}
                                     </label>
@@ -83,7 +84,8 @@ $chevronClass = $dir === 'rtl' ? 'ms-1' : 'me-1';
                                 </div>
 
                                 <button type="button" class="text-sm font-bold text-black hover:text-primary"
-                                    x-on:click="expanded = !expanded" dir="{{ $dir }}">
+                                    x-on:click="expanded = !expanded" dir="{{ $dir }}"
+                                    {{ $disabled ? 'disabled' : '' }}>
                                     <span x-show="!expanded">
                                         @if ($dir === 'rtl')
                                             {{ __('See more') }}

@@ -10,7 +10,8 @@
             <div class="max-w-xl mx-auto bg-white rounded-xl shadow-2xl p-6 text-center">
                 <h2 class="text-xl font-bold mb-2">{{ __('website/footer.contact_card.title') }}</h2>
                 <p class="text-gray-600 text-sm mb-4">{{ __('website/footer.contact_card.description') }}</p>
-                <a href="{{ route('redirect_to_ffp_events_contact') }}" class="btn btn-neutral normal-case text-sm">
+                <a href="{{ route('redirect_to_ffp_events_contact') }}" target="_blank"
+                    class="btn btn-neutral normal-case text-sm">
                     {{ __('website/footer.contact_card.button') }}
                 </a>
             </div>
@@ -73,7 +74,7 @@
                 <h3 class="text-neutral-400 text-[0.9rem] mb-4">{{ __('website/footer.company.title') }}</h3>
                 <ul class="space-y-2">
                     <li>
-                        <a href="{{ route('redirect_to_ffp_events') }}"
+                        <a href="{{ route('redirect_to_ffp_events') }}" target="_blank"
                             class="text-sm hover:text-primary transition-colors inline-flex items-center gap-2 group">
                             {{ $settings->name }}
                             <span class="block group-hover:hidden">
@@ -85,7 +86,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('redirect_to_ffp_events_contact') }}"
+                        <a href="{{ route('redirect_to_ffp_events_contact') }}" target="_blank"
                             class="text-sm hover:text-primary transition-colors inline-flex items-center gap-2 group">
                             {{ __('website/footer.company.contact_us') }}
                             <span class="block group-hover:hidden">

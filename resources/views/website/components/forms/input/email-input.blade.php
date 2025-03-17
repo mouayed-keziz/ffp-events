@@ -1,4 +1,4 @@
-@props(['data', 'answerPath'])
+@props(['data', 'answerPath', 'disabled' => false])
 
 <div class="form-control">
     <label class="label">
@@ -8,8 +8,8 @@
             @endif
         </span>
     </label>
-    <input type="email" placeholder="{{ $data['description'][app()->getLocale()] ?? '' }}"
-        class="input input-bordered bg-white mb-2 rounded-md"
-        wire:model.lazy="formData.{{ $answerPath }}"
+    <input @if ($disabled) disabled @endif type="email"
+        placeholder="{{ $data['description'][app()->getLocale()] ?? '' }}"
+        class="input input-bordered bg-white mb-2 rounded-md" wire:model.lazy="formData.{{ $answerPath }}"
         @if ($data['required'] ?? false) required @endif>
 </div>

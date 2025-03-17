@@ -1,4 +1,4 @@
-@props(['fields', 'answerPath'])
+@props(['fields', 'answerPath', 'disabled'])
 
 <div>
     @foreach ($fields as $field)
@@ -7,6 +7,7 @@
                 @include('website.components.forms.input.input', [
                     'data' => $field['data'],
                     'answerPath' => $answerPath ?? null,
+                    'disabled' => $disabled ?? false,
                 ])
             @break
 
@@ -14,6 +15,7 @@
                 @include('website.components.forms.multiple.select', [
                     'data' => $field['data'],
                     'answerPath' => $answerPath ?? null,
+                    'disabled' => $disabled ?? false,
                 ])
             @break
 
@@ -21,6 +23,7 @@
                 @include('website.components.forms.multiple.checkbox', [
                     'data' => $field['data'],
                     'answerPath' => $answerPath ?? null,
+                    'disabled' => $disabled ?? false,
                 ])
             @break
 
@@ -28,6 +31,7 @@
                 @include('website.components.forms.multiple.radio', [
                     'data' => $field['data'],
                     'answerPath' => $answerPath ?? null,
+                    'disabled' => $disabled ?? false,
                 ])
             @break
 
@@ -35,6 +39,7 @@
                 @include('website.components.forms.file-upload', [
                     'data' => $field['data'],
                     'answerPath' => $answerPath ?? null,
+                    'disabled' => $disabled ?? false,
                 ])
             @break
 
@@ -43,6 +48,7 @@
                 @include('website.components.forms.priced.select', [
                     'data' => $field['data'],
                     'answerPath' => $answerPath ?? null,
+                    'disabled' => $disabled ?? false,
                 ])
             @break
 
@@ -50,6 +56,7 @@
                 @include('website.components.forms.priced.checkbox', [
                     'data' => $field['data'],
                     'answerPath' => $answerPath ?? null,
+                    'disabled' => $disabled ?? false,
                 ])
             @break
 
@@ -57,6 +64,7 @@
                 @include('website.components.forms.priced.radio', [
                     'data' => $field['data'],
                     'answerPath' => $answerPath ?? null,
+                    'disabled' => $disabled ?? false,
                 ])
             @break
 
@@ -64,6 +72,7 @@
                 @include('website.components.forms.priced.ecommerce', [
                     'data' => $field['data'],
                     'answerPath' => $answerPath ?? null,
+                    'disabled' => $disabled ?? false,
                 ])
             @break
 
@@ -71,6 +80,7 @@
                 @include('website.components.forms.priced.plan_tier', [
                     'data' => $field['data'],
                     'answerPath' => $answerPath ?? null,
+                    'disabled' => $disabled ?? false,
                 ])
             @break
 

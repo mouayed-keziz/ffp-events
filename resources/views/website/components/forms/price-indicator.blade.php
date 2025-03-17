@@ -1,6 +1,7 @@
 @props([
     'totalPrice' => 0,
     'currency' => 'DZD',
+    'disabled' => false,
 ])
 
 <div class="fixed {{ app()->getLocale() === 'ar' ? 'left-4' : 'right-4' }} bottom-4 z-10 hidden md:block md:w-72">
@@ -12,18 +13,20 @@
                 {{ number_format($totalPrice, 2) }} {{ $currency }}
             </div>
         </div>
-        <div class="dropdown dropdown-top w-full my-3">
-            <div tabindex="0" role="button" class="btn btn-primary btn-sm w-full">
-                {{ $currency }}
+        @if (!$disabled)
+            <div class="dropdown dropdown-top w-full my-3">
+                <div tabindex="0" role="button" class="btn btn-primary btn-sm w-full">
+                    {{ $currency }}
+                </div>
+                <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-full">
+                    <li><a class="font-bold text-sm px-3 py-2 rounded-md inline-flex items-center whitespace-nowrap m-1 {{ $currency === 'DZD' ? 'bg-primary/10 text-primary' : '' }}"
+                            wire:click="changeCurrency('DZD')">DZD</a></li>
+                    <li><a class="font-bold text-sm px-3 py-2 rounded-md inline-flex items-center whitespace-nowrap m-1 {{ $currency === 'USD' ? 'bg-primary/10 text-primary' : '' }}"
+                            wire:click="changeCurrency('USD')">USD</a></li>
+                    <li><a class="font-bold text-sm px-3 py-2 rounded-md inline-flex items-center whitespace-nowrap m-1 {{ $currency === 'EUR' ? 'bg-primary/10 text-primary' : '' }}"
+                            wire:click="changeCurrency('EUR')">EUR</a></li>
+                </ul>
             </div>
-            <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-full">
-                <li><a class="font-bold text-sm px-3 py-2 rounded-md inline-flex items-center whitespace-nowrap m-1 {{ $currency === 'DZD' ? 'bg-primary/10 text-primary' : '' }}"
-                        wire:click="changeCurrency('DZD')">DZD</a></li>
-                <li><a class="font-bold text-sm px-3 py-2 rounded-md inline-flex items-center whitespace-nowrap m-1 {{ $currency === 'USD' ? 'bg-primary/10 text-primary' : '' }}"
-                        wire:click="changeCurrency('USD')">USD</a></li>
-                <li><a class="font-bold text-sm px-3 py-2 rounded-md inline-flex items-center whitespace-nowrap m-1 {{ $currency === 'EUR' ? 'bg-primary/10 text-primary' : '' }}"
-                        wire:click="changeCurrency('EUR')">EUR</a></li>
-            </ul>
-        </div>
+        @endif
     </div>
 </div>
