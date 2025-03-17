@@ -23,8 +23,16 @@ class ExhibitorFormActions extends BaseFormActions
 
         foreach ($event->exhibitorForms as $formIndex => $exhibitorForm) {
             $formData[$formIndex] = [
-                'title' => $exhibitorForm->title,
-                'description' => $exhibitorForm->description,
+                'title' => [
+                    "ar" => $exhibitorForm->getTranslation('title', 'ar'),
+                    "fr" => $exhibitorForm->getTranslation('title', 'fr'),
+                    "en" => $exhibitorForm->getTranslation('title', 'en'),
+                ],
+                'description' => [
+                    "ar" => $exhibitorForm->getTranslation('description', 'ar'),
+                    "fr" => $exhibitorForm->getTranslation('description', 'fr'),
+                    "en" => $exhibitorForm->getTranslation('description', 'en'),
+                ],
                 'sections' => []
             ];
 

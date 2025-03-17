@@ -32,7 +32,7 @@
                             <li class="step {{ $i <= $currentStep ? 'step-primary' : '' }}">
                                 <span
                                     class="text-sm text-center {{ $i === $currentStep ? 'font-bold text-gray-900' : 'text-gray-500' }}">
-                                    {{ isset($steps[$i]['title']) ? $steps[$i]['title'] ?? ($steps[$i]['title'][app()->getLocale()] ?? ($steps[$i]['title']['fr'] ?? '')) : '' }}
+                                    {{ isset($steps[$i]['title']) ? $steps[$i]['title'][app()->getLocale()] ?? ($steps[$i]['title']['fr'] ?? '') : '' }}
                                 </span>
                             </li>
                         @endfor
@@ -94,7 +94,7 @@
         <!-- Current step title and description -->
         <div class="mb-6">
             <h2 class="text-xl font-bold">
-                {{ isset($steps[$currentStep]['title']) ? $steps[$currentStep]['title'] ?? ($steps[$currentStep]['title'][app()->getLocale()] ?? ($steps[$currentStep]['title']['fr'] ?? '')) : '' }}
+                {{ isset($steps[$currentStep]['title']) ? $steps[$currentStep]['title'][app()->getLocale()] ?? ($steps[$currentStep]['title']['fr'] ?? '') : '' }}
             </h2>
             @if (isset($steps[$currentStep]['description']) && !empty($steps[$currentStep]['description'][app()->getLocale()]))
                 <p class="text-gray-600 mt-2">

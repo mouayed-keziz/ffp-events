@@ -44,7 +44,7 @@ new class extends Component {
     protected function initFormData()
     {
         $actions = new ExhibitorFormActions();
-        $this->formData = $actions->initFormData($this->event);
+        $this->formData = $this->submission->answers;
         $this->totalSteps = count($this->formData);
 
         if ($this->totalSteps > 0) {
