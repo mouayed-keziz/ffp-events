@@ -81,4 +81,35 @@ class EventController extends Controller
             return redirect()->route('events');
         }
     }
+
+    public static function InfoValidation($id)
+    {
+        $event = EventAnnouncement::find($id);
+        if (!$event) {
+            return redirect()->route('events');
+        }
+        $exhibitor_submission = Auth('exhibitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
+        if (!$exhibitor_submission) {
+            return redirect()->route('exhibit_event', ['id' => $event->id]);
+        }
+        return view('website.pages.events.info-validation', [
+            'event' => $event
+        ]);
+    }
+
+    public static function ViewExhibitorAnswers($id)
+    {
+        $event = EventAnnouncement::find($id);
+        if (!$event) {
+            return redirect()->route('events');
+        }
+        $exhibitor_submission = Auth('exhibitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
+        if (!$exhibitor_submission) {
+            return redirect()->route('exhibit_event', ['id' => $event->id]);
+        }
+        return view('website.pages.events.info-validation', [
+            'event' => $event,
+            "submission" => $exhibitor_submission
+        ]);
+    }
 }

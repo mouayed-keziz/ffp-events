@@ -19,6 +19,7 @@ return [
             'sort' => 'Order',
             'currency' => 'Currency',
             'attachment' => 'Payment Proof',
+            'due_to' => 'Due Date',
         ],
     ],
     'filters' => [
@@ -36,6 +37,7 @@ return [
         'download' => 'Download File',
         'payment_slice' => [
             'create' => 'Add Payment Slice',
+            'create_title' => 'Add Exhibitor Payment Slice',
         ],
     ],
     'messages' => [
@@ -44,5 +46,9 @@ return [
     ],
     'sections' => [
         'payment_slices' => 'Payment Slices',
+    ],
+    'empty' => [
+        'payment_slices' => 'No payment slices',
+        'payment_slices_description' => 'You can add payment slices to this submission.',
     ],
 ];

@@ -6,6 +6,7 @@ use App\Enums\Currency;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -41,5 +42,10 @@ class Exhibitor extends Authenticatable implements HasMedia
     public function getImageAttribute()
     {
         return $this->hasMedia('image') ? $this->getFirstMediaUrl('image') : null;
+    }
+
+    public function submissions(): HasMany
+    {
+        return $this->hasMany(ExhibitorSubmission::class);
     }
 }

@@ -60,11 +60,11 @@ class ManageEventAnnouncementExhibitorSubmissions extends ManageRelatedRecords
                 //     ->label(__("panel/visitor_submissions.actions.create")),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make()
-                    ->url(fn($record) => EventAnnouncementResource::getUrl('exhibitor-submission.view', [
-                        'record' => $record->eventAnnouncement->id,
-                        'exhibitorSubmission' => $record->id,
-                    ])),
+                Tables\Actions\ViewAction::make(),
+                // ->url(fn($record) => EventAnnouncementResource::getUrl('exhibitor-submission.view', [
+                //     'record' => $record->eventAnnouncement->id,
+                //     'exhibitorSubmission' => $record->id,
+                // ])),
                 // Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])

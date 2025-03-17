@@ -22,6 +22,7 @@ return [
             'sort' => 'الترتيب',
             'currency' => 'العملة',
             'attachment' => 'إثبات الدفع',
+            'due_to' => 'تاريخ الاستحقاق',
         ],
     ],
     'filters' => [
@@ -39,10 +40,15 @@ return [
         'download' => 'تحميل الملف',
         'payment_slice' => [
             'create' => 'إضافة شريحة دفع',
+            'create_title' => 'إضافة شريحة دفع للعارض',
         ],
     ],
     'messages' => [
         'deleted' => 'تم حذف الطلب بنجاح',
         'updated' => 'تم تحديث الطلب بنجاح',
-    ]
+    ],
+    'empty' => [
+        'payment_slices' => 'لا يوجد شرائح دفع',
+        'payment_slices_description' => 'يمكنك إضافة شرائح دفع لهذا الطلب.',
+    ],
 ];

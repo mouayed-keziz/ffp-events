@@ -38,6 +38,7 @@ class ExhibitorSubmissionResource extends Resource
             ]);
     }
 
+
     public static function table(Table $table): Table
     {
         return $table
@@ -63,7 +64,7 @@ class ExhibitorSubmissionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            // PaymentSlicesRelationManager::class
+            PaymentSlicesRelationManager::class
         ];
     }
 
@@ -73,6 +74,7 @@ class ExhibitorSubmissionResource extends Resource
             'index' => Pages\ListExhibitorSubmissions::route('/'),
             // 'create' => Pages\CreateExhibitorSubmission::route('/create'),
             // 'edit' => Pages\EditExhibitorSubmission::route('/{record}/edit'),
+            'view' => Pages\ViewExhibitorSubmission::route('/{record}'),
         ];
     }
 

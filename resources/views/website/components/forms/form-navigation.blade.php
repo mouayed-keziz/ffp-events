@@ -1,34 +1,21 @@
 @props([
     'currentStep' => 0,
     'totalSteps' => 0,
-    'isLastStep' => false
+    'isLastStep' => false,
 ])
 
-<div class="flex justify-between mt-8">
-    <button type="button" class="btn btn-outline btn-sm" 
-        wire:click="previousStep" 
+<div class="flex justify-start mt-8">
+    <button type="button" class="btn btn-outline border-base-200 border-2" wire:click="previousStep"
         {{ $currentStep === 0 ? 'disabled' : '' }}>
-        @if(app()->getLocale() === 'ar')
-            {{ __('forms.Previous') }}
-            <x-heroicon-o-arrow-right class="w-4 h-4 ms-2" />
-        @else
-            <x-heroicon-o-arrow-left class="w-4 h-4 me-2" />
-            {{ __('forms.Previous') }}
-        @endif
+        {{ __('forms.Previous') }}
     </button>
 
     @if (!$isLastStep)
-        <button type="button" class="btn btn-primary btn-sm" wire:click="nextStep">
-            @if(app()->getLocale() === 'ar')
-                <x-heroicon-o-arrow-left class="w-4 h-4 me-2" />
-                {{ __('forms.Next') }}
-            @else
-                {{ __('forms.Next') }}
-                <x-heroicon-o-arrow-right class="w-4 h-4 ms-2" />
-            @endif
+        <button type="button" class="btn btn-primary ms-4" wire:click="nextStep">
+            {{ __('forms.Next') }}
         </button>
     @else
-        <button type="submit" class="btn btn-primary btn-sm" wire:loading.attr="disabled">
+        <button type="submit" class="btn btn-primary ms-4" wire:loading.attr="disabled">
             <div class="flex items-center">
                 <span wire:loading.remove>{{ __('forms.Submit') }}</span>
                 <span wire:loading wire:target="submitForm" class="flex items-center">

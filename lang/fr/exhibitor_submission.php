@@ -19,6 +19,7 @@ return [
             'sort' => 'Ordre',
             'currency' => 'Devise',
             'attachment' => 'Preuve de Paiement',
+            'due_to' => 'Date d\'échéance',
         ],
     ],
     'filters' => [
@@ -36,11 +37,16 @@ return [
         'download' => 'Télécharger le Fichier',
         'payment_slice' => [
             'create' => 'Ajouter une Tranche',
+            'create_title' => 'Ajouter une Tranche de Paiement d\'Exposant',
         ],
     ],
     'messages' => [
         'deleted' => 'Soumission supprimée avec succès',
         'updated' => 'Soumission mise à jour avec succès',
+    ],
+    'empty' => [
+        'payment_slices' => 'Aucune tranche de paiement',
+        'payment_slices_description' => 'Vous pouvez ajouter des tranches de paiement à cette soumission.',
     ],
     'sections' => [
         'payment_slices' => 'Tranches de Paiement',

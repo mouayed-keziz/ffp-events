@@ -14,11 +14,14 @@ return new class extends Migration
         Schema::create('exhibitor_payment_slices', function (Blueprint $table) {
             $table->id();
             $table->foreignId("exhibitor_submission_id")->constrained()->cascadeOnDelete();
+            $table->unsignedInteger("sort")->default(0);
 
-            $table->unsignedInteger("sort");
             $table->unsignedInteger("price");
             $table->enum("currency", ["DZD", "EUR", "USD"])->default("DZD");
             $table->enum("status", ["not_payed", "proof_attached", "valid"])->default("not_payed");
+
+            $table->timestamp("due_to")->nullable();
+
             $table->timestamps();
         });
     }
