@@ -2,6 +2,7 @@
     'currentStep' => 0,
     'totalSteps' => 0,
     'isLastStep' => false,
+    'isLastExhibitorForm' => false,
 ])
 
 <div class="flex justify-start mt-8">
@@ -10,7 +11,7 @@
         {{ __('forms.Previous') }}
     </button>
 
-    @if (!$isLastStep)
+    @if (!$isLastStep && !$isLastExhibitorForm)
         <button type="button" class="btn btn-primary ms-4" wire:click="nextStep">
             {{ __('forms.Next') }}
         </button>

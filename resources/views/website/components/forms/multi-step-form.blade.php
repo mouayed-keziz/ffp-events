@@ -8,7 +8,6 @@
     - $formSubmitted: Whether the form has been submitted 
     - $successMessage: Message to show on successful submission
 --}}
-
 <div>
     @if (session('error'))
         <div class="alert alert-error mb-4">
@@ -26,54 +25,65 @@
         <div class="mb-8">
             <div class="hidden sm:block">
                 <div class="relative" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
-                    <!-- Progress bar container with connectors -->
-                    <div class="relative">
-                        <!-- Connector lines layer -->
-                        <div class="absolute inset-x-0 top-4 flex justify-center items-center">
-                            <div class="w-full mx-8 flex">
-                                @for ($i = 0; $i < count($steps) - 1; $i++)
-                                    <div class="flex-1 h-1 {{ $i < $currentStep ? 'bg-primary' : 'bg-gray-300' }}">
-                                    </div>
-                                @endfor
-                            </div>
-                        </div>
+                    <!-- Daisy UI steps implementation -->
+                    <ul class="steps w-full">
+                        <!-- Exhibitor forms steps -->
+                        @for ($i = 0; $i < count($steps); $i++)
+                            <li class="step {{ $i <= $currentStep ? 'step-primary' : '' }}">
+                                <span
+                                    class="text-sm text-center {{ $i === $currentStep ? 'font-bold text-gray-900' : 'text-gray-500' }}">
+                                    {{ isset($steps[$i]['title']) ? $steps[$i]['title'] ?? ($steps[$i]['title'][app()->getLocale()] ?? ($steps[$i]['title']['fr'] ?? '')) : '' }}
+                                </span>
+                            </li>
+                        @endfor
 
-                        <!-- Circles and labels -->
-                        <div class="grid relative z-10"
-                            style="grid-template-columns: repeat({{ count($steps) }}, 1fr);">
-                            @for ($i = 0; $i < count($steps); $i++)
-                                <div class="flex flex-col items-center">
-                                    <div
-                                        class="w-8 h-8 rounded-full flex items-center justify-center {{ $i <= $currentStep ? 'bg-primary' : 'bg-gray-300' }}">
-                                        <span class="text-white font-medium">{{ $i + 1 }}</span>
-                                    </div>
-                                    <div class="mt-2 px-2 w-full">
-                                        <span
-                                            class="text-sm text-center break-words inline-block w-full {{ $i === $currentStep ? 'font-bold text-gray-900' : 'text-gray-500' }}">
-                                            {{ isset($steps[$i]['title']) ? $steps[$i]['title'] ?? ($steps[$i]['title'][app()->getLocale()] ?? ($steps[$i]['title']['fr'] ?? '')) : '' }}
-                                        </span>
-                                    </div>
-                                </div>
-                            @endfor
-                        </div>
-                    </div>
+                        <!-- Info Validation step -->
+                        <li class="step {{ count($steps) <= $currentStep ? 'step-primary' : '' }}">
+                            <span
+                                class="text-sm text-center {{ count($steps) === $currentStep ? 'font-bold text-gray-900' : 'text-gray-500' }}">
+                                {{ __('Info Validation') }}
+                            </span>
+                        </li>
+
+                        <!-- Payment step -->
+                        <li class="step {{ count($steps) + 1 <= $currentStep ? 'step-primary' : '' }}">
+                            <span
+                                class="text-sm text-center {{ count($steps) + 1 === $currentStep ? 'font-bold text-gray-900' : 'text-gray-500 ' }}">
+                                {{ __('Payment') }}
+                            </span>
+                        </li>
+
+                        <!-- Payment Validation step -->
+                        <li class="step {{ count($steps) + 2 <= $currentStep ? 'step-primary' : '' }}">
+                            <span
+                                class="text-sm text-center {{ count($steps) + 2 === $currentStep ? 'font-bold text-gray-900' : 'text-gray-500' }}">
+                                {{ __('Payment Validation') }}
+                            </span>
+                        </li>
+
+                        <!-- Post-payment form steps -->
+                        @foreach ($postForms as $index => $form)
+                            <li class="step {{ count($steps) + 3 + $index <= $currentStep ? 'step-primary' : '' }}">
+                                <span
+                                    class="text-sm text-center {{ count($steps) + 3 + $index === $currentStep ? 'font-bold text-gray-900' : 'text-gray-500' }}">
+                                    {{ $form['title'][app()->getLocale()] ?? ($form['title']['fr'] ?? '') }}
+                                </span>
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
 
             <!-- Mobile progress indicator -->
             <div class="sm:hidden">
-                <div class="flex items-center justify-between mb-2">
-                    @for ($i = 0; $i < count($steps); $i++)
-                        @if ($i > 0)
-                            <div class="flex-1 h-1 {{ $i <= $currentStep ? 'bg-primary' : 'bg-gray-300' }}"></div>
-                        @endif
-                        <div
-                            class="w-6 h-6 rounded-full flex items-center justify-center {{ $i <= $currentStep ? 'bg-primary' : 'bg-gray-300' }}">
-                            <span class="text-white text-xs">{{ $i + 1 }}</span>
-                        </div>
+                <ul class="steps steps-horizontal w-full">
+                    @for ($i = 0; $i < count($steps) + count($postForms) + 3; $i++)
+                        <li class="step {{ $i <= $currentStep ? 'step-primary' : '' }}">
+                            <span class="step-circle text-xs">{{ $i + 1 }}</span>
+                        </li>
                     @endfor
-                </div>
-                <div class="text-center">
+                </ul>
+                <div class="text-center mt-2">
                     <span class="font-bold text-primary text-sm">
                         {{ isset($steps[$currentStep]['title']) ? $steps[$currentStep]['title'][app()->getLocale()] ?? ($steps[$currentStep]['title']['fr'] ?? ($steps[$currentStep]['title']['en'] ?? '')) : '' }}
                     </span>

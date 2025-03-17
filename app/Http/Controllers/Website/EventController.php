@@ -73,6 +73,10 @@ class EventController extends Controller
         if (!$event) {
             return redirect()->route('events');
         }
+        $exhibitor_submission = Auth('exhibitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
+        if ($exhibitor_submission) {
+            return redirect()->route('view_exhibitor_answers', ['id' => $event->id]);
+        }
         if ($event->is_exhibitor_registration_open) {
             return view('website.pages.events.exhibit-event', [
                 'event' => $event
@@ -107,7 +111,7 @@ class EventController extends Controller
         if (!$exhibitor_submission) {
             return redirect()->route('exhibit_event', ['id' => $event->id]);
         }
-        return view('website.pages.events.info-validation', [
+        return view('website.pages.events.view-exhibitor-answers', [
             'event' => $event,
             "submission" => $exhibitor_submission
         ]);

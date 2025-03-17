@@ -37,6 +37,7 @@
                 'currentStep' => $currentStep,
                 'totalSteps' => $totalSteps,
                 'isLastStep' => $currentStep === $totalSteps - 1,
+                'isLastExhibitorForm' => $this->isLastExhibitorForm(),
             ])
         </div>
     @else

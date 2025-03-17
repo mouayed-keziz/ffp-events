@@ -17,7 +17,7 @@ new class extends Component {
 
     public EventAnnouncement $event;
     public array $formData = [];
-    public array $postFormTitles = [];
+    public array $postForms = [];
     public int $currentStep = 0;
     public int $totalSteps = 0;
     public bool $formSubmitted = false;
@@ -29,6 +29,7 @@ new class extends Component {
     {
         $this->event = $event;
         $this->initFormData();
+        $this->postForms = $event->exhibitorPostPaymentForms->toArray();
     }
 
     public function updated($name)
@@ -48,6 +49,7 @@ new class extends Component {
             $this->calculateTotalPrice();
         }
     }
+
     public function submitForm()
     {
         $this->validateCurrentStep();
@@ -55,18 +57,23 @@ new class extends Component {
         $success = $actions->saveFormSubmission($this->event, $this->formData);
 
         if ($success) {
-            $this->formSubmitted = true;
-            $this->successMessage = __('Form submitted successfully!');
+            // Instead of showing success message, redirect to info validation
+            return redirect()->route('info_validation', ['id' => $this->event->id]);
         } else {
             session()->flash('error', 'An error occurred while submitting the form. Please try again.');
         }
+    }
+
+    public function isLastExhibitorForm()
+    {
+        return $this->currentStep === $this->totalSteps - 1;
     }
 }; ?>
 
 <div class="container mx-auto py-8 md:px-4">
     @include('website.components.forms.multi-step-form', [
         'steps' => $formData,
-        'postFormTitles' => $postFormTitles,
+        'postForms' => $postForms,
         'currentStep' => $currentStep,
         'errors' => $errors,
         'formSubmitted' => $formSubmitted,
