@@ -62,6 +62,9 @@ new class extends Component {
         $actions = new ExhibitorFormActions();
 
         // Use the new updateExistingSubmission method
+        if ($this->disabled) {
+            return redirect()->route('info_validation', ['id' => $this->event->id]);
+        }
         $success = $actions->updateExistingSubmission($this->submission, $this->formData);
 
         if ($success) {

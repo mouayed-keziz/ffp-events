@@ -135,4 +135,19 @@ class EventController extends Controller
             "submission" => $exhibitor_submission
         ]);
     }
+
+    public static function PaymentValidation($id)
+    {
+        $event = EventAnnouncement::find($id);
+        if (!$event) {
+            return redirect()->route('events');
+        }
+        $exhibitor_submission = Auth('exhibitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
+        if (!$exhibitor_submission) {
+            return redirect()->route('exhibit_event', ['id' => $event->id]);
+        }
+        return view('website.pages.events.payment-validation', [
+            'event' => $event
+        ]);
+    }
 }

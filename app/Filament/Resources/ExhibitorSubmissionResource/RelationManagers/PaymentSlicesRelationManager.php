@@ -65,12 +65,10 @@ class PaymentSlicesRelationManager extends RelationManager
                         })
                         ->displayFormat('Y-m-d'),
                     SpatieMediaLibraryFileUpload::make('attachment')
+                        ->collection('attachement')
                         ->label(__('exhibitor_submission.fields.payment_slice.attachment'))
-                        ->directory('payment-proofs')
-                        ->visibility('private')
                         ->downloadable()
                         ->columnSpan(2)
-                        ->collection('attachment'),
                 ]),
         ]);
     }

@@ -87,11 +87,9 @@ class ViewExhibitorSubmission extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\ActionGroup::make([
-                Actions\DeleteAction::make(),
-                Actions\EditAction::make(),
-
-            ])
+            Actions\ActionGroup::make([]),
+            Actions\EditAction::make(),
+            Actions\DeleteAction::make(),
         ];
     }
 
