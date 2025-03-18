@@ -63,17 +63,16 @@ class ViewExhibitorSubmission extends ViewRecord
                         Tab::make("details")
                             ->columns(2)
                             ->schema([
-                                ...$exhibitorDetailsSection
-                            ]),
-                        Tab::make("answers")
-                            ->schema([
+                                ...$exhibitorDetailsSection,
                                 Fieldset::make("total_prices")->columns(3)
                                     ->schema([
                                         TextEntry::make("total_prices.DZD")->label("DZD"),
                                         TextEntry::make("total_prices.EUR")->label("EUR"),
                                         TextEntry::make("total_prices.USD")->label("USD"),
                                     ])
-                            ])
+                            ]),
+                        Tab::make("answers")
+                            ->schema([])
                     ])
                 // Section::make("stuff")->schema([
                 // ...(VisitorSubmissionFormDisplay::make($sections)),

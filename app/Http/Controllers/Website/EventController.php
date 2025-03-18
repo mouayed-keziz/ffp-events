@@ -150,4 +150,23 @@ class EventController extends Controller
             'event' => $event
         ]);
     }
+
+    public function PostExhibitEvent($id)
+    {
+        $event = EventAnnouncement::find($id);
+        if (!$event) {
+            return redirect()->route('events');
+        }
+        $exhibitor_submission = Auth('exhibitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
+        if (!$exhibitor_submission) {
+            return redirect()->route('exhibit_event', ['id' => $event->id]);
+        }
+        if (!$exhibitor_submission->showFinalizeButton) {
+            return redirect()->route("event_details", ['id' => $event->id]);
+        }
+        return view('website.pages.events.post-exhibit-event', [
+            'event' => $event,
+            "submission" => $exhibitor_submission
+        ]);
+    }
 }

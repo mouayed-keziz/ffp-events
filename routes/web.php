@@ -26,13 +26,15 @@ Route::middleware('local_middleware')->group(function () {
 
         Route::get('/event/{id}/visit', [EventController::class, 'VisitEvent'])->name('visit_event')->middleware("is_visitor");
         Route::get('/event/{id}/visit-event-form-submitted', [EventController::class, 'VisitFormSubmitted'])->name('visit_event_form_submitted')->middleware("is_visitor");
-
-        Route::get('/event/{id}/exhibit', [EventController::class, 'ExhibitEvent'])->name('exhibit_event')->middleware("is_exhibitor");
-        Route::get("/event/{id}/info-validation", [EventController::class, 'InfoValidation'])->name('info_validation')->middleware("is_exhibitor");
-        Route::get("/event/{id}/view-exhibitor-answers", [EventController::class, 'ViewExhibitorAnswers'])->name('view_exhibitor_answers')->middleware("is_exhibitor");
-        Route::get("/event/{id}/download-invoice", [EventController::class, 'DownloadInvoice'])->name('download_invoice')->middleware("is_exhibitor");
-        Route::get("/event/{id}/upload-payment-proof", [EventController::class, 'UploadPaymentProof'])->name('upload_payment_proof')->middleware("is_exhibitor");
-        Route::get("/event/{id}/payment-validation", [EventController::class, 'PaymentValidation'])->name('payment_validation')->middleware("is_exhibitor");
+        Route::middleware("is_exhibitor")->group(function () {
+            Route::get('/event/{id}/exhibit', [EventController::class, 'ExhibitEvent'])->name('exhibit_event')->middleware("is_exhibitor");
+            Route::get("/event/{id}/info-validation", [EventController::class, 'InfoValidation'])->name('info_validation');
+            Route::get("/event/{id}/view-exhibitor-answers", [EventController::class, 'ViewExhibitorAnswers'])->name('view_exhibitor_answers');
+            Route::get("/event/{id}/download-invoice", [EventController::class, 'DownloadInvoice'])->name('download_invoice');
+            Route::get("/event/{id}/upload-payment-proof", [EventController::class, 'UploadPaymentProof'])->name('upload_payment_proof');
+            Route::get("/event/{id}/payment-validation", [EventController::class, 'PaymentValidation'])->name('payment_validation');
+            Route::get("/event/{id}/post-exhibit-event", [EventController::class, 'PostExhibitEvent'])->name('PostExhibitEvent');
+        });
     });
 
     Route::prefix("auth")->group(function () {
