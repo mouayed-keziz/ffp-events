@@ -150,7 +150,7 @@ class EventAnnouncementResource extends Resource
 
             // New routes for visitor submissions
             'exhibitor-submissions' => Pages\ManageEventAnnouncementExhibitorSubmissions::route('/{record}/exhibitor-submissions'),
-            'exhibitor-submission.view' => Pages\ViewExhibitorSubmission::route('/{record}/exhibitor-submissions/{exhibitorSubmission}'),
+            // 'exhibitor-submission.view' => Pages\ViewExhibitorSubmission::route('/{record}/exhibitor-submissions/{exhibitorSubmission}'),
         ];
     }
 

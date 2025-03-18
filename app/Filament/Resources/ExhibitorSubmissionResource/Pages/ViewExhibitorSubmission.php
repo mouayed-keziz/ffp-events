@@ -39,20 +39,19 @@ class ViewExhibitorSubmission extends ViewRecord
         }
 
         // Visitor details section
-        $exhibitorDetailsSection = Section::make(__('panel/visitor_submissions.visitor_details'))
-            ->schema([
-                \Filament\Infolists\Components\TextEntry::make('exhibitor.name')
-                    ->label(__('panel/visitors.form.name')),
-                \Filament\Infolists\Components\TextEntry::make('exhibitor.email')
-                    ->label(__('panel/visitors.form.email')),
-                \Filament\Infolists\Components\TextEntry::make('status')
-                    ->label(__('panel/visitor_submissions.fields.status'))
-                    ->badge(),
-                \Filament\Infolists\Components\TextEntry::make('created_at')
-                    ->label(__('panel/visitor_submissions.fields.created_at'))
-                    ->dateTime(),
-            ])
-            ->columns(2);
+        $exhibitorDetailsSection = [
+            \Filament\Infolists\Components\TextEntry::make('exhibitor.name')
+                ->label(__('panel/visitors.form.name')),
+            \Filament\Infolists\Components\TextEntry::make('exhibitor.email')
+                ->label(__('panel/visitors.form.email')),
+            \Filament\Infolists\Components\TextEntry::make('status')
+                ->label(__('panel/visitor_submissions.fields.status'))
+                ->badge(),
+            \Filament\Infolists\Components\TextEntry::make('created_at')
+                ->label(__('panel/visitor_submissions.fields.created_at'))
+                ->dateTime(),
+            \Filament\Infolists\Components\IconEntry::make("isEditable")->boolean()
+        ];
 
         // Create the infolist schema
         return $infolist
@@ -60,8 +59,9 @@ class ViewExhibitorSubmission extends ViewRecord
                 Tabs::make("tabs")->columnSpanFull()
                     ->schema([
                         Tab::make("details")
+                            ->columns(2)
                             ->schema([
-                                $exhibitorDetailsSection
+                                ...$exhibitorDetailsSection
                             ]),
                         Tab::make("answers")
                             ->schema([])
@@ -78,7 +78,11 @@ class ViewExhibitorSubmission extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\ActionGroup::make([
+                Actions\DeleteAction::make(),
+                Actions\EditAction::make(),
+
+            ])
         ];
     }
 

@@ -34,13 +34,16 @@ class ExhibitorSubmission extends Model implements HasMedia
     /**
      * Determine if the submission can be edited based on deadline and permission
      */
-    public function isEditable(): bool
+    public function getIsEditableAttribute(): bool
     {
-        if ($this->edit_deadline && now()->greaterThan($this->edit_deadline)) {
+        if (!$this->edit_deadline) {
             return false;
         }
+        if (now()->lessThan($this->edit_deadline)) {
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
     /**

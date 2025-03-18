@@ -73,7 +73,7 @@ class ExhibitorSubmissionResource extends Resource
         return [
             'index' => Pages\ListExhibitorSubmissions::route('/'),
             // 'create' => Pages\CreateExhibitorSubmission::route('/create'),
-            // 'edit' => Pages\EditExhibitorSubmission::route('/{record}/edit'),
+            'edit' => Pages\EditExhibitorSubmission::route('/{record}/edit'),
             'view' => Pages\ViewExhibitorSubmission::route('/{record}'),
         ];
     }
