@@ -74,7 +74,7 @@ new class extends Component {
             @endif
 
             @if ($submission->showFinalizeButton)
-                <a href="#"
+                <a href="{{ route('post_exhibit_event', $event) }}"
                     class="btn rounded-md text-sm font-semibold btn-outline border-base-200 border-2 uppercase">
                     Finaliser Mes Reponses
                 </a>

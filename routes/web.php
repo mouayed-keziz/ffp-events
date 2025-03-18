@@ -33,7 +33,7 @@ Route::middleware('local_middleware')->group(function () {
             Route::get("/event/{id}/download-invoice", [EventController::class, 'DownloadInvoice'])->name('download_invoice');
             Route::get("/event/{id}/upload-payment-proof", [EventController::class, 'UploadPaymentProof'])->name('upload_payment_proof');
             Route::get("/event/{id}/payment-validation", [EventController::class, 'PaymentValidation'])->name('payment_validation');
-            Route::get("/event/{id}/post-exhibit-event", [EventController::class, 'PostExhibitEvent'])->name('PostExhibitEvent');
+            Route::get("/event/{id}/post-exhibit-event", [EventController::class, 'PostExhibitEvent'])->name('post_exhibit_event');
         });
     });
 
