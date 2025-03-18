@@ -24,10 +24,12 @@ class EventController extends Controller
         if (!$event) {
             return redirect()->route('events');
         }
+        $exhibitor_submission = Auth('exhibitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
         $relatedEvents = EventAnnouncement::where('id', '!=', $id)->inRandomOrder()->limit(4)->get();
         return view('website.pages.events.event', [
             'event' => $event,
-            'relatedEvents' => $relatedEvents
+            'relatedEvents' => $relatedEvents,
+            "submission" => $exhibitor_submission
         ]);
     }
 
@@ -112,6 +114,23 @@ class EventController extends Controller
             return redirect()->route('exhibit_event', ['id' => $event->id]);
         }
         return view('website.pages.events.view-exhibitor-answers', [
+            'event' => $event,
+            "submission" => $exhibitor_submission
+        ]);
+    }
+
+    public function DownloadInvoice($id) {}
+    public function UploadPaymentProof($id)
+    {
+        $event = EventAnnouncement::find($id);
+        if (!$event) {
+            return redirect()->route('events');
+        }
+        $exhibitor_submission = Auth('exhibitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
+        if (!$exhibitor_submission) {
+            return redirect()->route('exhibit_event', ['id' => $event->id]);
+        }
+        return view('website.pages.events.upload-payment-proof', [
             'event' => $event,
             "submission" => $exhibitor_submission
         ]);

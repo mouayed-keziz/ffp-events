@@ -29,6 +29,12 @@ class ExhibitorPaymentSlice extends Model implements HasMedia
         return $this->belongsTo(ExhibitorSubmission::class);
     }
 
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('attachement')
+            ->singleFile();
+    }
+
     public function attachMedia($file)
     {
         $this->addMedia($file)->toMediaCollection('attachement');

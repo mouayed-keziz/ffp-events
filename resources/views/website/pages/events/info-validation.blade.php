@@ -6,7 +6,10 @@
     $currentStep = count($formData) + 0;
 @endphp
 @section('content')
-    @include('website.components.exhibit-event.banner', ['event' => $event])
+    @include('website.components.exhibit-event.banner', [
+        'event' => $event,
+        'title' => 'Exposer dans' . $event->title,
+    ])
     <main class="w-full max-w-5xl mx-auto px-4 py-8">
         <div class="-mt-40 relative z-10">
             <div class="bg-white rounded-xl shadow-lg p-6">

@@ -1,4 +1,4 @@
-@props(['disabled'])
+@props(['disabled' => false])
 <form wire:submit.prevent="submitForm">
     @if (!empty($formData))
         <div>
@@ -40,6 +40,7 @@
                 'totalSteps' => $totalSteps,
                 'isLastStep' => $currentStep === $totalSteps - 1,
                 'isLastExhibitorForm' => $this->isLastExhibitorForm(),
+                'disabled' => $disabled,
             ])
         </div>
     @else

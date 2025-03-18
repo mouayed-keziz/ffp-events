@@ -36,6 +36,7 @@ class PaymentSlicesRelationManager extends RelationManager
                     Forms\Components\Select::make('status')
                         ->label(__('exhibitor_submission.fields.payment_slice.status'))
                         ->options(PaymentSliceStatus::class)
+                        ->default(PaymentSliceStatus::NOT_PAYED)
                         ->required()
                         ->columnSpan(1)
                         ->searchable(),
@@ -47,6 +48,7 @@ class PaymentSlicesRelationManager extends RelationManager
                     Forms\Components\Select::make('currency')
                         ->label(__('exhibitor_submission.fields.payment_slice.currency'))
                         ->options(Currency::class)
+                        ->default(Currency::DA)
                         ->required()
                         ->columnSpan(1)
                         ->searchable(),

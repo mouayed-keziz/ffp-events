@@ -4,9 +4,11 @@ namespace App\Filament\Resources\ExhibitorSubmissionResource\Pages;
 
 use App\Filament\Resources\ExhibitorSubmissionResource;
 use Filament\Actions;
+use Filament\Infolists\Components\Fieldset;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\Tabs\Tab;
+use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Guava\FilamentNestedResources\Concerns\NestedPage;
@@ -64,7 +66,14 @@ class ViewExhibitorSubmission extends ViewRecord
                                 ...$exhibitorDetailsSection
                             ]),
                         Tab::make("answers")
-                            ->schema([])
+                            ->schema([
+                                Fieldset::make("total_prices")->columns(3)
+                                    ->schema([
+                                        TextEntry::make("total_prices.DZD")->label("DZD"),
+                                        TextEntry::make("total_prices.EUR")->label("EUR"),
+                                        TextEntry::make("total_prices.USD")->label("USD"),
+                                    ])
+                            ])
                     ])
                 // Section::make("stuff")->schema([
                 // ...(VisitorSubmissionFormDisplay::make($sections)),

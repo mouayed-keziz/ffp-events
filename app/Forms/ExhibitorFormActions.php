@@ -4,9 +4,12 @@ namespace App\Forms;
 
 use App\Models\EventAnnouncement;
 use App\Enums\FormField;
+use App\Enums\SubmissionStatus;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
+use App\Models\ExhibitorSubmission;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ExhibitorFormActions extends BaseFormActions
 {
@@ -225,5 +228,151 @@ class ExhibitorFormActions extends BaseFormActions
             report($e);
             return false;
         }
+    }
+
+    /**
+     * Transform a submission's answers back into interactive formData for editing
+     * 
+     * @param ExhibitorSubmission $submission The submission to transform
+     * @param EventAnnouncement $event The event that contains the form structure
+     * @return array The formData with answers included ready for user interaction
+     */
+    public function transformSubmissionToFormData(ExhibitorSubmission $submission, EventAnnouncement $event): array
+    {
+        // First, get the empty form structure
+        $formStructure = $this->initFormData($event);
+
+        // If the structure is empty or submission doesn't have answers, return empty form
+        if (empty($formStructure) || empty($submission->answers)) {
+            return $formStructure;
+        }
+
+        $answers = $submission->answers;
+
+        // Iterate through the forms and merge the answers
+        foreach ($formStructure as $formIndex => $form) {
+            if (isset($answers[$formIndex])) {
+                foreach ($form['sections'] as $sectionIndex => $section) {
+                    if (isset($answers[$formIndex]['sections'][$sectionIndex])) {
+                        foreach ($section['fields'] as $fieldIndex => $field) {
+                            // For file uploads, check if file exists in the media library
+                            if (
+                                $field['type'] === FormField::UPLOAD->value &&
+                                isset($answers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'])
+                            ) {
+
+                                $fileId = $answers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'];
+
+                                // Check if this fileId exists in the media library
+                                $mediaExists = $submission->getMedia('attachments')
+                                    ->filter(function (Media $media) use ($fileId) {
+                                        return isset($media->custom_properties['fileId']) &&
+                                            $media->custom_properties['fileId'] === $fileId;
+                                    })
+                                    ->isNotEmpty();
+
+                                // Only set the answer if the file exists
+                                if ($mediaExists) {
+                                    $formStructure[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'] = $fileId;
+                                }
+                            }
+                            // For all other field types, just copy the answers over
+                            else if (isset($answers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'])) {
+                                $formStructure[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'] =
+                                    $answers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $formStructure;
+    }
+
+    /**
+     * Update an existing submission with new form data
+     * 
+     * @param ExhibitorSubmission $submission The submission to update
+     * @param array $formData The new form data
+     * @return bool Whether the update was successful
+     */
+    public function updateExistingSubmission(ExhibitorSubmission $submission, array $formData): bool
+    {
+        // try {
+        // Process the form data with price calculation
+        $processResult = $this->processFormDataForSubmission($formData, true);
+        $processedData = $processResult['processedData'];
+        $filesToProcess = $processResult['filesToProcess'];
+
+        // Track fileIds being replaced so we can remove old files later
+        $replacedFileIds = [];
+
+        // Find and mark file replacements
+        foreach ($processedData as $formIndex => $form) {
+            if (!isset($form['sections'])) continue;
+
+            foreach ($form['sections'] as $sectionIndex => $section) {
+                if (!isset($section['fields'])) continue;
+
+                foreach ($section['fields'] as $fieldIndex => $field) {
+                    // Only interested in upload fields
+                    if ($field['type'] !== FormField::UPLOAD->value || !isset($field['answer'])) continue;
+
+                    // Check if this is a new file (UUID from processFormDataForSubmission)
+                    if (is_string($field['answer']) && Str::isUuid($field['answer'])) {
+                        // Check if there was a previous file for this field position in the original answers
+                        $oldAnswers = $submission->answers;
+
+                        if (isset($oldAnswers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'])) {
+                            $oldFileId = $oldAnswers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'];
+                            $replacedFileIds[] = $oldFileId;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Update the submission with the new answers
+        $submission->answers = array_values($processedData);
+        $submission->total_prices = $processedData['total_prices'] ?? null;
+        $submission->status = SubmissionStatus::PENDING->value;
+        $submission->edit_deadline = null;
+        $submission->update_requested_at = null;
+        $submission->save();
+
+
+        // Remove media that's been replaced
+        if (!empty($replacedFileIds)) {
+            $submission->getMedia('attachments')
+                ->filter(function (Media $media) use ($replacedFileIds) {
+                    return isset($media->custom_properties['fileId']) &&
+                        in_array($media->custom_properties['fileId'], $replacedFileIds);
+                })
+                ->each(function (Media $media) {
+                    $media->delete();
+                });
+        }
+
+        // Process new files using Media Library
+        foreach ($filesToProcess as $fileInfo) {
+            $media = $submission->addMedia($fileInfo['file']->getRealPath())
+                ->usingFileName($fileInfo['file']->getClientOriginalName())
+                ->withCustomProperties([
+                    'fileId' => $fileInfo['fileId'],
+                    'fileType' => $fileInfo['fieldData']['file_type'] ?? null,
+                    'fieldLabel' => $fileInfo['fieldData']['label'] ?? null,
+                ])
+                ->toMediaCollection('attachments');
+            Log::info("Media added to updated submission: {$media->id} with fileId: {$fileInfo['fileId']}");
+        }
+
+        Log::info("Exhibitor Submission updated: {$submission->id}");
+        return true;
+        // } catch (\Exception $e) {
+        //     report($e);
+        //     Log::error("Failed to update submission: " . $e->getMessage());
+        //     return false;
+        // }
     }
 }

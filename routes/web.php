@@ -30,6 +30,8 @@ Route::middleware('local_middleware')->group(function () {
         Route::get('/event/{id}/exhibit', [EventController::class, 'ExhibitEvent'])->name('exhibit_event')->middleware("is_exhibitor");
         Route::get("/event/{id}/info-validation", [EventController::class, 'InfoValidation'])->name('info_validation')->middleware("is_exhibitor");
         Route::get("/event/{id}/view-exhibitor-answers", [EventController::class, 'ViewExhibitorAnswers'])->name('view_exhibitor_answers')->middleware("is_exhibitor");
+        Route::get("/event/{id}/download-invoice", [EventController::class, 'DownloadInvoice'])->name('download_invoice')->middleware("is_exhibitor");
+        Route::get("/event/{id}/upload-payment-proof", [EventController::class, 'UploadPaymentProof'])->name('upload_payment_proof')->middleware("is_exhibitor");
     });
 
     Route::prefix("auth")->group(function () {

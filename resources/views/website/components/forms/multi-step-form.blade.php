@@ -79,7 +79,7 @@
                 <ul class="steps steps-horizontal w-full">
                     @for ($i = 0; $i < count($steps) + count($postForms) + 3; $i++)
                         <li class="step {{ $i <= $currentStep ? 'step-primary' : '' }}">
-                            <span class="step-circle text-xs">{{ $i + 1 }}</span>
+                            {{-- <span class="step-circle text-xs">{{ $i + 1 }}</span> --}}
                         </li>
                     @endfor
                 </ul>

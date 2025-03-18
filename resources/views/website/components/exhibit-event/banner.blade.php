@@ -1,4 +1,4 @@
-@props(['event'])
+@props(['event', 'title', 'withEndDate' => true])
 
 
 <div class="relative w-full h-[60vh] min-h-[400px]">
@@ -17,18 +17,20 @@
                     @endif
                     {{ __('website/visit-event.goback') }}
                 </a>
-                <h1 class="text-white text-2xl md:text-4xl font-bold max-w-2xl mt-24">
-                    {{ $event['title'] }}
+                <h1 class="text-white text-2xl md:text-4xl font-bold mt-24">
+                    {{ $title }}
                 </h1>
-                <div
-                    class="bg-white/15 backdrop-blur-md text-white text-sm px-3 py-1 rounded flex items-center gap-2 mt-2">
-                    @include('website.svg.event.callendar-white')
-                    <span>{{ __('website/visit-event.exhibitor_registration_end_date') }} :
-                        <span>
-                            {{ \Carbon\Carbon::parse($event['exhibitor_registration_end_date'])->locale(app()->getLocale())->translatedFormat('j F Y') }}
+                @if ($withEndDate)
+                    <div
+                        class="bg-white/15 backdrop-blur-md text-white text-sm px-3 py-1 rounded flex items-center gap-2 mt-2">
+                        @include('website.svg.event.callendar-white')
+                        <span>{{ __('website/visit-event.exhibitor_registration_end_date') }} :
+                            <span>
+                                {{ \Carbon\Carbon::parse($event['exhibitor_registration_end_date'])->locale(app()->getLocale())->translatedFormat('j F Y') }}
+                            </span>
                         </span>
-                    </span>
-                </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

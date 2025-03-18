@@ -20,14 +20,18 @@ class ExhibitorSubmission extends Model implements HasMedia
         'event_announcement_id',
         'answers',
         'post_answers',
+        'total_prices',
         'status',
         'edit_deadline',
+        'update_requested_at'
     ];
 
     protected $casts = [
         'answers' => 'array',
         'post_answers' => 'array',
+        'total_prices' => 'array',
         'edit_deadline' => 'datetime',
+        'update_requested_at' => 'datetime',
         'status' => ExhibitorSubmissionStatus::class
     ];
 
@@ -71,6 +75,6 @@ class ExhibitorSubmission extends Model implements HasMedia
     }
     public function paymentSlices()
     {
-        return $this->hasMany(ExhibitorPaymentSlice::class);
+        return $this->hasMany(ExhibitorPaymentSlice::class)->orderBy('sort');
     }
 }

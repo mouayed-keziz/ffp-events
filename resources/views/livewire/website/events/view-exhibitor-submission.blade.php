@@ -35,17 +35,21 @@ new class extends Component {
         $this->initFormData();
         $this->postForms = $event->exhibitorPostPaymentForms->toArray();
     }
+
     public function updated($name)
     {
         if (str_starts_with($name, 'formData')) {
             $this->calculateTotalPrice();
         }
     }
+
     protected function initFormData()
     {
         $actions = new ExhibitorFormActions();
-        $this->formData = $this->submission->answers;
+        // Use the new transformSubmissionToFormData method instead of directly accessing answers
+        $this->formData = $actions->transformSubmissionToFormData($this->submission, $this->event);
         $this->totalSteps = count($this->formData);
+        $this->disabled = !$this->submission->isEditable;
 
         if ($this->totalSteps > 0) {
             $this->calculateTotalPrice();
@@ -56,14 +60,27 @@ new class extends Component {
     {
         $this->validateCurrentStep();
         $actions = new ExhibitorFormActions();
-        // $success = $actions->saveFormSubmission($this->event, $this->formData);
-        dd($this->event, $this->formData);
+
+        // Use the new updateExistingSubmission method
+        $success = $actions->updateExistingSubmission($this->submission, $this->formData);
+
         if ($success) {
-            // Instead of showing success message, redirect to info validation
+            // $this->formSubmitted = true;
+            // $this->successMessage = __('exhibitor_submission.messages.updated');
+            // Refresh the page after a brief delay to show the success message
             return redirect()->route('info_validation', ['id' => $this->event->id]);
         } else {
-            session()->flash('error', 'An error occurred while submitting the form. Please try again.');
+            session()->flash('error', 'An error occurred while updating the form. Please try again.');
         }
+    }
+
+    public function requestFormModification()
+    {
+        $this->submission->update_requested_at = now();
+        $this->submission->save();
+
+        // session()->flash('success', __('Form modification request submitted successfully'));
+        // $this->dispatch('refreshPage');
     }
 
     public function isLastExhibitorForm()
@@ -73,6 +90,12 @@ new class extends Component {
 }; ?>
 
 <div class="container mx-auto py-8 md:px-4">
+    @if ($formSubmitted)
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ $successMessage }}</span>
+        </div>
+    @endif
+
     @if (!empty($formData))
         @include('website.components.forms.multi-step-form', [
             'steps' => $formData,
@@ -94,3 +117,13 @@ new class extends Component {
         ])
     @endif
 </div>
+
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.on('refreshPage', () => {
+            setTimeout(() => {
+                location.reload();
+            }, 1500);
+        });
+    });
+</script>
