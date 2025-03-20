@@ -94,7 +94,7 @@ new class extends Component {
         if ($success) {
             $this->formSubmitted = true;
             $this->successMessage = __('Post-exhibition form submitted successfully!');
-            return redirect()->route('exhibitor.dashboard')->with('success', 'Post-exhibition form submitted successfully!');
+            return redirect()->route('event_details', $this->event)->with('success', 'Post-exhibition form submitted successfully!');
         } else {
             session()->flash('error', 'An error occurred while submitting the form. Please try again.');
         }

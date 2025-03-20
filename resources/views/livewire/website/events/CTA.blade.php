@@ -54,6 +54,15 @@ new class extends Component {
 
         return true;
     }
+
+    public function isFullyPaidOrReady()
+    {
+        if (!$this->submission) {
+            return false;
+        }
+
+        return $this->submission->status === ExhibitorSubmissionStatus::FULLY_PAYED || $this->submission->status === ExhibitorSubmissionStatus::READY;
+    }
 }; ?>
 
 <div class="my-4">
@@ -82,6 +91,21 @@ new class extends Component {
                 <a href="{{ route('upload_payment_proof', $event) }}"
                     class="btn rounded-md text-sm font-semibold btn-primary uppercase">
                     Televerser la preuve de paiement
+                </a>
+            @endif
+
+            @if ($submission->status === ExhibitorSubmissionStatus::FULLY_PAYED)
+                <a href="#" class="btn rounded-md text-sm font-semibold btn-primary uppercase">
+                    Creer et telecharger les badges
+                </a>
+            @endif
+
+            @if (
+                $submission->status === ExhibitorSubmissionStatus::FULLY_PAYED ||
+                    $submission->status === ExhibitorSubmissionStatus::READY)
+                <a href="#"
+                    class="btn btn-sm rounded-md text-sm font-semibold btn-error bg-red-600 hover:bg-red-700 text-white uppercase">
+                    Amenager mon stand
                 </a>
             @endif
         @endif
