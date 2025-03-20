@@ -375,4 +375,268 @@ class ExhibitorFormActions extends BaseFormActions
             return false;
         }
     }
+
+    /**
+     * Initialize form data structure based on the event's post-payment forms
+     */
+    public function initPostFormData(EventAnnouncement $event): array
+    {
+        if (!$event->exhibitorPostPaymentForms || $event->exhibitorPostPaymentForms->isEmpty()) {
+            return [];
+        }
+
+        $formData = [];
+
+        foreach ($event->exhibitorPostPaymentForms as $formIndex => $exhibitorForm) {
+            $formData[$formIndex] = [
+                'title' => [
+                    "ar" => $exhibitorForm->getTranslation('title', 'ar'),
+                    "fr" => $exhibitorForm->getTranslation('title', 'fr'),
+                    "en" => $exhibitorForm->getTranslation('title', 'en'),
+                ],
+                'description' => [
+                    "ar" => $exhibitorForm->getTranslation('description', 'ar'),
+                    "fr" => $exhibitorForm->getTranslation('description', 'fr'),
+                    "en" => $exhibitorForm->getTranslation('description', 'en'),
+                ],
+                'sections' => []
+            ];
+
+            foreach ($exhibitorForm->sections as $section) {
+                $sectionData = [
+                    'title' => $section['title'],
+                    'fields' => []
+                ];
+
+                foreach ($section['fields'] as $field) {
+                    $fieldType = FormField::tryFrom($field['type']);
+                    $sectionData['fields'][] = $fieldType
+                        ? $fieldType->initializeField($field)
+                        : $this->initializeField($field);
+                }
+
+                $formData[$formIndex]['sections'][] = $sectionData;
+            }
+        }
+
+        return $formData;
+    }
+
+    /**
+     * Get validation rules for post-payment forms
+     */
+    public function getPostFormValidationRules(EventAnnouncement $event, int $currentStep = null): array
+    {
+        $rules = [];
+        $attributes = [];
+
+        if (!$event->exhibitorPostPaymentForms || $event->exhibitorPostPaymentForms->isEmpty()) {
+            return ['rules' => $rules, 'attributes' => $attributes];
+        }
+
+        // If a specific step is provided, only validate that form
+        if ($currentStep !== null) {
+            $exhibitorForm = $event->exhibitorPostPaymentForms[$currentStep] ?? null;
+            if (!$exhibitorForm) {
+                return ['rules' => $rules, 'attributes' => $attributes];
+            }
+
+            foreach ($exhibitorForm->sections as $sectionIndex => $section) {
+                foreach ($section['fields'] as $fieldIndex => $field) {
+                    $fieldKey = "formData.{$currentStep}.sections.{$sectionIndex}.fields.{$fieldIndex}.answer";
+
+                    $fieldType = FormField::tryFrom($field['type']);
+                    if ($fieldType) {
+                        $rules[$fieldKey] = implode('|', $fieldType->getValidationRules($field));
+                        // Add attribute name using the field's label in current locale
+                        $attributes[$fieldKey] = $field['data']['label'][app()->getLocale()] ?? '';
+                    }
+                }
+            }
+        }
+
+        return [
+            'rules' => $rules,
+            'attributes' => $attributes
+        ];
+    }
+
+    /**
+     * Transform a submission's post_answers back into interactive formData for editing
+     * 
+     * @param ExhibitorSubmission $submission The submission to transform
+     * @param EventAnnouncement $event The event that contains the form structure
+     * @return array The formData with post_answers included ready for user interaction
+     */
+    public function transformPostSubmissionToFormData(ExhibitorSubmission $submission, EventAnnouncement $event): array
+    {
+        // First, get the empty form structure
+        $formStructure = $this->initPostFormData($event);
+
+        // If the structure is empty or submission doesn't have post_answers, return empty form
+        if (empty($formStructure) || empty($submission->post_answers)) {
+            return $formStructure;
+        }
+
+        $answers = $submission->post_answers;
+
+        // Iterate through the forms and merge the answers
+        foreach ($formStructure as $formIndex => $form) {
+            if (isset($answers[$formIndex])) {
+                foreach ($form['sections'] as $sectionIndex => $section) {
+                    if (isset($answers[$formIndex]['sections'][$sectionIndex])) {
+                        foreach ($section['fields'] as $fieldIndex => $field) {
+                            // For file uploads, check if file exists in the media library
+                            if (
+                                $field['type'] === FormField::UPLOAD->value &&
+                                isset($answers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'])
+                            ) {
+                                $fileId = $answers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'];
+
+                                // Check if this fileId exists in the media library
+                                $mediaExists = $submission->getMedia('post_attachments')
+                                    ->filter(function (Media $media) use ($fileId) {
+                                        return isset($media->custom_properties['fileId']) &&
+                                            $media->custom_properties['fileId'] === $fileId;
+                                    })
+                                    ->isNotEmpty();
+
+                                // Only set the answer if the file exists
+                                if ($mediaExists) {
+                                    $formStructure[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'] = $fileId;
+                                }
+                            }
+                            // For all other field types, just copy the answers over
+                            else if (isset($answers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'])) {
+                                $formStructure[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'] =
+                                    $answers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $formStructure;
+    }
+
+    /**
+     * Save the post-payment form submission to the database
+     */
+    public function savePostFormSubmission(EventAnnouncement $event, array $formData, ExhibitorSubmission $submission): bool
+    {
+        try {
+            // Process the form data with price calculation
+            $processResult = $this->processFormDataForSubmission($formData, true);
+            $processedData = $processResult['processedData'];
+            $filesToProcess = $processResult['filesToProcess'];
+
+            // Update the submission with the post_answers
+            $submission->post_answers = array_values($processedData);
+            $submission->save();
+
+            Log::info("Exhibitor Post-Payment Submission updated: {$submission->id}");
+
+            // Process files using Media Library in a separate collection for post forms
+            foreach ($filesToProcess as $fileInfo) {
+                $media = $submission->addMedia($fileInfo['file']->getRealPath())
+                    ->usingFileName($fileInfo['file']->getClientOriginalName())
+                    ->withCustomProperties([
+                        'fileId' => $fileInfo['fileId'],
+                        'fileType' => $fileInfo['fieldData']['file_type'] ?? null,
+                        'fieldLabel' => $fileInfo['fieldData']['label'] ?? null,
+                    ])
+                    ->toMediaCollection('post_attachments'); // Use a different collection for post form attachments
+
+                Log::info("Media added to post submission: {$media->id} with fileId: {$fileInfo['fileId']}");
+            }
+
+            return true;
+        } catch (\Exception $e) {
+            report($e);
+            Log::error("Failed to update post-payment submission: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Update an existing submission's post_answers with new form data
+     * 
+     * @param ExhibitorSubmission $submission The submission to update
+     * @param array $formData The new post-payment form data
+     * @return bool Whether the update was successful
+     */
+    public function updateExistingPostSubmission(ExhibitorSubmission $submission, array $formData): bool
+    {
+        try {
+            // Process the form data with price calculation
+            $processResult = $this->processFormDataForSubmission($formData, true);
+            $processedData = $processResult['processedData'];
+            $filesToProcess = $processResult['filesToProcess'];
+
+            // Track fileIds being replaced so we can remove old files later
+            $replacedFileIds = [];
+
+            // Find and mark file replacements
+            foreach ($processedData as $formIndex => $form) {
+                if (!isset($form['sections'])) continue;
+
+                foreach ($form['sections'] as $sectionIndex => $section) {
+                    if (!isset($section['fields'])) continue;
+
+                    foreach ($section['fields'] as $fieldIndex => $field) {
+                        // Only interested in upload fields
+                        if ($field['type'] !== FormField::UPLOAD->value || !isset($field['answer'])) continue;
+
+                        // Check if this is a new file (UUID from processFormDataForSubmission)
+                        if (is_string($field['answer']) && Str::isUuid($field['answer'])) {
+                            // Check if there was a previous file for this field position in the original post_answers
+                            $oldAnswers = $submission->post_answers;
+                            if (isset($oldAnswers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'])) {
+                                $oldFileId = $oldAnswers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'];
+                                $replacedFileIds[] = $oldFileId;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Update the submission with the new post_answers
+            $submission->post_answers = array_values($processedData);
+            $submission->save();
+
+            // Remove media that's been replaced
+            if (!empty($replacedFileIds)) {
+                $submission->getMedia('post_attachments')
+                    ->filter(function (Media $media) use ($replacedFileIds) {
+                        return isset($media->custom_properties['fileId']) &&
+                            in_array($media->custom_properties['fileId'], $replacedFileIds);
+                    })
+                    ->each(function (Media $media) {
+                        $media->delete();
+                    });
+            }
+
+            // Process new files using Media Library
+            foreach ($filesToProcess as $fileInfo) {
+                $media = $submission->addMedia($fileInfo['file']->getRealPath())
+                    ->usingFileName($fileInfo['file']->getClientOriginalName())
+                    ->withCustomProperties([
+                        'fileId' => $fileInfo['fileId'],
+                        'fileType' => $fileInfo['fieldData']['file_type'] ?? null,
+                        'fieldLabel' => $fileInfo['fieldData']['label'] ?? null,
+                    ])
+                    ->toMediaCollection('post_attachments');
+
+                Log::info("Media added to updated post submission: {$media->id} with fileId: {$fileInfo['fileId']}");
+            }
+
+            Log::info("Exhibitor Post Submission updated: {$submission->id}");
+            return true;
+        } catch (\Exception $e) {
+            report($e);
+            Log::error("Failed to update post submission: " . $e->getMessage());
+            return false;
+        }
+    }
 }

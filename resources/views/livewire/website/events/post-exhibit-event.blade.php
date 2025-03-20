@@ -8,6 +8,8 @@ use Livewire\WithFileUploads;
 use App\Traits\Livewire\HasFormSteps;
 use App\Traits\Livewire\HasPrices;
 use App\Traits\Livewire\HasFormFieldUpdates;
+use App\Models\ExhibitorSubmission;
+
 new class extends Component {
     use WithFileUploads;
     use HasFormSteps;
@@ -15,9 +17,9 @@ new class extends Component {
     use HasFormFieldUpdates;
 
     public EventAnnouncement $event;
+    public ?ExhibitorSubmission $submission = null;
     public $disabled = false;
     public array $formData = [];
-    public array $postForms = [];
     public int $currentStep = 0;
     public int $totalSteps = 0;
     public bool $formSubmitted = false;
@@ -28,12 +30,26 @@ new class extends Component {
     public function mount(EventAnnouncement $event)
     {
         $this->event = $event;
-        $this->initFormData();
-        $this->postForms = $event->exhibitorPostPaymentForms->toArray();
-        dd([
-            'forms' => $this->formData,
-            'postForms' => $this->postForms,
-        ]);
+
+        // Find the exhibitor submission for this event for the current user
+        if (auth('exhibitor')->check()) {
+            $this->submission = ExhibitorSubmission::where('exhibitor_id', auth('exhibitor')->id())
+                ->where('event_announcement_id', $event->id)
+                ->first();
+        }
+
+        if (!$this->submission || !$this->submission->canFillPostForms) {
+            session()->flash('error', 'You do not have permission to access post-payment forms for this event.');
+            return redirect()->route('event_details', $event);
+        }
+
+        // Check if the submission already has post_answers and load them if available
+        if ($this->submission && !empty($this->submission->post_answers)) {
+            $actions = new ExhibitorFormActions();
+            $this->formData = $actions->transformPostSubmissionToFormData($this->submission, $event);
+        } else {
+            $this->initFormData();
+        }
     }
 
     public function updated($name)
@@ -46,7 +62,7 @@ new class extends Component {
     protected function initFormData()
     {
         $actions = new ExhibitorFormActions();
-        $this->formData = $actions->initFormData($this->event);
+        $this->formData = $actions->initPostFormData($this->event);
         $this->totalSteps = count($this->formData);
 
         if ($this->totalSteps > 0) {
@@ -54,37 +70,56 @@ new class extends Component {
         }
     }
 
+    public function validateCurrentStep()
+    {
+        // Use the post-payment specific validation method
+        $actions = new ExhibitorFormActions();
+        $validation = $actions->getPostFormValidationRules($this->event, $this->currentStep);
+
+        $this->validate($validation['rules'], [], $validation['attributes']);
+    }
+
     public function submitForm()
     {
         $this->validateCurrentStep();
         $actions = new ExhibitorFormActions();
-        $success = $actions->saveFormSubmission($this->event, $this->formData);
+
+        // Use existing or new submission based on update or create
+        if ($this->submission && !empty($this->submission->post_answers)) {
+            $success = $actions->updateExistingPostSubmission($this->submission, $this->formData);
+        } else {
+            $success = $actions->savePostFormSubmission($this->event, $this->formData, $this->submission);
+        }
 
         if ($success) {
-            // Instead of showing success message, redirect to info validation
-            return redirect()->route('info_validation', ['id' => $this->event->id]);
+            $this->formSubmitted = true;
+            $this->successMessage = __('Post-exhibition form submitted successfully!');
+            return redirect()->route('exhibitor.dashboard')->with('success', 'Post-exhibition form submitted successfully!');
         } else {
             session()->flash('error', 'An error occurred while submitting the form. Please try again.');
         }
     }
+
+    public function isLastExhibitorForm()
+    {
+        return $this->currentStep === $this->totalSteps - 1;
+    }
 }; ?>
 
 <div>
-
     <div class="container mx-auto py-8 md:px-4">
         @if (!empty($formData))
-            @include('website.components.forms.multi-step-form', [
+            {{-- @include('website.components.forms.multi-step-form', [
                 'steps' => $formData,
-                'postForms' => $postForms,
-                'currentStep' => count($formData) + 3,
+                'currentStep' => $currentStep,
                 'errors' => $errors,
                 'formSubmitted' => $formSubmitted,
                 'successMessage' => $successMessage,
-            ])
+            ]) --}}
         @endif
 
         @if (!$formSubmitted)
-            {{-- @include('website.components.forms.form', ['disabled' => $disabled]) --}}
+            @include('website.components.forms.form', ['disabled' => $disabled])
 
             @include('website.components.forms.price-indicator', [
                 'totalPrice' => $totalPrice,
@@ -93,5 +128,4 @@ new class extends Component {
             ])
         @endif
     </div>
-
 </div>

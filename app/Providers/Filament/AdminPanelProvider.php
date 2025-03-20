@@ -45,6 +45,7 @@ class AdminPanelProvider extends PanelProvider
             ->spa()
             ->login()
             ->profile(isSimple: false)
+            ->sidebarCollapsibleOnDesktop()
             ->databaseNotifications()
             ->databaseNotificationsPolling("30s")
             ->databaseTransactions()

@@ -18,7 +18,6 @@ return new class extends Migration
             $table->json('answers')->nullable();
             $table->string('status')->default('submitted');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

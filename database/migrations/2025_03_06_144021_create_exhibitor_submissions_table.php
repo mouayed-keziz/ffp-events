@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('status')->default('submitted');
             $table->boolean("can_update")->default(false);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
