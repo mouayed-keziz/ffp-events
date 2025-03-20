@@ -2,6 +2,9 @@
 
 namespace App\Enums\Fields;
 
+use Filament\Infolists\Components\TextEntry;
+use Illuminate\Support\Facades\App;
+
 class Checkbox
 {
     public static function initializeField(array $field): array
@@ -100,5 +103,33 @@ class Checkbox
     public static function needsQuantity(): bool
     {
         return false;
+    }
+
+    /**
+     * Create a display component for a checkbox field
+     *
+     * @param array $field The field definition with type, data and answer
+     * @param string $label The field label
+     * @param mixed $answer The field answer value
+     * @return TextEntry Component suitable for displaying in an Infolist
+     */
+    public static function createDisplayComponent(array $field, string $label, $answer): TextEntry
+    {
+        $locale = App::getLocale();
+        $selectedOptions = [];
+
+        if (!empty($answer['selected_options'])) {
+            foreach ($answer['selected_options'] as $selectedOption) {
+                if (isset($selectedOption['option'][$locale])) {
+                    $selectedOptions[] = $selectedOption['option'][$locale];
+                }
+            }
+        }
+
+        return TextEntry::make('checkbox')
+            ->label($label)
+            ->state(empty($selectedOptions) ?
+                __('panel/visitor_submissions.no_selection') :
+                implode(', ', $selectedOptions));
     }
 }

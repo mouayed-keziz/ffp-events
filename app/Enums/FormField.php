@@ -184,6 +184,31 @@ enum FormField: string implements HasLabel
     }
 
     /**
+     * Create display component for visitor submission
+     * 
+     * @param array $field The field definition with type, data and answer
+     * @param string $label The field label
+     * @param mixed $answer The field answer value
+     * @param mixed|null $visitorSubmission Optional visitor submission model for file handling
+     * @return mixed Component suitable for displaying in an Infolist
+     */
+    public function createDisplayComponent(array $field, string $label, $answer, $visitorSubmission = null)
+    {
+        return match ($this) {
+            self::INPUT => Input::createDisplayComponent($field, $label, $answer),
+            self::SELECT => Select::createDisplayComponent($field, $label, $answer),
+            self::CHECKBOX => Checkbox::createDisplayComponent($field, $label, $answer),
+            self::RADIO => Radio::createDisplayComponent($field, $label, $answer),
+            self::UPLOAD => Upload::createDisplayComponent($field, $label, $answer, $visitorSubmission),
+            self::SELECT_PRICED => SelectPriced::createDisplayComponent($field, $label, $answer),
+            self::CHECKBOX_PRICED => CheckboxPriced::createDisplayComponent($field, $label, $answer),
+            self::RADIO_PRICED => RadioPriced::createDisplayComponent($field, $label, $answer),
+            self::ECOMMERCE => Ecommerce::createDisplayComponent($field, $label, $answer),
+            self::PLAN_TIER => PlanTier::createDisplayComponent($field, $label, $answer),
+        };
+    }
+
+    /**
      * Update field options based on selection
      * 
      * @param array $options Current options array

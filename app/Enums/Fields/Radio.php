@@ -2,6 +2,9 @@
 
 namespace App\Enums\Fields;
 
+use Filament\Infolists\Components\TextEntry;
+use Illuminate\Support\Facades\App;
+
 class Radio
 {
     public static function initializeField(array $field): array
@@ -122,5 +125,29 @@ class Radio
         }
 
         return $options;
+    }
+
+    /**
+     * Create a display component for a radio field
+     *
+     * @param array $field The field definition with type, data and answer
+     * @param string $label The field label
+     * @param mixed $answer The field answer value
+     * @return TextEntry Component suitable for displaying in an Infolist
+     */
+    public static function createDisplayComponent(array $field, string $label, $answer): TextEntry
+    {
+        $locale = App::getLocale();
+
+        if (!empty($answer) && isset($answer['selected_option']['option'][$locale])) {
+            $selectedOption = $answer['selected_option']['option'][$locale];
+            return TextEntry::make('radio')
+                ->label($label)
+                ->state($selectedOption);
+        }
+
+        return TextEntry::make('radio')
+            ->label($label)
+            ->state(__('panel/visitor_submissions.no_selection'));
     }
 }

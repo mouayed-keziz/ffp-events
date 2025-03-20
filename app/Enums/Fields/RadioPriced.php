@@ -2,6 +2,9 @@
 
 namespace App\Enums\Fields;
 
+use Filament\Infolists\Components\TextEntry;
+use Illuminate\Support\Facades\App;
+
 class RadioPriced
 {
     public static function initializeField(array $field): array
@@ -101,6 +104,37 @@ class RadioPriced
     public static function needsQuantity(): bool
     {
         return false;
+    }
+
+    /**
+     * Create a display component for a priced radio field
+     *
+     * @param array $field The field definition with type, data and answer
+     * @param string $label The field label
+     * @param mixed $answer The field answer value
+     * @return TextEntry Component suitable for displaying in an Infolist
+     */
+    public static function createDisplayComponent(array $field, string $label, $answer): TextEntry
+    {
+        $locale = App::getLocale();
+
+        if (!empty($answer) && isset($answer['selected_option']['option'][$locale])) {
+            $selectedOption = $answer['selected_option']['option'][$locale];
+            $price = '';
+
+            if (isset($answer['selected_option']['price'])) {
+                $currencySymbol = $answer['selected_option']['currency'] ?? '€';
+                $price = " ({$currencySymbol}" . number_format($answer['selected_option']['price'], 2) . ")";
+            }
+
+            return TextEntry::make('radio_priced')
+                ->label($label)
+                ->state($selectedOption . $price);
+        }
+
+        return TextEntry::make('radio_priced')
+            ->label($label)
+            ->state(__('panel/visitor_submissions.no_selection'));
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Enums\Fields;
 
 use App\Enums\FormInputType;
+use Filament\Infolists\Components\TextEntry;
 
 class Input
 {
@@ -78,5 +79,20 @@ class Input
     public static function needsQuantity(): bool
     {
         return false;
+    }
+
+    /**
+     * Create a display component for an input field
+     *
+     * @param array $field The field definition with type, data and answer
+     * @param string $label The field label
+     * @param mixed $answer The field answer value
+     * @return TextEntry Component suitable for displaying in an Infolist
+     */
+    public static function createDisplayComponent(array $field, string $label, $answer): TextEntry
+    {
+        return TextEntry::make('input')
+            ->label($label)
+            ->state($answer ?? '');
     }
 }

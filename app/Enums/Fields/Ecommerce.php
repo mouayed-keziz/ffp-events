@@ -2,6 +2,9 @@
 
 namespace App\Enums\Fields;
 
+use Filament\Infolists\Components\TextEntry;
+use Illuminate\Support\Facades\App;
+
 class Ecommerce
 {
     public static function initializeField(array $field): array
@@ -174,5 +177,47 @@ class Ecommerce
         }
 
         return $products;
+    }
+
+    /**
+     * Create a display component for an ecommerce field
+     *
+     * @param array $field The field definition with type, data and answer
+     * @param string $label The field label
+     * @param mixed $answer The field answer value
+     * @return TextEntry Component suitable for displaying in an Infolist
+     */
+    public static function createDisplayComponent(array $field, string $label, $answer): TextEntry
+    {
+        $locale = App::getLocale();
+        $selectedProducts = [];
+
+        if (!empty($answer['selected_products'])) {
+            foreach ($answer['selected_products'] as $product) {
+                if (isset($product['product'][$locale])) {
+                    $productText = $product['product'][$locale];
+
+                    // Add quantity if available
+                    if (isset($product['quantity']) && $product['quantity'] > 0) {
+                        $productText .= ' × ' . $product['quantity'];
+                    }
+
+                    // Add price if available
+                    if (isset($product['price']) && isset($product['quantity'])) {
+                        $currencySymbol = $product['currency'] ?? '€';
+                        $totalPrice = $product['price'] * $product['quantity'];
+                        $productText .= " ({$currencySymbol}" . number_format($totalPrice, 2) . ")";
+                    }
+
+                    $selectedProducts[] = $productText;
+                }
+            }
+        }
+
+        return TextEntry::make('ecommerce')
+            ->label($label)
+            ->state(empty($selectedProducts) ?
+                __('panel/visitor_submissions.no_products_selected') :
+                implode(', ', $selectedProducts));
     }
 }

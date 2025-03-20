@@ -8,6 +8,8 @@ use App\Models\VisitorSubmission;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
 use Filament\Actions;
 use Filament\Infolists\Components\Section;
+use Filament\Infolists\Components\Tabs;
+use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Database\Eloquent\Model;
@@ -68,35 +70,42 @@ class ViewVisitorSubmission extends ViewRecord
             }
         }
 
-        // Visitor details section
-        $visitorDetailsSection = Section::make(__('panel/visitor_submissions.visitor_details'))
-            ->schema([
-                \Filament\Infolists\Components\TextEntry::make('visitor.name')
-                    ->label(__('panel/visitors.form.name')),
-                \Filament\Infolists\Components\TextEntry::make('visitor.email')
-                    ->label(__('panel/visitors.form.email')),
-                \Filament\Infolists\Components\TextEntry::make('status')
-                    ->label(__('panel/visitor_submissions.fields.status'))
-                    ->badge()
-                    ->color(fn(string $state): string => match ($state) {
-                        'pending' => 'warning',
-                        'approved' => 'success',
-                        'rejected' => 'danger',
-                        default => 'gray',
-                    }),
-                \Filament\Infolists\Components\TextEntry::make('created_at')
-                    ->label(__('panel/visitor_submissions.fields.created_at'))
-                    ->dateTime(),
-            ])
-            ->columns(2);
+        // Visitor details tab components
+        $visitorDetailsComponents = [
+            \Filament\Infolists\Components\TextEntry::make('visitor.name')
+                ->label('Name'),
+            \Filament\Infolists\Components\TextEntry::make('visitor.email')
+                ->label('Email'),
+            \Filament\Infolists\Components\TextEntry::make('status')
+                ->label('Status')
+                ->badge()
+                ->color(fn(string $state): string => match ($state) {
+                    'pending' => 'warning',
+                    'approved' => 'success',
+                    'rejected' => 'danger',
+                    default => 'gray',
+                }),
+            \Filament\Infolists\Components\TextEntry::make('created_at')
+                ->label('Submission Date')
+                ->dateTime(),
+        ];
 
-        // Create the infolist schema
+        // Create the infolist schema with tabs
         return $infolist
             ->schema([
-                $visitorDetailsSection,
-                // Section::make("stuff")->schema([
-                ...(VisitorSubmissionFormDisplay::make($sections)),
-                // ])
+                Tabs::make('Submission Tabs')
+                    ->columnSpanFull()
+                    ->tabs([
+                        Tab::make('Visitor Details')
+                            ->schema($visitorDetailsComponents)
+                            ->columns(2),
+
+                        Tab::make('Submission Answers')
+                            ->schema([
+                                // We'll use the FormDisplay component to render all sections
+                                ...VisitorSubmissionFormDisplay::make($sections),
+                            ])
+                    ])
             ]);
     }
 
@@ -115,6 +124,6 @@ class ViewVisitorSubmission extends ViewRecord
      */
     public function getTitle(): string
     {
-        return __('panel/visitor_submissions.single');
+        return 'Visitor Submission';
     }
 }
