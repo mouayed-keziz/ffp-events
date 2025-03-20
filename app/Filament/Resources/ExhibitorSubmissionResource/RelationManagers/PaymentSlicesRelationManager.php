@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ExhibitorSubmissionResource\RelationManagers;
 
+use App\Actions\ExhibitorSubmissionActions;
 use App\Enums\PaymentSliceStatus;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -75,6 +76,8 @@ class PaymentSlicesRelationManager extends RelationManager
 
     public function table(Table $table): Table
     {
+        $exhibitorActions = new ExhibitorSubmissionActions();
+
         return $table
             ->reorderable('sort')
             ->columns([
@@ -89,7 +92,6 @@ class PaymentSlicesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('status')
                     ->label(__('exhibitor_submission.fields.payment_slice.status'))
                     ->badge()
-                // ->type(PaymentSliceStatus::class),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
@@ -102,9 +104,12 @@ class PaymentSlicesRelationManager extends RelationManager
                     ->label(__('exhibitor_submission.actions.payment_slice.create_title')),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                $exhibitorActions->getViewProofAction(),
+                $exhibitorActions->getValidatePaymentAction(),
+                $exhibitorActions->getRejectPaymentAction(),
+                // Tables\Actions\ViewAction::make(),
+                // Tables\Actions\EditAction::make(),
+                $exhibitorActions->getDeletePaymentSliceAction(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

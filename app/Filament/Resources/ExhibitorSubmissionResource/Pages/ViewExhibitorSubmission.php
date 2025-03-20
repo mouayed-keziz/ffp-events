@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ExhibitorSubmissionResource\Pages;
 
+use App\Actions\ExhibitorSubmissionActions;
 use App\Filament\Resources\ExhibitorSubmissionResource;
 use Filament\Actions;
 use Filament\Infolists\Components\Fieldset;
@@ -64,12 +65,12 @@ class ViewExhibitorSubmission extends ViewRecord
                             ->columns(2)
                             ->schema([
                                 ...$exhibitorDetailsSection,
-                                Fieldset::make("total_prices")->columns(3)
-                                    ->schema([
-                                        TextEntry::make("total_prices.DZD")->label("DZD"),
-                                        TextEntry::make("total_prices.EUR")->label("EUR"),
-                                        TextEntry::make("total_prices.USD")->label("USD"),
-                                    ])
+                                // Fieldset::make("total_prices")->columns(3)
+                                //     ->schema([
+                                //         TextEntry::make("total_prices.DZD")->label("DZD"),
+                                //         TextEntry::make("total_prices.EUR")->label("EUR"),
+                                //         TextEntry::make("total_prices.USD")->label("USD"),
+                                //     ])
                             ]),
                         Tab::make("answers")
                             ->schema([])
@@ -85,10 +86,17 @@ class ViewExhibitorSubmission extends ViewRecord
      */
     protected function getHeaderActions(): array
     {
+        $actions = new ExhibitorSubmissionActions();
+
         return [
-            Actions\ActionGroup::make([]),
-            Actions\EditAction::make(),
-            Actions\DeleteAction::make(),
+            $actions->getAcceptAction(),
+            $actions->getRejectAction(),
+            $actions->getMakeReadyAction(),
+            $actions->getArchiveAction(),
+            Actions\ActionGroup::make([
+                Actions\EditAction::make(),
+                Actions\DeleteAction::make(),
+            ])->dropdown(true),
         ];
     }
 

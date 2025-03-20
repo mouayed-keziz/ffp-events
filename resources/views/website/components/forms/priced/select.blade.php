@@ -1,4 +1,4 @@
-@props(['data', 'answerPath', 'disabled' => false])
+@props(['data', 'answerPath'])
 
 <div class="mb-4">
     <label class="label">
@@ -25,7 +25,6 @@
         selectedOption: @js($selectedOption),
     
         selectOption(option, optionValue, priceData) {
-            if (this.disabled) return;
             this.selectedOption = {
                 value: optionValue,
                 price: priceData[$wire.preferred_currency] || 0
@@ -34,9 +33,9 @@
             $wire.updateSelectOption('{{ $answerPath }}', optionValue);
         }
     }" class="relative">
-        <button type="button" @click="!disabled && (open = !open)"
+        <button type="button" @click="open = !open"
             class="input input-bordered bg-white rounded-md w-full flex justify-between items-center"
-            :class="{ 'opacity-60 cursor-not-allowed': disabled }" {{ $disabled ? 'disabled' : '' }}>
+            :class="selectedOption ? '' : 'text-gray-500'">
             <div class="flex items-center gap-2 overflow-hidden">
                 <span x-text="selectedOption ? selectedOption.value : '{{ __('Select an option') }}'"
                     class="truncate"></span>
@@ -64,9 +63,7 @@
                 @endphp
                 <button type="button" @click="selectOption($event, '{{ $optionLabel }}', {{ $priceData }})"
                     class="w-full text-left px-4 py-2 hover:bg-gray-100"
-                    :class="{ 'bg-primary/10': selectedOption && selectedOption
-                        .value === '{{ $optionLabel }}', 'opacity-60 cursor-not-allowed': disabled }"
-                    {{ $disabled ? 'disabled' : '' }}>
+                    :class="selectedOption && selectedOption.value === '{{ $optionLabel }}' ? 'bg-primary/10' : ''">
                     <div class="flex items-center gap-2">
                         <span>{{ $optionLabel }}</span>
                         @if (isset($option['price']))

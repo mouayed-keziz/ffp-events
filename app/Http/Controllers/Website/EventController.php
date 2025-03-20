@@ -24,7 +24,8 @@ class EventController extends Controller
         if (!$event) {
             return redirect()->route('events');
         }
-        $exhibitor_submission = Auth('exhibitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
+        $user = Auth("exhibitor")->user();
+        $exhibitor_submission = $user ? $user->submissions()->where('event_announcement_id', $event->id)->first() : null;
         $relatedEvents = EventAnnouncement::where('id', '!=', $id)->inRandomOrder()->limit(4)->get();
         return view('website.pages.events.event', [
             'event' => $event,
