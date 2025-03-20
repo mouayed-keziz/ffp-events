@@ -299,80 +299,80 @@ class ExhibitorFormActions extends BaseFormActions
      */
     public function updateExistingSubmission(ExhibitorSubmission $submission, array $formData): bool
     {
-        // try {
-        // Process the form data with price calculation
-        $processResult = $this->processFormDataForSubmission($formData, true);
-        $processedData = $processResult['processedData'];
-        $filesToProcess = $processResult['filesToProcess'];
+        try {
+            // Process the form data with price calculation
+            $processResult = $this->processFormDataForSubmission($formData, true);
+            $processedData = $processResult['processedData'];
+            $filesToProcess = $processResult['filesToProcess'];
 
-        // Track fileIds being replaced so we can remove old files later
-        $replacedFileIds = [];
+            // Track fileIds being replaced so we can remove old files later
+            $replacedFileIds = [];
 
-        // Find and mark file replacements
-        foreach ($processedData as $formIndex => $form) {
-            if (!isset($form['sections'])) continue;
+            // Find and mark file replacements
+            foreach ($processedData as $formIndex => $form) {
+                if (!isset($form['sections'])) continue;
 
-            foreach ($form['sections'] as $sectionIndex => $section) {
-                if (!isset($section['fields'])) continue;
+                foreach ($form['sections'] as $sectionIndex => $section) {
+                    if (!isset($section['fields'])) continue;
 
-                foreach ($section['fields'] as $fieldIndex => $field) {
-                    // Only interested in upload fields
-                    if ($field['type'] !== FormField::UPLOAD->value || !isset($field['answer'])) continue;
+                    foreach ($section['fields'] as $fieldIndex => $field) {
+                        // Only interested in upload fields
+                        if ($field['type'] !== FormField::UPLOAD->value || !isset($field['answer'])) continue;
 
-                    // Check if this is a new file (UUID from processFormDataForSubmission)
-                    if (is_string($field['answer']) && Str::isUuid($field['answer'])) {
-                        // Check if there was a previous file for this field position in the original answers
-                        $oldAnswers = $submission->answers;
+                        // Check if this is a new file (UUID from processFormDataForSubmission)
+                        if (is_string($field['answer']) && Str::isUuid($field['answer'])) {
+                            // Check if there was a previous file for this field position in the original answers
+                            $oldAnswers = $submission->answers;
 
-                        if (isset($oldAnswers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'])) {
-                            $oldFileId = $oldAnswers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'];
-                            $replacedFileIds[] = $oldFileId;
+                            if (isset($oldAnswers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'])) {
+                                $oldFileId = $oldAnswers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'];
+                                $replacedFileIds[] = $oldFileId;
+                            }
                         }
                     }
                 }
             }
+
+            // Update the submission with the new answers
+            $submission->answers = array_values($processedData);
+            $submission->total_prices = $processedData['total_prices'] ?? null;
+            $submission->status = SubmissionStatus::PENDING->value;
+            $submission->edit_deadline = null;
+            $submission->update_requested_at = null;
+            $submission->save();
+
+
+            // Remove media that's been replaced
+            if (!empty($replacedFileIds)) {
+                $submission->getMedia('attachments')
+                    ->filter(function (Media $media) use ($replacedFileIds) {
+                        return isset($media->custom_properties['fileId']) &&
+                            in_array($media->custom_properties['fileId'], $replacedFileIds);
+                    })
+                    ->each(function (Media $media) {
+                        $media->delete();
+                    });
+            }
+
+            // Process new files using Media Library
+            foreach ($filesToProcess as $fileInfo) {
+                $media = $submission->addMedia($fileInfo['file']->getRealPath())
+                    ->usingFileName($fileInfo['file']->getClientOriginalName())
+                    ->withCustomProperties([
+                        'fileId' => $fileInfo['fileId'],
+                        'fileType' => $fileInfo['fieldData']['file_type'] ?? null,
+                        'fieldLabel' => $fileInfo['fieldData']['label'] ?? null,
+                    ])
+                    ->toMediaCollection('attachments');
+                Log::info("Media added to updated submission: {$media->id} with fileId: {$fileInfo['fileId']}");
+            }
+
+            Log::info("Exhibitor Submission updated: {$submission->id}");
+            return true;
+        } catch (\Exception $e) {
+            report($e);
+            Log::error("Failed to update submission: " . $e->getMessage());
+            return false;
         }
-
-        // Update the submission with the new answers
-        $submission->answers = array_values($processedData);
-        $submission->total_prices = $processedData['total_prices'] ?? null;
-        $submission->status = SubmissionStatus::PENDING->value;
-        $submission->edit_deadline = null;
-        $submission->update_requested_at = null;
-        $submission->save();
-
-
-        // Remove media that's been replaced
-        if (!empty($replacedFileIds)) {
-            $submission->getMedia('attachments')
-                ->filter(function (Media $media) use ($replacedFileIds) {
-                    return isset($media->custom_properties['fileId']) &&
-                        in_array($media->custom_properties['fileId'], $replacedFileIds);
-                })
-                ->each(function (Media $media) {
-                    $media->delete();
-                });
-        }
-
-        // Process new files using Media Library
-        foreach ($filesToProcess as $fileInfo) {
-            $media = $submission->addMedia($fileInfo['file']->getRealPath())
-                ->usingFileName($fileInfo['file']->getClientOriginalName())
-                ->withCustomProperties([
-                    'fileId' => $fileInfo['fileId'],
-                    'fileType' => $fileInfo['fieldData']['file_type'] ?? null,
-                    'fieldLabel' => $fileInfo['fieldData']['label'] ?? null,
-                ])
-                ->toMediaCollection('attachments');
-            Log::info("Media added to updated submission: {$media->id} with fileId: {$fileInfo['fileId']}");
-        }
-
-        Log::info("Exhibitor Submission updated: {$submission->id}");
-        return true;
-        // } catch (\Exception $e) {
-        //     report($e);
-        //     Log::error("Failed to update submission: " . $e->getMessage());
-        //     return false;
-        // }
     }
 }

@@ -156,7 +156,7 @@ class VisitorSubmissionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListVisitorSubmissions::route('/'),
+            // 'index' => Pages\ListVisitorSubmissions::route('/'),
             // 'create' => Pages\CreateVisitorSubmission::route('/create'),
             // 'edit' => Pages\EditVisitorSubmission::route('/{record}/edit'),
         ];

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Observers\EventAnnouncementObserver;
+use App\Traits\Shareable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,6 +16,7 @@ class EventAnnouncement extends Model implements HasMedia
 {
     use HasFactory, SoftDeletes;
     use InteractsWithMedia, HasTranslations;
+    use Shareable;
 
     protected $fillable = [
         'title',

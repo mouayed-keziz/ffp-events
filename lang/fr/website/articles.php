@@ -18,4 +18,5 @@ return [
         'views' => 'vues',
         'shares' => 'partages',
     ],
+    'no_articles' => 'Aucun article trouvé. Veuillez essayer une autre recherche ou un autre filtre.',
 ];

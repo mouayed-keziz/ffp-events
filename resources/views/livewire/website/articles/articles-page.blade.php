@@ -103,22 +103,51 @@ new class extends Component {
         @include('website.components.articles.sort')
     </div>
 
-    <!-- Articles grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        @foreach ($articles as $article)
-            @include('website.components.articles.article-card', [
-                'title' => $article->title,
-                'slug' => $article->slug,
-                'date' => $article->published_at,
-                'views' => $article->views,
-                'shares' => $article->shares_count,
-                'image' => $article->getFirstMediaUrl('image') ?: asset('placeholder.png'),
-            ])
-        @endforeach
+    <!-- Loading skeletons -->
+    <div wire:loading.block>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            @php
+                // Calculate how many skeletons to show - match current article count or default to 8
+                $skeletonCount = isset($articles) && $articles->count() > 0 ? $articles->count() : 8;
+            @endphp
+
+            @for ($i = 0; $i < $skeletonCount; $i++)
+                @include('website.components.articles.article-card-skeleton')
+            @endfor
+        </div>
+    </div>
+
+    <!-- Content (visible when not loading) -->
+    <div wire:loading.remove>
+        @if ($articles->count() > 0)
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                @foreach ($articles as $article)
+                    @include('website.components.articles.article-card', [
+                        'title' => $article->title,
+                        'slug' => $article->slug,
+                        'date' => $article->published_at,
+                        'views' => $article->views,
+                        'shares' => $article->shares_count,
+                        'image' => $article->getFirstMediaUrl('image') ?: asset('placeholder.png'),
+                    ])
+                @endforeach
+            </div>
+        @else
+            <div class="flex flex-col items-center justify-center py-16 text-center">
+                <div class="mb-4 text-gray-400">
+                    <x-heroicon-o-magnifying-glass class="w-16 h-16" />
+                </div>
+                <p class="text-xl font-semibold text-gray-700 mb-2">{{ __('website/articles.no_articles') }}</p>
+            </div>
+        @endif
     </div>
 
     <!-- Pagination -->
-    <div class="my-16">
-        {{ $articles->links() }}
+    <div wire:loading.remove>
+        @if ($articles->count() > 0)
+            <div class="my-16">
+                {{ $articles->links() }}
+            </div>
+        @endif
     </div>
 </div>

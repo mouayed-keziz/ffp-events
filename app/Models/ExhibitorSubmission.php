@@ -36,9 +36,6 @@ class ExhibitorSubmission extends Model implements HasMedia
         'status' => ExhibitorSubmissionStatus::class
     ];
 
-    /**
-     * Determine if the submission can be edited based on deadline and permission
-     */
     public function getIsEditableAttribute(): bool
     {
         if (!$this->edit_deadline) {
@@ -51,63 +48,57 @@ class ExhibitorSubmission extends Model implements HasMedia
         return false;
     }
 
-    /**
-     * Determine if the payment button should be shown
-     */
     public function getShowPaymentButtonAttribute(): bool
     {
-        // If status is not ACCEPTED or PARTLY_PAYED, don't show the button
         if (!in_array($this->status, [ExhibitorSubmissionStatus::ACCEPTED, ExhibitorSubmissionStatus::PARTLY_PAYED])) {
             return false;
         }
 
-        // Get payment slices ordered by sort
         $slices = $this->paymentSlices()->orderBy('sort')->get();
 
-        // If no slices, don't show the button
         if ($slices->isEmpty()) {
             return false;
         }
 
-        // If any slice has PROOF_ATTACHED status, don't show button until admin validates it
         if ($slices->where('status', PaymentSliceStatus::PROOF_ATTACHED)->count() > 0) {
             return false;
         }
 
-        // Check if there's any slice that needs payment (NOT_PAYED status)
         return $slices->where('status', PaymentSliceStatus::NOT_PAYED)->count() > 0;
     }
 
-    /**
-     * Determine if the finalize button should be shown
-     */
-    public function getShowFinalizeButtonAttribute(): bool
+
+    public function getCanFillPostFormsAttribute(): bool
     {
-        // Show finalize button when at least one payment is valid
         return $this->paymentSlices()->where('status', PaymentSliceStatus::VALID)->count() > 0 &&
-            $this->status !== ExhibitorSubmissionStatus::FULLY_PAYED &&
-            $this->status !== ExhibitorSubmissionStatus::READY;
+            $this->status !== ExhibitorSubmissionStatus::ARCHIVE &&
+            $this->status !== ExhibitorSubmissionStatus::READY &&
+            $this->status !== ExhibitorSubmissionStatus::REJECTED &&
+            $this->post_answers === NULL;
+    }
+    public function getCanDownloadInvoiceAttribute()
+    {
+
+        return $this->status === ExhibitorSubmissionStatus::ACCEPTED ||
+            $this->status === ExhibitorSubmissionStatus::PARTLY_PAYED ||
+            $this->status === ExhibitorSubmissionStatus::FULLY_PAYED ||
+            $this->status === ExhibitorSubmissionStatus::READY ||
+            $this->status === ExhibitorSubmissionStatus::ARCHIVE;
     }
 
-    /**
-     * Get the exhibitor that owns the submission.
-     */
+
     public function exhibitor(): BelongsTo
     {
         return $this->belongsTo(Exhibitor::class);
     }
 
-    /**
-     * Get the event announcement that the submission is for.
-     */
+
     public function eventAnnouncement(): BelongsTo
     {
         return $this->belongsTo(EventAnnouncement::class);
     }
 
-    /**
-     * Register media collections for the model.
-     */
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('attachments');

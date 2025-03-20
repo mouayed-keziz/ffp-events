@@ -30,6 +30,10 @@ new class extends Component {
         $this->event = $event;
         $this->initFormData();
         $this->postForms = $event->exhibitorPostPaymentForms->toArray();
+        dd([
+            'forms' => $this->formData,
+            'postForms' => $this->postForms,
+        ]);
     }
 
     public function updated($name)

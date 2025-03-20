@@ -71,7 +71,7 @@ new class extends Component {
                 @endif
             @endforeach
 
-            @if ($submission->showFinalizeButton)
+            @if ($submission->canFillPostForms)
                 <div class="alert bg-info/20 text-info text-xs mt-2">
                     <x-heroicon-s-information-circle class="w-7 h-7" />
                     <span>Vous pouvez maintenant finaliser vos réponses pour cet événement via le bouton "Finaliser Mes

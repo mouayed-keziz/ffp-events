@@ -18,4 +18,5 @@ return [
         'views' => 'views',
         'shares' => 'shares',
     ],
+    'no_articles' => 'No articles found. Please try a different search or filter.',
 ];

@@ -64,18 +64,16 @@ new class extends Component {
                 Revoir Mes Reponses
             </a>
 
-            @if (
-                $submission->status === ExhibitorSubmissionStatus::PENDING ||
-                    $submission->status === ExhibitorSubmissionStatus::ACCEPTED)
+            @if ($submission->canDownloadInvoice)
                 <a href="{{ route('download_invoice', $event) }}"
                     class="btn rounded-md text-sm font-semibold btn-outline border-base-200 border-2 uppercase">
                     Telecharger le bon de commande
                 </a>
             @endif
 
-            @if ($submission->showFinalizeButton)
+            @if ($submission->canFillPostForms)
                 <a href="{{ route('post_exhibit_event', $event) }}"
-                    class="btn rounded-md text-sm font-semibold btn-outline border-base-200 border-2 uppercase">
+                    class="btn btn-sm rounded-md text-sm font-semibold btn-outline border-base-200 border-2 uppercase">
                     Finaliser Mes Reponses
                 </a>
             @endif

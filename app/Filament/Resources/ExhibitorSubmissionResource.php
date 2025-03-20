@@ -71,7 +71,7 @@ class ExhibitorSubmissionResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListExhibitorSubmissions::route('/'),
+            // 'index' => Pages\ListExhibitorSubmissions::route('/'),
             // 'create' => Pages\CreateExhibitorSubmission::route('/create'),
             'edit' => Pages\EditExhibitorSubmission::route('/{record}/edit'),
             'view' => Pages\ViewExhibitorSubmission::route('/{record}'),
