@@ -139,19 +139,14 @@ class Select
     {
         $locale = App::getLocale();
 
-        // Create a Group with title and description at the top
+        // Create a Group with title-description entry and select component
         return \Filament\Infolists\Components\Group::make()
             ->schema([
-                TextEntry::make('title')
-                    ->label($label)
-                    ->weight(\Filament\Support\Enums\FontWeight::Bold)
-                    ->translateLabel(false),
-
-                TextEntry::make('description')
-                    ->label('')
-                    ->state($field['data']['description'][$locale] ?? ($field['data']['description']['en'] ?? null))
-                    ->visible(isset($field['data']['description']))
-                    ->color('gray'),
+                \App\Infolists\Components\TitleDescriptionEntry::make('heading')
+                    ->state([
+                        'title' => $label,
+                        'description' => $field['data']['description'][$locale] ?? ($field['data']['description']['en'] ?? null),
+                    ]),
 
                 \App\Infolists\Components\SelectEntry::make('select')
                     ->label('')

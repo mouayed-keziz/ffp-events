@@ -4,6 +4,7 @@ namespace App\Enums\Fields;
 
 use App\Enums\FormInputType;
 use Filament\Infolists\Components\TextEntry;
+use Illuminate\Support\Facades\App;
 
 class Input
 {
@@ -87,13 +88,27 @@ class Input
      * @param array $field The field definition with type, data and answer
      * @param string $label The field label
      * @param mixed $answer The field answer value
-     * @return TextEntry Component suitable for displaying in an Infolist
+     * @return \Filament\Infolists\Components\Component
      */
-    public static function createDisplayComponent(array $field, string $label, $answer): TextEntry
+    public static function createDisplayComponent(array $field, string $label, $answer)
     {
-        dd($field, $label, $answer);
-        return TextEntry::make('input')
-            ->label($label)
-            ->state($answer ?? '');
+        $locale = App::getLocale();
+
+        // Create a Group with title-description entry and input component
+        return \Filament\Infolists\Components\Group::make()
+            ->schema([
+                \App\Infolists\Components\TitleDescriptionEntry::make('heading')
+                    ->state([
+                        'title' => $label,
+                        'description' => $field['data']['description'][$locale] ?? ($field['data']['description']['en'] ?? null),
+                    ]),
+
+                \App\Infolists\Components\InputEntry::make('input')
+                    ->label('')
+                    ->state([
+                        'type' => $field['data']['type'] ?? 'text',
+                        'value' => $answer
+                    ])
+            ]);
     }
 }

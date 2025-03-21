@@ -6,6 +6,7 @@ use App\Enums\FormField;
 use App\Models\VisitorSubmission;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\Fieldset;
+use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
@@ -24,7 +25,7 @@ class VisitorSubmissionFormDisplay
 
         foreach ($formData as $sectionIndex => $section) {
             $sectionTitle = $section['title'][App::getLocale()] ?? $section['title']['en'] ?? $section['title']['fr'] ?? 'Section';
-
+            $sectionDescription = $section['description'][App::getLocale()] ?? $section['description']['en'] ?? $section['description']['fr'] ?? null;
             $sectionFields = [];
 
             foreach ($section['fields'] as $fieldIndex => $field) {
@@ -35,11 +36,15 @@ class VisitorSubmissionFormDisplay
             }
 
             // Use a fieldset to visually separate sections instead of a collapsible section
-            $components[] = Fieldset::make($sectionTitle)
+            $components[] = Section::make($sectionTitle)
+                ->label($sectionTitle)
+                ->collapsible()
+                ->collapsed()
+                ->description($sectionDescription)
                 ->schema($sectionFields)
                 ->columns([
                     'default' => 1,
-                    'md' => 2,
+                    'md' => 1,
                 ]);
 
             // Add a spacer between sections
