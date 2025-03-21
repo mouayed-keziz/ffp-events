@@ -3,9 +3,11 @@
 namespace App\Filament\Resources\ExhibitorSubmissionResource\Pages;
 
 use App\Actions\ExhibitorSubmissionActions;
+use App\Filament\Components\ExhibitorSubmissionFormDisplay;
 use App\Filament\Resources\ExhibitorSubmissionResource;
 use Filament\Actions;
 use Filament\Infolists\Components\Fieldset;
+use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\Tabs;
 use Filament\Infolists\Components\Tabs\Tab;
@@ -22,63 +24,119 @@ class ViewExhibitorSubmission extends ViewRecord
 
     public function infolist(Infolist $infolist): Infolist
     {
-        $answers = $this->getRecord()->answers ?? [];
+        $record = $this->getRecord();
+        $answers = $record->answers ?? [];
+        $postAnswers = $record->post_answers ?? [];
 
-        // Get form definitions from the event announcement's visitor form
-        $visitorForm = $this->getRecord()->eventAnnouncement->visitorForm;
-        $sections = $visitorForm->sections ?? [];
+        // Get form definitions from the event announcement's exhibitor form
+        $exhibitorForm = $record->eventAnnouncement->exhibitorForm;
 
-        // Merge form definition with answers
+        // Process answers and post_answers to merge with form structure
+        $processedAnswers = $this->processFormWithAnswers($exhibitorForm, $answers);
+        $hasPostAnswers = !empty($postAnswers);
+
+        // Exhibitor details components
+        $exhibitorDetailsComponents = [
+            TextEntry::make('exhibitor.name')
+                ->label('Name'),
+            TextEntry::make('exhibitor.email')
+                ->label('Email'),
+            TextEntry::make('status')
+                ->label('Status')
+                ->badge(),
+
+            TextEntry::make('created_at')
+                ->label('Submission Date')
+                ->dateTime(),
+            IconEntry::make('isEditable')
+                ->label('Can Edit')
+                ->boolean()
+        ];
+
+        // Price components if available
+        $priceComponents = [];
+        if (!empty($record->total_prices)) {
+            $priceComponents[] = Fieldset::make('Prices')->columns(3)
+                ->schema([
+                    TextEntry::make('total_prices.DZD')
+                        ->label('DZD')
+                        ->formatStateUsing(fn($state) => $state ? number_format($state, 2) . ' DZD' : '-'),
+                    TextEntry::make('total_prices.EUR')
+                        ->label('EUR')
+                        ->formatStateUsing(fn($state) => $state ? number_format($state, 2) . ' €' : '-'),
+                    TextEntry::make('total_prices.USD')
+                        ->label('USD')
+                        ->formatStateUsing(fn($state) => $state ? number_format($state, 2) . ' $' : '-'),
+                ]);
+        }
+
+        // Build tabs for the infolist
+        $tabs = [
+            Tab::make('Exhibitor Details')
+                ->schema([
+                    ...$exhibitorDetailsComponents,
+                    ...$priceComponents,
+                ])
+                ->columns(2),
+
+            Tab::make('Submission Answers')
+                ->columns(1)
+                ->schema(ExhibitorSubmissionFormDisplay::make($processedAnswers)),
+        ];
+
+        // Add post answers tab if available
+        if ($hasPostAnswers) {
+            $processedPostAnswers = $this->processFormWithAnswers($exhibitorForm, $postAnswers);
+            $tabs[] = Tab::make('Post-Submission Answers')
+                ->schema(ExhibitorSubmissionFormDisplay::make($processedPostAnswers));
+        }
+
+        // Create the infolist with tabs
+        return $infolist
+            ->schema([
+                Tabs::make('Submission Tabs')
+                    ->tabs($tabs)->columnSpanFull()
+            ]);
+    }
+
+    /**
+     * Process form structure with answers to create a merged structure
+     * 
+     * @param mixed $form The form definition
+     * @param array $answers The answers
+     * @return array The processed form with answers
+     */
+    protected function processFormWithAnswers($form, array $answers): array
+    {
+        // If form doesn't exist or is empty, just return the answers as-is
+        if (!$form || empty($form->sections)) {
+            return $answers;
+        }
+
+        $sections = $form->sections ?? [];
+        $result = [
+            [
+                'title' => $form->title ?? 'Form',
+                'description' => $form->description ?? null,
+                'sections' => [],
+            ]
+        ];
+
+        // Deep merge the answers into the form structure
         if (!empty($sections) && !empty($answers)) {
-            // Deep merge the answers into the form sections
-            // This ensures we follow the same structure but with answers included
             foreach ($sections as $sIndex => $section) {
+                $result[0]['sections'][$sIndex] = $section;
+
                 foreach ($section['fields'] ?? [] as $fIndex => $field) {
                     if (isset($answers[$sIndex]['fields'][$fIndex]['answer'])) {
-                        $sections[$sIndex]['fields'][$fIndex]['answer'] = $answers[$sIndex]['fields'][$fIndex]['answer'];
+                        $result[0]['sections'][$sIndex]['fields'][$fIndex]['answer'] =
+                            $answers[$sIndex]['fields'][$fIndex]['answer'];
                     }
                 }
             }
         }
 
-        // Visitor details section
-        $exhibitorDetailsSection = [
-            \Filament\Infolists\Components\TextEntry::make('exhibitor.name')
-                ->label(__('panel/visitors.form.name')),
-            \Filament\Infolists\Components\TextEntry::make('exhibitor.email')
-                ->label(__('panel/visitors.form.email')),
-            \Filament\Infolists\Components\TextEntry::make('status')
-                ->label(__('panel/visitor_submissions.fields.status'))
-                ->badge(),
-            \Filament\Infolists\Components\TextEntry::make('created_at')
-                ->label(__('panel/visitor_submissions.fields.created_at'))
-                ->dateTime(),
-            \Filament\Infolists\Components\IconEntry::make("isEditable")->boolean()
-        ];
-
-        // Create the infolist schema
-        return $infolist
-            ->schema([
-                Tabs::make("tabs")->columnSpanFull()
-                    ->schema([
-                        Tab::make("details")
-                            ->columns(2)
-                            ->schema([
-                                ...$exhibitorDetailsSection,
-                                // Fieldset::make("total_prices")->columns(3)
-                                //     ->schema([
-                                //         TextEntry::make("total_prices.DZD")->label("DZD"),
-                                //         TextEntry::make("total_prices.EUR")->label("EUR"),
-                                //         TextEntry::make("total_prices.USD")->label("USD"),
-                                //     ])
-                            ]),
-                        Tab::make("answers")
-                            ->schema([])
-                    ])
-                // Section::make("stuff")->schema([
-                // ...(VisitorSubmissionFormDisplay::make($sections)),
-                // ])
-            ]);
+        return $result;
     }
 
     /**
@@ -105,6 +163,6 @@ class ViewExhibitorSubmission extends ViewRecord
      */
     public function getTitle(): string
     {
-        return __('panel/visitor_submissions.single');
+        return 'Exhibitor Submission';
     }
 }

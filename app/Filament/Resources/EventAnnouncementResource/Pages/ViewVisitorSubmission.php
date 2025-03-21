@@ -98,7 +98,7 @@ class ViewVisitorSubmission extends ViewRecord
                     ->tabs([
                         Tab::make('Visitor Details')
                             ->schema($visitorDetailsComponents)
-                            ->columns(2),
+                            ->columns(1),
 
                         Tab::make('Submission Answers')
                             ->schema([

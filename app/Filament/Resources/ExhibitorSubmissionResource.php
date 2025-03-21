@@ -45,9 +45,7 @@ class ExhibitorSubmissionResource extends Resource
             ->columns([
                 //
             ])
-            ->filters([
-                Tables\Filters\TrashedFilter::make(),
-            ])
+            ->filters([])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
@@ -76,13 +74,5 @@ class ExhibitorSubmissionResource extends Resource
             'edit' => Pages\EditExhibitorSubmission::route('/{record}/edit'),
             'view' => Pages\ViewExhibitorSubmission::route('/{record}'),
         ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
     }
 }

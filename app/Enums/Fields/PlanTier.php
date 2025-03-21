@@ -156,6 +156,7 @@ class PlanTier
      */
     public static function createDisplayComponent(array $field, string $label, $answer): TextEntry
     {
+        dd(json_encode($answer, JSON_PRETTY_PRINT));
         $locale = App::getLocale();
 
         if (!empty($answer) && isset($answer['selected_plan']['name'][$locale])) {

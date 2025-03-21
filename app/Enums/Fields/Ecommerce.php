@@ -185,39 +185,12 @@ class Ecommerce
      * @param array $field The field definition with type, data and answer
      * @param string $label The field label
      * @param mixed $answer The field answer value
-     * @return TextEntry Component suitable for displaying in an Infolist
+     * @return \Filament\Infolists\Components\Component
      */
-    public static function createDisplayComponent(array $field, string $label, $answer): TextEntry
+    public static function createDisplayComponent(array $field, string $label, $answer)
     {
-        $locale = App::getLocale();
-        $selectedProducts = [];
-
-        if (!empty($answer['selected_products'])) {
-            foreach ($answer['selected_products'] as $product) {
-                if (isset($product['product'][$locale])) {
-                    $productText = $product['product'][$locale];
-
-                    // Add quantity if available
-                    if (isset($product['quantity']) && $product['quantity'] > 0) {
-                        $productText .= ' × ' . $product['quantity'];
-                    }
-
-                    // Add price if available
-                    if (isset($product['price']) && isset($product['quantity'])) {
-                        $currencySymbol = $product['currency'] ?? '€';
-                        $totalPrice = $product['price'] * $product['quantity'];
-                        $productText .= " ({$currencySymbol}" . number_format($totalPrice, 2) . ")";
-                    }
-
-                    $selectedProducts[] = $productText;
-                }
-            }
-        }
-
-        return TextEntry::make('ecommerce')
+        return \App\Infolists\Components\EcommerceProductsEntry::make('ecommerce')
             ->label($label)
-            ->state(empty($selectedProducts) ?
-                __('panel/visitor_submissions.no_products_selected') :
-                implode(', ', $selectedProducts));
+            ->state($answer);
     }
 }
