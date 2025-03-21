@@ -146,35 +146,11 @@ class PlanTier
         return $plans;
     }
 
-    /**
-     * Create a display component for a plan tier field
-     *
-     * @param array $field The field definition with type, data and answer
-     * @param string $label The field label
-     * @param mixed $answer The field answer value
-     * @return TextEntry Component suitable for displaying in an Infolist
-     */
-    public static function createDisplayComponent(array $field, string $label, $answer): TextEntry
+
+    public static function createDisplayComponent(array $field, string $label, $answer)
     {
-        dd(json_encode($answer, JSON_PRETTY_PRINT));
-        $locale = App::getLocale();
-
-        if (!empty($answer) && isset($answer['selected_plan']['name'][$locale])) {
-            $selectedPlan = $answer['selected_plan']['name'][$locale];
-            $price = '';
-
-            if (isset($answer['selected_plan']['price'])) {
-                $currencySymbol = $answer['selected_plan']['currency'] ?? '€';
-                $price = " ({$currencySymbol}" . number_format($answer['selected_plan']['price'], 2) . ")";
-            }
-
-            return TextEntry::make('plan_tier')
-                ->label($label)
-                ->state($selectedPlan . $price);
-        }
-
-        return TextEntry::make('plan_tier')
+        return \App\Infolists\Components\PlantierEntry::make('ecommerce')
             ->label($label)
-            ->state(__('panel/visitor_submissions.no_plan_selected'));
+            ->state($answer);
     }
 }
