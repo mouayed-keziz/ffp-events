@@ -51,11 +51,22 @@
                         @endif
 
                         <!-- Plan Info with link to plan tier page -->
+                        <div class="flex-shrink-0 w-12 h-12 rounded-lg overflow-hidden">
+                            @if ($planModel)
+                                <img src="{{ $planModel->image }}" alt="{{ $planTitle }}"
+                                    class="h-full aspect-video object-cover " />
+                            @else
+                                <div
+                                    class="w-full h-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                                    <span class="text-gray-400 dark:text-gray-500 text-xs">{{ __('No image') }}</span>
+                                </div>
+                            @endif
+                        </div>
                         <div class="flex-1">
                             @if ($planModel)
                                 <a href="{{ route('filament.admin.resources.plan-tiers.edit', ['record' => $planModel->plan_tier_id ?? '']) }}"
                                     class="hover:underline text-primary-600 dark:text-primary-400">
-                                    <h3 class="font-medium text-gray-900 dark:text-gray-100 text-base">
+                                    <h3 class="font-medium text-sm">
                                         {{ $planTitle }}</h3>
                                 </a>
                             @else
@@ -65,7 +76,7 @@
                         </div>
 
                         <!-- Simple prices display -->
-                        <div class="text-right">
+                        <div class="text-right pt-2">
                             @foreach ($currencies as $currencyCode)
                                 @php
                                     $price = $plan['price'][$currencyCode] ?? 0;

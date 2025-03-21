@@ -41,20 +41,13 @@ class ExhibitorSubmissionFormDisplay
                 ? ($form['description'][App::getLocale()] ?? $form['description']['en'] ?? $form['description']['fr'] ?? '')
                 : ($form['description'] ?? '');
 
-            // Create a header for the form
-            $components[] = TextEntry::make("form_title_{$formIndex}")
-                ->label($formTitle)
-                ->state($formDescription)
-                ->size(TextEntry\TextEntrySize::Large)
-                ->weight(FontWeight::Bold)
-                ->columnSpanFull();
-
-            // if (!empty($formDescription)) {
-            //     $components[] = TextEntry::make("form_description_{$formIndex}")
-            //         ->label('')
-            //         ->state($formDescription)
-            //         ->columnSpanFull();
-            // }
+            // Create a header for the form (if needed - now each form is in its own tab)
+            if (!empty($formDescription)) {
+                // $components[] = TextEntry::make("form_description_{$formIndex}")
+                //     ->label('')
+                //     ->state($formDescription)
+                //     ->columnSpanFull();
+            }
 
             // Process each section within the form
             foreach ($form['sections'] as $sectionIndex => $section) {
@@ -73,7 +66,7 @@ class ExhibitorSubmissionFormDisplay
                     }
                 }
 
-                // Use a fieldset to visually separate sections
+                // Use a section to visually separate sections, but keep them expanded by default
                 $components[] = Section::make($sectionTitle)
                     ->label($sectionTitle)
                     ->description($sectionDescription)
@@ -82,10 +75,11 @@ class ExhibitorSubmissionFormDisplay
                     ->schema($sectionFields)
                     ->columns(1);
 
-                // Add a spacer between sections
+                // Add a small spacer between sections
                 $components[] = TextEntry::make("section_spacer_{$formIndex}_{$sectionIndex}")
                     ->label('')
                     ->state('')
+                    ->size('xs')
                     ->columnSpanFull();
             }
         }
@@ -121,7 +115,7 @@ class ExhibitorSubmissionFormDisplay
         }
 
         // Delegate to the enum's createDisplayComponent method
-        return $fieldType->createDisplayComponent($field,   $label, $answer, $exhibitorSubmission);
+        return $fieldType->createDisplayComponent($field, $label, $answer, $exhibitorSubmission);
     }
 
     /**

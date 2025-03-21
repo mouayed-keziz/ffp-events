@@ -25,6 +25,7 @@ $products = $state['products'] ?? [];
                         : $product['name'];
                     $productCode = $product['code'] ?? ($productModel ? $productModel->code : '');
                     $isSelected = !empty($product['selected']) && $product['selected'] === true;
+                    $quantity = $product['quantity'] ?? 1; // Get quantity with default of 1
                 @endphp
                 <li
                     class="fi-resource-item relative flex items-center gap-4 rounded-lg border p-3 transition
@@ -63,30 +64,30 @@ $products = $state['products'] ?? [];
                         @if ($productModel)
                             <a href="{{ route('filament.admin.resources.products.edit', ['record' => $productModel->id]) }}"
                                 class="hover:underline text-primary-600 dark:text-primary-400">
-                                <h3 class="font-medium text-sm">{{ $productName }}</h3>
+                                <h3 class="font-medium text-sm">{{ $productName }} x ({{ $quantity }})</h3>
                             </a>
                         @else
-                            <h3 class="font-medium text-gray-900 dark:text-gray-100 text-sm">{{ $productName }}</h3>
+                            <h3 class="font-medium text-gray-900 dark:text-gray-100 text-sm">{{ $productName }} x
+                                ({{ $quantity }})
+                            </h3>
                         @endif
-                        <p class="text-gray-500 dark:text-gray-400 text-xs">{{ $productCode }}</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs">code : <span
+                                class="font-bold">{{ $productCode }}</span></p>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs">quantity : <span
+                                class="font-bold">{{ $quantity }}</span></p>
                     </div>
 
-                    <!-- Simple prices display -->
-                    <div class="text-right">
+                    <!-- Prices display in compact format -->
+                    <div class="text-right pt-2">
                         @foreach ($currencies as $currencyCode)
                             @php
                                 $price = $product['price'][$currencyCode] ?? 0;
-                                $currencySymbol = match ($currencyCode) {
-                                    'EUR' => '€',
-                                    'USD' => '$',
-                                    'DZD' => 'DA',
-                                    default => $currencyCode,
-                                };
+                                $totalPrice = $price * $quantity;
                             @endphp
-                            <div class="text-xs">
+                            <div class="text-xs mb-1">
                                 <span class="text-gray-500 dark:text-gray-400">{{ $currencyCode }}: </span>
-                                <span class="text-gray-900 dark:text-gray-100">{{ $currencySymbol }}
-                                    {{ number_format($price, 2) }}</span>
+                                <span class="text-gray-900 dark:text-gray-100">{{ number_format($price, 2) }} x
+                                    {{ $quantity }} = {{ number_format($totalPrice, 2) }}</span>
                             </div>
                         @endforeach
                     </div>

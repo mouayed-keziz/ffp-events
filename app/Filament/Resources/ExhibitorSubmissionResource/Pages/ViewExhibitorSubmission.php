@@ -70,7 +70,7 @@ class ViewExhibitorSubmission extends ViewRecord
                 ]);
         }
 
-        // Build tabs for the infolist
+        // Build the tabs array starting with exhibitor details
         $tabs = [
             Tab::make('Exhibitor Details')
                 ->schema([
@@ -78,17 +78,44 @@ class ViewExhibitorSubmission extends ViewRecord
                     ...$priceComponents,
                 ])
                 ->columns(2),
-
-            Tab::make('Submission Answers')
-                ->columns(1)
-                ->schema(ExhibitorSubmissionFormDisplay::make($processedAnswers)),
         ];
 
-        // Add post answers tab if available
+        // Add each form as its own tab
+        if (!empty($processedAnswers)) {
+            foreach ($processedAnswers as $formIndex => $form) {
+                if (!isset($form['title']) || !isset($form['sections'])) {
+                    continue;
+                }
+
+                $formTitle = is_array($form['title'])
+                    ? ($form['title'][app()->getLocale()] ?? $form['title']['en'] ?? $form['title']['fr'] ?? 'Form ' . ($formIndex + 1))
+                    : $form['title'];
+
+                $tabs[] = Tab::make("form_{$formIndex}")
+                    ->label($formTitle)
+                    ->schema(ExhibitorSubmissionFormDisplay::make([$form]))
+                    ->columns(1);
+            }
+        }
+
+        // Add post-submission forms as separate tabs if available
         if ($hasPostAnswers) {
             $processedPostAnswers = $this->processFormWithAnswers($exhibitorForm, $postAnswers);
-            $tabs[] = Tab::make('Post-Submission Answers')
-                ->schema(ExhibitorSubmissionFormDisplay::make($processedPostAnswers));
+
+            foreach ($processedPostAnswers as $formIndex => $form) {
+                if (!isset($form['title']) || !isset($form['sections'])) {
+                    continue;
+                }
+
+                $formTitle = is_array($form['title'])
+                    ? ($form['title'][app()->getLocale()] ?? $form['title']['en'] ?? $form['title']['fr'] ?? 'Form ' . ($formIndex + 1))
+                    : $form['title'];
+
+                $tabs[] = Tab::make("post_form_{$formIndex}")
+                    ->label("Post: {$formTitle}")
+                    ->schema(ExhibitorSubmissionFormDisplay::make([$form]))
+                    ->columns(1);
+            }
         }
 
         // Create the infolist with tabs

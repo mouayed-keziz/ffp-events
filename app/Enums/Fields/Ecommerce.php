@@ -207,7 +207,6 @@ class Ecommerce
                 \App\Infolists\Components\EcommerceProductsEntry::make('ecommerce')
                     ->label('')
                     ->state($answer)
-                    ->extraAttributes(['class' => 'mt-3']),
             ]);
     }
 }
