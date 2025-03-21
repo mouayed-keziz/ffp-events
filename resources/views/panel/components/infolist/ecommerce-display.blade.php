@@ -73,8 +73,10 @@ $products = $state['products'] ?? [];
                         @endif
                         <p class="text-gray-500 dark:text-gray-400 text-xs">code : <span
                                 class="font-bold">{{ $productCode }}</span></p>
-                        <p class="text-gray-500 dark:text-gray-400 text-xs">quantity : <span
-                                class="font-bold">{{ $quantity }}</span></p>
+                        @if ($isSelected)
+                            <p class="text-gray-500 dark:text-gray-400 text-xs">quantity : <span
+                                    class="font-bold">{{ $quantity }}</span></p>
+                        @endif
                     </div>
 
                     <!-- Prices display in compact format -->
@@ -85,9 +87,24 @@ $products = $state['products'] ?? [];
                                 $totalPrice = $price * $quantity;
                             @endphp
                             <div class="text-xs mb-1">
-                                <span class="text-gray-500 dark:text-gray-400">{{ $currencyCode }}: </span>
-                                <span class="text-gray-900 dark:text-gray-100">{{ number_format($price, 2) }} x
-                                    {{ $quantity }} = {{ number_format($totalPrice, 2) }}</span>
+                                <span class="text-gray-500 dark:text-gray-400">
+                                    {{ $currencyCode }}:
+                                </span>
+                                @if ($isSelected)
+                                    <span class="text-gray-900 dark:text-gray-100">
+                                        <span class="font-bold text-primary-600 dark:text-primary-400">
+                                            {{ number_format($price, 2) }}
+                                        </span> x
+                                        {{ $quantity }} = <span
+                                            class="font-bold text-primary-600 dark:text-primary-400">
+                                            {{ number_format($totalPrice, 2) }}
+                                        </span>
+                                    </span>
+                                @else
+                                    <span class="text-gray-500 dark:text-gray-400">
+                                        {{ number_format($price, 2) }}
+                                    </span>
+                                @endif
                             </div>
                         @endforeach
                     </div>

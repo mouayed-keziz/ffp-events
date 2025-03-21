@@ -1,5 +1,6 @@
 @php
     use Filament\Support\Facades\FilamentView;
+    use App\Enums\Currency;
 
     $locale = app()->getLocale();
 
@@ -7,14 +8,8 @@
     $state = $getState() ?? [];
     $options = $state['options'] ?? [];
 
-    // Default currency
-    $preferredCurrency = session('currency', 'EUR');
-    $currencySymbols = [
-        'EUR' => '€',
-        'USD' => '$',
-        'DZD' => 'DA',
-    ];
-    $currencySymbol = $currencySymbols[$preferredCurrency] ?? $preferredCurrency;
+    // Get all available currencies
+    $currencies = collect(Currency::cases())->pluck('value')->toArray();
 @endphp
 
 <div class="fi-radio-priced-options space-y-2">
@@ -24,8 +19,6 @@
                 @php
                     $optionText = $option['option'][$locale] ?? ($option['option']['en'] ?? '');
                     $isSelected = !empty($option['selected']) && $option['selected'] === true;
-                    $price = $option['price'][$preferredCurrency] ?? '0';
-                    $formattedPrice = number_format((float) $price, 2);
                 @endphp
                 <li
                     class="fi-resource-item flex items-center gap-2 rounded-lg border p-2
@@ -62,12 +55,21 @@
                         </span>
                     </div>
 
-                    <!-- Price -->
-                    <div class="flex-shrink-0">
-                        <span
-                            class="{{ $isSelected ? 'font-medium text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400' }}">
-                            {{ $currencySymbol }}{{ $formattedPrice }}
-                        </span>
+                    <!-- Prices for all currencies -->
+                    <div class="flex-shrink-0 text-right">
+                        @foreach ($currencies as $currencyCode)
+                            @php
+                                $price = $option['price'][$currencyCode] ?? 0;
+                                $formattedPrice = number_format((float) $price, 2);
+                            @endphp
+                            <div class="text-xs">
+                                <span class="text-gray-500 dark:text-gray-400">{{ $currencyCode }}: </span>
+                                <span
+                                    class="{{ $isSelected ? 'font-bold text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400' }}">
+                                    {{ $formattedPrice }}
+                                </span>
+                            </div>
+                        @endforeach
                     </div>
                 </li>
             @endforeach

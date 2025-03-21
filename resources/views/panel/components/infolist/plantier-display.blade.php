@@ -89,8 +89,10 @@
                                 @endphp
                                 <div class="text-xs">
                                     <span class="text-gray-500 dark:text-gray-400">{{ $currencyCode }}: </span>
-                                    <span class="text-gray-900 dark:text-gray-100">{{ $currencySymbol }}
-                                        {{ number_format($price, 2) }}</span>
+                                    <span
+                                        class="{{ $isSelected ? 'font-bold text-primary-600 dark:text-primary-400' : 'text-gray-500 dark:text-gray-400' }}">
+                                        {{ number_format($price, 2) }}
+                                    </span>
                                 </div>
                             @endforeach
                         </div>
