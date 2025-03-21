@@ -91,6 +91,7 @@ class Input
      */
     public static function createDisplayComponent(array $field, string $label, $answer): TextEntry
     {
+        dd($field, $label, $answer);
         return TextEntry::make('input')
             ->label($label)
             ->state($answer ?? '');

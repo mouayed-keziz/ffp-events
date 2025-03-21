@@ -133,21 +133,29 @@ class Select
      * @param array $field The field definition with type, data and answer
      * @param string $label The field label
      * @param mixed $answer The field answer value
-     * @return TextEntry Component suitable for displaying in an Infolist
+     * @return \Filament\Infolists\Components\Component
      */
-    public static function createDisplayComponent(array $field, string $label, $answer): TextEntry
+    public static function createDisplayComponent(array $field, string $label, $answer)
     {
         $locale = App::getLocale();
 
-        if (!empty($answer) && isset($answer['selected_option']['option'][$locale])) {
-            $selectedOption = $answer['selected_option']['option'][$locale];
-            return TextEntry::make('select')
-                ->label($label)
-                ->state($selectedOption);
-        }
+        // Create a Group with title and description at the top
+        return \Filament\Infolists\Components\Group::make()
+            ->schema([
+                TextEntry::make('title')
+                    ->label($label)
+                    ->weight(\Filament\Support\Enums\FontWeight::Bold)
+                    ->translateLabel(false),
 
-        return TextEntry::make('select')
-            ->label($label)
-            ->state(__('panel/visitor_submissions.no_selection'));
+                TextEntry::make('description')
+                    ->label('')
+                    ->state($field['data']['description'][$locale] ?? ($field['data']['description']['en'] ?? null))
+                    ->visible(isset($field['data']['description']))
+                    ->color('gray'),
+
+                \App\Infolists\Components\SelectEntry::make('select')
+                    ->label('')
+                    ->state($answer)
+            ]);
     }
 }

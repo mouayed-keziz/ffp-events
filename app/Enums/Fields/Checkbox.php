@@ -111,25 +111,29 @@ class Checkbox
      * @param array $field The field definition with type, data and answer
      * @param string $label The field label
      * @param mixed $answer The field answer value
-     * @return TextEntry Component suitable for displaying in an Infolist
+     * @return \Filament\Infolists\Components\Component
      */
-    public static function createDisplayComponent(array $field, string $label, $answer): TextEntry
+    public static function createDisplayComponent(array $field, string $label, $answer)
     {
         $locale = App::getLocale();
-        $selectedOptions = [];
 
-        if (!empty($answer['selected_options'])) {
-            foreach ($answer['selected_options'] as $selectedOption) {
-                if (isset($selectedOption['option'][$locale])) {
-                    $selectedOptions[] = $selectedOption['option'][$locale];
-                }
-            }
-        }
+        // Create a Group with title and description at the top
+        return \Filament\Infolists\Components\Group::make()
+            ->schema([
+                TextEntry::make('title')
+                    ->label($label)
+                    ->weight(\Filament\Support\Enums\FontWeight::Bold)
+                    ->translateLabel(false),
 
-        return TextEntry::make('checkbox')
-            ->label($label)
-            ->state(empty($selectedOptions) ?
-                __('panel/visitor_submissions.no_selection') :
-                implode(', ', $selectedOptions));
+                TextEntry::make('description')
+                    ->label('')
+                    ->state($field['data']['description'][$locale] ?? ($field['data']['description']['en'] ?? null))
+                    ->visible(isset($field['data']['description']))
+                    ->color('gray'),
+
+                \App\Infolists\Components\CheckBoxEntry::make('checkbox')
+                    ->label('')
+                    ->state($answer)
+            ]);
     }
 }
