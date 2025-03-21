@@ -19,16 +19,15 @@
                     $planTitle = $planModel
                         ? $planModel->getTranslations('title')[$locale] ?? ($planModel->title ?? '')
                         : '';
-                    $planContent = $planModel
-                        ? $planModel->getTranslations('content')[$locale] ?? ($planModel->content ?? '')
-                        : '';
                     $isSelected = !empty($plan['selected']) && $plan['selected'] === true;
                 @endphp
                 <li
                     class="fi-resource-item relative flex items-center gap-4 rounded-lg border p-3 transition 
-                          {{ $isSelected ? 'border-primary-500 bg-primary-50 dark:border-primary-400 dark:bg-primary-950/50' : 'border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800' }}">
-                    <!-- Selection badge - positioned at top of card -->
-                    <div class="absolute top-2 right-2 z-10">
+                          {{ $isSelected
+                              ? 'border-success-600 bg-success-50 dark:border-success-500 dark:bg-success-950/50'
+                              : 'border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800' }}">
+                    <!-- Selection badge - positioned at top right of card -->
+                    <div class="absolute -top-2 -right-2 z-10">
                         @if ($isSelected)
                             <span
                                 class="fi-badge rounded-full bg-success-500 text-white text-xs font-medium px-2 py-1 shadow-sm">
@@ -42,7 +41,7 @@
                         @endif
                     </div>
 
-                    <div class="flex flex-col sm:flex-row gap-3 w-full">
+                    <div class="flex flex-row gap-3 w-full">
                         <!-- Plan Image -->
                         @if ($planModel && $planModel->hasMedia('image'))
                             <div class="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden">
@@ -51,15 +50,22 @@
                             </div>
                         @endif
 
-                        <!-- Plan Info -->
+                        <!-- Plan Info with link to plan tier page -->
                         <div class="flex-1">
-                            <h3 class="font-medium text-gray-900 dark:text-gray-100 text-base">{{ $planTitle }}</h3>
-                            <p class="text-gray-500 dark:text-gray-400 text-sm mt-1 line-clamp-2">{ $planContent }
-                            </p>
+                            @if ($planModel)
+                                <a href="{{ route('filament.admin.resources.plan-tiers.edit', ['record' => $planModel->plan_tier_id ?? '']) }}"
+                                    class="hover:underline text-primary-600 dark:text-primary-400">
+                                    <h3 class="font-medium text-gray-900 dark:text-gray-100 text-base">
+                                        {{ $planTitle }}</h3>
+                                </a>
+                            @else
+                                <h3 class="font-medium text-gray-900 dark:text-gray-100 text-base">{{ $planTitle }}
+                                </h3>
+                            @endif
                         </div>
 
-                        <!-- Prices -->
-                        <div class="flex flex-col gap-2 min-w-[120px] text-right">
+                        <!-- Simple prices display -->
+                        <div class="text-right">
                             @foreach ($currencies as $currencyCode)
                                 @php
                                     $price = $plan['price'][$currencyCode] ?? 0;
@@ -71,8 +77,7 @@
                                     };
                                 @endphp
                                 <div class="text-xs">
-                                    <span
-                                        class="font-medium text-gray-500 dark:text-gray-400">{{ $currencyCode }}:</span>
+                                    <span class="text-gray-500 dark:text-gray-400">{{ $currencyCode }}: </span>
                                     <span class="text-gray-900 dark:text-gray-100">{{ $currencySymbol }}
                                         {{ number_format($price, 2) }}</span>
                                 </div>

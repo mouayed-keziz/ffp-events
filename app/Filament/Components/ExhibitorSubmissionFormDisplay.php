@@ -61,7 +61,9 @@ class ExhibitorSubmissionFormDisplay
                 $sectionTitle = is_array($section['title'])
                     ? ($section['title'][App::getLocale()] ?? $section['title']['en'] ?? $section['title']['fr'] ?? 'Section ' . ($sectionIndex + 1))
                     : $section['title'];
-
+                $sectionDescription = is_array($section['description'] ?? null)
+                    ? ($section['description'][App::getLocale()] ?? $section['description']['en'] ?? $section['description']['fr'] ?? '')
+                    : ($section['description'] ?? '');
                 $sectionFields = [];
 
                 foreach ($section['fields'] ?? [] as $fieldIndex => $field) {
@@ -73,6 +75,8 @@ class ExhibitorSubmissionFormDisplay
 
                 // Use a fieldset to visually separate sections
                 $components[] = Section::make($sectionTitle)
+                    ->label($sectionTitle)
+                    ->description($sectionDescription)
                     ->collapsible()
                     ->collapsed()
                     ->schema($sectionFields)
@@ -117,7 +121,7 @@ class ExhibitorSubmissionFormDisplay
         }
 
         // Delegate to the enum's createDisplayComponent method
-        return $fieldType->createDisplayComponent($field, $label, $answer, $exhibitorSubmission);
+        return $fieldType->createDisplayComponent($field,   $label, $answer, $exhibitorSubmission);
     }
 
     /**

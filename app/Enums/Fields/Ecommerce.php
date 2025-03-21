@@ -189,8 +189,25 @@ class Ecommerce
      */
     public static function createDisplayComponent(array $field, string $label, $answer)
     {
-        return \App\Infolists\Components\EcommerceProductsEntry::make('ecommerce')
-            ->label($label)
-            ->state($answer);
+        $locale = App::getLocale();
+        // Create a Section with title and description at the top
+        return \Filament\Infolists\Components\Group::make()
+            ->schema([
+                TextEntry::make('title')
+                    ->label($label)
+                    ->weight(\Filament\Support\Enums\FontWeight::Bold)
+                    ->translateLabel(false),
+
+                TextEntry::make('description')
+                    ->label('')
+                    ->state($field['data']['description'][$locale] ?? ($field['data']['description']['en'] ?? null))
+                    ->visible(isset($field['data']['description']))
+                    ->color('gray'),
+
+                \App\Infolists\Components\EcommerceProductsEntry::make('ecommerce')
+                    ->label('')
+                    ->state($answer)
+                    ->extraAttributes(['class' => 'mt-3']),
+            ]);
     }
 }

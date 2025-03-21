@@ -2,6 +2,7 @@
     use App\Enums\Currency;
     use Filament\Support\Facades\FilamentView;
     use Filament\Support\Colors\Color;
+    use Filament\Pages\Actions\Action;
 
     $locale = app()->getLocale();
 
@@ -26,10 +27,12 @@ $products = $state['products'] ?? [];
                     $isSelected = !empty($product['selected']) && $product['selected'] === true;
                 @endphp
                 <li
-                    class="fi-resource-item relative flex items-center gap-4 rounded-lg border p-3 transition 
-                          border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
-                    <!-- Selection badge -->
-                    <div class="absolute -top-1 -right-1 z-10">
+                    class="fi-resource-item relative flex items-center gap-4 rounded-lg border p-3 transition
+                        {{ $isSelected
+                            ? 'border-success-600 bg-success-50 dark:border-success-500 dark:bg-success-950/50'
+                            : 'border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800' }}">
+                    <!-- Selection badge - positioned at top right of card -->
+                    <div class="absolute -top-2 -right-2 z-10">
                         @if ($isSelected)
                             <span
                                 class="fi-badge rounded-full bg-success-500 text-white text-xs font-medium px-2 py-1 shadow-sm">
@@ -45,9 +48,9 @@ $products = $state['products'] ?? [];
 
                     <!-- Product Image -->
                     <div class="flex-shrink-0 w-12 h-12 rounded-lg overflow-hidden">
-                        @if ($productModel && $productModel->hasMedia('image'))
+                        @if ($productModel)
                             <img src="{{ $productModel->image }}" alt="{{ $productName }}"
-                                class="w-full h-full object-cover" />
+                                class="h-full aspect-video object-cover " />
                         @else
                             <div class="w-full h-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
                                 <span class="text-gray-400 dark:text-gray-500 text-xs">{{ __('No image') }}</span>
@@ -55,14 +58,21 @@ $products = $state['products'] ?? [];
                         @endif
                     </div>
 
-                    <!-- Product Info -->
+                    <!-- Product Info with link to product page -->
                     <div class="flex-1">
-                        <h3 class="font-medium text-gray-900 dark:text-gray-100 text-sm">{{ $productName }}</h3>
+                        @if ($productModel)
+                            <a href="{{ route('filament.admin.resources.products.edit', ['record' => $productModel->id]) }}"
+                                class="hover:underline text-primary-600 dark:text-primary-400">
+                                <h3 class="font-medium text-sm">{{ $productName }}</h3>
+                            </a>
+                        @else
+                            <h3 class="font-medium text-gray-900 dark:text-gray-100 text-sm">{{ $productName }}</h3>
+                        @endif
                         <p class="text-gray-500 dark:text-gray-400 text-xs">{{ $productCode }}</p>
                     </div>
 
-                    <!-- Prices -->
-                    <div class="flex flex-col gap-1 text-right">
+                    <!-- Simple prices display -->
+                    <div class="text-right">
                         @foreach ($currencies as $currencyCode)
                             @php
                                 $price = $product['price'][$currencyCode] ?? 0;
@@ -74,7 +84,7 @@ $products = $state['products'] ?? [];
                                 };
                             @endphp
                             <div class="text-xs">
-                                <span class="font-medium text-gray-500 dark:text-gray-400">{{ $currencyCode }}:</span>
+                                <span class="text-gray-500 dark:text-gray-400">{{ $currencyCode }}: </span>
                                 <span class="text-gray-900 dark:text-gray-100">{{ $currencySymbol }}
                                     {{ number_format($price, 2) }}</span>
                             </div>
