@@ -24,13 +24,13 @@
                 <li
                     class="fi-resource-item relative flex items-center gap-4 rounded-lg border p-3 transition 
                           {{ $isSelected
-                              ? 'border-success-600 bg-success-50 dark:border-success-500 dark:bg-success-950/50'
+                              ? 'border-primary-600 bg-primary-600/10 dark:border-primary-500 dark:bg-primary-600/10'
                               : 'border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800' }}">
                     <!-- Selection badge - positioned at top right of card -->
                     <div class="absolute -top-2 -right-2 z-10">
                         @if ($isSelected)
                             <span
-                                class="fi-badge rounded-full bg-success-500 text-white text-xs font-medium px-2 py-1 shadow-sm">
+                                class="fi-badge rounded-full bg-primary-500 text-white text-xs font-medium px-2 py-1 shadow-sm">
                                 {{ __('Selected') }}
                             </span>
                         @else

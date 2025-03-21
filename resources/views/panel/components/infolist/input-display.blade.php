@@ -3,7 +3,9 @@
         $inputType = $getState()['type'] ?? 'text';
         $value = $getState()['value'] ?? '';
         $isEmpty = empty($value) && $value !== '0';
-        $borderClass = $isEmpty ? 'border-gray-300 bg-gray-50' : 'border-green-500 bg-green-50';
+        $borderClass = $isEmpty
+            ? 'text-gray-500 dark:text-gray-400'
+            : 'border-primary-600 bg-primary-600/10 dark:border-primary-500 dark:bg-primary-600/10';
     @endphp
 
     <div class="border {{ $borderClass }} rounded-md p-3 mt-1">

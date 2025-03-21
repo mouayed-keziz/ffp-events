@@ -134,28 +134,24 @@ class SelectPriced
      * @param array $field The field definition with type, data and answer
      * @param string $label The field label
      * @param mixed $answer The field answer value
-     * @return TextEntry Component suitable for displaying in an Infolist
+     * @return \Filament\Infolists\Components\Component
      */
-    public static function createDisplayComponent(array $field, string $label, $answer): TextEntry
+    public static function createDisplayComponent(array $field, string $label, $answer)
     {
         $locale = App::getLocale();
 
-        if (!empty($answer) && isset($answer['selected_option']['option'][$locale])) {
-            $selectedOption = $answer['selected_option']['option'][$locale];
-            $price = '';
+        // Create a Group with title-description entry and select component
+        return \Filament\Infolists\Components\Group::make()
+            ->schema([
+                \App\Infolists\Components\TitleDescriptionEntry::make('heading')
+                    ->state([
+                        'title' => $label,
+                        'description' => $field['data']['description'][$locale] ?? ($field['data']['description']['en'] ?? null),
+                    ]),
 
-            if (isset($answer['selected_option']['price'])) {
-                $currencySymbol = $answer['selected_option']['currency'] ?? '€';
-                $price = " ({$currencySymbol}" . number_format($answer['selected_option']['price'], 2) . ")";
-            }
-
-            return TextEntry::make('select_priced')
-                ->label($label)
-                ->state($selectedOption . $price);
-        }
-
-        return TextEntry::make('select_priced')
-            ->label($label)
-            ->state(__('panel/visitor_submissions.no_selection'));
+                \App\Infolists\Components\SelectPricedEntry::make('select_priced')
+                    ->label('')
+                    ->state($answer)
+            ]);
     }
 }

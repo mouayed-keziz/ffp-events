@@ -112,33 +112,24 @@ class CheckboxPriced
      * @param array $field The field definition with type, data and answer
      * @param string $label The field label
      * @param mixed $answer The field answer value
-     * @return TextEntry Component suitable for displaying in an Infolist
+     * @return \Filament\Infolists\Components\Component
      */
-    public static function createDisplayComponent(array $field, string $label, $answer): TextEntry
+    public static function createDisplayComponent(array $field, string $label, $answer)
     {
         $locale = App::getLocale();
-        $selectedOptions = [];
 
-        if (!empty($answer['selected_options'])) {
-            foreach ($answer['selected_options'] as $selectedOption) {
-                if (isset($selectedOption['option'][$locale])) {
-                    $optionText = $selectedOption['option'][$locale];
+        // Create a Group with title-description entry and checkbox component
+        return \Filament\Infolists\Components\Group::make()
+            ->schema([
+                \App\Infolists\Components\TitleDescriptionEntry::make('heading')
+                    ->state([
+                        'title' => $label,
+                        'description' => $field['data']['description'][$locale] ?? ($field['data']['description']['en'] ?? null),
+                    ]),
 
-                    // Add price if available
-                    if (isset($selectedOption['price'])) {
-                        $currencySymbol = $selectedOption['currency'] ?? '€';
-                        $optionText .= " ({$currencySymbol}" . number_format($selectedOption['price'], 2) . ")";
-                    }
-
-                    $selectedOptions[] = $optionText;
-                }
-            }
-        }
-
-        return TextEntry::make('checkbox_priced')
-            ->label($label)
-            ->state(empty($selectedOptions) ?
-                __('panel/visitor_submissions.no_selection') :
-                implode(', ', $selectedOptions));
+                \App\Infolists\Components\CheckBoxPricedEntry::make('checkbox_priced')
+                    ->label('')
+                    ->state($answer)
+            ]);
     }
 }

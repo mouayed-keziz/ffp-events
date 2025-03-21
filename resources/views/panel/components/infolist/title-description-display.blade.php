@@ -1,6 +1,6 @@
 <div class="field-title-description mt-6 -mb-4">
     @if (isset($getState()['title']))
-        <div class="text-lg font-bold mb-1">{{ $getState()['title'] }}</div>
+        <div class="text-md font-semibold mb-1">{{ $getState()['title'] }} :</div>
     @endif
 
     @if (isset($getState()['description']) && !empty($getState()['description']))

@@ -24,13 +24,13 @@
                 <li
                     class="fi-resource-item flex items-center gap-2 rounded-lg border p-2
                         {{ $isSelected
-                            ? 'border-success-600 bg-success-50 dark:border-success-500 dark:bg-success-950/50'
+                            ? 'border-primary-600 bg-primary-600/10 dark:border-primary-500 dark:bg-primary-600/10'
                             : 'border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800' }}">
 
                     <!-- Checkbox icon -->
                     <div class="flex-shrink-0">
                         @if ($isSelected)
-                            <span class="text-success-500 dark:text-success-400">
+                            <span class="text-primary-500 dark:text-primary-400">
                                 <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="2" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
