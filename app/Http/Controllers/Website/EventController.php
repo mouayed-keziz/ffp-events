@@ -61,7 +61,6 @@ class EventController extends Controller
             return redirect()->route('events');
         }
         $visitorSubmission = Auth('visitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
-        // dd($visitorSubmission);
         if (!$visitorSubmission) {
             return redirect()->route('visit_event', ['id' => $event->id]);
         }

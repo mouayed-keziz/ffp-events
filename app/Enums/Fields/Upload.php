@@ -98,39 +98,74 @@ class Upload
      * @param string $label The field label
      * @param mixed $answer The field answer value (fileId)
      * @param VisitorSubmission|null $visitorSubmission The visitor submission model
-     * @return Group Component suitable for displaying in an Infolist
+     * @return Group|TextEntry Component suitable for displaying in an Infolist
      */
-    public static function createDisplayComponent(array $field, string $label, $answer, $visitorSubmission = null): Group|TextEntry
+    public static function createDisplayComponent(array $field, string $label, $answer, $visitorSubmission = null): Group
     {
-        // If no file has been uploaded (no fileId)
-        if (empty($answer)) {
-            return TextEntry::make('upload')
+        // If no visitor submission was provided, try to find it
+        if (!$visitorSubmission) {
+            $visitorSubmission = self::findVisitorSubmission();
+        }
+
+        // Display title and description if present
+        $components = [];
+
+        // Add title and description component if available
+        if (isset($field['data']['label']) || isset($field['data']['description'])) {
+            $titleData = [];
+
+            // Get localized label and description if available
+            $locale = app()->getLocale();
+
+            if (isset($field['data']['label'])) {
+                // If label is an array with translations, get the appropriate one
+                if (is_array($field['data']['label']) && isset($field['data']['label'][$locale])) {
+                    $titleData['title'] = $field['data']['label'][$locale];
+                } else {
+                    $titleData['title'] = $field['data']['label'];
+                }
+            }
+
+            if (isset($field['data']['description'])) {
+                // If description is an array with translations, get the appropriate one
+                if (is_array($field['data']['description']) && isset($field['data']['description'][$locale])) {
+                    $titleData['description'] = $field['data']['description'][$locale];
+                } else {
+                    $titleData['description'] = $field['data']['description'];
+                }
+            }
+
+            if (!empty($titleData)) {
+                $components[] = \App\Infolists\Components\TitleDescriptionEntry::make('title_description')
+                    ->state($titleData);
+            }
+        }
+
+        // Prepare upload component state
+        $uploadState = ['answer' => $answer];
+
+        // If no file has been uploaded or the visitor submission is not found
+        if (empty($answer) || !$visitorSubmission) {
+            $components[] = \App\Infolists\Components\UploadEntry::make('upload')
                 ->label($label)
-                ->state(__('panel/visitor_submissions.no_file_uploaded'));
+                ->state($uploadState);
+
+            return Group::make($components)->columnSpanFull();
         }
 
         try {
-            // Get the visitor submission using the route parameters from the nested resource URL if not provided
-            if (!$visitorSubmission) {
-                $visitorSubmission = self::findVisitorSubmission();
-            }
-
-            // If we still don't have a visitor submission, return an error message
-            if (!$visitorSubmission) {
-                return TextEntry::make('upload')
-                    ->label($label)
-                    ->state(__('panel/visitor_submissions.submission_context_not_found'));
-            }
-
             // Get the media directly from the attachments collection by fileId in custom properties
             $media = $visitorSubmission->getMedia('attachments')->filter(function ($media) use ($answer) {
                 return isset($media->custom_properties['fileId']) && $media->custom_properties['fileId'] === $answer;
             })->first();
 
             if (!$media) {
-                return TextEntry::make('upload')
+                $uploadState['fileUrl'] = null;
+                $components[] = \App\Infolists\Components\UploadEntry::make('upload')
                     ->label($label)
-                    ->state(__('panel/visitor_submissions.file_not_found') . ' (FileID: ' . $answer . ')');
+                    ->state($uploadState);
+
+                return Group::make($components)->columnSpanFull();
             }
 
             // Get file information
@@ -138,11 +173,11 @@ class Upload
             $fileUrl = $media->getUrl();
 
             // Get the file type from custom properties (instead of relying on potentially incorrect mime_type)
-            $fileType = $media->custom_properties['fieldData']['file_type'] ?? FileUploadType::ANY;
+            $fileType = $media->custom_properties['fieldData']['file_type'] ?? 'any';
 
             // Determine if this is an image or PDF based on the file type
             $lowerFileName = strtolower($fileName);
-            $isImage = $fileType === FileUploadType::IMAGE ||
+            $isImage = $fileType === 'image' ||
                 str_ends_with($lowerFileName, '.jpg') ||
                 str_ends_with($lowerFileName, '.jpeg') ||
                 str_ends_with($lowerFileName, '.png') ||
@@ -150,62 +185,46 @@ class Upload
                 str_ends_with($lowerFileName, '.bmp') ||
                 str_ends_with($lowerFileName, '.webp');
 
-            $isPdf = $fileType === FileUploadType::PDF || str_ends_with($lowerFileName, '.pdf');
+            $isPdf = $fileType === 'pdf' || str_ends_with($lowerFileName, '.pdf');
 
-            // Create a group with different components based on file type
-            $components = [
-                // Always show the file name
-                TextEntry::make('file_name')
-                    ->label(__('panel/visitor_submissions.file_name'))
-                    ->state($fileName),
-            ];
-
-            // Add preview component based on file type
-            if ($isImage) {
-                $components[] = TextEntry::make('file_preview')
-                    ->label(__('panel/visitor_submissions.file_preview'))
-                    ->view('panel.components.visitor-submissions.image-upload', [
-                        'fileName' => $fileName,
-                        'fileUrl' => $fileUrl,
-                    ]);
-            } elseif ($isPdf) {
-                // For PDFs, use the PDF Blade template
-                $components[] = TextEntry::make('pdf_preview')
-                    ->label(__('panel/visitor_submissions.file_preview'))
-                    ->view('panel.components.visitor-submissions.pdf-upload', [
-                        'fileName' => $fileName,
-                        'fileUrl' => $fileUrl,
-                    ]);
-            } else {
-                // For other file types, use the generic file template
-                $components[] = TextEntry::make('file_type')
-                    ->label(__('panel/visitor_submissions.file_type'))
-                    ->view('panel.components.visitor-submissions.other-upload', [
-                        'fileName' => $fileName,
-                        'fileUrl' => $fileUrl,
-                        'fileType' => $fileType,
-                    ]);
-            }
-
-            // Show any additional metadata from the media
+            // Get any additional metadata from the media
+            $fieldLabel = null;
             if (isset($media->custom_properties['fieldLabel'])) {
-                $locale = App::getLocale();
-                $fieldLabel = $media->custom_properties['fieldLabel'][$locale] ??
-                    $media->custom_properties['fieldLabel']['en'] ??
-                    $media->custom_properties['fieldLabel']['fr'] ?? null;
-
-                if ($fieldLabel) {
-                    $components[] = TextEntry::make('field_label')
-                        ->label(__('panel/visitor_submissions.field_label'))
-                        ->state($fieldLabel);
+                $locale = app()->getLocale();
+                if (is_array($media->custom_properties['fieldLabel'])) {
+                    $fieldLabel = $media->custom_properties['fieldLabel'][$locale] ??
+                        $media->custom_properties['fieldLabel']['en'] ??
+                        $media->custom_properties['fieldLabel']['fr'] ??
+                        json_encode($media->custom_properties['fieldLabel']);
+                } else {
+                    $fieldLabel = $media->custom_properties['fieldLabel'];
                 }
             }
 
+            // Build the complete state for the UploadEntry component
+            $uploadState = [
+                'answer' => $answer,
+                'media' => $media,
+                'fileName' => $fileName,
+                'fileUrl' => $fileUrl,
+                'fileType' => $fileType,
+                'isImage' => $isImage,
+                'isPdf' => $isPdf,
+                'fieldLabel' => $fieldLabel,
+            ];
+
+            $components[] = \App\Infolists\Components\UploadEntry::make('upload')
+                ->label($label)
+                ->state($uploadState);
+
             return Group::make($components)->columnSpanFull();
         } catch (\Exception $e) {
-            return TextEntry::make('upload')
+            $uploadState['error'] = $e->getMessage();
+            $components[] = \App\Infolists\Components\UploadEntry::make('upload')
                 ->label($label)
-                ->state(__('panel/visitor_submissions.error_loading_file') . ': ' . $e->getMessage());
+                ->state($uploadState);
+
+            return Group::make($components)->columnSpanFull();
         }
     }
 

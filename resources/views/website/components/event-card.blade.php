@@ -45,10 +45,16 @@
                 <img src="{{ $event['image'] }}" alt="{{ $event['title'] }}"
                     class="w-full h-full object-cover rounded-btn aspect-[7/4] md:aspect-video lg:aspect-[3/1]">
                 <div class="absolute bottom-4 left-1/2 -translate-x-1/2">
-                    @include('website.components.countdown', [
-                        'countdown' => $event['countdown'],
-                        'size' => 'md',
-                    ])
+                    @if ($event['countdown']['is_past'])
+                        <div class="text-sm font-bold text-white bg-red-500 rounded-full px-3 py-1">
+                            {{ __('website/home.events.past') }}
+                        </div>
+                    @else
+                        @include('website.components.countdown', [
+                            'countdown' => $event['countdown']['diff'],
+                            'size' => 'md',
+                        ])
+                    @endif
                 </div>
             </div>
         </div>

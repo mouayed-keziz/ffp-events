@@ -39,7 +39,7 @@ class VisitorSubmissionFormDisplay
             $components[] = Section::make($sectionTitle)
                 ->label($sectionTitle)
                 ->collapsible()
-                ->collapsed()
+                // ->collapsed()
                 ->description($sectionDescription)
                 ->schema($sectionFields)
                 ->columns([

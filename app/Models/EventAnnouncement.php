@@ -87,11 +87,15 @@ class EventAnnouncement extends Model implements HasMedia
         $now = now();
         $start_date = $this->start_date;
         $diff = $start_date->diff($now);
+        // dd($diff->invert);
         return [
-            'days' => $diff->d,
-            'hours' => $diff->h,
-            'minutes' => $diff->i,
-            'seconds' => $diff->s,
+            'is_past' => $diff->invert === 0,
+            'diff' => [
+                'days' => $diff->d,
+                'hours' => $diff->h,
+                'minutes' => $diff->i,
+                'seconds' => $diff->s,
+            ]
         ];
     }
 

@@ -71,7 +71,7 @@ class ExhibitorSubmissionFormDisplay
                     ->label($sectionTitle)
                     ->description($sectionDescription)
                     ->collapsible()
-                    ->collapsed()
+                    // ->collapsed()
                     ->schema($sectionFields)
                     ->columns(1);
 

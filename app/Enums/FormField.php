@@ -192,14 +192,14 @@ enum FormField: string implements HasLabel
      * @param mixed|null $visitorSubmission Optional visitor submission model for file handling
      * @return mixed Component suitable for displaying in an Infolist
      */
-    public function createDisplayComponent(array $field, string $label, $answer, $visitorSubmission = null)
+    public function createDisplayComponent(array $field, string $label, $answer, $submission = null)
     {
         return match ($this) {
             self::INPUT => Input::createDisplayComponent($field, $label, $answer),
             self::SELECT => Select::createDisplayComponent($field, $label, $answer),
             self::CHECKBOX => Checkbox::createDisplayComponent($field, $label, $answer),
             self::RADIO => Radio::createDisplayComponent($field, $label, $answer),
-            self::UPLOAD => Upload::createDisplayComponent($field, $label, $answer, $visitorSubmission),
+            self::UPLOAD => Upload::createDisplayComponent($field, $label, $answer, $submission),
             self::SELECT_PRICED => SelectPriced::createDisplayComponent($field, $label, $answer),
             self::CHECKBOX_PRICED => CheckboxPriced::createDisplayComponent($field, $label, $answer),
             self::RADIO_PRICED => RadioPriced::createDisplayComponent($field, $label, $answer),

@@ -20,6 +20,7 @@ new class extends Component {
     public ?ExhibitorSubmission $submission = null;
     public $disabled = false;
     public array $formData = [];
+    public array $postForms = [];
     public int $currentStep = 0;
     public int $totalSteps = 0;
     public bool $formSubmitted = false;
@@ -109,13 +110,13 @@ new class extends Component {
 <div>
     <div class="container mx-auto py-8 md:px-4">
         @if (!empty($formData))
-            {{-- @include('website.components.forms.multi-step-form', [
+            @include('website.components.forms.multi-step-form', [
                 'steps' => $formData,
                 'currentStep' => $currentStep,
                 'errors' => $errors,
                 'formSubmitted' => $formSubmitted,
                 'successMessage' => $successMessage,
-            ]) --}}
+            ])
         @endif
 
         @if (!$formSubmitted)

@@ -23,10 +23,17 @@
             <!-- Bottom Container -->
             <div class="absolute bottom-8 left-4 right-4 flex gap-4 items-center">
                 <div class="flex-1">
-                    @include('website.components.countdown', [
-                        'countdown' => $event['countdown'],
-                        'size' => 'lg',
-                    ])
+                    @if ($event['countdown']['is_past'])
+                        <div class="text-sm font-bold text-white bg-red-500 rounded-full px-3 py-1 w-fit">
+                            {{ __('website/home.events.past') }}
+                        </div>
+                    @else
+                        @include('website.components.countdown', [
+                            'countdown' => $event['countdown']['diff'],
+                            'size' => 'lg',
+                        ])
+                    @endif
+
                 </div>
                 @livewire('website.share', [
                     'title' => $event->title,
