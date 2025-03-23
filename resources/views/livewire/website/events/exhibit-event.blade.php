@@ -84,7 +84,10 @@ new class extends Component {
     @endif
 
     @if (!$formSubmitted)
-        @include('website.components.forms.form', ['disabled' => $disabled])
+        @include('website.components.forms.form', [
+            'disabled' => $disabled,
+            'formStep' => $currentStep, // For regular forms, formStep equals currentStep
+        ])
         <!-- Floating Price Indicator Component with Currency Selector -->
         @include('website.components.forms.price-indicator', [
             'totalPrice' => $totalPrice,

@@ -66,15 +66,18 @@ new class extends Component {
         $actions = new \App\Forms\ExhibitorFormActions();
         $formData = $actions->initFormData($event);
         $postForms = $event->exhibitorPostPaymentForms->toArray();
-        $currentStep = count($formData) + 1;
+        $currentStep = count($formData) + 1; // Payment step is after forms and info validation
     @endphp
+
     @include('website.components.forms.multi-step-form', [
         'steps' => $formData,
         'postForms' => $postForms,
         'currentStep' => $currentStep,
+        'errors' => $errors ?? null,
         'formSubmitted' => false,
         'successMessage' => '',
     ])
+
     <h2 class="text-xl font-semibold mb-6">Preuve du paiement</h2>
 
     @if ($currentPayment)

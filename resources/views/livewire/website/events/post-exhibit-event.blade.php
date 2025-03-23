@@ -27,6 +27,7 @@ new class extends Component {
     public string $successMessage = '';
     public string $preferred_currency = 'EUR';
     public float $totalPrice = 0;
+    public int $formStep = 0;
 
     public function mount(EventAnnouncement $event)
     {
@@ -44,9 +45,21 @@ new class extends Component {
             return redirect()->route('event_details', $event);
         }
 
+        // Get the regular form data for progress display
+        $actions = new ExhibitorFormActions();
+        $regularForms = $actions->initFormData($this->event);
+
+        // Get post forms
+        $this->postForms = $event->exhibitorPostPaymentForms->toArray();
+
+        // Calculate form step for internal use (0-indexed for post forms)
+        $this->formStep = 0;
+
+        // Set current step to the first post-form (after forms, info validation, payment, payment validation)
+        $this->currentStep = count($regularForms) + 3;
+
         // Check if the submission already has post_answers and load them if available
         if ($this->submission && !empty($this->submission->post_answers)) {
-            $actions = new ExhibitorFormActions();
             $this->formData = $actions->transformPostSubmissionToFormData($this->submission, $event);
         } else {
             $this->initFormData();
@@ -75,7 +88,7 @@ new class extends Component {
     {
         // Use the post-payment specific validation method
         $actions = new ExhibitorFormActions();
-        $validation = $actions->getPostFormValidationRules($this->event, $this->currentStep);
+        $validation = $actions->getPostFormValidationRules($this->event, $this->formStep);
 
         $this->validate($validation['rules'], [], $validation['attributes']);
     }
@@ -101,17 +114,36 @@ new class extends Component {
         }
     }
 
+    public function nextStep()
+    {
+        $this->validateCurrentStep();
+        $this->formStep++;
+        $this->currentStep++;
+    }
+
+    public function prevStep()
+    {
+        $this->formStep = max(0, $this->formStep - 1);
+        $this->currentStep = max(count((new ExhibitorFormActions())->initFormData($this->event)) + 3, $this->currentStep - 1);
+    }
+
     public function isLastExhibitorForm()
     {
-        return $this->currentStep === $this->totalSteps - 1;
+        // Check if this is the last post form
+        return $this->formStep === count($this->postForms) - 1;
     }
 }; ?>
 
 <div>
     <div class="container mx-auto py-8 md:px-4">
         @if (!empty($formData))
+            @php
+                $regularForms = (new \App\Forms\ExhibitorFormActions())->initFormData($event);
+            @endphp
+
             @include('website.components.forms.multi-step-form', [
-                'steps' => $formData,
+                'steps' => $regularForms,
+                'postForms' => $postForms,
                 'currentStep' => $currentStep,
                 'errors' => $errors,
                 'formSubmitted' => $formSubmitted,
@@ -120,7 +152,10 @@ new class extends Component {
         @endif
 
         @if (!$formSubmitted)
-            @include('website.components.forms.form', ['disabled' => $disabled])
+            @include('website.components.forms.form', [
+                'disabled' => $disabled,
+                'formStep' => $formStep ?? 0,
+            ])
 
             @include('website.components.forms.price-indicator', [
                 'totalPrice' => $totalPrice,

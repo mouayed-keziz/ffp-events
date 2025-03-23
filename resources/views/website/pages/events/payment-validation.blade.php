@@ -3,7 +3,7 @@
     $actions = new \App\Forms\ExhibitorFormActions();
     $formData = $actions->initFormData($event);
     $postForms = $event->exhibitorPostPaymentForms->toArray();
-    $currentStep = count($formData) + 2;
+    $currentStep = count($formData) + 2; // Payment validation step
 @endphp
 @section('content')
     @include('website.components.exhibit-event.banner', [
@@ -18,6 +18,7 @@
                         'steps' => $formData,
                         'postForms' => $postForms,
                         'currentStep' => $currentStep,
+                        'errors' => $errors ?? null,
                         'formSubmitted' => false,
                         'successMessage' => '',
                     ])

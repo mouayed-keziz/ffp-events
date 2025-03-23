@@ -4,6 +4,7 @@ namespace App\Filament\Resources\ExhibitorSubmissionResource\RelationManagers;
 
 use App\Actions\ExhibitorSubmissionActions;
 use App\Enums\PaymentSliceStatus;
+use App\Enums\ExhibitorSubmissionStatus;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -11,6 +12,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use App\Enums\Currency;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Notifications\Notification;
 use Carbon\Carbon;
 
 class PaymentSlicesRelationManager extends RelationManager
@@ -101,7 +103,34 @@ class PaymentSlicesRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->modalHeading(__('exhibitor_submission.actions.payment_slice.create_title'))
-                    ->label(__('exhibitor_submission.actions.payment_slice.create_title')),
+                    ->label(__('exhibitor_submission.actions.payment_slice.create_title'))
+                    ->after(function ($record) {
+                        // Get the parent exhibitor submission
+                        $submission = $record->exhibitorSubmission;
+                        $allSlices = $submission->paymentSlices;
+
+                        // Check payment status of all slices
+                        $validCount = $allSlices->where('status', PaymentSliceStatus::VALID)->count();
+                        $totalCount = $allSlices->count();
+
+                        // Update submission status based on payment slices
+                        if ($validCount > 0) {
+                            if ($validCount == $totalCount) {
+                                $submission->status = ExhibitorSubmissionStatus::FULLY_PAYED;
+                            } else {
+                                $submission->status = ExhibitorSubmissionStatus::PARTLY_PAYED;
+                            }
+                        } else {
+                            // No valid payments, keep as accepted
+                            $submission->status = ExhibitorSubmissionStatus::ACCEPTED;
+                        }
+                        $submission->save();
+
+                        Notification::make()
+                            ->title(__('exhibitor_submission.notifications.payment_slice_created'))
+                            ->success()
+                            ->send();
+                    })
             ])
             ->actions([
                 $exhibitorActions->getViewProofAction(),
