@@ -1,0 +1,108 @@
+<?php
+
+return [
+    'resource' => [
+        'label' => 'طلب العارض',
+        'plural_label' => 'طلبات العارضين',
+    ],
+    'fields' => [
+        'status' => 'الحالة',
+        'total_prices' => 'الأسعار الإجمالية',
+        'answers' => 'إجابات النموذج',
+        'created_at' => 'تم التقديم في',
+        'exhibitor' => 'العارض',
+        'event' => 'الفعالية',
+        'attachments' => 'المرفقات',
+        'payment_slice' => [
+            'status' => 'الحالة',
+            'price' => 'السعر',
+            'currency' => 'العملة',
+            'due_to' => 'تاريخ الاستحقاق',
+            'attachment' => 'المرفق',
+        ],
+    ],
+    'filters' => [
+        'status' => 'تصفية حسب الحالة',
+        'event' => 'تصفية حسب الفعالية',
+        'date_range' => 'تصفية حسب الفترة الزمنية',
+        'payment_slice' => [
+            'status' => 'تصفية حسب الحالة',
+        ],
+    ],
+    'actions' => [
+        'delete' => 'حذف',
+        'view' => 'عرض التفاصيل',
+        'update' => 'تحديث',
+        'download' => 'تنزيل الملف',
+        'accept' => 'قبول',
+        'reject' => 'رفض',
+        'validate' => 'تحقق',
+        'mark_ready' => 'تحديد كجاهز',
+        'archive' => 'أرشفة',
+        'view_proof' => 'عرض الإثبات',
+        'payment_slice' => [
+            'create_title' => 'إنشاء شريحة دفع',
+            'delete' => 'حذف شريحة الدفع',
+        ],
+    ],
+    'messages' => [
+        'deleted' => 'تم حذف الطلب بنجاح',
+        'updated' => 'تم تحديث الطلب بنجاح',
+    ],
+    'sections' => [
+        'payment_slices' => 'شرائح الدفع',
+    ],
+    'notifications' => [
+        'payment_slice_created' => 'تم إنشاء شريحة الدفع بنجاح',
+    ],
+    'empty' => [
+        'payment_slices' => 'لم يتم العثور على شرائح دفع',
+        'payment_slices_description' => 'قم بإنشاء شريحة دفع للبدء',
+    ],
+    'modals' => [
+        'accept' => 'قبول الطلب',
+        'accept_description' => 'سيؤدي هذا إلى قبول طلب العارض وإنشاء شرائح الدفع.',
+        'reject' => 'رفض الطلب',
+        'reject_description' => 'هل أنت متأكد من أنك تريد رفض طلب العارض هذا؟',
+        'validate_payment' => 'تحقق من الدفع',
+        'validate_payment_description' => 'هل أنت متأكد من أنك تريد تأكيد إثبات الدفع هذا؟',
+        'reject_payment' => 'رفض الدفع',
+        'reject_payment_description' => 'هل أنت متأكد من أنك تريد رفض إثبات الدفع هذا؟',
+        'delete_payment_slice' => 'حذف شريحة الدفع',
+        'delete_payment_slice_description' => 'هل أنت متأكد من أنك تريد حذف شريحة الدفع هذه؟ لا يمكن التراجع عن هذا الإجراء.',
+        'make_ready' => 'تحديد الطلب كجاهز',
+        'make_ready_description' => 'سيؤدي هذا إلى تحديد طلب العارض كجاهز. هل أنت متأكد من أنك تريد المتابعة؟',
+        'archive' => 'أرشفة الطلب',
+        'archive_description' => 'سيؤدي هذا إلى أرشفة طلب العارض. هل أنت متأكد من أنك تريد المتابعة؟',
+    ],
+    'success_messages' => [
+        'submission_accepted' => 'تم قبول الطلب بنجاح',
+        'submission_rejected' => 'تم رفض الطلب',
+        'payment_validated' => 'تم التحقق من الدفع بنجاح',
+        'payment_rejected' => 'تم رفض إثبات الدفع',
+        'payment_slice_deleted' => 'تم حذف شريحة الدفع بنجاح',
+        'submission_ready' => 'تم تحديد الطلب كجاهز',
+        'submission_archived' => 'تم أرشفة الطلب بنجاح',
+    ],
+    'tabs' => [
+        'exhibitor_details' => 'تفاصيل العارض',
+        'post_form_prefix' => 'بعد',
+    ],
+    'details' => [
+        'name' => 'الاسم',
+        'email' => 'البريد الإلكتروني',
+        'status' => 'الحالة',
+        'submission_date' => 'تاريخ التقديم',
+        'can_edit' => 'يمكن التعديل',
+        'prices' => 'الأسعار',
+    ],
+    'statuses' => [
+        'pending' => 'قيد الانتظار',
+        'rejected' => 'مرفوض',
+        'accepted' => 'مقبول',
+        'partly_payed' => 'مدفوع جزئياً',
+        'fully_payed' => 'مدفوع بالكامل',
+        'ready' => 'جاهز',
+        'archive' => 'مؤرشف',
+    ],
+];

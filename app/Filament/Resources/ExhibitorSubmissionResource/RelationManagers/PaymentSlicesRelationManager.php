@@ -28,7 +28,7 @@ class PaymentSlicesRelationManager extends RelationManager
 
     public static function getTitle(\Illuminate\Database\Eloquent\Model $ownerRecord, string $pageClass): string
     {
-        return __('exhibitor_submission.sections.payment_slices');
+        return __('panel/exhibitor_submission.sections.payment_slices');
     }
 
     public function form(Form $form): Form
@@ -37,26 +37,26 @@ class PaymentSlicesRelationManager extends RelationManager
             Forms\Components\Grid::make(2)
                 ->schema([
                     Forms\Components\Select::make('status')
-                        ->label(__('exhibitor_submission.fields.payment_slice.status'))
+                        ->label(__('panel/exhibitor_submission.fields.payment_slice.status'))
                         ->options(PaymentSliceStatus::class)
                         ->default(PaymentSliceStatus::NOT_PAYED)
                         ->required()
                         ->columnSpan(1)
                         ->searchable(),
                     Forms\Components\TextInput::make('price')
-                        ->label(__('exhibitor_submission.fields.payment_slice.price'))
+                        ->label(__('panel/exhibitor_submission.fields.payment_slice.price'))
                         ->numeric()
                         ->required()
                         ->columnSpan(1),
                     Forms\Components\Select::make('currency')
-                        ->label(__('exhibitor_submission.fields.payment_slice.currency'))
+                        ->label(__('panel/exhibitor_submission.fields.payment_slice.currency'))
                         ->options(Currency::class)
                         ->default(Currency::DA)
                         ->required()
                         ->columnSpan(1)
                         ->searchable(),
                     Forms\Components\DatePicker::make('due_to')
-                        ->label(__('exhibitor_submission.fields.payment_slice.due_to'))
+                        ->label(__('panel/exhibitor_submission.fields.payment_slice.due_to'))
                         ->required()
                         ->native(false)
                         ->columnSpan(1)
@@ -69,7 +69,7 @@ class PaymentSlicesRelationManager extends RelationManager
                         ->displayFormat('Y-m-d'),
                     SpatieMediaLibraryFileUpload::make('attachment')
                         ->collection('attachement')
-                        ->label(__('exhibitor_submission.fields.payment_slice.attachment'))
+                        ->label(__('panel/exhibitor_submission.fields.payment_slice.attachment'))
                         ->downloadable()
                         ->columnSpan(2)
                 ]),
@@ -84,26 +84,26 @@ class PaymentSlicesRelationManager extends RelationManager
             ->reorderable('sort')
             ->columns([
                 Tables\Columns\TextColumn::make('price')
-                    ->label(__('exhibitor_submission.fields.payment_slice.price'))
+                    ->label(__('panel/exhibitor_submission.fields.payment_slice.price'))
                     ->money(fn($record) => $record->currency)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('currency')
                     ->badge()
                     ->color('gray')
-                    ->label(__('exhibitor_submission.fields.payment_slice.currency')),
+                    ->label(__('panel/exhibitor_submission.fields.payment_slice.currency')),
                 Tables\Columns\TextColumn::make('status')
-                    ->label(__('exhibitor_submission.fields.payment_slice.status'))
+                    ->label(__('panel/exhibitor_submission.fields.payment_slice.status'))
                     ->badge()
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
-                    ->label(__('exhibitor_submission.filters.payment_slice.status'))
+                    ->label(__('panel/exhibitor_submission.filters.payment_slice.status'))
                     ->options(PaymentSliceStatus::class),
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make()
-                    ->modalHeading(__('exhibitor_submission.actions.payment_slice.create_title'))
-                    ->label(__('exhibitor_submission.actions.payment_slice.create_title'))
+                    ->modalHeading(__('panel/exhibitor_submission.actions.payment_slice.create_title'))
+                    ->label(__('panel/exhibitor_submission.actions.payment_slice.create_title'))
                     ->after(function ($record) {
                         // Get the parent exhibitor submission
                         $submission = $record->exhibitorSubmission;
@@ -127,7 +127,7 @@ class PaymentSlicesRelationManager extends RelationManager
                         $submission->save();
 
                         Notification::make()
-                            ->title(__('exhibitor_submission.notifications.payment_slice_created'))
+                            ->title(__('panel/exhibitor_submission.notifications.payment_slice_created'))
                             ->success()
                             ->send();
                     })
@@ -145,7 +145,7 @@ class PaymentSlicesRelationManager extends RelationManager
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->emptyStateHeading(__('exhibitor_submission.empty.payment_slices'))
-            ->emptyStateDescription(__('exhibitor_submission.empty.payment_slices_description'));
+            ->emptyStateHeading(__('panel/exhibitor_submission.empty.payment_slices'))
+            ->emptyStateDescription(__('panel/exhibitor_submission.empty.payment_slices_description'));
     }
 }

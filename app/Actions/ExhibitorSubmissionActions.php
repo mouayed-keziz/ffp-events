@@ -22,39 +22,39 @@ class ExhibitorSubmissionActions
     public function getAcceptAction(): Action
     {
         return Action::make('accept')
-            ->label(__('Accept'))
+            ->label(__('panel/exhibitor_submission.actions.accept'))
             ->color('success')
             ->icon('heroicon-o-check-circle')
-            ->modalHeading(__('Accept Submission'))
-            ->modalDescription(__('This will accept the exhibitor submission and create payment slices.'))
+            ->modalHeading(__('panel/exhibitor_submission.modals.accept'))
+            ->modalDescription(__('panel/exhibitor_submission.modals.accept_description'))
             ->form([
                 Forms\Components\Repeater::make('payment_slices')
                     ->collapsible()
-                    ->label(__('Payment Slices'))
+                    ->label(__('panel/exhibitor_submission.sections.payment_slices'))
                     ->schema([
                         Forms\Components\Grid::make(2)
                             ->schema([
                                 Forms\Components\Select::make('status')
-                                    ->label(__('exhibitor_submission.fields.payment_slice.status'))
+                                    ->label(__('panel/exhibitor_submission.fields.payment_slice.status'))
                                     ->options(PaymentSliceStatus::class)
                                     ->default(PaymentSliceStatus::NOT_PAYED)
                                     ->required()
                                     ->columnSpan(1)
                                     ->searchable(),
                                 Forms\Components\TextInput::make('price')
-                                    ->label(__('exhibitor_submission.fields.payment_slice.price'))
+                                    ->label(__('panel/exhibitor_submission.fields.payment_slice.price'))
                                     ->numeric()
                                     ->required()
                                     ->columnSpan(1),
                                 Forms\Components\Select::make('currency')
-                                    ->label(__('exhibitor_submission.fields.payment_slice.currency'))
+                                    ->label(__('panel/exhibitor_submission.fields.payment_slice.currency'))
                                     ->options(Currency::class)
                                     ->default(Currency::DA)
                                     ->required()
                                     ->columnSpan(1)
                                     ->searchable(),
                                 Forms\Components\DatePicker::make('due_to')
-                                    ->label(__('exhibitor_submission.fields.payment_slice.due_to'))
+                                    ->label(__('panel/exhibitor_submission.fields.payment_slice.due_to'))
                                     ->required()
                                     ->native(false)
                                     ->columnSpan(1)
@@ -62,7 +62,7 @@ class ExhibitorSubmissionActions
                                     ->displayFormat('Y-m-d'),
                                 SpatieMediaLibraryFileUpload::make('attachment')
                                     ->collection('attachement')
-                                    ->label(__('exhibitor_submission.fields.payment_slice.attachment'))
+                                    ->label(__('panel/exhibitor_submission.fields.payment_slice.attachment'))
                                     ->downloadable()
                                     ->columnSpan(2)
                             ]),
@@ -97,7 +97,7 @@ class ExhibitorSubmissionActions
                 }
 
                 Notification::make()
-                    ->title(__('Submission accepted successfully'))
+                    ->title(__('panel/exhibitor_submission.success_messages.submission_accepted'))
                     ->success()
                     ->send();
             });
@@ -112,18 +112,18 @@ class ExhibitorSubmissionActions
                     $record->status !== ExhibitorSubmissionStatus::READY &&
                     $record->status !== ExhibitorSubmissionStatus::ARCHIVE
             )
-            ->label(__('Reject'))
+            ->label(__('panel/exhibitor_submission.actions.reject'))
             ->color('danger')
             ->icon('heroicon-o-x-circle')
             ->requiresConfirmation()
-            ->modalHeading(__('Reject Submission'))
-            ->modalDescription(__('Are you sure you want to reject this exhibitor submission?'))
+            ->modalHeading(__('panel/exhibitor_submission.modals.reject'))
+            ->modalDescription(__('panel/exhibitor_submission.modals.reject_description'))
             ->action(function (ExhibitorSubmission $record): void {
                 $record->status = ExhibitorSubmissionStatus::REJECTED;
                 $record->save();
 
                 Notification::make()
-                    ->title(__('Submission rejected'))
+                    ->title(__('panel/exhibitor_submission.success_messages.submission_rejected'))
                     ->success()
                     ->send();
             });
@@ -132,12 +132,12 @@ class ExhibitorSubmissionActions
     public function getValidatePaymentAction(): TableAction
     {
         return TableAction::make('validatePayment')
-            ->label(__('Validate'))
+            ->label(__('panel/exhibitor_submission.actions.validate'))
             ->color('success')
             ->icon('heroicon-o-check')
             ->requiresConfirmation()
-            ->modalHeading(__('Validate Payment'))
-            ->modalDescription(__('Are you sure you want to validate this payment proof?'))
+            ->modalHeading(__('panel/exhibitor_submission.modals.validate_payment'))
+            ->modalDescription(__('panel/exhibitor_submission.modals.validate_payment_description'))
             ->visible(fn(ExhibitorPaymentSlice $record) => $record->status === PaymentSliceStatus::PROOF_ATTACHED)
             ->action(function (ExhibitorPaymentSlice $record): void {
                 $record->status = PaymentSliceStatus::VALID;
@@ -157,7 +157,7 @@ class ExhibitorSubmissionActions
                 }
 
                 Notification::make()
-                    ->title(__('Payment validated successfully'))
+                    ->title(__('panel/exhibitor_submission.success_messages.payment_validated'))
                     ->success()
                     ->send();
             });
@@ -166,12 +166,12 @@ class ExhibitorSubmissionActions
     public function getRejectPaymentAction(): TableAction
     {
         return TableAction::make('rejectPayment')
-            ->label(__('Reject'))
+            ->label(__('panel/exhibitor_submission.actions.reject'))
             ->color('danger')
             ->icon('heroicon-o-x-mark')
             ->requiresConfirmation()
-            ->modalHeading(__('Reject Payment'))
-            ->modalDescription(__('Are you sure you want to reject this payment proof?'))
+            ->modalHeading(__('panel/exhibitor_submission.modals.reject_payment'))
+            ->modalDescription(__('panel/exhibitor_submission.modals.reject_payment_description'))
             ->visible(fn(ExhibitorPaymentSlice $record) => $record->status === PaymentSliceStatus::PROOF_ATTACHED)
             ->action(function (ExhibitorPaymentSlice $record): void {
                 $record->status = PaymentSliceStatus::NOT_PAYED;
@@ -188,7 +188,7 @@ class ExhibitorSubmissionActions
                 $submission->save();
 
                 Notification::make()
-                    ->title(__('Payment proof rejected'))
+                    ->title(__('panel/exhibitor_submission.success_messages.payment_rejected'))
                     ->warning()
                     ->send();
             });
@@ -197,12 +197,12 @@ class ExhibitorSubmissionActions
     public function getDeletePaymentSliceAction(): TableAction
     {
         return TableAction::make('deletePaymentSlice')
-            ->label(__('Delete'))
+            ->label(__('panel/exhibitor_submission.actions.delete'))
             ->color('danger')
             ->icon('heroicon-o-trash')
             ->requiresConfirmation()
-            ->modalHeading(__('Delete Payment Slice'))
-            ->modalDescription(__('Are you sure you want to delete this payment slice? This cannot be undone.'))
+            ->modalHeading(__('panel/exhibitor_submission.modals.delete_payment_slice'))
+            ->modalDescription(__('panel/exhibitor_submission.modals.delete_payment_slice_description'))
             ->action(function (ExhibitorPaymentSlice $record): void {
                 // Get the submission before deleting the record
                 $submission = $record->exhibitorSubmission;
@@ -233,7 +233,7 @@ class ExhibitorSubmissionActions
                 $submission->save();
 
                 Notification::make()
-                    ->title(__('Payment slice deleted successfully'))
+                    ->title(__('panel/exhibitor_submission.success_messages.payment_slice_deleted'))
                     ->success()
                     ->send();
             });
@@ -242,7 +242,7 @@ class ExhibitorSubmissionActions
     public function getViewProofAction(): TableAction
     {
         return TableAction::make('viewProof')
-            ->label(__('View Proof'))
+            ->label(__('panel/exhibitor_submission.actions.view_proof'))
             ->color('info')
             // ->icon('heroicon-o-document-magnify-glass')
             ->url(fn(ExhibitorPaymentSlice $record) => $record->getFirstMediaUrl('attachement'), true)
@@ -252,19 +252,19 @@ class ExhibitorSubmissionActions
     public function getMakeReadyAction(): Action
     {
         return Action::make('makeReady')
-            ->label(__('Mark as Ready'))
+            ->label(__('panel/exhibitor_submission.actions.mark_ready'))
             ->color('success')
             ->icon('heroicon-o-check-badge')
             ->requiresConfirmation()
-            ->modalHeading(__('Mark Submission as Ready'))
-            ->modalDescription(__('This will mark the exhibitor submission as ready. Are you sure you want to continue?'))
+            ->modalHeading(__('panel/exhibitor_submission.modals.make_ready'))
+            ->modalDescription(__('panel/exhibitor_submission.modals.make_ready_description'))
             ->visible(fn(ExhibitorSubmission $record) => $record->status === ExhibitorSubmissionStatus::FULLY_PAYED)
             ->action(function (ExhibitorSubmission $record): void {
                 $record->status = ExhibitorSubmissionStatus::READY;
                 $record->save();
 
                 Notification::make()
-                    ->title(__('Submission marked as ready'))
+                    ->title(__('panel/exhibitor_submission.success_messages.submission_ready'))
                     ->success()
                     ->send();
             });
@@ -273,19 +273,19 @@ class ExhibitorSubmissionActions
     public function getArchiveAction(): Action
     {
         return Action::make('archive')
-            ->label(__('Archive'))
+            ->label(__('panel/exhibitor_submission.actions.archive'))
             ->color('gray')
             ->icon('heroicon-o-archive-box')
             ->requiresConfirmation()
-            ->modalHeading(__('Archive Submission'))
-            ->modalDescription(__('This will archive the exhibitor submission. Are you sure you want to continue?'))
+            ->modalHeading(__('panel/exhibitor_submission.modals.archive'))
+            ->modalDescription(__('panel/exhibitor_submission.modals.archive_description'))
             ->visible(fn(ExhibitorSubmission $record) => $record->status === ExhibitorSubmissionStatus::READY)
             ->action(function (ExhibitorSubmission $record): void {
                 $record->status = ExhibitorSubmissionStatus::ARCHIVE;
                 $record->save();
 
                 Notification::make()
-                    ->title(__('Submission archived successfully'))
+                    ->title(__('panel/exhibitor_submission.success_messages.submission_archived'))
                     ->success()
                     ->send();
             });

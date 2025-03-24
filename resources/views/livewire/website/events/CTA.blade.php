@@ -70,33 +70,33 @@ new class extends Component {
         @if ($submission)
             <a href="{{ route('view_exhibitor_answers', $event) }}"
                 class="btn btn-sm rounded-md text-sm font-semibold btn-outline border-base-200 border-2 uppercase">
-                Revoir Mes Reponses
+                {{ __('website/event.review_answers') }}
             </a>
 
             @if ($submission->canDownloadInvoice)
                 <a href="{{ route('download_invoice', $event) }}"
                     class="btn rounded-md text-sm font-semibold btn-outline border-base-200 border-2 uppercase">
-                    Telecharger le bon de commande
+                    {{ __('website/event.download_invoice') }}
                 </a>
             @endif
 
             @if ($submission->canFillPostForms)
                 <a href="{{ route('post_exhibit_event', $event) }}"
                     class="btn btn-sm rounded-md text-sm font-semibold btn-outline border-base-200 border-2 uppercase">
-                    Finaliser Mes Reponses
+                    {{ __('website/event.finalize_answers') }}
                 </a>
             @endif
 
             @if ($submission->showPaymentButton)
                 <a href="{{ route('upload_payment_proof', $event) }}"
                     class="btn rounded-md text-sm font-semibold btn-primary uppercase">
-                    Televerser la preuve de paiement
+                    {{ __('website/event.upload_payment_proof') }}
                 </a>
             @endif
 
             @if ($submission->status === ExhibitorSubmissionStatus::FULLY_PAYED)
                 <a href="#" class="btn rounded-md text-sm font-semibold btn-primary uppercase">
-                    Creer et telecharger les badges
+                    {{ __('website/event.create_download_badges') }}
                 </a>
             @endif
 
@@ -105,7 +105,7 @@ new class extends Component {
                     $submission->status === ExhibitorSubmissionStatus::READY)
                 <a href="#"
                     class="btn btn-sm rounded-md text-sm font-semibold btn-error bg-red-600 hover:bg-red-700 text-white uppercase">
-                    Amenager mon stand
+                    {{ __('website/event.setup_booth') }}
                 </a>
             @endif
         @endif

@@ -6,6 +6,7 @@ return [
     'fields' => [
         'event_announcement' => 'إعلان الفعالية',
         'visitor' => 'الزائر',
+        'email' => 'البريد الإلكتروني',
         'status' => 'الحالة',
         'created_at' => 'تم الإنشاء في',
     ],
@@ -18,6 +19,10 @@ return [
         'submission_answers' => 'إجابات التقديم',
     ],
     'visitor_details' => 'تفاصيل الزائر',
+    'tabs' => [
+        'visitor_details' => 'تفاصيل الزائر',
+        'submission_answers' => 'إجابات التقديم',
+    ],
     'field_answer' => 'الإجابة',
     'no_file_uploaded' => 'لم يتم رفع أي ملف',
     'submission_context_not_found' => 'سياق التقديم غير موجود',

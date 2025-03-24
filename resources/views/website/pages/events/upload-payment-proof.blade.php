@@ -3,7 +3,7 @@
 @section('content')
     @include('website.components.exhibit-event.banner', [
         'event' => $event,
-        'title' => 'Téléverser la preuve de paiement pour exposer à ' . $event->title,
+        'title' => __('website/exhibit-event.upload_payment_proof_for') . ' ' . $event->title,
         'withEndDate' => false,
     ])
     <main class="w-full max-w-5xl mx-auto px-2 md:px-4 py-8">

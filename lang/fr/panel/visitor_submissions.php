@@ -6,6 +6,7 @@ return [
     'fields' => [
         'event_announcement' => 'Annonce d\'Événement',
         'visitor' => 'Visiteur',
+        'email' => 'Email',
         'status' => 'Statut',
         'created_at' => 'Créé Le',
     ],
@@ -18,6 +19,10 @@ return [
         'submission_answers' => 'Réponses de Soumission',
     ],
     'visitor_details' => 'Détails du Visiteur',
+    'tabs' => [
+        'visitor_details' => 'Détails du Visiteur',
+        'submission_answers' => 'Réponses de Soumission',
+    ],
     'field_answer' => 'Réponse',
     'no_file_uploaded' => 'Aucun fichier n\'a été téléchargé',
     'submission_context_not_found' => 'Contexte de soumission non trouvé',

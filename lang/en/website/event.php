@@ -1,4 +1,3 @@
-
 <?php
 
 return [
@@ -19,5 +18,22 @@ return [
         "hours" => "hours",
         "minutes" => "minutes",
         "seconds" => "seconds",
-    ]
+    ],
+    'is_past' => 'This event is past',
+    'submission_pending' => 'Your data is being processed by our team, you will receive a notification by email once this is done',
+    'submission_rejected' => 'Your registration has been rejected by our team',
+    'proof_processing' => 'Your proof of payment is being processed by our team, you will receive a notification by email once this is done',
+    'submission_accepted' => 'Your data has been validated by our team, please upload your proof of payment via the button below.',
+    'payment_validated' => 'Congratulations, your registration and payment of :price :currency as an exhibitor at :event is validated',
+    'payment_pending' => 'You have payments of :price :currency before :due_date pending for this event.',
+    'finalize_responses' => 'You can now finalize your responses for this event via the "Finalize My Responses" button.',
+    'fully_paid' => 'Congratulations, all your payments for :event have been validated. Your participation as an exhibitor is confirmed.',
+    'ready' => 'Your exhibition space for :event is ready. Everything is in order for the event.',
+    'archived' => 'This submission for :event has been archived.',
+    'review_answers' => 'Review My Answers',
+    'download_invoice' => 'Download Invoice',
+    'finalize_answers' => 'Finalize My Answers',
+    'upload_payment_proof' => 'Upload Payment Proof',
+    'create_download_badges' => 'Create and download badges',
+    'setup_booth' => 'Setup My Booth',
 ];

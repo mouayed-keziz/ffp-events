@@ -10,7 +10,7 @@
     @if ($currentStep !== 0)
         <button type="button" class="btn font-semibold btn-sm rounded-md btn-outline border-base-200 border-2"
             wire:click="previousStep">
-            {{ __('forms.Previous') }}
+            {{ __('website/exhibit-event.previous') }}
         </button>
     @endif
 
@@ -18,27 +18,27 @@
         <button {{ $submission->update_requested_at ? 'disabled' : '' }} type="button"
             class="btn font-semibold btn-sm rounded-md btn-outline border-base-200 border-2"
             wire:click="requestFormModification">
-            {{ __('Demander la modification de ce formulaire') }}
+            {{ __('website/exhibit-event.request_form_modification') }}
         </button>
     @endif
 
     @if (!$isLastStep && !$isLastExhibitorForm)
         <button type="button" class="btn font-semibold btn-sm rounded-md btn-primary" wire:click="nextStep">
-            {{ __('forms.Next') }}
+            {{ __('website/exhibit-event.next') }}
         </button>
     @else
         <button type="submit" class="btn font-semibold btn-sm rounded-md btn-primary" wire:loading.attr="disabled">
             <div class="flex items-center">
                 <span wire:loading.remove>
                     @if ($disabled)
-                        {{ __('forms.Next') }}
+                        {{ __('website/exhibit-event.next') }}
                     @else
-                        {{ __('forms.Submit') }}
+                        {{ __('website/exhibit-event.submit') }}
                     @endif
                 </span>
                 <span wire:loading wire:target="submitForm" class="flex items-center">
                     <x-heroicon-o-arrow-path class="w-4 h-4 animate-spin me-2" />
-                    <span>{{ __('forms.Submitting...') }}</span>
+                    <span>{{ __('website/exhibit-event.submitting') }}</span>
                 </span>
             </div>
         </button>

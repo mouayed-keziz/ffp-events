@@ -47,7 +47,7 @@
                 <div class="absolute bottom-4 left-1/2 -translate-x-1/2">
                     @if ($event['countdown']['is_past'])
                         <div class="text-sm font-bold text-white bg-red-500 rounded-full px-3 py-1">
-                            {{ __('website/home.events.past') }}
+                            {{ __('website/event.is_past') }}
                         </div>
                     @else
                         @include('website.components.countdown', [

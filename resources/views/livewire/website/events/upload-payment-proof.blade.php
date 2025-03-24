@@ -78,7 +78,7 @@ new class extends Component {
         'successMessage' => '',
     ])
 
-    <h2 class="text-xl font-semibold mb-6">Preuve du paiement</h2>
+    <h2 class="text-xl font-semibold mb-6">{{ __('website/exhibit-event.payment_proof_title') }}</h2>
 
     @if ($currentPayment)
         <div class="mb-8">
@@ -86,32 +86,29 @@ new class extends Component {
 
             <div class="mb-6 text-gray-500">
                 <p class="mb-4">
-                    Veuillez téléverser votre preuve de paiement ici de
+                    {{ __('website/exhibit-event.upload_payment_proof') }}
                     <span
                         class="font-bold">{{ number_format($currentPayment->price, 0, ',', ' ') }}{{ $currentPayment->currency }}</span>,
-                    le deadline de paiement est le <span
-                        class="font-bold">{{ $currentPayment->due_to->format('d-m-Y') }}</span> notre
-                    équipe vous
-                    contactera dans les
-                    brefs délais pour confirmer le paiement et l'inscription, une fois l'inscription confirmé par notre
-                    équipe vous
-                    allez pouvoir générer les badge de votre équipe via la page <a
-                        class="font-bold link link-primary">mes
-                        inscriptions.</a>
+                    {{ __('website/exhibit-event.payment_deadline') }} <span
+                        class="font-bold">{{ $currentPayment->due_to->format('d-m-Y') }}</span>
+                    {{ __('website/exhibit-event.team_contact') }}
+                    {{ __('website/exhibit-event.badge_generation') }} <a
+                        class="font-bold link link-primary">{{ __('website/exhibit-event.my_registrations') }}</a>.
                 </p>
 
                 @if ($payments->where('status', PaymentSliceStatus::NOT_PAYED)->count() > 1)
-                    <p class="mb-3">Vous avez d'autres paiements divisés par tranche avec cet ordre:</p>
+                    <p class="mb-3">{{ __('website/exhibit-event.other_payment_slices') }}</p>
                     <ul class="list-disc pl-5 mb-4">
                         @foreach ($payments->where('status', PaymentSliceStatus::NOT_PAYED)->where('id', '!=', $currentPayment->id)->sortBy('due_to') as $payment)
-                            <li>Montant: <span
+                            <li>{{ __('website/exhibit-event.amount') }} <span
                                     class="font-bold">{{ number_format($payment->price, 0, ',', ' ') }}{{ $payment->currency }}</span>,
-                                Deadline: <span class="font-bold">{{ $payment->due_to->format('d M Y') }}</span></li>
+                                {{ __('website/exhibit-event.deadline') }} <span
+                                    class="font-bold">{{ $payment->due_to->format('d M Y') }}</span></li>
                         @endforeach
                     </ul>
                 @endif
 
-                <p>Veuillez nous contacter en cas de besoin.</p>
+                <p>{{ __('website/exhibit-event.contact_if_needed') }}</p>
             </div>
 
             <form wire:submit="submitPaymentProof">
@@ -130,14 +127,14 @@ new class extends Component {
 
                 <div class="mt-6">
                     <button type="submit" class="btn btn-primary">
-                        Soumettre la preuve de paiement
+                        {{ __('website/exhibit-event.submit_payment_proof') }}
                     </button>
                 </div>
             </form>
         </div>
     @else
         <div class="p-4 bg-success/10 text-success rounded-lg">
-            <p class="font-medium">Tous vos paiements ont été traités ou sont en cours de vérification.</p>
+            <p class="font-medium">{{ __('website/exhibit-event.all_payments_processed') }}</p>
         </div>
     @endif
 </div>

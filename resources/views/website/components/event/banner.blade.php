@@ -25,7 +25,7 @@
                 <div class="flex-1">
                     @if ($event['countdown']['is_past'])
                         <div class="text-sm font-bold text-white bg-red-500 rounded-full px-3 py-1 w-fit">
-                            {{ __('website/home.events.past') }}
+                            {{ __('website/event.is_past') }}
                         </div>
                     @else
                         @include('website.components.countdown', [

@@ -41,11 +41,17 @@
                         <!-- Fixed steps: Info Validation, Payment, Payment Validation -->
                         @php
                             $fixedSteps = [
-                                'info_validation' => ['index' => count($steps), 'title' => __('Info Validation')],
-                                'payment' => ['index' => count($steps) + 1, 'title' => __('Payment')],
+                                'info_validation' => [
+                                    'index' => count($steps),
+                                    'title' => __('website/exhibit-event.info_validation'),
+                                ],
+                                'payment' => [
+                                    'index' => count($steps) + 1,
+                                    'title' => __('website/exhibit-event.payment'),
+                                ],
                                 'payment_validation' => [
                                     'index' => count($steps) + 2,
-                                    'title' => __('Payment Validation'),
+                                    'title' => __('website/exhibit-event.payment_validation'),
                                 ],
                             ];
                         @endphp
@@ -92,11 +98,11 @@
                         @if ($currentStep < count($steps))
                             {{ isset($steps[$currentStep]['title']) ? $steps[$currentStep]['title'][app()->getLocale()] ?? ($steps[$currentStep]['title']['fr'] ?? ($steps[$currentStep]['title']['en'] ?? '')) : '' }}
                         @elseif ($currentStep === count($steps))
-                            {{ __('Info Validation') }}
+                            {{ __('website/exhibit-event.info_validation') }}
                         @elseif ($currentStep === count($steps) + 1)
-                            {{ __('Payment') }}
+                            {{ __('website/exhibit-event.payment') }}
                         @elseif ($currentStep === count($steps) + 2)
-                            {{ __('Payment Validation') }}
+                            {{ __('website/exhibit-event.payment_validation') }}
                         @else
                             @php
                                 $postFormIndex = $currentStep - count($steps) - 3;

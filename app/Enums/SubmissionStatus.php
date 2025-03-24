@@ -23,9 +23,9 @@ enum SubmissionStatus: string implements HasColor, HasLabel
     public function getLabel(): ?string
     {
         return match ($this) {
-            self::PENDING => __('exhibitor_submission.status.pending'),
-            self::APPROVED => __('exhibitor_submission.status.approved'),
-            self::REJECTED => __('exhibitor_submission.status.rejected'),
+            self::PENDING => __('panel/visitor_submissions.status.pending'),
+            self::APPROVED => __('panel/visitor_submissions.status.approved'),
+            self::REJECTED => __('panel/visitor_submissions.status.rejected'),
         };
     }
 }

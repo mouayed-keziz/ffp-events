@@ -73,20 +73,14 @@ class ViewVisitorSubmission extends ViewRecord
         // Visitor details tab components
         $visitorDetailsComponents = [
             \Filament\Infolists\Components\TextEntry::make('visitor.name')
-                ->label('Name'),
+                ->label(__('panel/visitor_submissions.fields.visitor')),
             \Filament\Infolists\Components\TextEntry::make('visitor.email')
-                ->label('Email'),
+                ->label(__('panel/visitor_submissions.fields.email', ['default' => 'Email'])),
             \Filament\Infolists\Components\TextEntry::make('status')
-                ->label('Status')
-                ->badge()
-                ->color(fn(string $state): string => match ($state) {
-                    'pending' => 'warning',
-                    'approved' => 'success',
-                    'rejected' => 'danger',
-                    default => 'gray',
-                }),
+                ->label(__('panel/visitor_submissions.fields.status'))
+                ->badge(),
             \Filament\Infolists\Components\TextEntry::make('created_at')
-                ->label('Submission Date')
+                ->label(__('panel/visitor_submissions.fields.created_at'))
                 ->dateTime(),
         ];
 
@@ -96,11 +90,11 @@ class ViewVisitorSubmission extends ViewRecord
                 Tabs::make('Submission Tabs')
                     ->columnSpanFull()
                     ->tabs([
-                        Tab::make('Visitor Details')
+                        Tab::make(__('panel/visitor_submissions.tabs.visitor_details'))
                             ->schema($visitorDetailsComponents)
                             ->columns(1),
 
-                        Tab::make('Submission Answers')
+                        Tab::make(__('panel/visitor_submissions.tabs.submission_answers'))
                             ->schema([
                                 // We'll use the FormDisplay component to render all sections
                                 ...VisitorSubmissionFormDisplay::make($sections),
@@ -124,6 +118,6 @@ class ViewVisitorSubmission extends ViewRecord
      */
     public function getTitle(): string
     {
-        return 'Visitor Submission';
+        return __('panel/visitor_submissions.single');
     }
 }

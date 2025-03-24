@@ -4,6 +4,8 @@ namespace App\Filament\Resources\ExhibitorSubmissionResource\Pages;
 
 use App\Actions\ExhibitorSubmissionActions;
 use App\Filament\Components\ExhibitorSubmissionFormDisplay;
+use App\Filament\Resources\EventAnnouncementResource;
+use App\Filament\Resources\ExhibitorResource;
 use App\Filament\Resources\ExhibitorSubmissionResource;
 use Filament\Actions;
 use Filament\Infolists\Components\Fieldset;
@@ -38,25 +40,25 @@ class ViewExhibitorSubmission extends ViewRecord
         // Exhibitor details components
         $exhibitorDetailsComponents = [
             TextEntry::make('exhibitor.name')
-                ->label('Name'),
+                ->label(__('panel/exhibitor_submission.details.name')),
             TextEntry::make('exhibitor.email')
-                ->label('Email'),
+                ->label(__('panel/exhibitor_submission.details.email')),
             TextEntry::make('status')
-                ->label('Status')
+                ->label(__('panel/exhibitor_submission.details.status'))
                 ->badge(),
 
             TextEntry::make('created_at')
-                ->label('Submission Date')
+                ->label(__('panel/exhibitor_submission.details.submission_date'))
                 ->dateTime(),
             IconEntry::make('isEditable')
-                ->label('Can Edit')
+                ->label(__('panel/exhibitor_submission.details.can_edit'))
                 ->boolean()
         ];
 
         // Price components if available
         $priceComponents = [];
         if (!empty($record->total_prices)) {
-            $priceComponents[] = Fieldset::make('Prices')->columns(3)
+            $priceComponents[] = Fieldset::make(__('panel/exhibitor_submission.details.prices'))->columns(3)
                 ->schema([
                     TextEntry::make('total_prices.DZD')
                         ->label('DZD')
@@ -72,7 +74,7 @@ class ViewExhibitorSubmission extends ViewRecord
 
         // Build the tabs array starting with exhibitor details
         $tabs = [
-            Tab::make('Exhibitor Details')
+            Tab::make(__('panel/exhibitor_submission.tabs.exhibitor_details'))
                 ->schema([
                     ...$exhibitorDetailsComponents,
                     ...$priceComponents,
@@ -112,7 +114,7 @@ class ViewExhibitorSubmission extends ViewRecord
                     : $form['title'];
 
                 $tabs[] = Tab::make("post_form_{$formIndex}")
-                    ->label("Post: {$formTitle}")
+                    ->label(__('panel/exhibitor_submission.tabs.post_form_prefix') . ": {$formTitle}")
                     ->schema(ExhibitorSubmissionFormDisplay::make([$form]))
                     ->columns(1);
             }
@@ -181,6 +183,16 @@ class ViewExhibitorSubmission extends ViewRecord
             Actions\ActionGroup::make([
                 Actions\EditAction::make(),
                 Actions\DeleteAction::make(),
+                Actions\Action::make('viewEventAnnouncement')
+                    ->label(__('panel/event_announcement.resource.label'))
+                    ->icon('heroicon-o-calendar')
+                    ->url(fn($record) => EventAnnouncementResource::getUrl('view', ['record' => $record->eventAnnouncement]))
+                    ->color('success'),
+                Actions\Action::make('viewExhibitor')
+                    ->label(__('panel/exhibitors.resource.single'))
+                    ->icon('heroicon-o-user')
+                    ->url(fn($record) => ExhibitorResource::getUrl('view', ['record' => $record->exhibitor]))
+                    ->color('info'),
             ])->dropdown(true),
         ];
     }
@@ -190,6 +202,6 @@ class ViewExhibitorSubmission extends ViewRecord
      */
     public function getTitle(): string
     {
-        return 'Exhibitor Submission';
+        return __('panel/exhibitor_submission.resource.label');
     }
 }

@@ -41,7 +41,7 @@ new class extends Component {
         }
 
         if (!$this->submission || !$this->submission->canFillPostForms) {
-            session()->flash('error', 'You do not have permission to access post-payment forms for this event.');
+            session()->flash('error', __('You do not have permission to access post-payment forms for this event.'));
             return redirect()->route('event_details', $event);
         }
 
@@ -107,10 +107,10 @@ new class extends Component {
 
         if ($success) {
             $this->formSubmitted = true;
-            $this->successMessage = __('Post-exhibition form submitted successfully!');
-            return redirect()->route('event_details', $this->event)->with('success', 'Post-exhibition form submitted successfully!');
+            $this->successMessage = __('website/exhibit-event.post_form_submitted_success');
+            return redirect()->route('event_details', $this->event)->with('success', __('website/exhibit-event.post_form_submitted_success'));
         } else {
-            session()->flash('error', 'An error occurred while submitting the form. Please try again.');
+            session()->flash('error', __('An error occurred while submitting the form. Please try again.'));
         }
     }
 

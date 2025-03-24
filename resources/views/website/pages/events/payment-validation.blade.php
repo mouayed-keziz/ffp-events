@@ -29,22 +29,21 @@
                     </div>
 
                     <h2 class="text-xl font-bold mt-6 text-center">
-                        Félicitations, votre preuve de paiement est en cours de traitement
+                        {{ __('website/exhibit-event.payment_being_processed') }}
                     </h2>
 
                     <p class="text-gray-400 text-sm mt-4 text-center max-w-3xl">
-                        Votre preuve de paiement est bien trasmise à notre équipe et vous allez recevoir une notification
-                        ici et par email pour vous notifiez une fois la validation est terminé.
+                        {{ __('website/exhibit-event.payment_notification') }}
                     </p>
 
                     <div class="w-full flex justify-start items-center gap-2 mt-8">
                         <a href="{{ route('view_exhibitor_answers', ['id' => $event->id]) }}"
                             class="btn font-semibold btn-sm rounded-md btn-outline border-base-200 border-2">
-                            revoir mes reponses
+                            {{ __('website/exhibit-event.review_answers') }}
                         </a>
                         <a href="{{ route('event_details', ['id' => $event->id]) }}"
                             class="btn font-semibold btn-sm rounded-md btn-primary">
-                            retourner vers l'evenement
+                            {{ __('website/exhibit-event.return_to_event') }}
                         </a>
                     </div>
                 </div>

@@ -1,4 +1,3 @@
-
 <?php
 
 return [
@@ -19,5 +18,22 @@ return [
         "hours" => "heures",
         "minutes" => "minutes",
         "seconds" => "secondes",
-    ]
+    ],
+    'is_past' => 'Cet événement est passé',
+    'submission_pending' => 'Vos données sont en cours de traitement par notre équipe, vous allez recevoir une notification par mail une fois cela est fait',
+    'submission_rejected' => 'Votre inscription a était refusé par notre équipe',
+    'proof_processing' => 'Votre preuve de paiement est en cours de traitement par notre équipe, vous allez recevoir une notification par mail une fois cela est fait',
+    'submission_accepted' => 'Vos données ont était validées par notre équipe, veuillez maintenant téléverser votre preuve de paiement via le boutton en bas.',
+    'payment_validated' => 'Félicitations, votre inscription et paiement de :price :currency comme exposant à :event est validé',
+    'payment_pending' => 'Vous avez des paiements de :price :currency avant le :due_date en attente pour cet événement.',
+    'finalize_responses' => 'Vous pouvez maintenant finaliser vos réponses pour cet événement via le bouton "Finaliser Mes Reponses".',
+    'fully_paid' => 'Félicitations, tous vos paiements pour :event ont été validés. Votre participation en tant qu\'exposant est confirmée.',
+    'ready' => 'Votre espace d\'exposition pour :event est prêt. Tout est en ordre pour l\'événement.',
+    'archived' => 'Cette soumission pour :event a été archivée.',
+    'review_answers' => 'Revoir Mes Reponses',
+    'download_invoice' => 'Telecharger le bon de commande',
+    'finalize_answers' => 'Finaliser Mes Reponses',
+    'upload_payment_proof' => 'Televerser la preuve de paiement',
+    'create_download_badges' => 'Creer et telecharger les badges',
+    'setup_booth' => 'Amenager mon stand',
 ];

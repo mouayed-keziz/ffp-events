@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\SubmissionStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -21,6 +22,7 @@ class VisitorSubmission extends Model implements HasMedia
 
     protected $casts = [
         'answers' => 'array',
+        'status' => SubmissionStatus::class
     ];
 
     /**

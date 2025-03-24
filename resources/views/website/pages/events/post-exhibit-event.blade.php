@@ -3,7 +3,7 @@
 @section('content')
     @include('website.components.exhibit-event.banner', [
         'event' => $event,
-        'title' => 'Exposer dans' . $event->title,
+        'title' => __('website/exhibit-event.exhibit_in') . ' ' . $event->title,
     ])
     <main class="w-full max-w-5xl mx-auto px-2 md:px-4 py-8">
         <div class="-mt-40 relative z-10">

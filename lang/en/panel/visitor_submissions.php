@@ -6,6 +6,7 @@ return [
     'fields' => [
         'event_announcement' => 'Event Announcement',
         'visitor' => 'Visitor',
+        'email' => 'Email',
         'status' => 'Status',
         'created_at' => 'Created At',
     ],
@@ -18,6 +19,10 @@ return [
         'submission_answers' => 'Submission Answers',
     ],
     'visitor_details' => 'Visitor Details',
+    'tabs' => [
+        'visitor_details' => 'Visitor Details',
+        'submission_answers' => 'Submission Answers',
+    ],
     'field_answer' => 'Answer',
     'no_file_uploaded' => 'No file was uploaded',
     'submission_context_not_found' => 'Submission context not found',

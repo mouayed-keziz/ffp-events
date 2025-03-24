@@ -19,13 +19,12 @@ new class extends Component {
     @if ($submission->status === ExhibitorSubmissionStatus::PENDING)
         <div class="alert bg-primary/20 text-primary text-xs">
             @include('website.svg.event.warning')
-            <span>Vos données sont en cours de traitement par notre équipe, vous allez recevoir une notification par
-                mail une fois cela est fait</span>
+            <span>{{ __('website/event.submission_pending') }}</span>
         </div>
     @elseif ($submission->status === ExhibitorSubmissionStatus::REJECTED)
         <div class="alert bg-error/30 text-error text-xs">
             @include('website.svg.event.error')
-            <span>Votre inscription a était refusé par notre équipe</span>
+            <span>{{ __('website/event.submission_rejected') }}</span>
         </div>
     @elseif (
         $submission->status === ExhibitorSubmissionStatus::ACCEPTED ||
@@ -39,31 +38,26 @@ new class extends Component {
         @if ($hasProofAttached)
             <div class="alert bg-primary/20 text-primary text-xs mt-2">
                 @include('website.svg.event.warning')
-                <span>Votre preuve de paiement est en cours de traitement par notre équipe, vous allez recevoir une
-                    notification par mail une fois cela est fait</span>
+                <span>{{ __('website/event.proof_processing') }}</span>
             </div>
         @elseif ($submission->status === ExhibitorSubmissionStatus::ACCEPTED)
             <div class="alert bg-primary/20 text-primary text-xs mt-2">
                 @include('website.svg.event.warning')
-                <span>Vos données ont était validées par notre équipe, veuillez maintenant téléverser votre preuve de
-                    paiement via le boutton en bas.</span>
+                <span>{{ __('website/event.submission_accepted') }}</span>
             </div>
         @else
             @foreach ($slices as $index => $paymentSlice)
                 @if ($paymentSlice->status === PaymentSliceStatus::VALID)
                     <div class="alert bg-success text-white text-xs mt-2">
                         <x-heroicon-s-check-circle class="w-7 h-7" />
-                        <span>Félicitations, votre inscription et paiement de
-                            {{ $paymentSlice->price }}{{ $paymentSlice->currency }} comme exposant à {{ $event->title }}
-                            est validé</span>
+                        <span>{{ __('website/event.payment_validated', ['price' => $paymentSlice->price, 'currency' => $paymentSlice->currency, 'event' => $event->title]) }}</span>
                     </div>
                 @elseif($paymentSlice->status === PaymentSliceStatus::NOT_PAYED)
                     <div class="alert bg-primary/20 text-primary text-xs mt-2">
                         @include('website.svg.event.warning')
-                        <span>Vous avez des paiements de {{ $paymentSlice->price }}{{ $paymentSlice->currency }} avant
-                            le {{ $paymentSlice->due_to->format('d-m-Y') }} en attente pour cet événement.
+                        <span>{{ __('website/event.payment_pending', ['price' => $paymentSlice->price, 'currency' => $paymentSlice->currency, 'due_date' => $paymentSlice->due_to->format('d-m-Y')]) }}
                             @if ($submission->showPaymentButton)
-                                Veuillez les téléverser via le bouton en bas.
+                                {{ __('website/event.upload_payment_proof') }}
                             @endif
                         </span>
                     </div>
@@ -74,27 +68,24 @@ new class extends Component {
             @if ($submission->canFillPostForms)
                 <div class="alert bg-info/20 text-info text-xs mt-2">
                     <x-heroicon-s-information-circle class="w-7 h-7" />
-                    <span>Vous pouvez maintenant finaliser vos réponses pour cet événement via le bouton "Finaliser Mes
-                        Reponses".</span>
+                    <span>{{ __('website/event.finalize_responses') }}</span>
                 </div>
             @endif
         @endif
     @elseif ($submission->status === ExhibitorSubmissionStatus::FULLY_PAYED)
         <div class="alert bg-success text-white text-xs mt-2">
             <x-heroicon-s-check-circle class="w-7 h-7" />
-            <span>Félicitations, tous vos paiements pour {{ $event->title }} ont été validés. Votre participation en
-                tant qu'exposant est confirmée.</span>
+            <span>{{ __('website/event.fully_paid', ['event' => $event->title]) }}</span>
         </div>
     @elseif ($submission->status === ExhibitorSubmissionStatus::READY)
         <div class="alert bg-success text-white text-xs mt-2">
             <x-heroicon-s-check-circle class="w-7 h-7" />
-            <span>Votre espace d'exposition pour {{ $event->title }} est prêt. Tout est en ordre pour
-                l'événement.</span>
+            <span>{{ __('website/event.ready', ['event' => $event->title]) }}</span>
         </div>
     @elseif ($submission->status === ExhibitorSubmissionStatus::ARCHIVE)
         <div class="alert bg-gray-200 text-gray-700 text-xs mt-2">
             <x-heroicon-s-archive-box class="w-7 h-7" />
-            <span>Cette soumission pour {{ $event->title }} a été archivée.</span>
+            <span>{{ __('website/event.archived', ['event' => $event->title]) }}</span>
         </div>
     @endif
 </div>

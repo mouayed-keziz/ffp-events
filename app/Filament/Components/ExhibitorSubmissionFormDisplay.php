@@ -33,12 +33,14 @@ class ExhibitorSubmissionFormDisplay
                 continue;
             }
 
+            $locale = App::getLocale();
+
             $formTitle = is_array($form['title'])
-                ? ($form['title'][App::getLocale()] ?? $form['title']['en'] ?? $form['title']['fr'] ?? 'Form ' . ($formIndex + 1))
+                ? ($form['title'][$locale] ?? $form['title']['en'] ?? $form['title']['fr'] ?? __('panel/form.form') . ' ' . ($formIndex + 1))
                 : $form['title'];
 
             $formDescription = is_array($form['description'] ?? null)
-                ? ($form['description'][App::getLocale()] ?? $form['description']['en'] ?? $form['description']['fr'] ?? '')
+                ? ($form['description'][$locale] ?? $form['description']['en'] ?? $form['description']['fr'] ?? '')
                 : ($form['description'] ?? '');
 
             // Create a header for the form (if needed - now each form is in its own tab)
@@ -52,10 +54,10 @@ class ExhibitorSubmissionFormDisplay
             // Process each section within the form
             foreach ($form['sections'] as $sectionIndex => $section) {
                 $sectionTitle = is_array($section['title'])
-                    ? ($section['title'][App::getLocale()] ?? $section['title']['en'] ?? $section['title']['fr'] ?? 'Section ' . ($sectionIndex + 1))
+                    ? ($section['title'][$locale] ?? $section['title']['en'] ?? $section['title']['fr'] ?? __('panel/form.section') . ' ' . ($sectionIndex + 1))
                     : $section['title'];
                 $sectionDescription = is_array($section['description'] ?? null)
-                    ? ($section['description'][App::getLocale()] ?? $section['description']['en'] ?? $section['description']['fr'] ?? '')
+                    ? ($section['description'][$locale] ?? $section['description']['en'] ?? $section['description']['fr'] ?? '')
                     : ($section['description'] ?? '');
                 $sectionFields = [];
 
@@ -96,7 +98,7 @@ class ExhibitorSubmissionFormDisplay
     protected static function createFieldComponent(array $field): mixed
     {
         $locale = App::getLocale();
-        $label = $field['data']['label'][$locale] ?? $field['data']['label']['en'] ?? $field['data']['label']['fr'] ?? 'Field';
+        $label = $field['data']['label'][$locale] ?? $field['data']['label']['en'] ?? $field['data']['label']['fr'] ?? __('panel/form.field');
         $answer = $field['answer'] ?? null;
 
         // Get the FormField enum instance from the field type string
@@ -105,7 +107,7 @@ class ExhibitorSubmissionFormDisplay
         if (!$fieldType) {
             return TextEntry::make('unknown')
                 ->label($label)
-                ->state('Unsupported field type: ' . $field['type']);
+                ->state(__('panel/form.unsupported_field_type', ['type' => $field['type']]));
         }
 
         // Get the exhibitor submission if needed for file uploads
