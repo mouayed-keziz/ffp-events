@@ -61,6 +61,14 @@ class ArticleTable
                 ->alignCenter()
                 ->sortable()
                 ->toggleable(),
+
+            Tables\Columns\TextColumn::make("sharesCount")
+                ->label(__("panel/articles.columns.shares_count"))
+                ->badge()
+                ->color("gray")
+                ->alignCenter()
+                ->sortable()
+                ->toggleable(),
             // ->grow(true),
 
             Tables\Columns\TextColumn::make('published_at')

@@ -44,6 +44,8 @@ return [
             'create_title' => 'إنشاء شريحة دفع',
             'delete' => 'حذف شريحة الدفع',
         ],
+        'approve_update' => 'الموافقة على طلب التحديث',
+        'deny_update' => 'رفض طلب التحديث',
     ],
     'messages' => [
         'deleted' => 'تم حذف الطلب بنجاح',
@@ -74,6 +76,10 @@ return [
         'make_ready_description' => 'سيؤدي هذا إلى تحديد طلب العارض كجاهز. هل أنت متأكد من أنك تريد المتابعة؟',
         'archive' => 'أرشفة الطلب',
         'archive_description' => 'سيؤدي هذا إلى أرشفة طلب العارض. هل أنت متأكد من أنك تريد المتابعة؟',
+        'approve_update' => 'الموافقة على طلب التحديث',
+        'approve_update_description' => 'تحديد موعد نهائي جديد للعارض لتحديث طلبه.',
+        'deny_update' => 'رفض طلب التحديث',
+        'deny_update_description' => 'هل أنت متأكد من رفض طلب التحديث هذا؟',
     ],
     'success_messages' => [
         'submission_accepted' => 'تم قبول الطلب بنجاح',
@@ -83,6 +89,8 @@ return [
         'payment_slice_deleted' => 'تم حذف شريحة الدفع بنجاح',
         'submission_ready' => 'تم تحديد الطلب كجاهز',
         'submission_archived' => 'تم أرشفة الطلب بنجاح',
+        'update_request_approved' => 'تمت الموافقة على طلب التحديث بنجاح.',
+        'update_request_denied' => 'تم رفض طلب التحديث.',
     ],
     'tabs' => [
         'exhibitor_details' => 'تفاصيل العارض',
@@ -95,6 +103,8 @@ return [
         'submission_date' => 'تاريخ التقديم',
         'can_edit' => 'يمكن التعديل',
         'prices' => 'الأسعار',
+        'update_requested' => 'تم طلب التحديث',
+        'edit_deadline' => 'الموعد النهائي للتعديل',
     ],
     'statuses' => [
         'pending' => 'قيد الانتظار',

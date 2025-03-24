@@ -44,6 +44,8 @@ return [
             'create_title' => 'Create Payment Slice',
             'delete' => 'Delete Payment Slice',
         ],
+        'approve_update' => 'Approve Update Request',
+        'deny_update' => 'Deny Update Request',
     ],
     'messages' => [
         'deleted' => 'Submission deleted successfully',
@@ -74,6 +76,10 @@ return [
         'make_ready_description' => 'This will mark the exhibitor submission as ready. Are you sure you want to continue?',
         'archive' => 'Archive Submission',
         'archive_description' => 'This will archive the exhibitor submission. Are you sure you want to continue?',
+        'approve_update' => 'Approve Update Request',
+        'approve_update_description' => 'Set a new deadline for the exhibitor to update their submission.',
+        'deny_update' => 'Deny Update Request',
+        'deny_update_description' => 'Are you sure you want to deny this update request?',
     ],
     'success_messages' => [
         'submission_accepted' => 'Submission accepted successfully',
@@ -83,6 +89,8 @@ return [
         'payment_slice_deleted' => 'Payment slice deleted successfully',
         'submission_ready' => 'Submission marked as ready',
         'submission_archived' => 'Submission archived successfully',
+        'update_request_approved' => 'Update request approved successfully.',
+        'update_request_denied' => 'Update request denied.',
     ],
     'tabs' => [
         'exhibitor_details' => 'Exhibitor Details',
@@ -95,6 +103,8 @@ return [
         'submission_date' => 'Submission Date',
         'can_edit' => 'Can Edit',
         'prices' => 'Prices',
+        'update_requested' => 'Update Requested',
+        'edit_deadline' => 'Edit Deadline',
     ],
     'statuses' => [
         'pending' => 'Pending',

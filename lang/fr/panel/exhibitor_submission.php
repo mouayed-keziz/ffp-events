@@ -44,6 +44,8 @@ return [
             'create_title' => 'Créer une Tranche de Paiement',
             'delete' => 'Supprimer la Tranche de Paiement',
         ],
+        'approve_update' => 'Approuver la demande de mise à jour',
+        'deny_update' => 'Refuser la demande de mise à jour',
     ],
     'messages' => [
         'deleted' => 'Soumission supprimée avec succès',
@@ -74,6 +76,10 @@ return [
         'make_ready_description' => 'Cela marquera la soumission de l\'exposant comme prête. Êtes-vous sûr de vouloir continuer?',
         'archive' => 'Archiver la Soumission',
         'archive_description' => 'Cela archivera la soumission de l\'exposant. Êtes-vous sûr de vouloir continuer?',
+        'approve_update' => 'Approuver la demande de mise à jour',
+        'approve_update_description' => 'Définir une nouvelle date limite pour la mise à jour de la soumission.',
+        'deny_update' => 'Refuser la demande de mise à jour',
+        'deny_update_description' => 'Êtes-vous sûr de vouloir refuser cette demande de mise à jour ?',
     ],
     'success_messages' => [
         'submission_accepted' => 'Soumission acceptée avec succès',
@@ -83,6 +89,8 @@ return [
         'payment_slice_deleted' => 'Tranche de paiement supprimée avec succès',
         'submission_ready' => 'Soumission marquée comme prête',
         'submission_archived' => 'Soumission archivée avec succès',
+        'update_request_approved' => 'Demande de mise à jour approuvée avec succès.',
+        'update_request_denied' => 'Demande de mise à jour refusée.',
     ],
     'tabs' => [
         'exhibitor_details' => 'Détails de l\'Exposant',
@@ -95,6 +103,8 @@ return [
         'submission_date' => 'Date de Soumission',
         'can_edit' => 'Peut Modifier',
         'prices' => 'Prix',
+        'update_requested' => 'Mise à jour demandée',
+        'edit_deadline' => 'Date limite de modification',
     ],
     'statuses' => [
         'pending' => 'En Attente',

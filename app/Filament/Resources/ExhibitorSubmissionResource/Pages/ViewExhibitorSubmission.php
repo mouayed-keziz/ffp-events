@@ -16,6 +16,7 @@ use Filament\Infolists\Components\Tabs\Tab;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Support\Enums\Alignment;
 use Guava\FilamentNestedResources\Concerns\NestedPage;
 
 class ViewExhibitorSubmission extends ViewRecord
@@ -29,11 +30,7 @@ class ViewExhibitorSubmission extends ViewRecord
         $record = $this->getRecord();
         $answers = $record->answers ?? [];
         $postAnswers = $record->post_answers ?? [];
-
-        // Get form definitions from the event announcement's exhibitor form
         $exhibitorForm = $record->eventAnnouncement->exhibitorForm;
-
-        // Process answers and post_answers to merge with form structure
         $processedAnswers = $this->processFormWithAnswers($exhibitorForm, $answers);
         $hasPostAnswers = !empty($postAnswers);
 
@@ -46,43 +43,65 @@ class ViewExhibitorSubmission extends ViewRecord
             TextEntry::make('status')
                 ->label(__('panel/exhibitor_submission.details.status'))
                 ->badge(),
-
             TextEntry::make('created_at')
                 ->label(__('panel/exhibitor_submission.details.submission_date'))
                 ->dateTime(),
-            IconEntry::make('isEditable')
-                ->label(__('panel/exhibitor_submission.details.can_edit'))
-                ->boolean()
         ];
 
-        // Price components if available
+        // Add update request status if present
+        if ($record->update_requested_at) {
+            $exhibitorDetailsComponents[] = TextEntry::make('update_requested_at')
+                ->label(__('panel/exhibitor_submission.details.update_requested'))
+                ->dateTime()
+                ->badge()
+                ->color('warning');
+        }
+
+        // Add edit deadline if present
+        if ($record->edit_deadline) {
+            $exhibitorDetailsComponents[] = TextEntry::make('edit_deadline')
+                ->label(__('panel/exhibitor_submission.details.edit_deadline'))
+                ->dateTime()
+                ->badge()
+                ->color('info');
+        }
+
+        // Price components with improved layout
         $priceComponents = [];
         if (!empty($record->total_prices)) {
-            $priceComponents[] = Fieldset::make(__('panel/exhibitor_submission.details.prices'))->columns(3)
+            $priceComponents[] = Section::make(__('panel/exhibitor_submission.details.prices'))
+                ->columns(3)
                 ->schema([
                     TextEntry::make('total_prices.DZD')
                         ->label('DZD')
-                        ->formatStateUsing(fn($state) => $state ? number_format($state, 2) . ' DZD' : '-'),
+                        ->formatStateUsing(fn($state) => $state ? number_format($state, 2) . ' DZD' : '-')
+                        ->color('success')
+                        ->alignment(Alignment::Start),
                     TextEntry::make('total_prices.EUR')
                         ->label('EUR')
-                        ->formatStateUsing(fn($state) => $state ? number_format($state, 2) . ' €' : '-'),
+                        ->formatStateUsing(fn($state) => $state ? number_format($state, 2) . ' €' : '-')
+                        ->color('success')
+                        ->alignment(Alignment::Start),
                     TextEntry::make('total_prices.USD')
                         ->label('USD')
-                        ->formatStateUsing(fn($state) => $state ? number_format($state, 2) . ' $' : '-'),
+                        ->formatStateUsing(fn($state) => $state ? number_format($state, 2) . ' $' : '-')
+                        ->color('success')
+                        ->alignment(Alignment::Start)
                 ]);
         }
 
-        // Build the tabs array starting with exhibitor details
+        // Build tabs array
         $tabs = [
             Tab::make(__('panel/exhibitor_submission.tabs.exhibitor_details'))
                 ->schema([
-                    ...$exhibitorDetailsComponents,
+                    Section::make()
+                        ->schema($exhibitorDetailsComponents)
+                        ->columns(2),
                     ...$priceComponents,
                 ])
-                ->columns(2),
         ];
 
-        // Add each form as its own tab
+        // Add form tabs
         if (!empty($processedAnswers)) {
             foreach ($processedAnswers as $formIndex => $form) {
                 if (!isset($form['title']) || !isset($form['sections'])) {
@@ -100,10 +119,9 @@ class ViewExhibitorSubmission extends ViewRecord
             }
         }
 
-        // Add post-submission forms as separate tabs if available
+        // Add post-submission form tabs
         if ($hasPostAnswers) {
             $processedPostAnswers = $this->processFormWithAnswers($exhibitorForm, $postAnswers);
-
             foreach ($processedPostAnswers as $formIndex => $form) {
                 if (!isset($form['title']) || !isset($form['sections'])) {
                     continue;
@@ -120,11 +138,11 @@ class ViewExhibitorSubmission extends ViewRecord
             }
         }
 
-        // Create the infolist with tabs
         return $infolist
             ->schema([
                 Tabs::make('Submission Tabs')
-                    ->tabs($tabs)->columnSpanFull()
+                    ->tabs($tabs)
+                    ->columnSpanFull()
             ]);
     }
 
@@ -176,13 +194,14 @@ class ViewExhibitorSubmission extends ViewRecord
         $actions = new ExhibitorSubmissionActions();
 
         return [
+            $actions->getApproveUpdateRequestAction(),
+            $actions->getDenyUpdateRequestAction(),
             $actions->getAcceptAction(),
             $actions->getRejectAction(),
             $actions->getMakeReadyAction(),
             $actions->getArchiveAction(),
             Actions\ActionGroup::make([
-                Actions\EditAction::make(),
-                Actions\DeleteAction::make(),
+                // Actions\EditAction::make()
                 Actions\Action::make('viewEventAnnouncement')
                     ->label(__('panel/event_announcement.resource.label'))
                     ->icon('heroicon-o-calendar')
@@ -193,6 +212,7 @@ class ViewExhibitorSubmission extends ViewRecord
                     ->icon('heroicon-o-user')
                     ->url(fn($record) => ExhibitorResource::getUrl('view', ['record' => $record->exhibitor]))
                     ->color('info'),
+                Actions\DeleteAction::make(),
             ])->dropdown(true),
         ];
     }

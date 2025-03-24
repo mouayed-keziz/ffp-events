@@ -290,4 +290,56 @@ class ExhibitorSubmissionActions
                     ->send();
             });
     }
+
+    public function getApproveUpdateRequestAction(): Action
+    {
+        return Action::make('approveUpdateRequest')
+            ->label(__('panel/exhibitor_submission.actions.approve_update'))
+            ->color('success')
+            ->outlined()
+            ->icon('heroicon-o-check')
+            ->requiresConfirmation()
+            ->modalHeading(__('panel/exhibitor_submission.modals.approve_update'))
+            ->modalDescription(__('panel/exhibitor_submission.modals.approve_update_description'))
+            ->form([
+                Forms\Components\DateTimePicker::make('edit_deadline')
+                    ->label(__('panel/exhibitor_submission.fields.edit_deadline'))
+                    ->required()
+                    ->native(false)
+                    ->minDate(now())
+            ])
+            ->visible(fn(ExhibitorSubmission $record) => $record->update_requested_at !== null)
+            ->action(function (array $data, ExhibitorSubmission $record): void {
+                $record->edit_deadline = $data['edit_deadline'];
+                $record->update_requested_at = null;
+                $record->save();
+
+                Notification::make()
+                    ->title(__('panel/exhibitor_submission.success_messages.update_request_approved'))
+                    ->success()
+                    ->send();
+            });
+    }
+
+    public function getDenyUpdateRequestAction(): Action
+    {
+        return Action::make('denyUpdateRequest')
+            ->label(__('panel/exhibitor_submission.actions.deny_update'))
+            ->color('danger')
+            ->outlined()
+            ->icon('heroicon-o-x-mark')
+            ->requiresConfirmation()
+            ->modalHeading(__('panel/exhibitor_submission.modals.deny_update'))
+            ->modalDescription(__('panel/exhibitor_submission.modals.deny_update_description'))
+            ->visible(fn(ExhibitorSubmission $record) => $record->update_requested_at !== null)
+            ->action(function (ExhibitorSubmission $record): void {
+                $record->update_requested_at = null;
+                $record->save();
+
+                Notification::make()
+                    ->title(__('panel/exhibitor_submission.success_messages.update_request_denied'))
+                    ->warning()
+                    ->send();
+            });
+    }
 }

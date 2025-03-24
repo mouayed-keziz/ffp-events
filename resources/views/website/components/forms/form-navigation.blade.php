@@ -37,7 +37,6 @@
                     @endif
                 </span>
                 <span wire:loading wire:target="submitForm" class="flex items-center">
-                    <x-heroicon-o-arrow-path class="w-4 h-4 animate-spin me-2" />
                     <span>{{ __('website/exhibit-event.submitting') }}</span>
                 </span>
             </div>
