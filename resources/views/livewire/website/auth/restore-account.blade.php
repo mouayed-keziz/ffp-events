@@ -2,6 +2,8 @@
 
 use Livewire\Volt\Component;
 use Illuminate\Support\Str;
+use App\Helpers\PasswordResetHelper;
+use Illuminate\Support\Facades\App;
 
 new class extends Component {
     // Added property for email input.
@@ -14,12 +16,22 @@ new class extends Component {
             'email' => 'required|email',
         ]);
 
+        $model = null;
+        $name = null;
+        $userId = null;
+
         if ($user = \App\Models\User::where('email', $this->email)->first()) {
             $model = 'user';
+            $name = $user->name;
+            $userId = $user->id;
         } elseif ($user = \App\Models\Exhibitor::where('email', $this->email)->first()) {
             $model = 'exhibitor';
+            $name = $user->name;
+            $userId = $user->id;
         } elseif ($user = \App\Models\Visitor::where('email', $this->email)->first()) {
             $model = 'visitor';
+            $name = $user->name;
+            $userId = $user->id;
         } else {
             session()->flash('error', "Aucun compte n'a été trouvé");
             return;
@@ -37,7 +49,8 @@ new class extends Component {
             ],
         );
 
-        \Mail::to($this->email)->send(new \App\Mail\ResetPasswordMail($token, $model));
+        // Use the new PasswordResetHelper to send localized reset email
+        PasswordResetHelper::sendResetEmail(email: $this->email, token: $token, userId: $model, locale: App::getLocale(), name: $name);
 
         return redirect()->route('email-sent', ['email' => $this->email]);
     }

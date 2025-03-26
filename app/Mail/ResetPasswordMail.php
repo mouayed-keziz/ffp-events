@@ -8,6 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\App;
 
 class ResetPasswordMail extends Mailable
 {
@@ -15,14 +16,20 @@ class ResetPasswordMail extends Mailable
 
     public $token;
     public $model;
+    public $locale;
+    public $name;
+    public $direction;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($token, $model)
+    public function __construct($token, $model, $locale = null, $name = null)
     {
         $this->token = $token;
         $this->model = $model;
+        $this->locale = $locale ?? App::getLocale();
+        $this->name = $name ?? $model;
+        $this->direction = $this->locale === 'ar' ? 'rtl' : 'ltr';
     }
 
     /**
@@ -30,8 +37,10 @@ class ResetPasswordMail extends Mailable
      */
     public function envelope(): Envelope
     {
+        App::setLocale($this->locale);
+
         return new Envelope(
-            subject: 'Reset Password Mail',
+            subject: __('emails/reset-password.subject'),
         );
     }
 
@@ -40,11 +49,16 @@ class ResetPasswordMail extends Mailable
      */
     public function content(): Content
     {
+        App::setLocale($this->locale);
+
         return new Content(
             view: 'mails.reset-password',
             with: [
                 'token' => $this->token,
                 'model' => $this->model,
+                'locale' => $this->locale,
+                'direction' => $this->direction,
+                'name' => $this->name,
             ]
         );
     }
