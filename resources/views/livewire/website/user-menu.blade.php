@@ -133,7 +133,7 @@ new class extends Component {
                     @endif
                 </div>
             </label>
-            <div tabindex="0" class="mt-3 z-[1] card compact dropdown-content w-96 bg-base-100 shadow">
+            <div tabindex="0" class="mt-3 z-[9999] card compact dropdown-content w-96 bg-base-100 shadow">
                 <div class="card-body p-2">
                     <h3 class="font-bold text-lg px-2 py-2 border-b">{{ __('website/notifications.title') }}</h3>
 

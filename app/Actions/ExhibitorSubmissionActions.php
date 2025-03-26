@@ -15,6 +15,7 @@ use Filament\Forms;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Notifications\Notification;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\App;
 
 class ExhibitorSubmissionActions
 {
@@ -118,9 +119,44 @@ class ExhibitorSubmissionActions
             ->requiresConfirmation()
             ->modalHeading(__('panel/exhibitor_submission.modals.reject'))
             ->modalDescription(__('panel/exhibitor_submission.modals.reject_description'))
-            ->action(function (ExhibitorSubmission $record): void {
+            ->form([
+                Forms\Components\Textarea::make('rejection_reason')
+                    ->label(__('panel/exhibitor_submission.fields.rejection_reason_translatable'))
+                    ->required()
+                    ->rows(3)
+                    ->translatable(),
+            ])
+            ->action(function (array $data, ExhibitorSubmission $record): void {
+                // Update submission status to rejected and set rejection reason
                 $record->status = ExhibitorSubmissionStatus::REJECTED;
+                $record->rejection_reason = $data['rejection_reason'];
                 $record->save();
+
+                // Send notification to exhibitor if associated with one
+                if ($record->exhibitor) {
+                    // Get the current locale for localized notification
+                    $locale = App::getLocale();
+
+                    try {
+                        $record->exhibitor->notify(
+                            new \App\Notifications\Exhibitor\ExhibitorSubmissionRejected(
+                                $record->eventAnnouncement,
+                                $record,
+                                $locale
+                            )
+                        );
+
+                        // Log notification sent
+                        \Illuminate\Support\Facades\Log::info(
+                            "Rejection notification sent to exhibitor {$record->exhibitor->id} for submission {$record->id}"
+                        );
+                    } catch (\Exception $e) {
+                        // Log error but continue
+                        \Illuminate\Support\Facades\Log::error(
+                            "Failed to send rejection notification: " . $e->getMessage()
+                        );
+                    }
+                }
 
                 Notification::make()
                     ->title(__('panel/exhibitor_submission.success_messages.submission_rejected'))

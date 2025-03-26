@@ -13,6 +13,8 @@ return [
         'exhibitor' => 'Exhibitor',
         'event' => 'Event',
         'attachments' => 'Attachments',
+        'rejection_reason' => 'Rejection Reason (:locale)',
+        'rejection_reason_translatable' => 'Rejection Reason',
         'payment_slice' => [
             'status' => 'Status',
             'price' => 'Price',

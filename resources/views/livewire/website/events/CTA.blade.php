@@ -4,15 +4,18 @@ use Livewire\Volt\Component;
 use App\Enums\ExhibitorSubmissionStatus;
 use App\Enums\PaymentSliceStatus;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\App;
 
 new class extends Component {
     public $event;
     public $submission;
+    public $locale;
 
     public function mount($event, $submission)
     {
         $this->event = $event;
         $this->submission = $submission;
+        $this->locale = App::getLocale();
     }
 
     public function hasUnpaidPayments()
@@ -68,6 +71,22 @@ new class extends Component {
 <div class="my-4">
     <div class="flex flex-col gap-3 pt-4">
         @if ($submission)
+            @if ($submission->status === ExhibitorSubmissionStatus::REJECTED)
+                <div class="alert alert-error shadow-lg">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div>
+                            <h3 class="font-bold">{{ __('website/event.submission_rejected') }}</h3>
+                            <div class="text-sm mt-2">{{ $submission->rejection_reason }}</div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             <a href="{{ route('view_exhibitor_answers', $event) }}"
                 class="btn btn-sm rounded-md text-sm font-semibold btn-outline border-base-200 border-2 uppercase">
                 {{ __('website/event.review_answers') }}

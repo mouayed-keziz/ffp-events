@@ -13,6 +13,8 @@ return [
         'exhibitor' => 'Exposant',
         'event' => 'Événement',
         'attachments' => 'Pièces Jointes',
+        'rejection_reason' => 'Motif de refus (:locale)',
+        'rejection_reason_translatable' => 'Motif de refus',
         'payment_slice' => [
             'status' => 'Statut',
             'price' => 'Prix',

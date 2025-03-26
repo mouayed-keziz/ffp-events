@@ -9,11 +9,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\Translatable\HasTranslations;
 
 class ExhibitorSubmission extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, HasTranslations;
 
+    public $translatable = ['rejection_reason'];
 
     protected $fillable = [
         'exhibitor_id',
@@ -22,6 +24,7 @@ class ExhibitorSubmission extends Model implements HasMedia
         'post_answers',
         'total_prices',
         'status',
+        'rejection_reason',
         'edit_deadline',
         'update_requested_at'
     ];

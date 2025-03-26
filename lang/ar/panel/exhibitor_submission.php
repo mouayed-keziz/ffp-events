@@ -13,6 +13,8 @@ return [
         'exhibitor' => 'العارض',
         'event' => 'الفعالية',
         'attachments' => 'المرفقات',
+        'rejection_reason' => 'سبب الرفض (:locale)',
+        'rejection_reason_translatable' => 'سبب الرفض',
         'payment_slice' => [
             'status' => 'الحالة',
             'price' => 'السعر',
