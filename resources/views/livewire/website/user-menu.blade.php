@@ -100,6 +100,14 @@ new class extends Component {
         }
     }
 
+    public function viewEventAndMarkAsRead($notificationId, $eventId): void
+    {
+        $this->markAsRead($notificationId);
+
+        // Redirect to the event page
+        $this->redirect(route('event_details', ['id' => $eventId]));
+    }
+
     public function logout(): void
     {
         Auth::guard('web')->logout();
@@ -141,7 +149,8 @@ new class extends Component {
                                         </div>
                                         @if (!$notification['read'])
                                             <button wire:click="markAsRead('{{ $notification['id'] }}')"
-                                                class="btn btn-xs btn-ghost">
+                                                class="btn btn-xs btn-ghost"
+                                                title="{{ __('website/notifications.mark_as_read') }}">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                     class="w-4 h-4">
@@ -154,10 +163,11 @@ new class extends Component {
 
                                     @if ($notification['event_id'])
                                         <div class="mt-2">
-                                            <a href="{{ route('event_details', ['id' => $notification['event_id']]) }}"
+                                            <button
+                                                wire:click="viewEventAndMarkAsRead('{{ $notification['id'] }}', {{ $notification['event_id'] }})"
                                                 class="btn btn-xs btn-primary w-full">
                                                 {{ __('website/notifications.view_event') }}
-                                            </a>
+                                            </button>
                                         </div>
                                     @endif
                                 </div>

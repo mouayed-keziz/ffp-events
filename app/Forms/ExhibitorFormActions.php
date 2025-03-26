@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use App\Models\ExhibitorSubmission;
+use Illuminate\Support\Facades\App;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ExhibitorFormActions extends BaseFormActions
@@ -189,45 +190,57 @@ class ExhibitorFormActions extends BaseFormActions
      */
     public function saveFormSubmission(EventAnnouncement $event, array $formData): bool
     {
-        try {
-            // Process the form data with price calculation
-            $processResult = $this->processFormDataForSubmission($formData, true);
-            $processedData = $processResult['processedData'];
-            $filesToProcess = $processResult['filesToProcess'];
+        // try {
+        // Process the form data with price calculation
+        $processResult = $this->processFormDataForSubmission($formData, true);
+        $processedData = $processResult['processedData'];
+        $filesToProcess = $processResult['filesToProcess'];
 
-            // Get exhibitor ID if user is authenticated as an exhibitor
-            $exhibitorId = null;
-            if (auth('exhibitor')->check()) {
-                $exhibitorId = auth('exhibitor')->user()->id;
-            }
-            // Create submission with total prices
-            $submission = \App\Models\ExhibitorSubmission::create([
-                'exhibitor_id' => $exhibitorId,
-                'event_announcement_id' => $event->id,
-                'answers' => array_values($processedData),
-                'total_prices' => $processedData['total_prices'] ?? null,
-                'status' => 'pending',
-            ]);
-            Log::info("Exhibitor Submission created: {$submission->id}");
-
-            // Process files using Media Library
-            foreach ($filesToProcess as $fileInfo) {
-                $media = $submission->addMedia($fileInfo['file']->getRealPath())
-                    ->usingFileName($fileInfo['file']->getClientOriginalName())
-                    ->withCustomProperties([
-                        'fileId' => $fileInfo['fileId'],
-                        'fileType' => $fileInfo['fieldData']['file_type'] ?? null,
-                        'fieldLabel' => $fileInfo['fieldData']['label'] ?? null,
-                    ])
-                    ->toMediaCollection('attachments');
-                Log::info("Media added: {$media->id} with fileId: {$fileInfo['fileId']}");
-            }
-
-            return true;
-        } catch (\Exception $e) {
-            report($e);
-            return false;
+        // Get exhibitor ID if user is authenticated as an exhibitor
+        $exhibitorId = null;
+        $exhibitor = null;
+        if (auth('exhibitor')->check()) {
+            $exhibitorId = auth('exhibitor')->user()->id;
+            $exhibitor = auth('exhibitor')->user();
         }
+        // Create submission with total prices
+        $submission = \App\Models\ExhibitorSubmission::create([
+            'exhibitor_id' => $exhibitorId,
+            'event_announcement_id' => $event->id,
+            'answers' => array_values($processedData),
+            'total_prices' => $processedData['total_prices'] ?? null,
+            'status' => 'pending',
+        ]);
+        Log::info("Exhibitor Submission created: {$submission->id}");
+
+        // Process files using Media Library
+        foreach ($filesToProcess as $fileInfo) {
+            $media = $submission->addMedia($fileInfo['file']->getRealPath())
+                ->usingFileName($fileInfo['file']->getClientOriginalName())
+                ->withCustomProperties([
+                    'fileId' => $fileInfo['fileId'],
+                    'fileType' => $fileInfo['fieldData']['file_type'] ?? null,
+                    'fieldLabel' => $fileInfo['fieldData']['label'] ?? null,
+                ])
+                ->toMediaCollection('attachments');
+            Log::info("Media added: {$media->id} with fileId: {$fileInfo['fileId']}");
+        }
+
+        // Send notification if exhibitor is authenticated
+        if ($exhibitor) {
+            // Get the current locale for localized notification
+            $locale = App::getLocale();
+
+            // Send the notification
+            $exhibitor->notify(new \App\Notifications\Exhibitor\ExhibitorSubmissionProcessing($event, $submission, $locale));
+            Log::info("Exhibitor notification sent to: {$exhibitor->email} with locale: {$locale}");
+        }
+
+        return true;
+        // } catch (\Exception $e) {
+        //     report($e);
+        //     return false;
+        // }
     }
 
     /**

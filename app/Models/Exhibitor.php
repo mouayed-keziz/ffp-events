@@ -34,11 +34,13 @@ class Exhibitor extends Authenticatable implements HasMedia
         'verified_at' => 'datetime',
         'currency' => Currency::class,
     ];
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('image')
             ->singleFile();
     }
+
     public function getImageAttribute()
     {
         return $this->hasMedia('image') ? $this->getFirstMediaUrl('image') : null;

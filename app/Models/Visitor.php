@@ -46,4 +46,14 @@ class Visitor extends Authenticatable implements HasMedia
     {
         return $this->hasMany(VisitorSubmission::class);
     }
+
+    /**
+     * Route notifications for the mail channel.
+     *
+     * @return string
+     */
+    public function routeNotificationForMail(): string
+    {
+        return $this->email;
+    }
 }
