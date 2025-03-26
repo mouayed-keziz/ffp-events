@@ -3,8 +3,13 @@
 namespace App\Forms;
 
 use App\Models\EventAnnouncement;
+use App\Models\Visitor;
+use App\Models\VisitorSubmission;
 use App\Enums\FormField;
+use App\Notifications\Visitor\VisitorEventRegistrationSuccessful;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
@@ -153,44 +158,56 @@ class VisitEventFormActions extends BaseFormActions
      */
     public function saveFormSubmission(EventAnnouncement $event, array $formData): bool
     {
-        try {
-            // Process the form data (handle file uploads, translatable fields, etc.)
-            $processResult = $this->processFormDataForSubmission($formData);
-            $processedData = $processResult['processedData'];
-            $filesToProcess = $processResult['filesToProcess'];
+        // try {
+        // Process the form data (handle file uploads, translatable fields, etc.)
+        $processResult = $this->processFormDataForSubmission($formData);
+        $processedData = $processResult['processedData'];
+        $filesToProcess = $processResult['filesToProcess'];
 
-            // Get visitor ID if user is authenticated as a visitor
-            $visitorId = null;
-            if (auth('visitor')->check()) {
-                $visitorId = auth('visitor')->user()->id;
-            }
-
-            // Create a new submission with nullable visitor_id
-            $submission = \App\Models\VisitorSubmission::create([
-                'visitor_id' => $visitorId,
-                'event_announcement_id' => $event->id,
-                'answers' => $processedData,
-                'status' => 'approved',
-            ]);
-            Log::info("Visitor Submission created: {$submission->id}");
-
-            // Process any files by adding them to the Spatie Media Library
-            foreach ($filesToProcess as $fileInfo) {
-                $media = $submission->addMedia($fileInfo['file']->getRealPath())
-                    ->usingFileName($fileInfo['file']->getClientOriginalName())
-                    ->withCustomProperties([
-                        'fileId' => $fileInfo['fileId'],
-                        'fileType' => $fileInfo['fieldData']['file_type'] ?? null,
-                        'fieldLabel' => $fileInfo['fieldData']['label'] ?? null,
-                    ])
-                    ->toMediaCollection('attachments');
-                Log::info("Media added: {$media->id} with fileId: {$fileInfo['fileId']}");
-            }
-
-            return true;
-        } catch (\Exception $e) {
-            report($e);
-            return false;
+        // Get visitor ID if user is authenticated as a visitor
+        $visitorId = null;
+        $visitor = null;
+        if (auth('visitor')->check()) {
+            $visitorId = auth('visitor')->user()->id;
+            $visitor = auth('visitor')->user();
         }
+
+        // Create a new submission with nullable visitor_id
+        $submission = VisitorSubmission::create([
+            'visitor_id' => $visitorId,
+            'event_announcement_id' => $event->id,
+            'answers' => $processedData,
+            'status' => 'approved',
+        ]);
+        Log::info("Visitor Submission created: {$submission->id}");
+
+        // Process any files by adding them to the Spatie Media Library
+        foreach ($filesToProcess as $fileInfo) {
+            $media = $submission->addMedia($fileInfo['file']->getRealPath())
+                ->usingFileName($fileInfo['file']->getClientOriginalName())
+                ->withCustomProperties([
+                    'fileId' => $fileInfo['fileId'],
+                    'fileType' => $fileInfo['fieldData']['file_type'] ?? null,
+                    'fieldLabel' => $fileInfo['fieldData']['label'] ?? null,
+                ])
+                ->toMediaCollection('attachments');
+            Log::info("Media added: {$media->id} with fileId: {$fileInfo['fileId']}");
+        }
+
+        // Send notification if visitor is authenticated
+        if ($visitor) {
+            // Get the current locale for localized notification
+            $locale = App::getLocale();
+
+            // Send the notification
+            $visitor->notify(new VisitorEventRegistrationSuccessful($event, $submission, $locale));
+            Log::info("Visitor notification sent to: {$visitor->email} with locale: {$locale}");
+        }
+
+        return true;
+        // } catch (\Exception $e) {
+        //     report($e);
+        //     return false;
+        // }
     }
 }
