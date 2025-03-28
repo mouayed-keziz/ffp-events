@@ -16,6 +16,7 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Notifications\Notification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\App;
+use App\Notifications\Exhibitor\ExhibitorEventRegistrationAccepted;
 
 class ExhibitorSubmissionActions
 {
@@ -95,6 +96,32 @@ class ExhibitorSubmissionActions
                     }
 
                     $sort++;
+                }
+
+                // Send notification to exhibitor if associated with one
+                if ($record->exhibitor) {
+                    // Get the current locale for localized notification
+                    $locale = App::getLocale();
+
+                    try {
+                        $record->exhibitor->notify(
+                            new ExhibitorEventRegistrationAccepted(
+                                $record->eventAnnouncement,
+                                $record,
+                                $locale
+                            )
+                        );
+
+                        // Log notification sent
+                        \Illuminate\Support\Facades\Log::info(
+                            "Acceptance notification sent to exhibitor {$record->exhibitor->id} for submission {$record->id}"
+                        );
+                    } catch (\Exception $e) {
+                        // Log error but continue
+                        \Illuminate\Support\Facades\Log::error(
+                            "Failed to send acceptance notification: " . $e->getMessage()
+                        );
+                    }
                 }
 
                 Notification::make()
