@@ -16,7 +16,7 @@
         <li>{{ __('emails/exhibitor-event-registration-accepted.status') }}</li>
     </ul>
     <p>{{ __('emails/exhibitor-event-registration-accepted.finalize') }}</p>
-    <p><a href="{{ route('payment.upload', ['submission' => $submission->id]) }}">{{ __('emails/exhibitor-event-registration-accepted.link', ['payment_link' => route('payment.upload', ['submission' => $submission->id])]) }}</a></p>
+    <p><a href="{{ route('upload_payment_proof', ['id' => $submission->id]) }}">{{ __('emails/exhibitor-event-registration-accepted.link', ['payment_link' => route('upload_payment_proof', ['id' => $submission->id])]) }}</a></p>
     <p>{{ __('emails/exhibitor-event-registration-accepted.confirmation') }}</p>
     <p>{{ __('emails/exhibitor-event-registration-accepted.salutation') }}</p>
     <p>{{ __('emails/exhibitor-event-registration-accepted.team') }}</p>
