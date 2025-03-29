@@ -14,4 +14,6 @@ return [
     'confirmation' => 'Votre participation sera confirmée dès réception de votre paiement. Pour toute question, n’hésitez pas à nous contacter.',
     'salutation' => 'Cordialement,',
     'team' => 'L’équipe FFP Events',
+    'link_text' => 'Téléverser la preuve de paiement',
+    'participation_details' => 'Détails de la participation :',
 ];

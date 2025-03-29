@@ -14,4 +14,6 @@ return [
     'confirmation' => 'سيتم تأكيد مشاركتك فور استلام الدفع. لأي استفسار، لا تتردد في الاتصال بنا.',
     'salutation' => 'مع تحيات،',
     'team' => 'فريق FFP Events',
+    'link_text' => 'رفع إثبات الدفع',
+    'participation_details' => 'تفاصيل المشاركة:',
 ];

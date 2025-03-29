@@ -200,7 +200,7 @@ class ViewExhibitorSubmission extends ViewRecord
             $actions->getRejectAction(),
             $actions->getMakeReadyAction(),
             $actions->getArchiveAction(),
-            // Actions\EditAction::make(),
+            Actions\EditAction::make(),
             Actions\ActionGroup::make([
                 Actions\Action::make('viewEventAnnouncement')
                     ->label(__('panel/event_announcement.resource.label'))
