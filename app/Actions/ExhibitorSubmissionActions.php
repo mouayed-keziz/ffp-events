@@ -219,6 +219,32 @@ class ExhibitorSubmissionActions
                     $submission->save();
                 }
 
+                // Send notification to exhibitor if associated with one
+                if ($submission->exhibitor) {
+                    // Get the current locale for localized notification
+                    $locale = App::getLocale();
+
+                    try {
+                        $submission->exhibitor->notify(
+                            new \App\Notifications\Exhibitor\ExhibitorPaymentRegistrationAccepted(
+                                $submission->eventAnnouncement,
+                                $record,
+                                $locale
+                            )
+                        );
+
+                        // Log notification sent
+                        \Illuminate\Support\Facades\Log::info(
+                            "Payment validation notification sent to exhibitor {$submission->exhibitor->id} for submission {$submission->id}"
+                        );
+                    } catch (\Exception $e) {
+                        // Log error but continue
+                        \Illuminate\Support\Facades\Log::error(
+                            "Failed to send payment validation notification: " . $e->getMessage()
+                        );
+                    }
+                }
+
                 Notification::make()
                     ->title(__('panel/exhibitor_submission.success_messages.payment_validated'))
                     ->success()
