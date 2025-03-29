@@ -119,7 +119,9 @@ class EventController extends Controller
         ]);
     }
 
-    public function DownloadInvoice($id) {}
+    public function DownloadInvoice($id) {
+        return view("pdf.exhibitor-submission-invoice");
+    }
     public function UploadPaymentProof($id)
     {
         $event = EventAnnouncement::find($id);
