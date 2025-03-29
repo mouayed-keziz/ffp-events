@@ -225,13 +225,28 @@ class ExhibitorSubmissionActions
                     $locale = App::getLocale();
 
                     try {
-                        $submission->exhibitor->notify(
-                            new \App\Notifications\Exhibitor\ExhibitorPaymentRegistrationAccepted(
-                                $submission->eventAnnouncement,
-                                $record,
-                                $locale
-                            )
-                        );
+                        // Use different notification based on payment order
+                        $isFirstPayment = $submission->paymentSlices()
+                            ->where('status', PaymentSliceStatus::VALID)
+                            ->count() === 1;
+
+                        if ($isFirstPayment) {
+                            $submission->exhibitor->notify(
+                                new \App\Notifications\Exhibitor\ExhibitorPaymentRegistrationAccepted(
+                                    $submission->eventAnnouncement,
+                                    $record,
+                                    $locale
+                                )
+                            );
+                        } else {
+                            $submission->exhibitor->notify(
+                                new \App\Notifications\Exhibitor\ExhibitorSubsequentPaymentAccepted(
+                                    $submission->eventAnnouncement,
+                                    $record,
+                                    $locale
+                                )
+                            );
+                        }
 
                         // Log notification sent
                         \Illuminate\Support\Facades\Log::info(
