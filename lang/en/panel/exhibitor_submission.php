@@ -107,6 +107,8 @@ return [
         'prices' => 'Prices',
         'update_requested' => 'Update Requested',
         'edit_deadline' => 'Edit Deadline',
+        'update_request' => 'Response modification request',
+        'update_request_description' => 'The exhibitor wishes to modify their response. If you accept, please set a new deadline by clicking on \'Approve update request\'',
     ],
     'statuses' => [
         'pending' => 'Pending',

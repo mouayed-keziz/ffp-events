@@ -107,6 +107,8 @@ return [
         'prices' => 'Prix',
         'update_requested' => 'Mise à jour demandée',
         'edit_deadline' => 'Date limite de modification',
+        'update_request' => 'demande de modification de réponse',
+        'update_request_description' => 'L\'exposant souhaite modifier sa réponse. Si vous acceptez, veuillez définir une nouvelle date limite en cliquant sur \'Approuver la demande de mise à jour\''
     ],
     'statuses' => [
         'pending' => 'En Attente',

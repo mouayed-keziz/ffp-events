@@ -297,14 +297,29 @@ class ExhibitorSubmissionActions
                     $locale = App::getLocale();
 
                     try {
-                        $submission->exhibitor->notify(
-                            new \App\Notifications\Exhibitor\ExhibitorPaymentRegistrationRejected(
-                                $submission->eventAnnouncement,
-                                $submission,
-                                $record,
-                                $locale
-                            )
-                        );
+                        // Use different notification based on payment order
+                        $isFirstPayment = $submission->paymentSlices()
+                            ->where('status', PaymentSliceStatus::VALID)
+                            ->count() === 0;
+
+                        if ($isFirstPayment) {
+                            $submission->exhibitor->notify(
+                                new \App\Notifications\Exhibitor\ExhibitorPaymentRegistrationRejected(
+                                    $submission->eventAnnouncement,
+                                    $submission,
+                                    $record,
+                                    $locale
+                                )
+                            );
+                        } else {
+                            $submission->exhibitor->notify(
+                                new \App\Notifications\Exhibitor\ExhibitorSubsequentPaymentRejected(
+                                    $submission->eventAnnouncement,
+                                    $record,
+                                    $locale
+                                )
+                            );
+                        }
 
                         // Log notification sent
                         \Illuminate\Support\Facades\Log::info(

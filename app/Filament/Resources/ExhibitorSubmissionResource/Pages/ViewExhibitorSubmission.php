@@ -50,21 +50,36 @@ class ViewExhibitorSubmission extends ViewRecord
 
         // Add update request status if present
         if ($record->update_requested_at) {
-            $exhibitorDetailsComponents[] = TextEntry::make('update_requested_at')
-                ->label(__('panel/exhibitor_submission.details.update_requested'))
-                ->dateTime()
-                ->badge()
-                ->color('warning');
+            $exhibitorDetailsComponents[] = Section::make(__('panel/exhibitor_submission.details.update_request'))
+                ->description(__('panel/exhibitor_submission.details.update_request_description'))
+                ->icon('heroicon-o-exclamation-circle')
+                ->schema([
+                    TextEntry::make('update_requested_at')
+                        ->label(__('panel/exhibitor_submission.details.update_requested'))
+                        ->dateTime()
+                        ->badge()
+                        ->color('warning')
+                        ->size('lg'),
+                    TextEntry::make('edit_deadline')
+                        ->label(__('panel/exhibitor_submission.details.edit_deadline'))
+                        ->dateTime()
+                        ->badge()
+                        ->color('info')
+                        ->visible(fn() => $record->edit_deadline !== null),
+                ])
+                ->columnSpan(2);
+        } else {
+            // Add edit deadline if present
+            if ($record->edit_deadline) {
+                $exhibitorDetailsComponents[] = TextEntry::make('edit_deadline')
+                    ->label(__('panel/exhibitor_submission.details.edit_deadline'))
+                    ->dateTime()
+                    ->badge()
+                    ->color('info');
+            }
         }
 
-        // Add edit deadline if present
-        if ($record->edit_deadline) {
-            $exhibitorDetailsComponents[] = TextEntry::make('edit_deadline')
-                ->label(__('panel/exhibitor_submission.details.edit_deadline'))
-                ->dateTime()
-                ->badge()
-                ->color('info');
-        }
+
 
         // Price components with improved layout
         $priceComponents = [];
