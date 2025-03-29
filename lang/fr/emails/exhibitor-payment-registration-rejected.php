@@ -15,4 +15,6 @@ return [
     'assistance' => 'Si vous avez besoin d’assistance, notre équipe reste à votre disposition.',
     'regards' => 'Cordialement,',
     'team' => 'L’équipe FFP Events',
+    'link_text' => 'Téléverser la preuve de paiement',
+    'participation_details' => 'Détails de la participation :',
 ];

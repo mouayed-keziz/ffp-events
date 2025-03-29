@@ -15,4 +15,7 @@ return [
     'assistance' => 'If you need assistance, our team remains at your disposal.',
     'regards' => 'Best regards,',
     'team' => 'The FFP Events team',
+    'participation_details' => 'Participation details:',
+    'link_text' => 'Upload proof of payment',
+
 ];

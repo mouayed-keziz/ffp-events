@@ -4,6 +4,7 @@ namespace App\Mail\Exhibitor;
 
 use App\Models\EventAnnouncement;
 use App\Models\Exhibitor;
+use App\Models\ExhibitorPaymentSlice;
 use App\Models\ExhibitorSubmission;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -20,17 +21,19 @@ class ExhibitorPaymentRegistrationRejectedMail extends Mailable
     public $event;
     public $exhibitor;
     public $submission;
+    public $paymentSlice;
     public $locale;
     public $direction;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(EventAnnouncement $event, Exhibitor $exhibitor, ExhibitorSubmission $submission, string $locale = null)
+    public function __construct(EventAnnouncement $event, Exhibitor $exhibitor, ExhibitorSubmission $submission, ExhibitorPaymentSlice $paymentSlice, string $locale = null)
     {
         $this->event = $event;
         $this->exhibitor = $exhibitor;
         $this->submission = $submission;
+        $this->paymentSlice = $paymentSlice;
         $this->locale = $locale ?? App::getLocale();
         $this->direction = $this->locale === 'ar' ? 'rtl' : 'ltr';
     }
@@ -62,6 +65,7 @@ class ExhibitorPaymentRegistrationRejectedMail extends Mailable
                 'event' => $this->event,
                 'exhibitor' => $this->exhibitor,
                 'submission' => $this->submission,
+                'paymentSlice' => $this->paymentSlice,
                 'locale' => $this->locale,
                 'direction' => $this->direction,
             ]

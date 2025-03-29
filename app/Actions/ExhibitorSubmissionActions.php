@@ -260,6 +260,7 @@ class ExhibitorSubmissionActions
                             new \App\Notifications\Exhibitor\ExhibitorPaymentRegistrationRejected(
                                 $submission->eventAnnouncement,
                                 $submission,
+                                $record,
                                 $locale
                             )
                         );

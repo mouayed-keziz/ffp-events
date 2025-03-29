@@ -5,6 +5,7 @@ namespace App\Notifications\Exhibitor;
 use App\Mail\Exhibitor\ExhibitorPaymentRegistrationRejectedMail;
 use App\Models\EventAnnouncement;
 use App\Models\Exhibitor;
+use App\Models\ExhibitorPaymentSlice;
 use App\Models\ExhibitorSubmission;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,15 +18,17 @@ class ExhibitorPaymentRegistrationRejected extends Notification
 
     public $event;
     public $submission;
+    public $paymentSlice;
     public $locale;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(EventAnnouncement $event, ExhibitorSubmission $submission, string $locale = null)
+    public function __construct(EventAnnouncement $event, ExhibitorSubmission $submission, ExhibitorPaymentSlice $paymentSlice, string $locale = null)
     {
         $this->event = $event;
         $this->submission = $submission;
+        $this->paymentSlice = $paymentSlice;
         $this->locale = $locale ?? App::getLocale();
     }
 
@@ -48,6 +51,7 @@ class ExhibitorPaymentRegistrationRejected extends Notification
             $this->event,
             $notifiable,
             $this->submission,
+            $this->paymentSlice,
             $this->locale
         ))->to($notifiable->email);
     }
@@ -84,6 +88,7 @@ class ExhibitorPaymentRegistrationRejected extends Notification
             'event_id' => $this->event->id,
             'event_title' => $translatedTitles,
             'submission_id' => $this->submission->id,
+            'payment_slice_id' => $this->paymentSlice->id,
             'type' => 'exhibitor_payment_registration_rejected',
             'message' => $translatedMessages,
             'reason' => $translatedReasons,
