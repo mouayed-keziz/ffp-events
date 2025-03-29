@@ -460,6 +460,33 @@ class ExhibitorSubmissionActions
                 $record->update_requested_at = null;
                 $record->save();
 
+                // Send notification to exhibitor if associated with one
+                if ($record->exhibitor) {
+                    // Get the current locale for localized notification
+                    $locale = App::getLocale();
+
+                    try {
+                        $record->exhibitor->notify(
+                            new \App\Notifications\Exhibitor\ExhibitorEditSubmissionRequestAccepted(
+                                $record->eventAnnouncement,
+                                $record,
+                                $locale,
+                                $data['edit_deadline']
+                            )
+                        );
+
+                        // Log notification sent
+                        \Illuminate\Support\Facades\Log::info(
+                            "Edit submission request accepted notification sent to exhibitor {$record->exhibitor->id} for submission {$record->id}"
+                        );
+                    } catch (\Exception $e) {
+                        // Log error but continue
+                        \Illuminate\Support\Facades\Log::error(
+                            "Failed to send edit submission request accepted notification: " . $e->getMessage()
+                        );
+                    }
+                }
+
                 Notification::make()
                     ->title(__('panel/exhibitor_submission.success_messages.update_request_approved'))
                     ->success()
