@@ -45,4 +45,7 @@ return [
     // Page titles
     'exhibit_in' => 'معرض في',
     'upload_payment_proof_for' => 'تحميل إثبات الدفع للمعرض في',
+
+    'total_order' => 'إجمالي طلب الشراء',
+    'total' => 'الإجمالي',
 ];

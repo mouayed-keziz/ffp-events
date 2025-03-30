@@ -45,4 +45,7 @@ return [
     // Page titles
     'exhibit_in' => 'Exhibit in',
     'upload_payment_proof_for' => 'Upload payment proof for exhibiting at',
+
+    'total_order' => 'Purchase order total',
+    'total' => 'Total',
 ];

@@ -45,4 +45,7 @@ return [
     // Page titles
     'exhibit_in' => 'Exposer dans',
     'upload_payment_proof_for' => 'Téléverser la preuve de paiement pour exposer à',
+
+    'total_order' => "Total du bon de commande",
+    "total" => "Total"
 ];

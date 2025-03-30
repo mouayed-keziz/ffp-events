@@ -68,10 +68,7 @@ class ExhibitorSubmissionActions
                                     ->downloadable()
                                     ->columnSpan(2)
                             ]),
-                    ])
-                    ->required()
-                    ->minItems(1)
-                    ->defaultItems(1),
+                    ]),
             ])
             ->visible(fn(ExhibitorSubmission $record) => $record->status === ExhibitorSubmissionStatus::PENDING)
             ->action(function (array $data, ExhibitorSubmission $record): void {

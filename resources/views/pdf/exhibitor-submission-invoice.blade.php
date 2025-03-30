@@ -2,6 +2,10 @@
 use App\Settings\CompanyInformationsSettings;
 use Illuminate\Support\Number;
 
+// Pagination settings
+$maxRowsPerPage = 20;
+$maxRowsLastPage = 12;
+
 // Get company information from settings
 $settings = app(CompanyInformationsSettings::class);
 
@@ -30,6 +34,9 @@ $clientInfo = [
 ];
 
 // Get invoice items
+// $items = [...$submission->getInvoiceData(), ...$submission->getInvoiceData(), ...$submission->getInvoiceData(),
+// ...$submission->getInvoiceData(), ...$submission->getInvoiceData(), ...$submission->getInvoiceData(),
+// ...$submission->getInvoiceData(), ...$submission->getInvoiceData(), ...$submission->getInvoiceData()];
 $items = $submission->getInvoiceData();
 
 // Calculate totals
@@ -68,161 +75,352 @@ $contactInfo = [
     'web' => isset($settings->website) ? $settings->website : 'http://www.ffp-events.com'
 ];
 
-$pageInfo = 'Page: 1 / 1';
+// Calculate total pages
+$totalItems = count($items);
+$totalPages = ($totalItems <= $maxRowsLastPage) ? 1 : ceil(($totalItems - $maxRowsLastPage) / $maxRowsPerPage) + 1;
 
+$pageInfo = 'Page: 1 / ' . $totalPages;
 ?>
 
-<!-- <pre>{{ json_encode(['submission' => $submission], JSON_PRETTY_PRINT) }}</pre> -->
 <!DOCTYPE html>
-<html dir="{{ App::getLocale() === 'ar' ? 'rtl' : 'ltr' }}" data-theme="ffp-theme-light" lang="{{ App::getLocale() }}">
+<html dir="{{ App::getLocale() === 'ar' ? 'rtl' : 'ltr' }}" lang="{{ App::getLocale() }}">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bon de commande {{ $invoiceNumber }}</title>
-    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap');
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('{{ storage_path('fonts/Montserrat-Regular.ttf') }}') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('{{ storage_path('fonts/Montserrat-Bold.ttf') }}') format('truetype');
+            font-weight: bold;
+            font-style: normal;
+        }
+        @page {
+            margin-bottom: 40px; /* Space for footer */
+        }
+        html {
+            margin-bottom: 40px; /* Space for footer */
+        }
         body {
             font-family: 'Montserrat', sans-serif;
+            color: #1F2937;
+            margin: 0;
+            padding: 1.5rem;
+            background-color: white;
+            font-size: 9px;
+            line-height: 1.2;
+        }
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .header {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        .header-table {
+            width: 100%;
+            border: none;
+        }
+        .header-table td {
+            vertical-align: top;
+            border: none;
+            padding: 0;
+        }
+        .logo-cell {
+            width: 50%;
+            text-align: left;
+        }
+        .company-info {
+            width: 50%;
+            text-align: right;
+        }
+        .company-info p {
+            margin: 0.1rem 0;
+        }
+        .company-name {
+            font-weight: bold;
+            font-size: 11px;
+        }
+        .client-info {
+            text-align: right;
+            margin-bottom: 1rem;
+        }
+        .client-name {
+            font-weight: bold;
+        }
+        .invoice-title {
+            margin-top: 1.5rem;
+            border-top: 1px solid #E5E7EB;
+            padding-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .invoice-title h1 {
+            font-size: 18px;
+            font-weight: bold;
+            color: #C2410C;
+            margin: 0;
+        }
+        .invoice-info-table {
+            width: 100%;
+            margin-bottom: 1rem;
+            border: none;
+        }
+        .invoice-info-table td {
+            border: none;
+            padding: 0.2rem 0;
+        }
+        .label {
+            font-weight: 600;
         }
         table {
             width: 100%;
             border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+        table, th, td {
+            border: 1px solid #E5E7EB;
         }
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            padding: 0.3rem;
         }
         th {
-            background-color: #f1f1f1;
+            background-color: #F3F4F6;
+            text-align: left;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-right {
+            text-align: right;
+        }
+        .summary-table-container {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        .summary-table {
+            width: 30%;
+            margin-left: 70%;
+            border-collapse: collapse;
+        }
+        .total-row {
+            background-color: #D97706;
+            color: white;
+        }
+        .total-row td {
+            font-weight: bold;
+        }
+        .total-words {
+            margin-bottom: 1rem;
+            border-top: 1px solid #E5E7EB;
+            border-bottom: 1px solid #E5E7EB;
+            padding: 0.5rem 0;
+        }
+        .signatures-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+        .signatures-table td {
+            border: 1px solid #E5E7EB;
+            padding: 0.5rem;
+            height: 6rem;
+            vertical-align: top;
+        }
+        .signature-client {
+            width: 30%;
+        }
+        .signature-space {
+            width: 40%;
+            border-left: none;
+            border-right: none;
+        }
+        .signature-company {
+            width: 30%;
+            text-align: right;
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            border-top: 1px solid #E5E7EB;
+            padding-top: 0.5rem;
+            text-align: center;
+            font-size: 8px;
+            height: 30px; /* Set a fixed height */
+        }
+        .footer p {
+            margin: 0.1rem 0;
+        }
+        .page-break {
+            page-break-after: always;
         }
     </style>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="min-h-screen p-8 bg-white text-gray-800">
-    <div class="w-full max-w-6xl mx-auto">
-        <!-- Header with Logo and Company Info -->
-        <div class="grid grid-cols-2 gap-4 mb-6">
-            <div class="flex items-start" style="zoom:1.5">
-                @include('website.components.brand.logo')
-            </div>
-            <div class="text-right text-sm">
-                <p class="font-bold text-base">{{ $companyInfo['name'] }}</p>
-                <p>{{ $companyInfo['address'] }}</p>
-                <p>{{ $companyInfo['location'] }}</p>
-                <p>{{ $companyInfo['capital'] }}</p>
-                <p>{{ $companyInfo['rc'] }}</p>
-                <p>{{ $companyInfo['nif'] }}</p>
-                <p>{{ $companyInfo['ai'] }}</p>
-                <p>{{ $companyInfo['nis'] }}</p>
-            </div>
-        </div>
-
-        <!-- Client Info -->
+<body>
+    <div class="container">
+        @php
+            $currentPage = 1;
+            $itemsProcessed = 0;
+            $itemsPerCurrentPage = ($totalPages == 1) ? $totalItems : $maxRowsPerPage;
+        @endphp
         
-        <div class="text-right mb-6">
-            <p class="font-bold">{{ $clientInfo['name'] }}</p>
-            <!-- <p>{{ $clientInfo['location'] }}</p>
-            <p>{{ $clientInfo['mobile'] }}</p> -->
-        </div>
+        @while ($itemsProcessed < $totalItems)
+            <!-- Header with Logo and Company Info -->
+            <table class="header-table">
+                <tr>
+                    <td class="logo-cell">
+                        <!-- Using PNG image instead of SVG -->
+                        <img src="{{ public_path('ffp-logo.png') }}" alt="FFP Events Logo" style="height: 60px;">
+                    </td>
+                    <td class="company-info">
+                        <p class="company-name">{{ $companyInfo['name'] }}</p>
+                        <p>{{ $companyInfo['address'] }}</p>
+                        <p>{{ $companyInfo['location'] }}</p>
+                        <p>{{ $companyInfo['capital'] }}</p>
+                        <p>{{ $companyInfo['rc'] }}</p>
+                        <p>{{ $companyInfo['nif'] }}</p>
+                        <p>{{ $companyInfo['ai'] }}</p>
+                        <p>{{ $companyInfo['nis'] }}</p>
+                    </td>
+                </tr>
+            </table>
 
-        <!-- Invoice Title -->
-        <div class="mb-6 border-t pt-8">
-            <h1 class="text-3xl font-bold text-orange-700">Bon de commande</h1>
-        </div>
-        
-        <!-- Invoice Info -->
-        <div class="grid grid-cols-2 gap-4 mb-6 pb-4">
-            <div>
-                <p><span class="font-semibold">Date du devis :</span> {{ $invoiceDate }}</p>
+            <!-- Client Info -->
+            <div class="client-info">
+                <p class="client-name">{{ $clientInfo['name'] }}</p>
+                <!-- <p>{{ $clientInfo['location'] }}</p>
+                <p>{{ $clientInfo['mobile'] }}</p> -->
             </div>
-            <div>
-                <p><span class="font-semibold">Vendeur :</span> {{ $vendorName }}</p>
-            </div>
-        </div>
 
-        <!-- Invoice Items Table -->
-        <div class="overflow-x-auto mb-6">
-            <table class="table w-full border border-collapse">
+            <!-- Invoice Title -->
+            <div class="invoice-title">
+                <h1>Bon de commande</h1>
+            </div>
+            
+            <!-- Invoice Info -->
+            <table class="invoice-info-table">
+                <tr>
+                    <td style="width: 50%"><span class="label">Date du devis :</span> {{ $invoiceDate }}</td>
+                    <td style="width: 50%"><span class="label">Vendeur :</span> {{ $vendorName }}</td>
+                </tr>
+            </table>
+
+            <!-- Invoice Items Table -->
+            <table>
                 <thead>
-                    <tr class="bg-gray-100">
-                        <th class="text-left">DESCRIPTION</th>
+                    <tr>
+                        <th>DESCRIPTION</th>
                         <th class="text-center">QUANTITÉ</th>
                         <th class="text-center">PRIX UNITAIRE</th>
-                        <!-- <th class="text-center">REM(%)</th> -->
                         <th class="text-center">TAXES</th>
                         <th class="text-right">MONTANT</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($items as $item)
+                    @php
+                        // Determine items for current page
+                        $endItem = min($itemsProcessed + $itemsPerCurrentPage, $totalItems);
+                        $currentPageItems = array_slice($items, $itemsProcessed, $endItem - $itemsProcessed);
+                    @endphp
+                    
+                    @foreach($currentPageItems as $item)
                     <tr>
                         <td>{{ $item['title'] }}</td>
-                        <td class="text-center"> {{$item['quantity'] }}</td>
-                        <td class="text-center"> {{$item['price']}} DZD</td>
-                        <!-- <td class="text-center"> 0</td> -->
-                        <td class="text-center"> TVA {{ $settings->tva }}%</td>
-                        <td class="text-right"> {{$item['quantity'] * $item['price']}} DZD</td>
+                        <td class="text-center">{{ $item['quantity'] }}</td>
+                        <td class="text-center">{{ $item['price'] }} DZD</td>
+                        <td class="text-center">TVA {{ $settings->tva }}%</td>
+                        <td class="text-right">{{ $item['quantity'] * $item['price'] }} DZD</td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
-        </div>
 
-        <!-- Invoice Summary -->
-        <div class="grid grid-cols-2 gap-4 mb-6">
-            <div></div>
-            <div>
-                <table class="table w-full border border-collapse">
+            @php
+                $itemsProcessed += count($currentPageItems);
+                
+                // For the last page, show the summary
+                if ($itemsProcessed >= $totalItems) {
+            @endphp
+                
+            <!-- Invoice Summary (only on last page) -->
+            <div class="summary-table-container">
+                <table class="summary-table">
                     <tr>
-                        <td class="font-semibold">Sous-total</td>
+                        <td class="label">Sous-total</td>
                         <td class="text-right">{{ $subtotal }}</td>
                     </tr>
                     <tr>
-                        <td class="font-semibold">Total Discount</td>
+                        <td class="label">Total Discount</td>
                         <td class="text-right">{{ $discount }}</td>
                     </tr>
                     <tr>
-                        <td class="font-semibold">TVA {{ $settings->tva }}%</td>
+                        <td class="label">TVA {{ $settings->tva }}%</td>
                         <td class="text-right">{{ $vat }}</td>
                     </tr>
-                    <tr class="bg-amber-600 text-white">
-                        <td class="font-bold">Total</td>
-                        <td class="text-right font-bold">{{ $total }}</td>
+                    <tr class="total-row">
+                        <td class="label">Total</td>
+                        <td class="text-right">{{ $total }}</td>
                     </tr>
                 </table>
             </div>
-        </div>
 
-        <!-- Total in Words -->
-        <div class="mb-6 border-t border-b py-4">
-            <p><span class="font-semibold">Arrêtée le présent devis à la somme de :</span></p>
-            <p>{{ $totalInWords }}</p>
-        </div>
-
-        <!-- Signatures -->
-        <div class="grid grid-cols-2 gap-4 mb-12">
-            <div class="border p-4 h-32">
-                <p class="font-semibold">Visa / Signature client:</p>
-                <p>Solde actuel: {{ $currentBalance }}</p>
+            <!-- Total in Words (only on last page) -->
+            <div class="total-words">
+                <p><span class="label">Arrêtée le présent devis à la somme de :</span></p>
+                <p>{{ $totalInWords }}</p>
             </div>
-            <div class="border p-4 h-32">
-                <p class="font-semibold text-right">Visa / Signature :</p>
-            </div>
-        </div>
 
-        <!-- Footer -->
-        <div class="border-t pt-4 text-center text-sm">
-            <p>
-                <span>Tél : {{ $contactInfo['tel'] }}</span> | 
-                <span>Mail : {{ $contactInfo['email'] }}</span> | 
-                <span>Web: {{ $contactInfo['web'] }}</span>
-            </p>
-            <p>{{ $pageInfo }}</p>
-        </div>
+            <!-- Signatures (only on last page) - using table layout -->
+            <table class="signatures-table">
+                <tr>
+                    <td class="signature-client">
+                        <p class="label">Visa / Signature client:</p>
+                        <p>Solde actuel: {{ $currentBalance }}</p>
+                    </td>
+                    <td class="signature-space"></td>
+                    <td class="signature-company">
+                        <p class="label">Visa / Signature :</p>
+                    </td>
+                </tr>
+            </table>
+
+            @php
+                }
+            @endphp
+
+            <!-- Footer -->
+            <div class="footer">
+                <p>
+                    <span>Tél : {{ $contactInfo['tel'] }}</span> | 
+                    <span>Mail : {{ $contactInfo['email'] }}</span> | 
+                    <span>Web: {{ $contactInfo['web'] }}</span>
+                </p>
+                <p>Page: {{ $currentPage }} / {{ $totalPages }}</p>
+            </div>
+
+            @php
+                if ($itemsProcessed < $totalItems) {
+                    echo '<div class="page-break"></div>';
+                    $currentPage++;
+                    // For last page, use the different max rows
+                    if ($currentPage == $totalPages) {
+                        $itemsPerCurrentPage = $maxRowsLastPage;
+                    }
+                }
+            @endphp
+        @endwhile
     </div>
 </body>
 

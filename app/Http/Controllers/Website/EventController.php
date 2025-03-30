@@ -99,6 +99,12 @@ class EventController extends Controller
         if (!$exhibitor_submission) {
             return redirect()->route('exhibit_event', ['id' => $event->id]);
         }
+        if ($exhibitor_submission->isEditable) {
+            return redirect()->route('exhibit_event', ['id' => $event->id]);
+        }
+        if ($exhibitor_submission->canDownloadInvoice) {
+            return redirect()->route('post_exhibit_event', ['id' => $event->id]); 
+        }
         return view('website.pages.events.info-validation', [
             'event' => $event
         ]);
@@ -139,7 +145,8 @@ class EventController extends Controller
         ]);
 
         $pdf->setPaper('A4', 'portrait');
-        return $pdf->download('invoice.pdf');
+        // $pdf->setOption('isRemoteEnabled', true);
+        return $pdf->stream('invoice.pdf');
 
         // return view('pdf.exhibitor-submission-invoice', [
         //     'event' => $event,
