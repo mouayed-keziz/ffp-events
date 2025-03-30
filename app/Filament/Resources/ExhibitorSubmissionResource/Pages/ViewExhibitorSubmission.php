@@ -215,7 +215,11 @@ class ViewExhibitorSubmission extends ViewRecord
             $actions->getRejectAction(),
             $actions->getMakeReadyAction(),
             $actions->getArchiveAction(),
-            Actions\EditAction::make(),
+            // Actions\Action::make("hello")->action(function($record) {
+            //     $record->post_answers = null;
+            //     $record->save();
+            // }),
+            // Actions\EditAction::make(),
             Actions\ActionGroup::make([
                 Actions\Action::make('viewEventAnnouncement')
                     ->label(__('panel/event_announcement.resource.label'))

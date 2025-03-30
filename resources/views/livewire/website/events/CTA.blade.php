@@ -18,15 +18,6 @@ new class extends Component {
         $this->locale = App::getLocale();
     }
 
-    public function hasUnpaidPayments()
-    {
-        return $this->submission->paymentSlices()->where('status', PaymentSliceStatus::NOT_PAYED)->exists();
-    }
-
-    public function isFullyPaid()
-    {
-        return $this->submission->paymentSlices()->where('status', '!=', PaymentSliceStatus::VALID)->count() === 0 && $this->submission->paymentSlices()->count() > 0;
-    }
 
     public function shouldShowVisitButton()
     {

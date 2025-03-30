@@ -17,4 +17,5 @@ return [
     'team' => 'L’équipe FFP Events',
     'link_text' => 'Téléverser la preuve de paiement',
     'participation_details' => 'Détails de la participation :',
+    'rejection_notice' => 'Votre paiement est rejeté, veuillez consulter la page de l’événement pour plus de détails.',
 ];

@@ -16,4 +16,5 @@ return [
     'team' => 'فريق FFP Events',
     'link_text' => 'رفع إثبات الدفع',
     'participation_details' => 'تفاصيل المشاركة:',
+    'acceptance_info' => 'لقد تم قبول مشاركتك. يرجى التحقق من تفاصيل المشاركة في حسابك الشخصي.',
 ];

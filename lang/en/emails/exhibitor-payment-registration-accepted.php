@@ -13,6 +13,7 @@ return [
     'assistance' => 'If you need assistance, our team remains at your disposal.',
     'regards' => 'Best regards,',
     'team' => 'The FFP Events team',
+    'confirmation_notice' => 'Your payment has been successfully accepted. Please check the event page for more details.',
     'participation_details' => 'Participation details:',
-    'link_text' => 'Access event page'
+    'link_text' => 'Access event page',
 ];

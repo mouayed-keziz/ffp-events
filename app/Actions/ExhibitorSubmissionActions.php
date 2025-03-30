@@ -446,7 +446,7 @@ class ExhibitorSubmissionActions
             ->modalDescription(__('panel/exhibitor_submission.modals.approve_update_description'))
             ->form([
                 Forms\Components\DateTimePicker::make('edit_deadline')
-                    ->label(__('panel/exhibitor_submission.fields.edit_deadline'))
+                    ->label(__('panel/exhibitor_submission.details.edit_deadline'))
                     ->required()
                     ->native(false)
                     ->minDate(now())

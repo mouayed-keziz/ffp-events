@@ -16,4 +16,5 @@ return [
     'team' => 'The FFP Events team',
     'link_text' => 'Upload proof of payment',
     'participation_details' => 'Participation details:',
+    'acceptance_info' => 'Your participation has been accepted. Please check the participation details in your personal account.',
 ];

@@ -13,4 +13,5 @@ return [
     'faq'  => [
         'title'   => 'Frequently Asked Questions',
     ],
+    "no_events" => "No events found"
 ];

@@ -12,7 +12,7 @@ use App\Models\ExhibitorSubmission;
 
 new class extends Component {
     use WithFileUploads;
-    use HasFormSteps;
+    // use HasFormSteps;
     use HasPrices;
     use HasFormFieldUpdates;
 
@@ -117,11 +117,12 @@ new class extends Component {
     public function nextStep()
     {
         $this->validateCurrentStep();
+                
         $this->formStep++;
         $this->currentStep++;
     }
 
-    public function prevStep()
+    public function previousStep()
     {
         $this->formStep = max(0, $this->formStep - 1);
         $this->currentStep = max(count((new ExhibitorFormActions())->initFormData($this->event)) + 3, $this->currentStep - 1);

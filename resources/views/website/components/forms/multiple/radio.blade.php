@@ -1,4 +1,4 @@
-@props(['data', 'answerPath'])
+@props(['data', 'answerPath', 'disabled' => false])
 <div class="form-control my-4">
     <label class="label">
         <span class="label-text">
@@ -32,13 +32,21 @@ if (empty($optionsData)) {
 
     // Also create a selectedValue property for radio functionality
     data_set($this, 'formData.' . $answerPath . '.selectedValue', null);
+} else {
+    // Check if we need to initialize selectedValue from existing selected option
+    $selectedOption = collect($optionsData)->firstWhere('selected', true);
+    if ($selectedOption && !data_get($this, 'formData.' . $answerPath . '.selectedValue')) {
+        // Set selectedValue based on the selected option's value
+        data_set($this, 'formData.' . $answerPath . '.selectedValue', $selectedOption['value']);
+    }
 }
 
 // Find the selected value if any
 $selectedValue = data_get($this, 'formData.' . $answerPath . '.selectedValue');
+
     @endphp
 
-    <div class="flex flex-col gap-2" x-data="{ selected: @entangle('formData.' . $answerPath . '.selectedValue') }">
+    <div class="flex flex-col gap-2 {{ $disabled ? 'opacity-60' : '' }}" x-data="{ selected: @entangle('formData.' . $answerPath . '.selectedValue') }">
         @php
             $radioName = 'radio_' . str_replace('.', '_', $answerPath);
         @endphp
@@ -52,8 +60,8 @@ $selectedValue = data_get($this, 'formData.' . $answerPath . '.selectedValue');
                 <input type="radio" name="{{ $radioName }}" value="{{ $optionLabel }}"
                     wire:model.live="formData.{{ $answerPath }}.selectedValue" x-model="selected"
                     wire:change="updateRadioSelection('{{ $answerPath }}', $event.target.value)"
-                    :class="{ 'radio-primary': selected === '{{ $optionLabel }}' }" class="radio mx-2"
-                    @if ($data['required'] ?? false) required @endif>
+                    :class="{ 'radio-primary': selected === '{{ $optionLabel }}' }" class="radio mx-2 {{ $disabled ? 'cursor-not-allowed' : '' }}"
+                    @if ($data['required'] ?? false) required @endif {{ $disabled ? 'disabled' : '' }}>
                 <span>{{ $optionLabel }}</span>
             </label>
         @endforeach

@@ -13,4 +13,5 @@ return [
     'faq'  => [
         'title'   => 'Les questions les plus Fréquentes',
     ],
+    "no_events" =>  "Aucun événement à venir",
 ];

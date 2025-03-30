@@ -144,7 +144,12 @@ new class extends Component {
                                     class="p-3 mb-2 rounded-lg {{ $notification['read'] ? 'bg-gray-50' : 'bg-blue-50' }}">
                                     <div class="flex justify-between items-start">
                                         <div class="flex-1">
-                                            <p class="text-sm">{{ $notification['message'] }}</p>
+                                            <p class="text-sm">
+                                                @if($notification['event_title'])
+                                                    <strong>{{ $notification['event_title'] }}</strong>: 
+                                                @endif
+                                                {{ $notification['message'] }}
+                                            </p>
                                             <div class="text-xs text-gray-500 mt-1">{{ $notification['time'] }}</div>
                                         </div>
                                         @if (!$notification['read'])

@@ -136,7 +136,7 @@ class Upload
                 if (is_array($field['data']['description']) && isset($field['data']['description'][$locale])) {
                     $titleData['description'] = $field['data']['description'][$locale];
                 } else {
-                    $titleData['description'] = $field['data']['description'];
+                    $titleData['description'] = "";
                 }
             }
 
