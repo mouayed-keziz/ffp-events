@@ -50,6 +50,22 @@ enum FormField: string implements HasLabel
         return $icons[$this->value] ?? 'heroicon-o-question-mark';
     }
 
+    public function getInvoiceDetails(array $field): array
+    {
+        return match ($this) {
+            self::INPUT => Input::getInvoiceDetails($field),
+            self::SELECT => Select::getInvoiceDetails($field),
+            self::CHECKBOX => Checkbox::getInvoiceDetails($field),
+            self::RADIO => Radio::getInvoiceDetails($field),
+            self::UPLOAD => Upload::getInvoiceDetails($field),
+            self::SELECT_PRICED => SelectPriced::getInvoiceDetails($field),
+            self::CHECKBOX_PRICED => CheckboxPriced::getInvoiceDetails($field),
+            self::RADIO_PRICED => RadioPriced::getInvoiceDetails($field),
+            self::ECOMMERCE => Ecommerce::getInvoiceDetails($field),
+            self::PLAN_TIER => PlanTier::getInvoiceDetails($field),
+        };
+    }
+
     /**
      * Initialize a field structure based on its type
      */

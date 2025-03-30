@@ -80,6 +80,27 @@ class PlanTier
         return $rules;
     }
 
+    public static function getInvoiceDetails(array $field, string $currency = 'DZD'): array
+    {
+        if (empty($field['answer']['plans'])) {
+            return [];
+        }
+
+        $details = [];
+        foreach ($field['answer']['plans'] as $plan) {
+            if (!empty($plan['selected']) && $plan['selected'] === true) {
+                $details[] = [
+                    'title' => \App\Models\Plan::find($plan['plan_id'])?->getTranslation('title', 'fr') ?? '',
+                    'quantity' => 1,
+                    'price' => $plan['price'][$currency] ?? 0,
+                    
+                ];
+            }
+        }
+        return $details;
+    
+    }
+
     public static function processFieldAnswer($answer, array $fieldData = [])
     {
         if ($answer === null || (is_array($answer) && empty($answer))) {

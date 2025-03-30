@@ -61,6 +61,11 @@ class Checkbox
         return array_merge($rules, ['array']);
     }
 
+    public static function getInvoiceDetails(array $field, string $currency = 'DZD'): array
+    {
+        return [];
+    }
+
     public static function processFieldAnswer($answer, array $fieldData = [])
     {
         if ($answer === null || (is_array($answer) && empty($answer))) {

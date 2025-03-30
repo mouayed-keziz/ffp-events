@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
+use App\Enums\FormField;
 
 class ExhibitorSubmission extends Model implements HasMedia
 {
@@ -108,5 +109,26 @@ class ExhibitorSubmission extends Model implements HasMedia
     public function paymentSlices()
     {
         return $this->hasMany(ExhibitorPaymentSlice::class)->orderBy('sort');
+    }
+
+
+    public function getInvoiceData(): array {
+        $invoiceData = [];
+
+        foreach ($this->answers as $answer) {
+            if (isset($answer['sections'])) {
+                foreach ($answer['sections'] as $section) {
+                    foreach ($section['fields'] as $field) {
+                        $fieldType = FormField::tryFrom($field['type']);
+                        if ($fieldType && $fieldType->isPriced()) {
+                            // dd($field);
+                            $invoiceData = array_merge($invoiceData, $fieldType->getInvoiceDetails($field));
+                        }
+                    }
+                }
+            }
+        }
+
+        return $invoiceData;
     }
 }

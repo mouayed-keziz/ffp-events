@@ -10,6 +10,7 @@ return [
         'social_links' => 'Liens sociaux',
         'faq' => 'FAQ',
         'terms' => 'Conditions générales',
+        'company_details' => 'Détails de l\'entreprise',
     ],
     'fields' => [
         'name' => [
@@ -67,6 +68,38 @@ return [
             'answer' => [
                 'label' => 'Réponse'
             ]
+        ],
+        'detailedAddress' => [
+            'label' => 'Adresse détaillée',
+            'placeholder' => 'Entrez l\'adresse détaillée'
+        ],
+        'location' => [
+            'label' => 'Emplacement',
+            'placeholder' => 'Entrez l\'emplacement'
+        ],
+        'capital' => [
+            'label' => 'Capital Social',
+            'placeholder' => 'Entrez le capital social'
+        ],
+        'rc' => [
+            'label' => 'Numéro RC',
+            'placeholder' => 'Entrez le numéro RC'
+        ],
+        'nif' => [
+            'label' => 'NIF',
+            'placeholder' => 'Entrez le NIF'
+        ],
+        'ai' => [
+            'label' => 'AI',
+            'placeholder' => 'Entrez l\'AI'
+        ],
+        'nis' => [
+            'label' => 'NIS',
+            'placeholder' => 'Entrez le NIS'
+        ],
+        'tva' => [
+            'label' => 'Pourcentage TVA',
+            'placeholder' => 'Entrez le pourcentage TVA'
         ],
     ],
 ];

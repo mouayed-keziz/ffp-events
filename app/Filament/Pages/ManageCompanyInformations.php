@@ -42,6 +42,7 @@ class ManageCompanyInformations extends SettingsPage
         return $form
             ->schema([
                 Forms\Components\Tabs::make('Settings')
+                ->persistTabInQueryString()
                     ->tabs([
                         Forms\Components\Tabs\Tab::make(__('settings/company_informations.tabs.general_information'))
                             ->columns([
@@ -171,6 +172,98 @@ class ManageCompanyInformations extends SettingsPage
                                     ->required()
                                     ->placeholder(__('settings/company_informations.fields.applicationTerms.placeholder'))
                                     ->columnSpan(12),
+                            ]),
+                            
+                        Forms\Components\Tabs\Tab::make(__('settings/company_informations.tabs.company_details'))
+                            ->columns([
+                                'default' => 1,
+                                'sm' => 2,
+                                'lg' => 12
+                            ])
+                            ->schema([
+                                Forms\Components\TextInput::make('detailedAddress')
+                                    ->label(__('settings/company_informations.fields.detailedAddress.label'))
+                                    ->required()
+                                    ->placeholder(__('settings/company_informations.fields.detailedAddress.placeholder'))
+                                    ->columnSpan([
+                                        'default' => 1,
+                                        'sm' => 2,
+                                        'lg' => 12
+                                    ]),
+                                    
+                                Forms\Components\TextInput::make('location')
+                                    ->label(__('settings/company_informations.fields.location.label'))
+                                    ->required()
+                                    ->placeholder(__('settings/company_informations.fields.location.placeholder'))
+                                    ->columnSpan([
+                                        'default' => 1,
+                                        'sm' => 2,
+                                        'lg' => 12
+                                    ]),
+                                    
+                                Forms\Components\TextInput::make('capital')
+                                    ->label(__('settings/company_informations.fields.capital.label'))
+                                    ->required()
+                                    ->placeholder(__('settings/company_informations.fields.capital.placeholder'))
+                                    ->columnSpan([
+                                        'default' => 1,
+                                        'sm' => 1,
+                                        'lg' => 6
+                                    ]),
+                                    
+                                Forms\Components\TextInput::make('rc')
+                                    ->label(__('settings/company_informations.fields.rc.label'))
+                                    ->required()
+                                    ->placeholder(__('settings/company_informations.fields.rc.placeholder'))
+                                    ->columnSpan([
+                                        'default' => 1,
+                                        'sm' => 1,
+                                        'lg' => 6
+                                    ]),
+                                    
+                                Forms\Components\TextInput::make('nif')
+                                    ->label(__('settings/company_informations.fields.nif.label'))
+                                    ->required()
+                                    ->placeholder(__('settings/company_informations.fields.nif.placeholder'))
+                                    ->columnSpan([
+                                        'default' => 1,
+                                        'sm' => 1,
+                                        'lg' => 6
+                                    ]),
+                                    
+                                Forms\Components\TextInput::make('ai')
+                                    ->label(__('settings/company_informations.fields.ai.label'))
+                                    ->required()
+                                    ->placeholder(__('settings/company_informations.fields.ai.placeholder'))
+                                    ->columnSpan([
+                                        'default' => 1,
+                                        'sm' => 1,
+                                        'lg' => 6
+                                    ]),
+                                    
+                                Forms\Components\TextInput::make('nis')
+                                    ->label(__('settings/company_informations.fields.nis.label'))
+                                    ->required()
+                                    ->placeholder(__('settings/company_informations.fields.nis.placeholder'))
+                                    ->columnSpan([
+                                        'default' => 1,
+                                        'sm' => 1,
+                                        'lg' => 6
+                                    ]),
+                                    
+                                Forms\Components\TextInput::make('tva')
+                                    ->label(__('settings/company_informations.fields.tva.label'))
+                                    ->required()
+                                    ->numeric()
+                                    ->minValue(0)
+                                    ->maxValue(100)
+                                    ->suffix("%")
+                                    ->placeholder(__('settings/company_informations.fields.tva.placeholder'))
+                                    ->columnSpan([
+                                        'default' => 1,
+                                        'sm' => 1,
+                                        'lg' => 6
+                                    ]),
                             ]),
                     ])->columnSpan([
                         'default' => 1,

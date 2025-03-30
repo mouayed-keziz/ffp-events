@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Article;
 use App\Models\EventAnnouncement;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class EventController extends Controller
 {
@@ -120,7 +121,31 @@ class EventController extends Controller
     }
 
     public function DownloadInvoice($id) {
-        return view("pdf.exhibitor-submission-invoice");
+        $event = EventAnnouncement::find($id);
+        if (!$event) {
+            return redirect()->route('events');
+        }
+        $exhibitor_submission = Auth('exhibitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
+        if (!$exhibitor_submission) {
+            return redirect()->route('exhibit_event', ['id' => $event->id]);
+        }
+        if (!$exhibitor_submission->canDownloadInvoice) {
+            return redirect()->route('event_details', ['id' => $event->id]);
+        }
+        $pdf = Pdf::loadView('pdf.exhibitor-submission-invoice', [
+            'event' => $event,
+            'exhibitor' => $exhibitor_submission->exhibitor,
+            'submission' => $exhibitor_submission
+        ]);
+
+        $pdf->setPaper('A4', 'portrait');
+        return $pdf->download('invoice.pdf');
+
+        // return view('pdf.exhibitor-submission-invoice', [
+        //     'event' => $event,
+        //     'exhibitor' => $exhibitor_submission->exhibitor,
+        //     'submission' => $exhibitor_submission
+        // ]);
     }
     public function UploadPaymentProof($id)
     {

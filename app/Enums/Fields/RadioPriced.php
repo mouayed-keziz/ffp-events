@@ -96,6 +96,26 @@ class RadioPriced
         return $price;
     }
 
+    public static function getInvoiceDetails(array $field, string $currency = 'DZD'): array
+    {
+        if (empty($field['answer']['options'])) {
+            return [];
+        }
+
+        $details = [];
+        foreach ($field['answer']['options'] as $option) {
+            if (!empty($option['selected']) && $option['selected'] === true) {
+                $details[] = [
+                    'title' => $option['option']['fr'] ?? '',
+                    'quantity' => 1,
+                    'price' => $option['price'][$currency] ?? 0,
+                    
+                ];
+            }
+        }
+        return $details;
+    }
+
     public static function isPriced(): bool
     {
         return true;

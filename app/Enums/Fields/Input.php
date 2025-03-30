@@ -77,6 +77,11 @@ class Input
         return false;
     }
 
+    public static function getInvoiceDetails(array $field, string $currency = 'DZD'): array
+    {
+        return [];
+    }
+
     public static function needsQuantity(): bool
     {
         return false;

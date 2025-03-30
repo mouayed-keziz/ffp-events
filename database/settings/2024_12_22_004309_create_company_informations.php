@@ -18,6 +18,14 @@ return new class extends SettingsMigration
         $this->migrator->add('default.facebookLink', 'https://www.facebook.com/ffpevents');
         $this->migrator->add('default.linkedinLink', 'https://www.linkedin.com/company/ffpevents');
         $this->migrator->add('default.instagramLink', 'https://www.instagram.com/ffpevents');
+        $this->migrator->add('default.detailedAddress', 'Cité 20 Aout 55 Ouest romaine N°76, 1er étage');
+        $this->migrator->add('default.location', 'El Achour (Alger), Algérie');
+        $this->migrator->add('default.capital', 'Capital Social: 100 000,00 DA');
+        $this->migrator->add('default.rc', 'RC N° : 17/01123/00-16');
+        $this->migrator->add('default.nif', 'NIF: 001716101234114');
+        $this->migrator->add('default.ai', 'AI : 16540510921');
+        $this->migrator->add('default.nis', 'NIS: 001716501893038');
+        $this->migrator->add('default.tva', 19);
         $this->migrator->add('default.faq', [
             [
                 'question' => 'What is FFP Events?',

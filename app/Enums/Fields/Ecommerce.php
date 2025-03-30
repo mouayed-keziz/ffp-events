@@ -114,7 +114,25 @@ class Ecommerce
 
         return $price;
     }
+    public static function getInvoiceDetails(array $field, string $currency = 'DZD'): array
+    {
+        if (empty($field['answer']['products'])) {
+            return [];
+        }
 
+        $details = [];
+        foreach ($field['answer']['products'] as $product) {
+            if (!empty($product['selected']) && $product['selected'] === true) {
+                $details[] = [
+                    'title' => $product['name'] ?? '',
+                    'quantity' => $product['quantity'] ?? 1,
+                    'price' => $product['price'][$currency] ?? 0,
+                    
+                ];
+            }
+        }
+        return $details;
+    }
     public static function isPriced(): bool
     {
         return true;
