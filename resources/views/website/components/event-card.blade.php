@@ -1,6 +1,13 @@
 @props(['event'])
 
+@php
+    use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\App;
+@endphp
+
 <div class="bg-white rounded-xl overflow-hidden shadow-sm py-2 relative">
+    <pre>
+</pre>
     <a href="{{ route('event_details', ['id' => $event['id']]) }}" class="absolute inset-0 z-0"></a>
     <div class="grid md:grid-cols-2 gap-0 relative pointer-events-none">
         <div class="p-6 space-y-4 md:order-1 order-2">
@@ -29,14 +36,19 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3 pointer-events-auto">
-                <a href="{{ route('event_details', ['id' => $event['id']]) }}"
-                    class="btn text-[1rem] font-bold btn-outline border-base-200 border-2 flex-1 normal-case">
-                    {{ __('website/home.events.visit') }}
-                </a>
-                <a href="{{ route('event_details', ['id' => $event['id']]) }}"
-                    class="btn text-[1rem] font-bold btn-primary flex-1 normal-case">
-                    {{ __('website/home.events.exhibit') }}
-                </a>
+                @if ((!Auth::guard('visitor')->check() && !Auth::guard('exhibitor')->check()) || Auth::guard('visitor')->check())
+                    <a href="{{ route('event_details', ['id' => $event['id']]) }}"
+                        class="btn text-[1rem] font-bold btn-outline border-base-200 border-2 flex-1 normal-case">
+                        {{ __('website/home.events.visit') }}
+                    </a>
+                @endif
+
+                @if ((!Auth::guard('visitor')->check() && !Auth::guard('exhibitor')->check()) || Auth::guard('exhibitor')->check())
+                    <a href="{{ route('event_details', ['id' => $event['id']]) }}"
+                        class="btn text-[1rem] font-bold btn-primary flex-1 normal-case">
+                        {{ __('website/home.events.exhibit') }}
+                    </a>
+                @endif
             </div>
         </div>
 

@@ -18,7 +18,6 @@ new class extends Component {
         $this->locale = App::getLocale();
     }
 
-
     public function shouldShowVisitButton()
     {
         if ($this->submission) {
