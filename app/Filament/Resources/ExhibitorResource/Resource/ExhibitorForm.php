@@ -23,11 +23,7 @@ class ExhibitorForm
                         ->required()
                         ->maxLength(255),
 
-                    Forms\Components\TextInput::make('password')
-                        ->label(__('panel/exhibitors.form.password'))
-                        ->password()
-                        ->required()
-                        ->maxLength(255),
+                    // Password field removed for auto-generation
                 ])
             ]);
     }
