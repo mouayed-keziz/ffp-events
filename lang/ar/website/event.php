@@ -14,6 +14,8 @@ return [
     'exhibit_and_sponsor' => 'عارض وراعي',
     'goback' => 'عودة',
     'countdown' => [
+        "years" => "سنوات",
+        "months" => "أشهر",
         "days" => "أيام",
         "hours" => "ساعات",
         "minutes" => "دقائق",

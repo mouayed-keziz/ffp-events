@@ -38,9 +38,13 @@ class EventAnnouncementForm
                                 ->schema([
                                     Forms\Components\DateTimePicker::make('start_date')
                                         ->required()
+                                        ->native(false)
+                                        ->displayFormat('Y/m/d H:i')
                                         ->label(__('panel/event_announcement.fields.start_date')),
                                     Forms\Components\DateTimePicker::make('end_date')
                                         ->required()
+                                        ->native(false)
+                                        ->displayFormat('Y/m/d H:i')
                                         ->label(__('panel/event_announcement.fields.end_date')),
                                 ]),
                             // New section for Location and Website URL
@@ -59,9 +63,13 @@ class EventAnnouncementForm
                                 ->schema([
                                     Forms\Components\DateTimePicker::make('visitor_registration_start_date')
                                         ->required()
+                                        ->native(false)
+                                        ->displayFormat('Y/m/d H:i')
                                         ->label(__('panel/event_announcement.fields.visitor_registration_start_date')),
                                     Forms\Components\DateTimePicker::make('visitor_registration_end_date')
                                         ->required()
+                                        ->native(false)
+                                        ->displayFormat('Y/m/d H:i')
                                         ->label(__('panel/event_announcement.fields.visitor_registration_end_date')),
                                 ]),
                             Forms\Components\Section::make(__('panel/event_announcement.fields.exhibitor_registration'))
@@ -69,9 +77,13 @@ class EventAnnouncementForm
                                 ->schema([
                                     Forms\Components\DateTimePicker::make('exhibitor_registration_start_date')
                                         ->required()
+                                        ->native(false)
+                                        ->displayFormat('Y/m/d H:i')
                                         ->label(__('panel/event_announcement.fields.exhibitor_registration_start_date')),
                                     Forms\Components\DateTimePicker::make('exhibitor_registration_end_date')
                                         ->required()
+                                        ->native(false)
+                                        ->displayFormat('Y/m/d H:i')
                                         ->label(__('panel/event_announcement.fields.exhibitor_registration_end_date')),
                                 ]),
                         ]),

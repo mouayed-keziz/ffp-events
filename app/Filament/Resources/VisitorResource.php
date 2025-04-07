@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Navigation\Sidebar;
 use App\Models\User;
+use App\Filament\Resources\VisitorResource\RelationManagers;
 use Filament\Forms\Form;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
@@ -71,7 +72,9 @@ class VisitorResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            RelationManagers\SubmissionsRelationManager::class,
+        ];
     }
 
     public static function getPages(): array

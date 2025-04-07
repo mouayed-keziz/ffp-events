@@ -72,7 +72,7 @@ class ExhibitorResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\SubmissionsRelationManager::class,
         ];
     }
 

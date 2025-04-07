@@ -14,6 +14,8 @@ return [
     'exhibit_and_sponsor' => 'EXPOSER ET SPONSORISER',
     'goback' => 'Retourner',
     'countdown' => [
+        "years" => "années",
+        "months" => "mois",
         "days" => "jours",
         "hours" => "heures",
         "minutes" => "minutes",

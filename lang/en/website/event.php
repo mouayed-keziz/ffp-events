@@ -14,6 +14,8 @@ return [
     'exhibit_and_sponsor' => 'EXHIBIT AND SPONSOR',
     'goback' => 'Go Back',
     'countdown' => [
+        "years" => "years",
+        "months" => "months",
         "days" => "days",
         "hours" => "hours",
         "minutes" => "minutes",

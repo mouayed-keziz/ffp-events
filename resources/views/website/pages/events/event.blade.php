@@ -25,8 +25,10 @@
             @include('website.components.event.details', ['event' => $event, 'submission' => null])
         @endif
     </div>
-    <div class="w-full max-w-5xl mx-auto px-4 py-8">
-        @include('website.components.home.events', ['events' => $relatedEvents])
-    </div>
+    @if (isset($relatedEvents) && count($relatedEvents) > 0)
+        <div class="w-full max-w-5xl mx-auto px-4 py-8">
+            @include('website.components.home.events', ['events' => $relatedEvents])
+        </div>
+    @endif
     @livewire('website.empty')
 @endsection

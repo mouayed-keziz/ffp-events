@@ -27,7 +27,7 @@ class InputBlock
                     Select::make('type')
                         ->columnSpan(8)
                         ->label(__('panel/forms.exhibitors.blocks.type'))
-                        ->native(false)
+                        // ->native(false)
                         ->options(FormInputType::class),
 
                     Toggle::make('required')

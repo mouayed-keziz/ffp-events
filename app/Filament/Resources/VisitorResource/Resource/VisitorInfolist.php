@@ -20,11 +20,11 @@ class VisitorInfolist
                         ->label(__('panel/visitors.form.email'))
                         ->default(__('panel/visitors.empty_states.email')),
 
-                    Infolists\Components\TextEntry::make('roles.name')
-                        ->label(__('panel/visitors.columns.roles'))
-                        ->badge()
-                        ->color("gray")
-                        ->default(__('panel/visitors.empty_states.roles')),
+                    // Infolists\Components\TextEntry::make('roles.name')
+                    //     ->label(__('panel/visitors.columns.roles'))
+                    //     ->badge()
+                    //     ->color("gray")
+                    //     ->default(__('panel/visitors.empty_states.roles')),
 
                     Infolists\Components\TextEntry::make('created_at')
                         ->label(__('panel/visitors.columns.created_at'))

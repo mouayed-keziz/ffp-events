@@ -13,6 +13,10 @@
     @livewire('website.empty')
     <main class="w-full max-w-4xl mx-auto px-4 py-8 flex-grow">
         @include('website.components.article.content', ['article' => $article])
-        @include('website.components.article.similar-articles', ['similarArticles' => $similarArticles])
+        @if (isset($similarArticles) && count($similarArticles) > 0)
+            @include('website.components.article.similar-articles', [
+                'similarArticles' => $similarArticles,
+            ])
+        @endif
     </main>
 @endsection
