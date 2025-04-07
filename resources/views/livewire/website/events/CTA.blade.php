@@ -120,7 +120,7 @@ new class extends Component {
             @if (
                 $submission->status === ExhibitorSubmissionStatus::FULLY_PAYED ||
                     $submission->status === ExhibitorSubmissionStatus::READY)
-                <a href="https://ffp-events.com/service-amenagement"
+                <a href="https://ffp-events.com/service-amenagement" target="_blank"
                     class="btn btn-sm rounded-md text-sm font-semibold btn-error bg-red-600 hover:bg-red-700 text-white uppercase">
                     {{ __('website/event.setup_booth') }}
                 </a>
