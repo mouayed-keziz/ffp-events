@@ -30,6 +30,7 @@ return [
     'fully_paid' => 'Congratulations, all your payments for :event have been validated. Your participation as an exhibitor is confirmed.',
     'ready' => 'Your exhibition space for :event is ready. Everything is in order for the event.',
     'archived' => 'This submission for :event has been archived.',
+    'visitor_registered' => 'Congratulations, you are registered as a visitor for :event',
     'review_answers' => 'Review My Answers',
     'download_invoice' => 'Download Invoice',
     'finalize_answers' => 'Finalize My Answers',

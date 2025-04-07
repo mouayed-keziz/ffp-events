@@ -30,6 +30,7 @@ return [
     'fully_paid' => 'Félicitations, tous vos paiements pour :event ont été validés. Votre participation en tant qu\'exposant est confirmée.',
     'ready' => 'Votre espace d\'exposition pour :event est prêt. Tout est en ordre pour l\'événement.',
     'archived' => 'Cette soumission pour :event a été archivée.',
+    'visitor_registered' => 'Félicitations, vous êtes inscrit comme visiteur de :event',
     'review_answers' => 'Revoir Mes Reponses',
     'download_invoice' => 'Telecharger le bon de commande',
     'finalize_answers' => 'Finaliser Mes Reponses',

@@ -16,7 +16,12 @@ new class extends Component {
 }; ?>
 
 <div class="my-4">
-    @if ($submission->status === ExhibitorSubmissionStatus::PENDING)
+    @if ($submission instanceof \App\Models\VisitorSubmission)
+        <div class="alert bg-success text-white text-xs mt-2">
+            <x-heroicon-s-check-circle class="w-7 h-7" />
+            <span>{{ __('website/event.visitor_registered', ['event' => $event->title]) }}</span>
+        </div>
+    @elseif ($submission->status === ExhibitorSubmissionStatus::PENDING)
         <div class="alert bg-primary/20 text-primary text-xs">
             @include('website.svg.event.warning')
             <span>{{ __('website/event.submission_pending') }}</span>

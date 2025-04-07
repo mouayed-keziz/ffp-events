@@ -9,10 +9,21 @@
 @section('content')
     @include('website.components.event.banner', ['event' => $event])
     <div class="w-full max-w-5xl mx-auto px-4 py-8">
-        @if ($submission)
-            @livewire('website.events.event-submission-alerts', ['event' => $event, 'submission' => $submission])
+        @if ($exhibitorSubmission)
+            @livewire('website.events.event-submission-alerts', ['event' => $event, 'submission' => $exhibitorSubmission])
+            @include('website.components.event.details', [
+                'event' => $event,
+                'submission' => $exhibitorSubmission,
+            ])
+        @elseif ($visitorSubmission)
+            @livewire('website.events.event-submission-alerts', ['event' => $event, 'submission' => $visitorSubmission])
+            @include('website.components.event.details', [
+                'event' => $event,
+                'submission' => $visitorSubmission,
+            ])
+        @else
+            @include('website.components.event.details', ['event' => $event, 'submission' => null])
         @endif
-        @include('website.components.event.details', ['event' => $event])
     </div>
     <div class="w-full max-w-5xl mx-auto px-4 py-8">
         @include('website.components.home.events', ['events' => $relatedEvents])

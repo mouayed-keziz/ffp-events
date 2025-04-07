@@ -25,13 +25,24 @@ class EventController extends Controller
         if (!$event) {
             return redirect()->route('events');
         }
-        $user = Auth("exhibitor")->user();
-        $exhibitor_submission = $user ? $user->submissions()->where('event_announcement_id', $event->id)->first() : null;
+
+        $exhibitor_submission = null;
+        $visitor_submission = null;
+
+        if (Auth::guard('exhibitor')->check()) {
+            $user = Auth::guard('exhibitor')->user();
+            $exhibitor_submission = $user->submissions()->where('event_announcement_id', $event->id)->first();
+        } elseif (Auth::guard('visitor')->check()) {
+            $user = Auth::guard('visitor')->user();
+            $visitor_submission = $user->submissions()->where('event_announcement_id', $event->id)->first();
+        }
+
         $relatedEvents = EventAnnouncement::where('id', '!=', $id)->inRandomOrder()->limit(4)->get();
         return view('website.pages.events.event', [
             'event' => $event,
             'relatedEvents' => $relatedEvents,
-            "submission" => $exhibitor_submission
+            "exhibitorSubmission" => $exhibitor_submission,
+            "visitorSubmission" => $visitor_submission
         ]);
     }
 
@@ -103,7 +114,7 @@ class EventController extends Controller
             return redirect()->route('exhibit_event', ['id' => $event->id]);
         }
         if ($exhibitor_submission->canDownloadInvoice) {
-            return redirect()->route('post_exhibit_event', ['id' => $event->id]); 
+            return redirect()->route('post_exhibit_event', ['id' => $event->id]);
         }
         return view('website.pages.events.info-validation', [
             'event' => $event
@@ -126,7 +137,8 @@ class EventController extends Controller
         ]);
     }
 
-    public function DownloadInvoice($id) {
+    public function DownloadInvoice($id)
+    {
         $event = EventAnnouncement::find($id);
         if (!$event) {
             return redirect()->route('events');
