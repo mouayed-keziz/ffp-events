@@ -77,7 +77,8 @@ class ExhibitorSubmission extends Model implements HasMedia
             $this->status !== ExhibitorSubmissionStatus::ARCHIVE &&
             $this->status !== ExhibitorSubmissionStatus::READY &&
             $this->status !== ExhibitorSubmissionStatus::REJECTED &&
-            $this->post_answers === NULL;
+            $this->post_answers === NULL &&
+            $this->eventAnnouncement->exhibitorPostPaymentForms->count() > 0;
     }
     public function getCanDownloadInvoiceAttribute()
     {
@@ -112,7 +113,8 @@ class ExhibitorSubmission extends Model implements HasMedia
     }
 
 
-    public function getInvoiceData(): array {
+    public function getInvoiceData(): array
+    {
         $invoiceData = [];
 
         foreach ($this->answers as $answer) {

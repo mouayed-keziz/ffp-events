@@ -207,7 +207,7 @@ class EventController extends Controller
         if (!$exhibitor_submission) {
             return redirect()->route('exhibit_event', ['id' => $event->id]);
         }
-        if (!$exhibitor_submission->canFillPostForms) {
+        if (!$exhibitor_submission->canFillPostForms || !$event->exhibitorPostPaymentForms) {
             return redirect()->route("event_details", ['id' => $event->id]);
         }
         return view('website.pages.events.post-exhibit-event', [
