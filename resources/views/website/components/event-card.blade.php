@@ -36,14 +36,18 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3 pointer-events-auto">
-                @if ((!Auth::guard('visitor')->check() && !Auth::guard('exhibitor')->check()) || Auth::guard('visitor')->check())
+                @if (
+                    (!Auth::guard('visitor')->check() && !Auth::guard('exhibitor')->check()) ||
+                        (Auth::guard('visitor')->check() && !empty($event->visitorForm->sections)))
                     <a href="{{ route('event_details', ['id' => $event['id']]) }}"
                         class="btn text-[1rem] font-bold btn-outline border-base-200 border-2 flex-1 normal-case">
                         {{ __('website/home.events.visit') }}
                     </a>
                 @endif
 
-                @if ((!Auth::guard('visitor')->check() && !Auth::guard('exhibitor')->check()) || Auth::guard('exhibitor')->check())
+                @if (
+                    (!Auth::guard('visitor')->check() && !Auth::guard('exhibitor')->check()) ||
+                        (Auth::guard('exhibitor')->check() && !empty($event->exhibitorForms->toArray())))
                     <a href="{{ route('event_details', ['id' => $event['id']]) }}"
                         class="btn text-[1rem] font-bold btn-primary flex-1 normal-case">
                         {{ __('website/home.events.exhibit') }}

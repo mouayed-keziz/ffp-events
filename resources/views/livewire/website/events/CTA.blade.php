@@ -24,6 +24,10 @@ new class extends Component {
             return false;
         }
 
+        if (empty($this->event->visitorForm->sections)) {
+            return false;
+        }
+
         if (Auth::guard('exhibitor')->check()) {
             return false;
         }
@@ -38,6 +42,10 @@ new class extends Component {
     public function shouldShowExhibitButton()
     {
         if ($this->submission) {
+            return false;
+        }
+
+        if (empty($this->event->exhibitorForms->toArray())) {
             return false;
         }
 

@@ -31,6 +31,11 @@ new class extends Component {
         $this->event = $event;
         $this->initFormData();
         $this->postForms = $event->exhibitorPostPaymentForms->toArray();
+
+        // Redirect to event details page if no forms available
+        if (empty($this->formData) || $this->totalSteps === 0) {
+            return redirect()->route('event_details', ['id' => $this->event->id]);
+        }
     }
 
     public function updated($name)

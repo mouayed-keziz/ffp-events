@@ -20,6 +20,11 @@ new class extends Component {
     {
         $this->event = $event;
         $this->initFormData();
+
+        // Redirect to event page if no visitor form available
+        if (empty($this->formData)) {
+            return redirect()->route('event_details', ['id' => $this->event->id]);
+        }
     }
 
     protected function initFormData()
