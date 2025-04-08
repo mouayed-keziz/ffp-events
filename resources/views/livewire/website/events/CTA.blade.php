@@ -85,10 +85,12 @@ new class extends Component {
                 </div>
             @endif
 
-            <a href="{{ route('view_exhibitor_answers', $event) }}"
-                class="btn btn-sm rounded-md text-sm font-semibold btn-outline border-base-200 border-2 uppercase">
-                {{ __('website/event.review_answers') }}
-            </a>
+            @if (!Auth::guard('visitor')->check())
+                <a href="{{ route('view_exhibitor_answers', $event) }}"
+                    class="btn btn-sm rounded-md text-sm font-semibold btn-outline border-base-200 border-2 uppercase">
+                    {{ __('website/event.review_answers') }}
+                </a>
+            @endif
 
             @if ($submission->canDownloadInvoice)
                 <a href="{{ route('download_invoice', $event) }}"

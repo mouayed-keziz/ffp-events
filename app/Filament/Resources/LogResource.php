@@ -19,10 +19,10 @@ class LogResource extends Resource
     protected static ?string $model = Log::class;
     protected static ?int $navigationSort = Sidebar::LOG["sort"];
     protected static ?string $navigationIcon = Sidebar::LOG["icon"];
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
+    // public static function getNavigationBadge(): ?string
+    // {
+    //     return static::getModel()::count();
+    // }
 
     public static function getNavigationBadgeColor(): ?string
     {

@@ -37,15 +37,18 @@ class EventAnnouncementForm
                                 ->collapsible()
                                 ->schema([
                                     Forms\Components\DateTimePicker::make('start_date')
-                                        ->required()
                                         ->native(false)
                                         ->displayFormat('Y/m/d H:i')
                                         ->label(__('panel/event_announcement.fields.start_date')),
                                     Forms\Components\DateTimePicker::make('end_date')
-                                        ->required()
                                         ->native(false)
                                         ->displayFormat('Y/m/d H:i')
-                                        ->label(__('panel/event_announcement.fields.end_date')),
+                                        ->label(__('panel/event_announcement.fields.end_date'))
+                                        ->validationMessages([
+                                            'after_or_equal' => __('panel/event_announcement.validation.after_or_equal'),
+                                        ])
+                                        ->afterOrEqual('start_date')
+                                        ->extraAttributes(['title' => __('panel/event_announcement.validation.after_or_equal')]),
                                 ]),
                             // New section for Location and Website URL
                             Forms\Components\Section::make(__('panel/event_announcement.fields.location'))
@@ -62,29 +65,35 @@ class EventAnnouncementForm
                                 ->collapsible()
                                 ->schema([
                                     Forms\Components\DateTimePicker::make('visitor_registration_start_date')
-                                        ->required()
                                         ->native(false)
                                         ->displayFormat('Y/m/d H:i')
                                         ->label(__('panel/event_announcement.fields.visitor_registration_start_date')),
                                     Forms\Components\DateTimePicker::make('visitor_registration_end_date')
-                                        ->required()
                                         ->native(false)
                                         ->displayFormat('Y/m/d H:i')
-                                        ->label(__('panel/event_announcement.fields.visitor_registration_end_date')),
+                                        ->label(__('panel/event_announcement.fields.visitor_registration_end_date'))
+                                        ->validationMessages([
+                                            'after_or_equal' => __('panel/event_announcement.validation.after_or_equal'),
+                                        ])
+                                        ->afterOrEqual('visitor_registration_start_date')
+                                        ->extraAttributes(['title' => __('panel/event_announcement.validation.after_or_equal')]),
                                 ]),
                             Forms\Components\Section::make(__('panel/event_announcement.fields.exhibitor_registration'))
                                 ->collapsible()
                                 ->schema([
                                     Forms\Components\DateTimePicker::make('exhibitor_registration_start_date')
-                                        ->required()
                                         ->native(false)
                                         ->displayFormat('Y/m/d H:i')
                                         ->label(__('panel/event_announcement.fields.exhibitor_registration_start_date')),
                                     Forms\Components\DateTimePicker::make('exhibitor_registration_end_date')
-                                        ->required()
                                         ->native(false)
                                         ->displayFormat('Y/m/d H:i')
-                                        ->label(__('panel/event_announcement.fields.exhibitor_registration_end_date')),
+                                        ->label(__('panel/event_announcement.fields.exhibitor_registration_end_date'))
+                                        ->validationMessages([
+                                            'after_or_equal' => __('panel/event_announcement.validation.after_or_equal'),
+                                        ])
+                                        ->afterOrEqual('exhibitor_registration_start_date')
+                                        ->extraAttributes(['title' => __('panel/event_announcement.validation.after_or_equal')]),
                                 ]),
                         ]),
                     // Contact & Currencies

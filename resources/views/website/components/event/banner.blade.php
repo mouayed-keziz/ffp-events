@@ -27,13 +27,17 @@
                         <div class="text-sm font-bold text-white bg-red-500 rounded-full px-3 py-1 w-fit">
                             {{ __('website/event.is_past') }}
                         </div>
+                    @elseif ($event['countdown']['is_ongoing'])
+                        @include('website.components.countdown', [
+                            'countdown' => $event['countdown']['diff'],
+                            'size' => 'lg',
+                        ])
                     @else
                         @include('website.components.countdown', [
                             'countdown' => $event['countdown']['diff'],
                             'size' => 'lg',
                         ])
                     @endif
-
                 </div>
                 @livewire('website.share', [
                     'title' => $event->title,

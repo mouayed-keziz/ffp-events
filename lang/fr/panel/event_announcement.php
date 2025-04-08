@@ -69,4 +69,7 @@ return [
         'highlighted_events' => 'Événements mis en avant',
         'last_7_days' => 'Les 7 derniers jours',
     ],
+    'validation' => [
+        'after_or_equal' => 'La date de fin doit être égale ou postérieure à la date de début',
+    ],
 ];

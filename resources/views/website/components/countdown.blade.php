@@ -39,6 +39,10 @@
     hours: {{ $countdown['hours'] }},
     minutes: {{ $countdown['minutes'] }},
     seconds: {{ $countdown['seconds'] }},
+    // Format numbers to add leading zero if less than 10
+    formatNumber(num) {
+        return (num < 10) ? '0' + num : num;
+    },
     init() {
         setInterval(() => {
             if (this.total > 0) {
@@ -57,7 +61,7 @@
         <template x-if="years > 0">
             <div>
                 <!-- Years -->
-                <div class="font-bold {{ $classes['numbers'] }}" x-text="years" :key="years"
+                <div class="font-bold {{ $classes['numbers'] }}" x-text="formatNumber(years)" :key="years"
                     x-transition:enter="transition transform duration-300" x-transition:enter-start="-translate-y-4"
                     x-transition:enter-end="translate-y-0">
                 </div>
@@ -67,52 +71,44 @@
         <template x-if="months > 0">
             <div>
                 <!-- Months -->
-                <div class="font-bold {{ $classes['numbers'] }}" x-text="months" :key="months"
+                <div class="font-bold {{ $classes['numbers'] }}" x-text="formatNumber(months)" :key="months"
                     x-transition:enter="transition transform duration-300" x-transition:enter-start="-translate-y-4"
                     x-transition:enter-end="translate-y-0">
                 </div>
                 <div class="{{ $classes['labels'] }}">{{ __('website/event.countdown.months') }}</div>
             </div>
         </template>
-        <template x-if="days > 0">
-            <div>
-                <!-- Days -->
-                <div class="font-bold {{ $classes['numbers'] }}" x-text="days" :key="days"
-                    x-transition:enter="transition transform duration-300" x-transition:enter-start="-translate-y-4"
-                    x-transition:enter-end="translate-y-0">
-                </div>
-                <div class="{{ $classes['labels'] }}">{{ __('website/event.countdown.days') }}</div>
+        <div>
+            <!-- Days -->
+            <div class="font-bold {{ $classes['numbers'] }}" x-text="formatNumber(days)" :key="days"
+                x-transition:enter="transition transform duration-300" x-transition:enter-start="-translate-y-4"
+                x-transition:enter-end="translate-y-0">
             </div>
-        </template>
-        <template x-if="hours > 0">
-            <div>
-                <!-- Hours -->
-                <div class="font-bold {{ $classes['numbers'] }}" x-text="hours" :key="hours"
-                    x-transition:enter="transition transform duration-300" x-transition:enter-start="-translate-y-4"
-                    x-transition:enter-end="translate-y-0">
-                </div>
-                <div class="{{ $classes['labels'] }}">{{ __('website/event.countdown.hours') }}</div>
+            <div class="{{ $classes['labels'] }}">{{ __('website/event.countdown.days') }}</div>
+        </div>
+        <div>
+            <!-- Hours -->
+            <div class="font-bold {{ $classes['numbers'] }}" x-text="formatNumber(hours)" :key="hours"
+                x-transition:enter="transition transform duration-300" x-transition:enter-start="-translate-y-4"
+                x-transition:enter-end="translate-y-0">
             </div>
-        </template>
-        <template x-if="minutes > 0">
-            <div>
-                <!-- Minutes -->
-                <div class="font-bold {{ $classes['numbers'] }}" x-text="minutes" :key="minutes"
-                    x-transition:enter="transition transform duration-300" x-transition:enter-start="-translate-y-4"
-                    x-transition:enter-end="translate-y-0">
-                </div>
-                <div class="{{ $classes['labels'] }}">{{ __('website/event.countdown.minutes') }}</div>
+            <div class="{{ $classes['labels'] }}">{{ __('website/event.countdown.hours') }}</div>
+        </div>
+        <div>
+            <!-- Minutes -->
+            <div class="font-bold {{ $classes['numbers'] }}" x-text="formatNumber(minutes)" :key="minutes"
+                x-transition:enter="transition transform duration-300" x-transition:enter-start="-translate-y-4"
+                x-transition:enter-end="translate-y-0">
             </div>
-        </template>
-        <template x-if="seconds > 0 || total == 0">
-            <div>
-                <!-- Seconds -->
-                <div class="font-bold {{ $classes['numbers'] }}" x-text="seconds" :key="seconds"
-                    x-transition:enter="transition transform duration-300" x-transition:enter-start="-translate-y-4"
-                    x-transition:enter-end="translate-y-0">
-                </div>
-                <div class="{{ $classes['labels'] }}">{{ __('website/event.countdown.seconds') }}</div>
+            <div class="{{ $classes['labels'] }}">{{ __('website/event.countdown.minutes') }}</div>
+        </div>
+        <div>
+            <!-- Seconds -->
+            <div class="font-bold {{ $classes['numbers'] }}" x-text="formatNumber(seconds)" :key="seconds"
+                x-transition:enter="transition transform duration-300" x-transition:enter-start="-translate-y-4"
+                x-transition:enter-end="translate-y-0">
             </div>
-        </template>
+            <div class="{{ $classes['labels'] }}">{{ __('website/event.countdown.seconds') }}</div>
+        </div>
     </div>
 </div>

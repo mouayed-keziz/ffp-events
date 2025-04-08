@@ -25,28 +25,29 @@ class AuthenticationListener
      */
     public function handle(object $event): void
     {
-        // if ($event instanceof Login) {
-        //     activity()
-        //         ->useLog(LogName::Authentication->value)
-        //         ->event(LogEvent::Login->value)
-        //         ->causedBy($event->user instanceof Model ? $event->user : null)
-        //         ->withProperties([
-        //             'email' => $event->user->email,
-        //             'name' => $event->user->name,
-        //         ])
-        //         ->log('User logged in');
-        // }
+        if ($event instanceof Login) {
+            activity()
+                ->useLog(LogName::Authentication->value)
+                ->event(LogEvent::Login->value)
+                ->causedBy($event->user instanceof Model ? $event->user : null)
+                ->withProperties([
+                    'email' => $event->user->email,
+                    'name' => $event->user->name,
+                ])
+                ->log('User logged in');
+        }
 
-        // if ($event instanceof Logout) {
-        //     activity()
-        //         ->useLog(LogName::Authentication->value)
-        //         ->event(LogEvent::Logout->value)
-        //         ->causedBy($event->user instanceof Model ? $event->user : null)
-        //         ->withProperties([
-        //             'email' => $event->user->email,
-        //             'name' => $event->user->name,
-        //         ])
-        //         ->log('User logged out');
-        // }
+        if ($event instanceof Logout) {
+            dd($event);
+            activity()
+                ->useLog(LogName::Authentication->value)
+                ->event(LogEvent::Logout->value)
+                ->causedBy($event->user instanceof Model ? $event->user : null)
+                ->withProperties([
+                    'email' => $event->user->email,
+                    'name' => $event->user->name,
+                ])
+                ->log('User logged out');
+        }
     }
 }

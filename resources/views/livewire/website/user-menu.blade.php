@@ -145,8 +145,8 @@ new class extends Component {
                                     <div class="flex justify-between items-start">
                                         <div class="flex-1">
                                             <p class="text-sm">
-                                                @if($notification['event_title'])
-                                                    <strong>{{ $notification['event_title'] }}</strong>: 
+                                                @if ($notification['event_title'])
+                                                    <strong>{{ $notification['event_title'] }}</strong>:
                                                 @endif
                                                 {{ $notification['message'] }}
                                             </p>
@@ -177,6 +177,18 @@ new class extends Component {
                                     @endif
                                 </div>
                             @endforeach
+                        </div>
+
+                        <div class="flex justify-end px-2 mb-1">
+                            <a href="{{ route('notifications') }}"
+                                class="text-sm text-primary hover:underline font-medium flex items-center gap-1">
+                                {{ __('website/notifications.see_all') }}
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                </svg>
+                            </a>
                         </div>
 
                         @if ($unreadCount > 0)

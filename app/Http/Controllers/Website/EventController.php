@@ -96,6 +96,7 @@ class EventController extends Controller
                 'event' => $event
             ]);
         } else {
+            dd("here");
             return redirect()->route('events');
         }
     }

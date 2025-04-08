@@ -6,4 +6,5 @@ return [
     'no_notifications' => 'No notifications',
     'view_event' => 'View Event',
     'mark_as_read' => 'Mark as read',
+    'see_all' => 'See all',
 ];

@@ -70,4 +70,7 @@ return [
         'highlighted_events' => 'الفعاليات المميزة',
         'last_7_days' => 'آخر 7 أيام',
     ],
+    'validation' => [
+        'after_or_equal' => 'يجب أن يكون تاريخ الانتهاء بعد أو يساوي تاريخ البدء',
+    ],
 ];

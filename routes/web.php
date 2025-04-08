@@ -19,12 +19,12 @@ Route::get('language/{locale}', function ($locale) {
 Route::get('media/download/{id}', [\App\Http\Controllers\MediaController::class, 'download'])->name('media.download');
 
 Route::middleware('local_middleware')->group(function () {
-    
-    Route::view("/notifications","website.pages.notifications")->name("notifications")->middleware("auth");
+
+    Route::view("/notifications", "website.pages.notifications")->name("notifications")->middleware("is_authenticated");
     Route::prefix("")->group(function () {
         Route::get('/', [EventController::class, 'Events'])->name('events');
         Route::get('/event/{id}', [EventController::class, 'Event'])->name('event_details');
-        
+
         Route::get('/event/{id}/visit', [EventController::class, 'VisitEvent'])->name('visit_event')->middleware("is_visitor");
         Route::get('/event/{id}/visit-event-form-submitted', [EventController::class, 'VisitFormSubmitted'])->name('visit_event_form_submitted')->middleware("is_visitor");
         Route::middleware("is_exhibitor")->group(function () {

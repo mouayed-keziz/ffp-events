@@ -86,10 +86,34 @@ class EventAnnouncement extends Model implements HasMedia
     {
         $now = now();
         $start_date = $this->start_date;
+        $end_date = $this->end_date;
         $diff = $start_date->diff($now);
 
+        // Check if the event is currently ongoing (between start and end date)
+        $is_ongoing = $now->greaterThanOrEqualTo($start_date) && $now->lessThanOrEqualTo($end_date);
+
+        // If event is ongoing, return zeros for the countdown
+        if ($is_ongoing) {
+            return [
+                'is_ongoing' => true,
+                'is_past' => false,
+                'diff' => [
+                    'years' => 0,
+                    'months' => 0,
+                    'days' => 0,
+                    'hours' => 0,
+                    'minutes' => 0,
+                    'seconds' => 0,
+                ]
+            ];
+        }
+
+        // If the event is past the end date
+        $is_past = $now->greaterThan($end_date);
+
         return [
-            'is_past' => $diff->invert === 0,
+            'is_ongoing' => false,
+            'is_past' => $is_past,
             'diff' => [
                 'years' => $diff->y,
                 'months' => $diff->m,

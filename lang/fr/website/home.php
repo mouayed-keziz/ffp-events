@@ -9,6 +9,7 @@ return [
         'visit'   => 'VISITER',
         'exhibit' => 'EXPOSER ET SPONSORISER',
         'to'     => 'à',
+        'already_registered' => 'Déjà Inscrit',
     ],
     'faq'  => [
         'title'   => 'Les questions les plus Fréquentes',

@@ -9,6 +9,7 @@ return [
         'visit'   => 'VISIT',
         'exhibit' => 'EXHIBIT AND SPONSOR',
         'to'     => 'to',
+        'already_registered' => 'Already Registered',
     ],
     'faq'  => [
         'title'   => 'Frequently Asked Questions',

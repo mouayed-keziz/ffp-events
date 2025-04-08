@@ -69,4 +69,7 @@ return [
         'highlighted_events' => 'Highlighted events',
         'last_7_days' => 'Last 7 days',
     ],
+    'validation' => [
+        'after_or_equal' => 'End date should be after or equal to start date',
+    ],
 ];

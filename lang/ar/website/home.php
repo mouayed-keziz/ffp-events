@@ -9,6 +9,7 @@ return [
         'visit'   => 'زيارة',
         'exhibit' => 'عرض ورعاية',
         'to'     => 'إلى',
+        'already_registered' => 'مسجل بالفعل',
     ],
     'faq'  => [
         'title'   => 'الأسئلة المتكررة',

@@ -1,4 +1,4 @@
-@props(['event'])
+@props(['event', 'visitorSubmission' => null, 'exhibitorSubmission' => null])
 
 @php
     use Illuminate\Support\Facades\Auth;
@@ -8,7 +8,10 @@
 <div class="bg-white rounded-xl overflow-hidden shadow-sm py-2 relative">
     <pre>
 </pre>
-    <a href="{{ route('event_details', ['id' => $event['id']]) }}" class="absolute inset-0 z-0"></a>
+    <a href="{{ auth()->guard('web')->check() || auth()->guard('exhibitor')->check() || auth()->guard('visitor')->check()
+        ? route('event_details', ['id' => $event['id']])
+        : route('login') }}"
+        class="absolute inset-0 z-0"></a>
     <div class="grid md:grid-cols-2 gap-0 relative pointer-events-none">
         <div class="p-6 space-y-4 md:order-1 order-2">
             <h3 class="text-xl font-bold">{{ $event['title'] }}</h3>
@@ -36,19 +39,33 @@
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3 pointer-events-auto">
-                @if (
+                @if (Auth::guard('visitor')->check() && $visitorSubmission)
+                    <button disabled
+                        class="btn text-[1rem] font-bold btn-outline border-base-200 border-2 flex-1 normal-case btn-disabled opacity-60">
+                        {{ __('website/home.events.already_registered') }}
+                    </button>
+                @elseif (
                     (!Auth::guard('visitor')->check() && !Auth::guard('exhibitor')->check()) ||
                         (Auth::guard('visitor')->check() && !empty($event->visitorForm->sections)))
-                    <a href="{{ route('event_details', ['id' => $event['id']]) }}"
+                    <a href="{{ Auth::guard('web')->check() || Auth::guard('exhibitor')->check() || Auth::guard('visitor')->check()
+                        ? route('event_details', ['id' => $event['id']])
+                        : route('login') }}"
                         class="btn text-[1rem] font-bold btn-outline border-base-200 border-2 flex-1 normal-case">
                         {{ __('website/home.events.visit') }}
                     </a>
                 @endif
 
-                @if (
+                @if (Auth::guard('exhibitor')->check() && $exhibitorSubmission)
+                    <button disabled
+                        class="btn text-[1rem] font-bold btn-primary flex-1 normal-case btn-disabled opacity-60">
+                        {{ __('website/home.events.already_registered') }}
+                    </button>
+                @elseif (
                     (!Auth::guard('visitor')->check() && !Auth::guard('exhibitor')->check()) ||
                         (Auth::guard('exhibitor')->check() && !empty($event->exhibitorForms->toArray())))
-                    <a href="{{ route('event_details', ['id' => $event['id']]) }}"
+                    <a href="{{ Auth::guard('web')->check() || Auth::guard('exhibitor')->check() || Auth::guard('visitor')->check()
+                        ? route('event_details', ['id' => $event['id']])
+                        : route('login') }}"
                         class="btn text-[1rem] font-bold btn-primary flex-1 normal-case">
                         {{ __('website/home.events.exhibit') }}
                     </a>
@@ -65,6 +82,11 @@
                         <div class="text-sm font-bold text-white bg-red-500 rounded-full px-3 py-1">
                             {{ __('website/event.is_past') }}
                         </div>
+                    @elseif($event['countdown']['is_ongoing'])
+                        @include('website.components.countdown', [
+                            'countdown' => $event['countdown']['diff'],
+                            'size' => 'md',
+                        ])
                     @else
                         @include('website.components.countdown', [
                             'countdown' => $event['countdown']['diff'],
