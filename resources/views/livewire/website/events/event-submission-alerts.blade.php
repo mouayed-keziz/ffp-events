@@ -70,7 +70,7 @@ new class extends Component {
                 @endif
             @endforeach
 
-            @if ($submission->canFillPostForms)
+            @if ($submission->canFillPostForms && $event->exhibitorPostPaymentForms->count() > 0)
                 <div class="alert bg-info/20 text-info text-xs mt-2">
                     <x-heroicon-s-information-circle class="w-7 h-7" />
                     <span>{{ __('website/event.finalize_responses') }}</span>

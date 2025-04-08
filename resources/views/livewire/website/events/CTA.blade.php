@@ -99,7 +99,7 @@ new class extends Component {
                 </a>
             @endif
 
-            @if ($submission->canFillPostForms)
+            @if ($submission->canFillPostForms && $event->exhibitorPostPaymentForms->count() > 0)
                 <a href="{{ route('post_exhibit_event', $event) }}"
                     class="btn btn-sm rounded-md text-sm font-semibold btn-outline border-base-200 border-2 uppercase">
                     {{ __('website/event.finalize_answers') }}
