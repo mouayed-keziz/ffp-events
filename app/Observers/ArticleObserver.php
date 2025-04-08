@@ -2,40 +2,16 @@
 
 namespace App\Observers;
 
+use App\Activity\ArticleActivity;
 use App\Enums\LogEvent;
-use App\Enums\LogName;
 use App\Models\Article;
-use Illuminate\Support\Facades\Auth;
 
 class ArticleObserver
 {
     public function created(Article $article)
     {
-        $properties = [
-            'fr' => [
-                'title' => $article->getTranslation('title', 'fr'),
-                'description' => $article->getTranslation('description', 'fr'),
-                'content' => $article->getTranslation('content', 'fr'),
-            ],
-            'en' => [
-                'title' => $article->getTranslation('title', 'en'),
-                'description' => $article->getTranslation('description', 'en'),
-                'content' => $article->getTranslation('content', 'en'),
-            ],
-            'ar' => [
-                'title' => $article->getTranslation('title', 'ar'),
-                'description' => $article->getTranslation('description', 'ar'),
-                'content' => $article->getTranslation('content', 'ar'),
-            ],
-        ];
-
-        activity()
-            ->useLog(LogName::Articles->value)
-            ->event(LogEvent::Creation->value)
-            ->performedOn($article)
-            ->withProperties($properties)
-            ->causedBy(Auth::user())
-            ->log("Création d'un nouvel article");
+        // Log the creation using the activity class
+        ArticleActivity::logCreation($article);
     }
 
     public function updated(Article $article)
@@ -46,68 +22,37 @@ class ArticleObserver
         foreach ($translatableFields as $field) {
             if ($article->isDirty($field)) {
                 foreach (['fr', 'en', 'ar'] as $locale) {
-                    if ($article->getTranslation($field, $locale) !== $article->getOriginal($field)[$locale]) {
-                        $changes[$field][$locale] = [
-                            'ancien' => $article->getOriginal($field)[$locale],
-                            'nouveau' => $article->getTranslation($field, $locale)
-                        ];
+                    $originalValue = $article->getOriginal($field) ? $article->getOriginal($field)[$locale] : null;
+                    if ($article->getTranslation($field, $locale) !== $originalValue) {
+                        $frenchFieldName = match ($field) {
+                            'title' => 'titre',
+                            'description' => 'description',
+                            'content' => 'contenu'
+                        };
+                        $changes["$frenchFieldName $locale ancien"] = $originalValue;
+                        $changes["$frenchFieldName $locale nouveau"] = $article->getTranslation($field, $locale);
                     }
                 }
             }
         }
 
-        if (!empty($changes)) {
-            activity()
-                ->useLog(LogName::Articles->value)
-                ->event(LogEvent::Modification->value)
-                ->performedOn($article)
-                ->withProperties($changes)
-                ->causedBy(Auth::user())
-                ->log("Modification de l'article");
-        }
+        ArticleActivity::logUpdate($article, $changes);
     }
 
     public function deleted(Article $article)
     {
-        // Only log if it's a soft delete
         if (!$article->isForceDeleting()) {
-            $this->logArticleAction($article, LogEvent::Deletion, "Suppression de l'article");
+            ArticleActivity::logArticleAction($article, LogEvent::Deletion, "Suppression de l'article");
         }
     }
 
     public function forceDeleted(Article $article)
     {
-        $this->logArticleAction($article, LogEvent::ForceDeletion, "Suppression définitive de l'article");
+        ArticleActivity::logArticleAction($article, LogEvent::ForceDeletion, "Suppression définitive de l'article");
     }
 
     public function restored(Article $article)
     {
-        $this->logArticleAction($article, LogEvent::Restoration, "Restauration de l'article");
-    }
-
-    private function logArticleAction(Article $article, LogEvent $event, string $description)
-    {
-        $properties = [
-            'fr' => [
-                'title' => $article->getTranslation('title', 'fr'),
-                'description' => $article->getTranslation('description', 'fr'),
-            ],
-            'en' => [
-                'title' => $article->getTranslation('title', 'en'),
-                'description' => $article->getTranslation('description', 'en'),
-            ],
-            'ar' => [
-                'title' => $article->getTranslation('title', 'ar'),
-                'description' => $article->getTranslation('description', 'ar'),
-            ],
-        ];
-
-        activity()
-            ->useLog(LogName::Articles->value)
-            ->event($event->value)
-            ->performedOn($article)
-            ->causedBy(Auth::user())
-            ->withProperties($properties)
-            ->log($description);
+        ArticleActivity::logArticleAction($article, LogEvent::Restoration, "Restauration de l'article");
     }
 }

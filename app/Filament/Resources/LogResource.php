@@ -10,6 +10,7 @@ use App\Filament\Resources\LogResource\Pages;
 use App\Filament\Resources\LogResource\Resource\LogTable;
 use App\Models\Log;
 use Filament\Forms;
+use Filament\Forms\Components\KeyValue;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
@@ -45,7 +46,8 @@ class LogResource extends Resource
     {
         return $form
             ->schema([
-                //
+                Forms\Components\KeyValue::make('properties')->columnSpanFull()
+
             ]);
     }
 

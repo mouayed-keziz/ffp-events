@@ -21,7 +21,7 @@ class LogActions
                 ->body(__('panel/logs.actions.delete_all.notifications.success.body'))
                 ->send();
 
-            $superAdmins = User::superAdmins()->get();
+            $superAdmins = User::role('super_admin')->get();
             foreach ($superAdmins as $superAdmin) {
                 $superAdmin->notify(
                     Notification::make()

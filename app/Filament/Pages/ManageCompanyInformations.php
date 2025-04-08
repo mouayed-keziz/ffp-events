@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Activity\CompanyInformationActivity;
 use App\Filament\Navigation\Sidebar;
 use App\Settings\CompanyInformationsSettings;
 use Filament\Forms;
@@ -37,12 +38,27 @@ class ManageCompanyInformations extends SettingsPage
         return __(Sidebar::SETTINGS["group"]);
     }
 
+    /**
+     * Called after the form is saved
+     * 
+     * @param array $data
+     * @return void
+     */
+    protected function afterSave(): void
+    {
+        // Get the settings model
+        $settings = app(CompanyInformationsSettings::class);
+
+        // Log the activity with details about what was changed
+        CompanyInformationActivity::logUpdate($this->data, $settings->name);
+    }
+
     public function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Tabs::make('Settings')
-                ->persistTabInQueryString()
+                    ->persistTabInQueryString()
                     ->tabs([
                         Forms\Components\Tabs\Tab::make(__('settings/company_informations.tabs.general_information'))
                             ->columns([
@@ -173,7 +189,7 @@ class ManageCompanyInformations extends SettingsPage
                                     ->placeholder(__('settings/company_informations.fields.applicationTerms.placeholder'))
                                     ->columnSpan(12),
                             ]),
-                            
+
                         Forms\Components\Tabs\Tab::make(__('settings/company_informations.tabs.company_details'))
                             ->columns([
                                 'default' => 1,
@@ -190,7 +206,7 @@ class ManageCompanyInformations extends SettingsPage
                                         'sm' => 2,
                                         'lg' => 12
                                     ]),
-                                    
+
                                 Forms\Components\TextInput::make('location')
                                     ->label(__('settings/company_informations.fields.location.label'))
                                     ->required()
@@ -200,7 +216,7 @@ class ManageCompanyInformations extends SettingsPage
                                         'sm' => 2,
                                         'lg' => 12
                                     ]),
-                                    
+
                                 Forms\Components\TextInput::make('capital')
                                     ->label(__('settings/company_informations.fields.capital.label'))
                                     ->required()
@@ -210,7 +226,7 @@ class ManageCompanyInformations extends SettingsPage
                                         'sm' => 1,
                                         'lg' => 6
                                     ]),
-                                    
+
                                 Forms\Components\TextInput::make('rc')
                                     ->label(__('settings/company_informations.fields.rc.label'))
                                     ->required()
@@ -220,7 +236,7 @@ class ManageCompanyInformations extends SettingsPage
                                         'sm' => 1,
                                         'lg' => 6
                                     ]),
-                                    
+
                                 Forms\Components\TextInput::make('nif')
                                     ->label(__('settings/company_informations.fields.nif.label'))
                                     ->required()
@@ -230,7 +246,7 @@ class ManageCompanyInformations extends SettingsPage
                                         'sm' => 1,
                                         'lg' => 6
                                     ]),
-                                    
+
                                 Forms\Components\TextInput::make('ai')
                                     ->label(__('settings/company_informations.fields.ai.label'))
                                     ->required()
@@ -240,7 +256,7 @@ class ManageCompanyInformations extends SettingsPage
                                         'sm' => 1,
                                         'lg' => 6
                                     ]),
-                                    
+
                                 Forms\Components\TextInput::make('nis')
                                     ->label(__('settings/company_informations.fields.nis.label'))
                                     ->required()
@@ -250,7 +266,7 @@ class ManageCompanyInformations extends SettingsPage
                                         'sm' => 1,
                                         'lg' => 6
                                     ]),
-                                    
+
                                 Forms\Components\TextInput::make('tva')
                                     ->label(__('settings/company_informations.fields.tva.label'))
                                     ->required()

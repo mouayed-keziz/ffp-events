@@ -19,6 +19,12 @@ return [
         'articles' => 'المقالات',
         'authentication' => 'المصادقة',
         'event_announcements' => 'إعلانات الفعاليات',
+        'products' => 'المنتجات',
+        'plans' => 'الخطط',
+        'plan_tiers' => 'مستويات الخطط',
+        'visitor_submissions' => 'طلبات الزوار',
+        'exhibitor_submissions' => 'طلبات العارضين',
+        'company_information' => 'معلومات الشركة',
     ],
     'columns' => [
         "log_name" => "اسم السجل",

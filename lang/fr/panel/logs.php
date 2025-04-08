@@ -17,6 +17,12 @@ return [
         'articles' => 'Articles',
         'authentication' => 'Authentification',
         'event_announcements' =>  'Annonces d\'événements',
+        'products' => 'Produits',
+        'plans' => 'Plans',
+        'plan_tiers' => 'Niveaux de plans',
+        'visitor_submissions' => 'Inscriptions des visiteurs',
+        'exhibitor_submissions' => 'Inscriptions des exposants',
+        'company_information' => 'Informations de l\'entreprise',
     ],
     'resource' => [
         'single' => 'Journal',

@@ -11,6 +11,7 @@ class Log extends Activity
     protected $casts = [
         'event' => LogEvent::class,
         'log_name' => LogName::class,
+        'properties' => 'array',
     ];
 
     public function getSubjectFieldAttribute()

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\PlanObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\MediaLibrary\HasMedia;
@@ -25,6 +26,12 @@ class Plan extends Model implements HasMedia
     protected $casts = [
         'price' => 'array',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::observe(PlanObserver::class);
+    }
 
     public function planTier(): BelongsTo
     {

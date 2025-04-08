@@ -19,6 +19,12 @@ return [
         'articles' => 'Articles',
         'authentication' => 'Authentication',
         'event_announcements' => 'Event Announcements',
+        'products' => 'Products',
+        'plans' => 'Plans',
+        'plan_tiers' => 'Plan Tiers',
+        'visitor_submissions' => 'Visitor Submissions',
+        'exhibitor_submissions' => 'Exhibitor Submissions',
+        'company_information' => 'Company Information',
     ],
     'columns' => [
         "log_name" => "Log Name",

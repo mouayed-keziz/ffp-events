@@ -2,8 +2,7 @@
 
 namespace App\Listeners;
 
-use App\Enums\LogEvent;
-use App\Enums\LogName;
+use App\Activity\AuthenticationActivity;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Auth\Events\Logout;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -26,28 +25,14 @@ class AuthenticationListener
     public function handle(object $event): void
     {
         if ($event instanceof Login) {
-            activity()
-                ->useLog(LogName::Authentication->value)
-                ->event(LogEvent::Login->value)
-                ->causedBy($event->user instanceof Model ? $event->user : null)
-                ->withProperties([
-                    'email' => $event->user->email,
-                    'name' => $event->user->name,
-                ])
-                ->log('User logged in');
+            AuthenticationActivity::logLogin($event->user);
         }
 
         if ($event instanceof Logout) {
-            dd($event);
-            activity()
-                ->useLog(LogName::Authentication->value)
-                ->event(LogEvent::Logout->value)
-                ->causedBy($event->user instanceof Model ? $event->user : null)
-                ->withProperties([
-                    'email' => $event->user->email,
-                    'name' => $event->user->name,
-                ])
-                ->log('User logged out');
+            // Fix for logout event where user might be null
+            // For the "visitor" guard, the user might be null in the logout event
+            // We don't log anything in that case as the AuthenticationActivity handles the null check
+            AuthenticationActivity::logLogout($event->user);
         }
     }
 }

@@ -115,6 +115,7 @@ class LogTable
                     ->native(false),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\DeleteAction::make()->requiresConfirmation(),
             ])
             ->bulkActions([

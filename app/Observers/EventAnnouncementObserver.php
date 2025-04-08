@@ -2,10 +2,9 @@
 
 namespace App\Observers;
 
+use App\Activity\EventAnnouncementActivity;
 use App\Enums\LogEvent;
-use App\Enums\LogName;
 use App\Models\EventAnnouncement;
-use Illuminate\Support\Facades\Auth;
 
 class EventAnnouncementObserver
 {
@@ -16,34 +15,8 @@ class EventAnnouncementObserver
             'sections' => []
         ]);
 
-        $properties = [
-            'fr' => [
-                'title' => $eventAnnouncement->getTranslation('title', 'fr'),
-                'description' => $eventAnnouncement->getTranslation('description', 'fr'),
-                'content' => $eventAnnouncement->getTranslation('content', 'fr'),
-                'terms' => $eventAnnouncement->getTranslation('terms', 'fr'),
-            ],
-            'en' => [
-                'title' => $eventAnnouncement->getTranslation('title', 'en'),
-                'description' => $eventAnnouncement->getTranslation('description', 'en'),
-                'content' => $eventAnnouncement->getTranslation('content', 'en'),
-                'terms' => $eventAnnouncement->getTranslation('terms', 'en'),
-            ],
-            'ar' => [
-                'title' => $eventAnnouncement->getTranslation('title', 'ar'),
-                'description' => $eventAnnouncement->getTranslation('description', 'ar'),
-                'content' => $eventAnnouncement->getTranslation('content', 'ar'),
-                'terms' => $eventAnnouncement->getTranslation('terms', 'ar'),
-            ],
-        ];
-
-        activity()
-            ->useLog(LogName::EventAnnouncements->value)
-            ->event(LogEvent::Creation->value)
-            ->performedOn($eventAnnouncement)
-            ->withProperties($properties)
-            ->causedBy(Auth::user())
-            ->log("Création d'un nouvel événement");
+        // Log the creation using the activity class
+        EventAnnouncementActivity::logCreation($eventAnnouncement);
     }
 
     public function updated(EventAnnouncement $eventAnnouncement)
@@ -56,66 +29,80 @@ class EventAnnouncementObserver
                 foreach (['fr', 'en', 'ar'] as $locale) {
                     $originalValue = $eventAnnouncement->getOriginal($field) ? $eventAnnouncement->getOriginal($field)[$locale] : null;
                     if ($eventAnnouncement->getTranslation($field, $locale) !== $originalValue) {
-                        $changes[$field][$locale] = [
-                            'ancien' => $eventAnnouncement->getOriginal($field) ? $eventAnnouncement->getOriginal($field)[$locale] : null,
-                            'nouveau' => $eventAnnouncement->getTranslation($field, $locale)
-                        ];
+                        $frenchFieldName = match ($field) {
+                            'title' => 'titre',
+                            'description' => 'description',
+                            'content' => 'contenu',
+                            'terms' => 'conditions'
+                        };
+                        $changes["$frenchFieldName $locale ancien"] = $originalValue;
+                        $changes["$frenchFieldName $locale nouveau"] = $eventAnnouncement->getTranslation($field, $locale);
                     }
+                }
+            }
+        }        // Handle date fields
+        $dateFields = [
+            'start_date' => 'date de début',
+            'end_date' => 'date de fin',
+            'visitor_registration_start_date' => 'date de début d\'inscription des visiteurs',
+            'visitor_registration_end_date' => 'date de fin d\'inscription des visiteurs',
+            'exhibitor_registration_start_date' => 'date de début d\'inscription des exposants',
+            'exhibitor_registration_end_date' => 'date de fin d\'inscription des exposants',
+        ];
+
+        foreach ($dateFields as $field => $frenchName) {
+            if ($eventAnnouncement->isDirty($field)) {
+                $originalValue = $eventAnnouncement->getOriginal($field);
+                $newValue = $eventAnnouncement->$field;
+
+                // Format date to dd/mm/yyyy hh:mm if not null
+                $formattedOriginalValue = $originalValue ? \Carbon\Carbon::parse($originalValue)->format('d/m/Y H:i') : null;
+                $formattedNewValue = $newValue ? \Carbon\Carbon::parse($newValue)->format('d/m/Y H:i') : null;
+
+                $changes["$frenchName ancien"] = $formattedOriginalValue;
+                $changes["$frenchName nouveau"] = $formattedNewValue;
+            }
+        }
+
+        // Handle the contact JSON field
+        if ($eventAnnouncement->isDirty('contact')) {
+            $originalContact = $eventAnnouncement->getOriginal('contact');
+            $newContact = $eventAnnouncement->contact;
+
+            // Check each property of the contact object
+            foreach (['name', 'email', 'phone_number'] as $property) {
+                if (
+                    isset($originalContact[$property]) && isset($newContact[$property]) &&
+                    $originalContact[$property] !== $newContact[$property]
+                ) {
+                    $frenchPropertyName = match ($property) {
+                        'name' => 'nom',
+                        'email' => 'email',
+                        'phone_number' => 'téléphone'
+                    };
+                    $changes["contact $frenchPropertyName ancien"] = $originalContact[$property];
+                    $changes["contact $frenchPropertyName nouveau"] = $newContact[$property];
                 }
             }
         }
 
-        if (!empty($changes)) {
-            activity()
-                ->useLog(LogName::EventAnnouncements->value)
-                ->event(LogEvent::Modification->value)
-                ->performedOn($eventAnnouncement)
-                ->withProperties($changes)
-                ->causedBy(Auth::user())
-                ->log("Modification de l'événement");
-        }
+        EventAnnouncementActivity::logUpdate($eventAnnouncement, $changes);
     }
 
     public function deleted(EventAnnouncement $eventAnnouncement)
     {
         if (!$eventAnnouncement->isForceDeleting()) {
-            $this->logEventAction($eventAnnouncement, LogEvent::Deletion, "Suppression de l'événement");
+            EventAnnouncementActivity::logEventAction($eventAnnouncement, LogEvent::Deletion, "Suppression de l'événement");
         }
     }
 
     public function forceDeleted(EventAnnouncement $eventAnnouncement)
     {
-        $this->logEventAction($eventAnnouncement, LogEvent::ForceDeletion, "Suppression définitive de l'événement");
+        EventAnnouncementActivity::logEventAction($eventAnnouncement, LogEvent::ForceDeletion, "Suppression définitive de l'événement");
     }
 
     public function restored(EventAnnouncement $eventAnnouncement)
     {
-        $this->logEventAction($eventAnnouncement, LogEvent::Restoration, "Restauration de l'événement");
-    }
-
-    private function logEventAction(EventAnnouncement $eventAnnouncement, LogEvent $event, string $description)
-    {
-        $properties = [
-            'fr' => [
-                'title' => $eventAnnouncement->getTranslation('title', 'fr'),
-                'description' => $eventAnnouncement->getTranslation('description', 'fr'),
-            ],
-            'en' => [
-                'title' => $eventAnnouncement->getTranslation('title', 'en'),
-                'description' => $eventAnnouncement->getTranslation('description', 'en'),
-            ],
-            'ar' => [
-                'title' => $eventAnnouncement->getTranslation('title', 'ar'),
-                'description' => $eventAnnouncement->getTranslation('description', 'ar'),
-            ],
-        ];
-
-        activity()
-            ->useLog(LogName::EventAnnouncements->value)
-            ->event($event->value)
-            ->performedOn($eventAnnouncement)
-            ->causedBy(Auth::user())
-            ->withProperties($properties)
-            ->log($description);
+        EventAnnouncementActivity::logEventAction($eventAnnouncement, LogEvent::Restoration, "Restauration de l'événement");
     }
 }

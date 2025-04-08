@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\ProductObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\MediaLibrary\HasMedia;
@@ -19,6 +20,12 @@ class Product extends Model implements HasMedia
     ];
 
     public $translatable = ['name'];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::observe(ProductObserver::class);
+    }
 
     // Accessor to get image URL if image media exists
     public function getImageAttribute()
