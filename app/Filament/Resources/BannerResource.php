@@ -89,6 +89,7 @@ class BannerResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->reorderable("order")
             ->columns([
                 ImageColumn::make('image')
                     ->label(__('panel/banners.table.columns.image'))
