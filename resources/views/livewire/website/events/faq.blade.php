@@ -2,7 +2,7 @@
     $faqs = app(\App\Settings\CompanyInformationsSettings::class)->faq;
 @endphp
 
-<div x-data="{ openItems: [0] }">
+<div x-data="{ openItems: [0] }" class="mt-8">
     <div class="container mx-auto px-4 py-12">
         <div class="max-w-5xl mx-auto">
             <div class="text-center mb-10">

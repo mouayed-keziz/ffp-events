@@ -62,6 +62,12 @@ class Sidebar
         'group' => 'panel/nav.groups.settings'
     ];
 
+    const BANNER = [
+        'icon' => 'heroicon-o-photo',
+        'sort' => 13,
+        'group' => 'panel/nav.groups.settings'
+    ];
+
     public static function icon(string $resource): string
     {
         return constant("self::$resource")['icon'];
