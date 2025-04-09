@@ -29,6 +29,7 @@ return [
         'radio_priced'     => 'Bouton radio tarifé',
         'ecommerce'        => 'E-commerce',
         'plan_tier'        => 'Niveau de Plan',
+        'plan_tier_checkbox' => 'Niveaux de Plan Multiple',
     ],
     'file_types' => [
         'image' => 'Image',

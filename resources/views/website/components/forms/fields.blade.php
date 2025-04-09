@@ -84,6 +84,14 @@
                 ])
             @break
 
+            @case(App\Enums\FormField::PLAN_TIER_CHECKBOX->value)
+                @include('website.components.forms.priced.plan_tier_checkbox', [
+                    'data' => $field['data'],
+                    'answerPath' => $answerPath ?? null,
+                    'disabled' => $disabled ?? false,
+                ])
+            @break
+
             @default
                 <div>_</div>
         @endswitch

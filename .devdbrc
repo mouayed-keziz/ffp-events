@@ -1,0 +1,10 @@
+[
+  {
+    "type": "sqlite",
+    "path": "/home/mouayed/projects/ffp-events/database/hello worlddatabase.sqlite"
+  },
+  {
+    "type": "sqlite",
+    "path": "/home/mouayed/projects/ffp-events/database/database.sqlite"
+  }
+]

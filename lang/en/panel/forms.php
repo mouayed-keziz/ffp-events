@@ -29,6 +29,7 @@ return [
         'radio_priced'     => 'Radio Priced',
         'ecommerce'        => 'E-commerce',
         'plan_tier'        => 'Plan Tier',
+        'plan_tier_checkbox' => 'Multiple Plan Tier',
     ],
     'file_types' => [
         'image' => 'Image',

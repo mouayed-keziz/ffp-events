@@ -29,6 +29,7 @@ return [
         'radio_priced'     => 'زر راديو بسعر',
         'ecommerce'        => 'تجارة إلكترونية',
         'plan_tier'        => 'مستوى الخطة',
+        'plan_tier_checkbox' => 'مستويات خطة متعددة',
     ],
     'file_types' => [
         'image' => 'صورة',

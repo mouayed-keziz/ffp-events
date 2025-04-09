@@ -180,6 +180,11 @@ class ExhibitorFormResource extends Resource
                                             ->label(function ($state) {
                                                 return FormField::PLAN_TIER->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
                                             }),
+                                        Components\PlanTierCheckboxBlock::make(FormField::PLAN_TIER_CHECKBOX->value)
+                                            ->icon('heroicon-o-table-cells')
+                                            ->label(function ($state) {
+                                                return FormField::PLAN_TIER_CHECKBOX->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                            }),
                                     ]),
                             ]),
                     ]),

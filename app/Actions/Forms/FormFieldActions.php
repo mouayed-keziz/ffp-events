@@ -77,6 +77,37 @@ class FormFieldActions
     }
 
     /**
+     * Toggle plan selection for plan tier checkbox fields
+     *
+     * @param array $formData Current form data
+     * @param string $answerPath Path to the answer field
+     * @param mixed $planId ID of the plan to toggle
+     * @return array Updated form data
+     */
+    public static function togglePlanSelection(array $formData, string $answerPath, $planId): array
+    {
+        // Get field type from the path
+        $fieldTypePath = str_replace('.answer', '.type', $answerPath);
+        $fieldType = Arr::get($formData, $fieldTypePath);
+
+        if ($fieldType !== FormField::PLAN_TIER_CHECKBOX->value) {
+            return $formData;
+        }
+
+        // Get the plans array
+        $plansPath = $answerPath . '.plans';
+        $plans = Arr::get($formData, $plansPath, []);
+
+        // Update plans using PlanTierCheckbox::togglePlanSelection
+        $updatedPlans = FormField::PLAN_TIER_CHECKBOX->updateOptions($plans, $planId);
+
+        // Set the updated plans back to the form data
+        Arr::set($formData, $plansPath, $updatedPlans);
+
+        return $formData;
+    }
+
+    /**
      * Update product selection and quantity for ecommerce fields
      *
      * @param array $formData Current form data

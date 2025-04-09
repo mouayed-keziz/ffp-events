@@ -7,6 +7,7 @@ use App\Enums\Fields\CheckboxPriced;
 use App\Enums\Fields\Ecommerce;
 use App\Enums\Fields\Input;
 use App\Enums\Fields\PlanTier;
+use App\Enums\Fields\PlanTierCheckbox;
 use App\Enums\Fields\Radio;
 use App\Enums\Fields\RadioPriced;
 use App\Enums\Fields\Select;
@@ -26,6 +27,7 @@ enum FormField: string implements HasLabel
     case RADIO_PRICED = "radio_priced";
     case ECOMMERCE = "ecommerce";
     case PLAN_TIER = "plan_tier";
+    case PLAN_TIER_CHECKBOX = "plan_tier_checkbox";
 
     public function getLabel(): ?string
     {
@@ -45,6 +47,7 @@ enum FormField: string implements HasLabel
             self::RADIO_PRICED->value    => 'heroicon-o-document-text',
             self::ECOMMERCE->value       => 'heroicon-o-shopping-cart',
             self::PLAN_TIER->value       => 'heroicon-o-table-cells',
+            self::PLAN_TIER_CHECKBOX->value => 'heroicon-o-table-cells',
         ];
 
         return $icons[$this->value] ?? 'heroicon-o-question-mark';
@@ -63,6 +66,7 @@ enum FormField: string implements HasLabel
             self::RADIO_PRICED => RadioPriced::getInvoiceDetails($field),
             self::ECOMMERCE => Ecommerce::getInvoiceDetails($field),
             self::PLAN_TIER => PlanTier::getInvoiceDetails($field),
+            self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::getInvoiceDetails($field),
         };
     }
 
@@ -82,6 +86,7 @@ enum FormField: string implements HasLabel
             self::RADIO_PRICED => RadioPriced::initializeField($field),
             self::ECOMMERCE => Ecommerce::initializeField($field),
             self::PLAN_TIER => PlanTier::initializeField($field),
+            self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::initializeField($field),
         };
     }
 
@@ -101,6 +106,7 @@ enum FormField: string implements HasLabel
             self::RADIO_PRICED => RadioPriced::getDefaultAnswer($field),
             self::ECOMMERCE => Ecommerce::getDefaultAnswer($field),
             self::PLAN_TIER => PlanTier::getDefaultAnswer($field),
+            self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::getDefaultAnswer($field),
         };
     }
 
@@ -120,6 +126,7 @@ enum FormField: string implements HasLabel
             self::RADIO_PRICED => RadioPriced::getValidationRules($field),
             self::ECOMMERCE => Ecommerce::getValidationRules($field),
             self::PLAN_TIER => PlanTier::getValidationRules($field),
+            self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::getValidationRules($field),
         };
     }
 
@@ -139,6 +146,7 @@ enum FormField: string implements HasLabel
             self::RADIO_PRICED => RadioPriced::processFieldAnswer($answer, $fieldData),
             self::ECOMMERCE => Ecommerce::processFieldAnswer($answer, $fieldData),
             self::PLAN_TIER => PlanTier::processFieldAnswer($answer, $fieldData),
+            self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::processFieldAnswer($answer, $fieldData),
         };
     }
 
@@ -158,6 +166,7 @@ enum FormField: string implements HasLabel
             self::RADIO_PRICED => RadioPriced::calculateFieldPrice($answer, $fieldData, $preferredCurrency),
             self::ECOMMERCE => Ecommerce::calculateFieldPrice($answer, $fieldData, $preferredCurrency),
             self::PLAN_TIER => PlanTier::calculateFieldPrice($answer, $fieldData, $preferredCurrency),
+            self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::calculateFieldPrice($answer, $fieldData, $preferredCurrency),
         };
     }
 
@@ -177,6 +186,7 @@ enum FormField: string implements HasLabel
             self::RADIO_PRICED => RadioPriced::isPriced(),
             self::ECOMMERCE => Ecommerce::isPriced(),
             self::PLAN_TIER => PlanTier::isPriced(),
+            self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::isPriced(),
         };
     }
 
@@ -196,6 +206,7 @@ enum FormField: string implements HasLabel
             self::RADIO_PRICED => RadioPriced::needsQuantity(),
             self::ECOMMERCE => Ecommerce::needsQuantity(),
             self::PLAN_TIER => PlanTier::needsQuantity(),
+            self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::needsQuantity(),
         };
     }
 
@@ -221,6 +232,7 @@ enum FormField: string implements HasLabel
             self::RADIO_PRICED => RadioPriced::createDisplayComponent($field, $label, $answer),
             self::ECOMMERCE => Ecommerce::createDisplayComponent($field, $label, $answer),
             self::PLAN_TIER => PlanTier::createDisplayComponent($field, $label, $answer),
+            self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::createDisplayComponent($field, $label, $answer),
         };
     }
 

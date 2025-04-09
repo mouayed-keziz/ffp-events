@@ -21,6 +21,20 @@ trait HasFormFieldUpdates
     }
 
     /**
+     * Toggle plan selection for plan_tier_checkbox field
+     *
+     * @param string $answerPath The path to the answer in formData
+     * @param string|int $planId The ID of the plan to toggle
+     */
+    public function togglePlanSelection($answerPath, $planId)
+    {
+        $this->formData = FormFieldActions::togglePlanSelection($this->formData, $answerPath, $planId);
+
+        // Recalculate price after changing selection
+        $this->calculateTotalPrice();
+    }
+
+    /**
      * Update product selection and quantity for ecommerce fields
      *
      * @param string $answerPath The path to the answer in formData
