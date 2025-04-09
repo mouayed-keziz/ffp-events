@@ -26,6 +26,7 @@ class InputBlock
                 Group::make()->columnSpan(2)->columns(10)->schema([
                     Select::make('type')
                         ->columnSpan(8)
+                        ->required()
                         ->label(__('panel/forms.exhibitors.blocks.type'))
                         // ->native(false)
                         ->options(FormInputType::class),
