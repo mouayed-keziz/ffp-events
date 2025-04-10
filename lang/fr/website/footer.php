@@ -12,7 +12,7 @@ return [
     ],
     'quick_links' => [
         'title' => 'Liens rapides',
-        'events' => 'Nos évènements',
+        'events' => 'Nos événements',
         'articles' => 'Nos articles',
         'terms' => 'Termes et conditions',
     ],
