@@ -231,6 +231,7 @@ class ViewExhibitorSubmission extends ViewRecord
                     ->icon('heroicon-o-user')
                     ->url(fn($record) => ExhibitorResource::getUrl('view', ['record' => $record->exhibitor]))
                     ->color('info'),
+                $actions->getDownloadInvoiceAction(),
                 Actions\DeleteAction::make(),
             ])->dropdown(true),
         ];

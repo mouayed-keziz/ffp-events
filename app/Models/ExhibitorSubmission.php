@@ -82,12 +82,15 @@ class ExhibitorSubmission extends Model implements HasMedia
     }
     public function getCanDownloadInvoiceAttribute()
     {
-
-        return $this->status === ExhibitorSubmissionStatus::ACCEPTED ||
-            $this->status === ExhibitorSubmissionStatus::PARTLY_PAYED ||
-            $this->status === ExhibitorSubmissionStatus::FULLY_PAYED ||
-            $this->status === ExhibitorSubmissionStatus::READY ||
-            $this->status === ExhibitorSubmissionStatus::ARCHIVE;
+        $invoiceData = $this->getInvoiceData();
+        return !empty($invoiceData) &&
+            (
+                $this->status === ExhibitorSubmissionStatus::ACCEPTED ||
+                $this->status === ExhibitorSubmissionStatus::PARTLY_PAYED ||
+                $this->status === ExhibitorSubmissionStatus::FULLY_PAYED ||
+                $this->status === ExhibitorSubmissionStatus::READY ||
+                $this->status === ExhibitorSubmissionStatus::ARCHIVE
+            );
     }
 
 
@@ -123,7 +126,6 @@ class ExhibitorSubmission extends Model implements HasMedia
                     foreach ($section['fields'] as $field) {
                         $fieldType = FormField::tryFrom($field['type']);
                         if ($fieldType && $fieldType->isPriced()) {
-                            // dd($field);
                             $invoiceData = array_merge($invoiceData, $fieldType->getInvoiceDetails($field));
                         }
                     }

@@ -34,22 +34,32 @@ class PlansRelationManager extends RelationManager
                     ->required()
                     ->maxLength(255)
                     ->translatable()
+                    ->columnSpanFull()
                     ->label(__("panel/plan.title")),
+
                 Forms\Components\RichEditor::make('content')
                     ->required()
                     ->translatable()
+                    ->columnSpanFull()
                     ->label(__("panel/plan.content")),
+
                 Forms\Components\Section::make(__("panel/plan.pricing"))
                     ->schema($currencyFields)
-                    ->columns(count($currencyFields)),
-                Forms\Components\SpatieMediaLibraryFileUpload::make('image')
-                    ->label(__("panel/plan.image"))
-                    ->collection('image')
-                    ->image()
-                    ->imageResizeMode('cover')
-                    ->imageCropAspectRatio('1:1')
-                    ->imageResizeTargetWidth('400')
-                    ->imageResizeTargetHeight('400'),
+                    ->columns(count($currencyFields))
+                    ->collapsible(),
+
+                Forms\Components\Section::make(__("panel/plan.image"))
+                    ->schema([
+                        Forms\Components\SpatieMediaLibraryFileUpload::make('image')
+                            ->label(false)
+                            ->collection('image')
+                            ->image()
+                            ->imageResizeMode('cover')
+                            ->imageCropAspectRatio('1:1')
+                            ->imageResizeTargetWidth('400')
+                            ->imageResizeTargetHeight('400'),
+                    ])
+                    ->collapsible(),
             ]);
     }
 

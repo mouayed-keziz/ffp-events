@@ -538,4 +538,18 @@ class ExhibitorSubmissionActions
                     ->send();
             });
     }
+
+    public function getDownloadInvoiceAction(): Action
+    {
+        return Action::make('downloadInvoice')
+            ->label(__('panel/exhibitor_submission.actions.download_invoice'))
+            ->icon('heroicon-o-document-arrow-down')
+            ->color('primary')
+            ->url(function (ExhibitorSubmission $record) {
+                return route('admin.exhibitor_submissions.download_invoice', ['record' => $record->id]);
+            }, shouldOpenInNewTab: true)
+            ->visible(function (ExhibitorSubmission $record) {
+                return $record->canDownloadInvoice;
+            });
+    }
 }

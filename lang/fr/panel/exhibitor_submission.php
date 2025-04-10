@@ -36,6 +36,7 @@ return [
         'view' => 'Voir Détails',
         'update' => 'Mettre à jour',
         'download' => 'Télécharger le Fichier',
+        'download_invoice' => 'Télécharger la Facture',
         'accept' => 'Accepter',
         'reject' => 'Rejeter',
         'validate' => 'Valider',

@@ -18,7 +18,13 @@ Route::get('language/{locale}', function ($locale) {
 
 Route::get('media/download/{id}', [\App\Http\Controllers\MediaController::class, 'download'])->name('media.download');
 
+Route::prefix('admin')->middleware(['auth:web'])->group(function () {
+    Route::get('exhibitor-submissions/{record}/download-invoice', [\App\Http\Controllers\Admin\ExhibitorSubmissionController::class, 'downloadInvoice'])
+        ->name('admin.exhibitor_submissions.download_invoice');
+});
 Route::middleware('local_middleware')->group(function () {
+
+    // Admin routes
 
     Route::view("/notifications", "website.pages.notifications")->name("notifications")->middleware("is_authenticated");
     Route::prefix("")->group(function () {

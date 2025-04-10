@@ -14,7 +14,6 @@ new class extends Component {
     public array $formData = [];
     public bool $formSubmitted = false;
     public string $successMessage = '';
-    public bool $terms_accepted = false;
 
     public function mount(EventAnnouncement $event)
     {
@@ -58,17 +57,6 @@ new class extends Component {
         // Validate the form data with proper attributes
         $validation = $actions->getValidationRules($this->event);
         $this->validate($validation['rules'], [], $validation['attributes']);
-
-        // Add terms acceptance validation
-        $this->validate(
-            [
-                'terms_accepted' => 'accepted',
-            ],
-            [],
-            [
-                'terms_accepted' => __('website/visit-event.terms_and_conditions'),
-            ],
-        );
 
         // Save the form submission
         $success = $actions->saveFormSubmission($this->event, $this->formData);
@@ -133,21 +121,9 @@ new class extends Component {
 
                 <div class="flex justify-start mt-6">
                     <div class="flex flex-col gap-4 w-full">
-                        <div class="flex justify-start items-center gap-2">
-                            <input type="checkbox" name="terms_accepted" wire:model="terms_accepted"
-                                class="checkbox rounded-lg {{ $errors->has('terms_accepted') ? 'checkbox-error' : '' }}">
-                            <span class="label-text font-semibold text-neutral">
-                                {{ __('website/visit-event.terms_acceptance') }}
-                                <a target="_blank" href="#"
-                                    class="link link-primary">{{ __('website/visit-event.terms_and_conditions') }}</a>
-                            </span>
-                        </div>
-                        @error('terms_accepted')
-                            <div class="text-error text-sm">{{ $message }}</div>
-                        @enderror
 
                         <div class="flex justify-start">
-                            <button type="submit" class="btn btn-md rounded-md btn-primary"
+                            <button type="submit" class="btn font-semibold btn-sm rounded-md btn-primary"
                                 wire:loading.attr="disabled">
                                 <span wire:loading class="loading loading-spinner"></span>
                                 <span>{{ __('website/visit-event.submit') }}</span>

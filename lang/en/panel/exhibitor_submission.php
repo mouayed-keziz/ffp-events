@@ -36,6 +36,7 @@ return [
         'view' => 'View Details',
         'update' => 'Update',
         'download' => 'Download File',
+        'download_invoice' => 'Download Invoice',
         'accept' => 'Accept',
         'reject' => 'Reject',
         'validate' => 'Validate',

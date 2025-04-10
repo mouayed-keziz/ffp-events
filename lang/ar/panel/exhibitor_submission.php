@@ -36,6 +36,7 @@ return [
         'view' => 'عرض التفاصيل',
         'update' => 'تحديث',
         'download' => 'تنزيل الملف',
+        'download_invoice' => 'تحميل الفاتورة',
         'accept' => 'قبول',
         'reject' => 'رفض',
         'validate' => 'تحقق',

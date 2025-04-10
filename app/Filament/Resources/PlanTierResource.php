@@ -53,14 +53,18 @@ class PlanTierResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make()
+                Forms\Components\Section::make(__("panel/plan.tier.details"))
                     ->schema([
                         Forms\Components\TextInput::make('title')
                             ->required()
                             ->label(__("panel/plan.tier.title"))
-                            ->translatable(),
-                    ]),
-            ]);
+                            ->translatable()
+                            ->columnSpanFull(),
+                    ])
+                    ->columns(2)
+                    ->collapsible(false),
+            ])
+            ->columns(1);
     }
 
     public static function table(Table $table): Table
