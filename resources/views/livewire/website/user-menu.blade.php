@@ -214,10 +214,12 @@ new class extends Component {
         </label>
         <ul tabindex="0" class="z-[1] p-1 shadow menu menu-sm dropdown-content bg-white rounded-box w-52">
             <div class="space-y-1">
-                <a href="#" class="block px-3 py-1.5 rounded font-semibold hover:bg-gray-300/40">
+                <a href="{{ route('my-profile') }}"
+                    class="block px-3 py-1.5 rounded font-semibold hover:bg-gray-300/40">
                     {{ __('website/navbar.my_profile') }}
                 </a>
-                <a href="#" class="block px-3 py-1.5 rounded font-semibold hover:bg-gray-300/40">
+                <a href="{{ route('my-subscriptions') }}"
+                    class="block px-3 py-1.5 rounded font-semibold hover:bg-gray-300/40">
                     {{ __('website/navbar.my_registrations') }}
                 </a>
                 <a wire:click="logout"

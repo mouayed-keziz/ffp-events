@@ -3,6 +3,7 @@
 use App\Http\Controllers\Website\GuestController;
 use App\Http\Controllers\Website\EventController;
 use App\Http\Controllers\Website\AuthController;
+use App\Http\Controllers\Website\ProfileController;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\EventAnnouncement;
@@ -27,6 +28,8 @@ Route::middleware('local_middleware')->group(function () {
     // Admin routes
 
     Route::view("/notifications", "website.pages.notifications")->name("notifications")->middleware("is_authenticated");
+    Route::get("/profile",  [ProfileController::class, 'MyProfile'])->name("my-profile")->middleware("is_authenticated");
+    Route::get("/subscriptions",  [ProfileController::class, 'MySubscriptions'])->name("my-subscriptions")->middleware("is_authenticated");
     Route::prefix("")->group(function () {
         Route::get('/', [EventController::class, 'Events'])->name('events');
         Route::get('/event/{id}', [EventController::class, 'Event'])->name('event_details');

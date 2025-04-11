@@ -18,8 +18,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            RoleSeeder::class,
-            AdminSeeder::class,
+            // RoleSeeder::class,
+            // AdminSeeder::class,
             // EventAnnouncementSeeder::class,
         ]);
 
@@ -41,8 +41,8 @@ class DatabaseSeeder extends Seeder
         // // $this->call(IseedExhibitorFormsTableSeeder::class);
 
         // // $this->call(IseedCategoriesTableSeeder::class);
-        // // $this->call(IseedArticlesTableSeeder::class);
-        // // $this->call(IseedArticleCategoryTableSeeder::class);
+        // $this->call(IseedArticlesTableSeeder::class);
+        // $this->call(IseedArticleCategoryTableSeeder::class);
 
         // // $this->call(IseedActivityLogTableSeeder::class);
 
