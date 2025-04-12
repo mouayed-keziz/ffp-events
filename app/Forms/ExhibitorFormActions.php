@@ -37,6 +37,7 @@ class ExhibitorFormActions extends BaseFormActions
                     "fr" => $exhibitorForm->getTranslation('description', 'fr'),
                     "en" => $exhibitorForm->getTranslation('description', 'en'),
                 ],
+                'image' => $exhibitorForm->image,
                 'sections' => []
             ];
 

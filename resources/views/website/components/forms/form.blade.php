@@ -1,6 +1,7 @@
 @props(['disabled' => false, 'formStep' => null])
 <form wire:submit.prevent="submitForm">
     @if (!empty($formData))
+        {{-- {{ dd($formData) }} --}}
         <div>
             <!-- Current form sections and fields -->
             @php
@@ -13,6 +14,12 @@
                         @include('website.components.forms.input.section_title', [
                             'title' => $section['title'][app()->getLocale()] ?? ($section['title']['fr'] ?? ''),
                         ])
+                        @if (isset($formData[$activeStep]['image']) && $formData[$activeStep]['image'])
+                            <div class="mb-4">
+                                <img src="{{ $formData[$activeStep]['image'] }}" alt="Section Image"
+                                    class="w-full h-auto rounded-lg">
+                            </div>
+                        @endif
                         @foreach ($section['fields'] as $fieldIndex => $field)
                             @php
                                 // Remove the formData. prefix from the answerPath

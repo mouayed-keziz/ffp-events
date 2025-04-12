@@ -105,6 +105,7 @@ class ExhibitorFormResource extends Resource
                     ->schema([
                         SpatieMediaLibraryFileUpload::make('images')
                             ->label("")
+                            ->imageEditor()
                             ->collection('images')
                             ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif']),
                     ]),
