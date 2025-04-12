@@ -1,10 +1,7 @@
 @extends('website.layouts.app')
 
-
-
 @section('content')
     <div class="w-full max-w-5xl mx-auto px-4 py-8">
-        my profile
-        {{-- @livewire('website.notifications-page') --}}
+        @livewire('website.profile.my-profile')
     </div>
 @endsection

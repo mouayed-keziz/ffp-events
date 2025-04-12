@@ -2,12 +2,15 @@
     'name' => 'password',
     'wireModel' => 'password',
     'placeholder' => null,
+    'has_label' => true,
     'label' => __('website/reset_password.password_label'),
 ])
 <div class="form-control mb-2" x-data="{ showPassword: false }">
-    <label class="label">
-        <span class="label-text text-neutral-500 font-semibold text-xs">{{ $label }}</span>
-    </label>
+    @if ($has_label)
+        <label class="label">
+            <span class="label-text text-neutral-500 font-semibold text-xs">{{ $label }}</span>
+        </label>
+    @endif
     <div class="relative">
         <input :type="showPassword ? 'text' : 'password'" name="{{ $name }}"
             class="input input-bordered w-full px-4 rounded-lg bg-white {{ $errors->has($name) ? 'input-error' : '' }}"

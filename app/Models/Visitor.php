@@ -19,7 +19,8 @@ class Visitor extends Authenticatable implements HasMedia
         'name',
         'email',
         'password',
-        'verified_at'
+        'verified_at',
+        'new_email'
     ];
     protected $hidden = [
         'password',

@@ -63,5 +63,6 @@ Route::middleware('local_middleware')->group(function () {
         Route::get("/terms", [GuestController::class, 'Terms'])->name('terms');
         Route::get("/redirect-to-ffp-events", [GuestController::class, 'RedirectToFFPEvents'])->name('redirect_to_ffp_events');
         Route::get("/redirect-to-ffp-events-contact", [GuestController::class, 'RedirectToFFPEventsContact'])->name('redirect_to_ffp_events_contact');
+        Route::get('/verify-email-change', [ProfileController::class, 'verifyEmailChange'])->name('verify-email-change');
     });
 });

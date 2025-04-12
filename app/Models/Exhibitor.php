@@ -21,7 +21,8 @@ class Exhibitor extends Authenticatable implements HasMedia
         'email',
         'password',
         'currency',
-        'verified_at'
+        'verified_at',
+        'new_email'
     ];
 
     protected $hidden = [
