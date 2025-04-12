@@ -37,12 +37,12 @@ if (empty($optionsData)) {
     $selectedOption = collect($optionsData)->firstWhere('selected', true);
     if ($selectedOption && !data_get($this, 'formData.' . $answerPath . '.selectedValue')) {
         // Set selectedValue based on the selected option's value
-        data_set($this, 'formData.' . $answerPath . '.selectedValue', $selectedOption['value']);
-    }
-}
+                data_set($this, 'formData.' . $answerPath . '.selectedValue', $selectedOption['value']);
+            }
+        }
 
-// Find the selected value if any
-$selectedValue = data_get($this, 'formData.' . $answerPath . '.selectedValue');
+        // Find the selected value if any
+        $selectedValue = data_get($this, 'formData.' . $answerPath . '.selectedValue');
 
     @endphp
 
@@ -60,10 +60,17 @@ $selectedValue = data_get($this, 'formData.' . $answerPath . '.selectedValue');
                 <input type="radio" name="{{ $radioName }}" value="{{ $optionLabel }}"
                     wire:model.live="formData.{{ $answerPath }}.selectedValue" x-model="selected"
                     wire:change="updateRadioSelection('{{ $answerPath }}', $event.target.value)"
-                    :class="{ 'radio-primary': selected === '{{ $optionLabel }}' }" class="radio mx-2 {{ $disabled ? 'cursor-not-allowed' : '' }}"
+                    :class="{ 'radio-primary': selected === '{{ $optionLabel }}' }"
+                    class="radio mx-2 {{ $disabled ? 'cursor-not-allowed' : '' }}"
                     @if ($data['required'] ?? false) required @endif {{ $disabled ? 'disabled' : '' }}>
                 <span>{{ $optionLabel }}</span>
             </label>
         @endforeach
+
+        @if ($data['required'] ?? false)
+            @error('formData.' . $answerPath . '.selectedValue')
+                <div class="text-error text-sm mt-1">{{ $message }}</div>
+            @enderror
+        @endif
     </div>
 </div>

@@ -8,6 +8,7 @@ use App\Filament\Resources\ExhibitorFormResource\Components\Core\Options;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 
 class RadioBlock
 {
@@ -18,6 +19,11 @@ class RadioBlock
             ->schema([
                 LabelInput::make(),
                 DescriptionInput::make(),
+                Toggle::make('required')
+                    ->label('Required')
+                    ->helperText('Is this field required?')
+                    ->default(false)
+                    ->columnSpanFull(),
                 Options::make()
             ]);
     }

@@ -67,7 +67,8 @@ $selectedValue = data_get($this, 'formData.' . $answerPath . '.selectedValue');
                         name="{{ $radioName }}" value="{{ $optionValue }}"
                         wire:model.live="formData.{{ $answerPath }}.selectedValue"
                         wire:change="updateRadioSelection('{{ $answerPath }}', $event.target.value)"
-                        {{ $isSelected ? 'checked' : '' }} {{ $disabled ? 'disabled' : '' }}>
+                        @if ($data['required'] ?? false) required @endif {{ $isSelected ? 'checked' : '' }}
+                        {{ $disabled ? 'disabled' : '' }}>
 
                     <label for="{{ $radioName }}_{{ $loop->index }}"
                         class="cursor-pointer mr-2 {{ $disabled ? 'cursor-not-allowed' : '' }}">
@@ -83,5 +84,11 @@ $selectedValue = data_get($this, 'formData.' . $answerPath . '.selectedValue');
                 </div>
             </div>
         @endforeach
+
+        @if ($data['required'] ?? false)
+            @error('formData.' . $answerPath . '.selectedValue')
+                <div class="text-error text-sm mt-1">{{ $message }}</div>
+            @enderror
+        @endif
     </div>
 </div>

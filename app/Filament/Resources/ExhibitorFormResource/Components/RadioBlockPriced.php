@@ -9,19 +9,23 @@ use App\Filament\Resources\ExhibitorFormResource\Components\Core\OptionsPriced;
 use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\KeyValue;
 
 class RadioBlockPriced
 {
     public static function make(string $name, $currencies = [])
     {
-
-
         return Block::make($name)
             ->columns(2)
             ->schema([
                 LabelInput::make(),
                 DescriptionInput::make(),
+                Toggle::make('required')
+                    ->label('Required')
+                    ->helperText('Is this field required?')
+                    ->default(false)
+                    ->columnSpanFull(),
                 OptionsPriced::make()
             ]);
     }
