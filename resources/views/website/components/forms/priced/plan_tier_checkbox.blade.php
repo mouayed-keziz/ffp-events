@@ -133,10 +133,16 @@ $chevronClass = $dir === 'rtl' ? 'ms-1' : 'me-1';
                                             {{ $plan['title'] }}
                                         </div>
 
-                                        @if (isset($plan['content']) && !empty($plan['content'][app()->getLocale()]))
+                                        @php
+                                            $currentLocale = app()->getLocale();
+                                            $content = isset($plan['content'])
+                                                ? $plan['content'][$currentLocale] ?? ($plan['content']['fr'] ?? '')
+                                                : '';
+                                        @endphp
+                                        @if (!empty($content))
                                             <div
                                                 class="prose prose-sm max-w-none prose-headings:text-primary prose-headings:font-bold">
-                                                {!! $plan['content'][app()->getLocale()] !!}
+                                                {!! $content !!}
                                             </div>
                                         @endif
                                     </div>
