@@ -43,4 +43,3 @@
         @include('website.components.global.input-error', ['message' => $message])
     @enderror
 </div>
-ssh root@LPRICOH10849.icosnetcloud.com
