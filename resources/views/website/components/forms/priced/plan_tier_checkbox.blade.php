@@ -135,9 +135,10 @@ $chevronClass = $dir === 'rtl' ? 'ms-1' : 'me-1';
 
                                         @php
                                             $currentLocale = app()->getLocale();
-                                            $content = isset($plan['content'])
-                                                ? $plan['content'][$currentLocale] ?? ($plan['content']['fr'] ?? '')
-                                                : '';
+                                            $content = isset($plan['content']) ? $plan['content'] : '';
+                                            // $content = isset($plan['content'])
+                                            //     ? $plan['content'][$currentLocale] ?? ($plan['content']['fr'] ?? '')
+                                            //     : '';
                                         @endphp
                                         @if (!empty($content))
                                             <div
