@@ -9,7 +9,7 @@
         </span>
     </label>
     @if ($data['description'][app()->getLocale()] ?? false)
-        <small class="mb-2">{{ $data['description'][app()->getLocale()] }}</small>
+        <small class="mb-2 label-text-alt text-xs text-gray-500">{{ $data['description'][app()->getLocale()] }}</small>
     @endif
 
     @php

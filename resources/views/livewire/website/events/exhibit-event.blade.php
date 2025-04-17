@@ -23,7 +23,7 @@ new class extends Component {
     public int $totalSteps = 0;
     public bool $formSubmitted = false;
     public string $successMessage = '';
-    public string $preferred_currency = 'EUR';
+    public string $preferred_currency = 'DZD';
     public float $totalPrice = 0;
 
     public function mount(EventAnnouncement $event)

@@ -1,16 +1,16 @@
 @props(['data', 'answerPath', 'disabled' => false])
 
 <div class="mb-4">
-    <label class="label">
-        <span class="label-text font-medium {{ isset($data['required']) && $data['required'] ? 'required' : '' }}">
+    <div class="mb-4">
+        <div class="label-text font-medium {{ isset($data['required']) && $data['required'] ? 'required' : '' }}">
             {{ $data['label'][app()->getLocale()] ?? ($data['label']['fr'] ?? '') }}
-        </span>
+        </div>
         @if (isset($data['description']) && !empty($data['description'][app()->getLocale()]))
-            <span class="label-text-alt text-xs text-gray-500">
+            <div class="label-text-alt text-xs text-gray-500 mt-1">
                 {{ $data['description'][app()->getLocale()] }}
-            </span>
+            </div>
         @endif
-    </label>
+    </div>
 
     @php
         // Initialize options array in answer structure if it doesn't exist
