@@ -8,10 +8,7 @@
 <div class="bg-white rounded-xl overflow-hidden shadow-sm py-2 relative">
     <pre>
 </pre>
-    <a href="{{ auth()->guard('web')->check() || auth()->guard('exhibitor')->check() || auth()->guard('visitor')->check()
-        ? route('event_details', ['id' => $event['id']])
-        : route('login') }}"
-        class="absolute inset-0 z-0"></a>
+    <a href="{{ route('event_details', ['id' => $event['id']]) }}" class="absolute inset-0 z-0"></a>
     <div class="grid md:grid-cols-2 gap-0 relative pointer-events-none">
         <div class="p-6 space-y-4 md:order-1 order-2">
             <h3 class="text-xl font-bold">{{ $event['title'] }}</h3>
@@ -45,8 +42,9 @@
                         {{ __('website/home.events.already_registered') }}
                     </button>
                 @elseif (
-                    (!Auth::guard('visitor')->check() && !Auth::guard('exhibitor')->check()) ||
-                        (Auth::guard('visitor')->check() && !empty($event->visitorForm->sections)))
+                    $event->is_visitor_registration_open &&
+                        ((!Auth::guard('visitor')->check() && !Auth::guard('exhibitor')->check()) ||
+                            (Auth::guard('visitor')->check() && !empty($event->visitorForm->sections))))
                     <a href="{{ Auth::guard('web')->check() || Auth::guard('exhibitor')->check() || Auth::guard('visitor')->check()
                         ? route('event_details', ['id' => $event['id']])
                         : route('login') }}"

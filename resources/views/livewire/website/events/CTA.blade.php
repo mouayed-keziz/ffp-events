@@ -17,7 +17,6 @@ new class extends Component {
         $this->submission = $submission;
         $this->locale = App::getLocale();
     }
-
     public function shouldShowVisitButton()
     {
         if ($this->submission) {
@@ -33,6 +32,12 @@ new class extends Component {
         }
 
         if (Auth::guard('visitor')->check() && $this->submission) {
+            return false;
+        }
+
+        // Don't show the visit button if visitor registration is not open
+        // This handles both undefined dates and dates outside the registration period
+        if (!$this->event->is_visitor_registration_open) {
             return false;
         }
 

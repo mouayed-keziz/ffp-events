@@ -73,6 +73,11 @@ class EventAnnouncement extends Model implements HasMedia
     }
     public function getIsVisitorRegistrationOpenAttribute()
     {
+        // If visitor registration dates are not defined, registration is closed
+        if (!$this->visitor_registration_start_date || !$this->visitor_registration_end_date) {
+            return false;
+        }
+
         $now = \Carbon\Carbon::now();
         return !($now->lt($this->visitor_registration_start_date) || $now->gt($this->visitor_registration_end_date));
     }
