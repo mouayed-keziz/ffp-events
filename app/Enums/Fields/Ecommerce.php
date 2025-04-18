@@ -14,6 +14,11 @@ class Ecommerce
             'data' => [
                 'label' => $field['data']['label'],
                 'description' => $field['data']['description'] ?? null,
+                'quantity_label' => $field['data']['quantity_label'] ?? [
+                    'en' => 'Quantity',
+                    'fr' => 'Quantité',
+                    'ar' => 'الكمية'
+                ],
             ],
             'answer' => self::getDefaultAnswer($field)
         ];
@@ -127,7 +132,7 @@ class Ecommerce
                     'title' => $product['name'] ?? '',
                     'quantity' => $product['quantity'] ?? 1,
                     'price' => $product['price'][$currency] ?? 0,
-                    
+
                 ];
             }
         }

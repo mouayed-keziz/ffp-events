@@ -63,6 +63,7 @@ return [
             'products' => 'Produits',
             'product' => 'Produit',
             'add_product' => 'Ajouter un produit',
+            'quantity_label' => 'Libellé de quantité',
         ]
     ],
 ];

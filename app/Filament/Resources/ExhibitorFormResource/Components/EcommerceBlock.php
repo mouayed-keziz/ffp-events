@@ -25,6 +25,16 @@ class EcommerceBlock
             ->schema([
                 LabelInput::make(),
                 DescriptionInput::make(),
+                TextInput::make('quantity_label')
+                    ->label(__('panel/forms.exhibitors.blocks.quantity_label'))
+                    ->translatable()
+                    ->default(function () {
+                        return [
+                            'en' => 'Quantity',
+                            'fr' => 'Quantité',
+                            'ar' => 'الكمية'
+                        ];
+                    }),
                 Repeater::make('products')
                     ->label(__('panel/forms.exhibitors.blocks.products'))
                     ->itemLabel(__('panel/forms.exhibitors.blocks.product'))

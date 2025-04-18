@@ -64,6 +64,7 @@ return [
             'products' => 'Products',
             'product' => 'Product',
             'add_product' => 'Add Product',
+            'quantity_label' => 'Quantity Label',
         ]
     ],
 ];

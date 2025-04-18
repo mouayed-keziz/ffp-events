@@ -91,8 +91,15 @@ if (empty($productsData)) {
                                 title="{{ $productName }}">{{ $productName }}</label>
                         </div>
 
-                        <div class="text-sm text-gray-500 mb-2">{{ __('Code') }}: {{ $productCode ?? '-' }}</div>
+                        {{-- <div class="text-sm text-gray-500 mb-2">{{ __('Code') }}: {{ $productCode ?? '-' }}</div> --}}
 
+                        <div class="mt-4 mb-1 text-red-300 text-sm font-semibold">
+                            <span
+                                class="label-text 
+                                {{ isset($data['quantity_label']) && $data['quantity_label'] ? 'required' : '' }}">
+                                {{ $data['quantity_label'][app()->getLocale()] ?? __('Qty') }}
+                            </span>
+                        </div>
                         <div class="grid grid-cols-7 gap-2 items-center">
                             <div class="col-span-7 sm:col-span-4">
                                 <input
@@ -102,7 +109,7 @@ if (empty($productsData)) {
                                     wire:change="$refresh" min="1" step="1"
                                     {{ !$isSelected || $disabled ? 'disabled' : '' }}
                                     class="{{ !$isSelected || $disabled ? 'opacity-60' : '' }}"
-                                    placeholder="{{ __('Qty') }}" />
+                                    placeholder="{{ $data['quantity_label'][app()->getLocale()] ?? __('Qty') }}" />
                             </div>
 
                             <div class="col-span-7 sm:col-span-3 text-right">

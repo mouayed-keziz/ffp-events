@@ -64,6 +64,7 @@ return [
             'products' => 'منتجات',
             'product' => 'المنتج',
             'add_product' => 'أضف منتج',
+            'quantity_label' => 'تسمية الكمية',
         ]
     ],
 ];
