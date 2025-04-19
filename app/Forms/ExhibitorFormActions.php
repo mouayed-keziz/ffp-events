@@ -237,6 +237,32 @@ class ExhibitorFormActions extends BaseFormActions
             Log::info("Exhibitor notification sent to: {$exhibitor->email} with locale: {$locale}");
         }
 
+        // Send notification to admin users with super_admin role
+        $adminUsers = \App\Models\User::role('super_admin')->get();
+        foreach ($adminUsers as $admin) {
+            // Send Laravel notification for email
+            $admin->notify(new \App\Notifications\Admin\NewExhibitorSubmission($event, $exhibitor, $submission));
+
+            // Send direct database notification for Filament panel
+            \Filament\Notifications\Notification::make()
+                ->title("Nouvelle soumission d'exposant")
+                ->body("L'exposant {$exhibitor->name} a soumis une demande pour l'événement {$event->title}.")
+                ->actions([
+                    \Filament\Notifications\Actions\Action::make('voir')
+                        ->label('Voir la soumission')
+                        ->url(route('filament.admin.resources.exhibitor-submissions.view', $submission->id)),
+                    // \Filament\Notifications\Actions\Action::make('traiter')
+                    //     ->label('Traiter la demande')
+                    //     ->url(route('filament.admin.resources.exhibitor-submissions.edit', $submission->id))
+                    //     ->color('success'),
+                ])
+                ->icon('heroicon-o-document-text')
+                ->iconColor('warning')
+                ->sendToDatabase($admin);
+
+            Log::info("Admin notification sent to: {$admin->email} for new exhibitor submission");
+        }
+
         return true;
         // } catch (\Exception $e) {
         //     report($e);

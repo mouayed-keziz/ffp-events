@@ -50,6 +50,28 @@ new class extends Component {
             $this->submission->status = ExhibitorSubmissionStatus::PARTLY_PAYED;
             $this->submission->save();
 
+            // Send notification to admin users with super_admin role
+            $adminUsers = \App\Models\User::role('super_admin')->get();
+            foreach ($adminUsers as $admin) {
+                // Send Laravel notification for email
+                $admin->notify(new \App\Notifications\Admin\ExhibitorPaymentProof($this->event, $this->submission->exhibitor, $this->submission, $this->currentPayment));
+
+                // Send direct database notification for Filament panel
+                \Filament\Notifications\Notification::make()
+                    ->title('Preuve de paiement soumise')
+                    ->body("L'exposant {$this->submission->exhibitor->name} a soumis une preuve de paiement pour l'événement {$this->event->title}.")
+                    ->actions([
+                        \Filament\Notifications\Actions\Action::make('voir')
+                            ->label('Voir la soumission')
+                            ->url(route('filament.admin.resources.exhibitor-submissions.view', $this->submission->id)),
+                    ])
+                    ->icon('heroicon-o-banknotes')
+                    ->iconColor('warning')
+                    ->sendToDatabase($admin);
+
+                \Illuminate\Support\Facades\Log::info("Admin notification sent to: {$admin->email} for payment proof submission");
+            }
+
             // Redirect to info validation page
             return redirect()
                 ->route('payment_validation', [
