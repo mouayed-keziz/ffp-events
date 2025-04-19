@@ -18,6 +18,7 @@ enum LogName: string implements HasLabel, HasColor, HasIcon
     case VisitorSubmissions = 'visitor_submissions';
     case ExhibitorSubmissions = 'exhibitor_submissions';
     case CompanyInformation = 'company_information';
+    case Banners = 'banners';
 
     public function getLabel(): ?string
     {
@@ -32,6 +33,7 @@ enum LogName: string implements HasLabel, HasColor, HasIcon
             self::VisitorSubmissions => __('panel/logs.names.visitor_submissions'),
             self::ExhibitorSubmissions => __('panel/logs.names.exhibitor_submissions'),
             self::CompanyInformation => __('panel/logs.names.company_information'),
+            self::Banners => __('panel/logs.names.banners'),
         };
     }
 
@@ -48,6 +50,7 @@ enum LogName: string implements HasLabel, HasColor, HasIcon
             self::VisitorSubmissions => "amber",
             self::ExhibitorSubmissions => "emerald",
             self::CompanyInformation => "gray",
+            self::Banners => "cyan",
         };
     }
 
@@ -64,6 +67,7 @@ enum LogName: string implements HasLabel, HasColor, HasIcon
             self::VisitorSubmissions => "heroicon-o-user-group",
             self::ExhibitorSubmissions => "heroicon-o-building-storefront",
             self::CompanyInformation => "heroicon-o-building-office",
+            self::Banners => "heroicon-o-photo",
         };
     }
 }

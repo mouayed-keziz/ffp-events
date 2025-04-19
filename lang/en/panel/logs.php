@@ -25,6 +25,7 @@ return [
         'visitor_submissions' => 'Visitor Submissions',
         'exhibitor_submissions' => 'Exhibitor Submissions',
         'company_information' => 'Company Information',
+        'banners' => 'Banners',
     ],
     'columns' => [
         "log_name" => "Log Name",

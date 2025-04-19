@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Observers\BannerObserver;
 
 class Banner extends Model implements HasMedia
 {
@@ -23,6 +24,12 @@ class Banner extends Model implements HasMedia
         'is_active' => 'boolean',
         'order' => 'integer',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::observe(BannerObserver::class);
+    }
 
     public function registerMediaCollections(): void
     {
