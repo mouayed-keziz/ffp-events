@@ -68,9 +68,28 @@ new class extends Component {
         $success = $actions->updateExistingSubmission($this->submission, $this->formData);
 
         if ($success) {
-            // $this->formSubmitted = true;
-            // $this->successMessage = __('exhibitor_submission.messages.updated');
-            // Refresh the page after a brief delay to show the success message
+            // Send notification to admin users with super_admin role
+            $adminUsers = \App\Models\User::role('super_admin')->get();
+            foreach ($adminUsers as $admin) {
+                // Send Laravel notification for email
+                $admin->notify(new \App\Notifications\Admin\ExhibitorSubmissionUpdate($this->event, $this->submission->exhibitor, $this->submission));
+
+                // Send direct database notification for Filament panel
+                \Filament\Notifications\Notification::make()
+                    ->title("Mise à jour de soumission d'exposant")
+                    ->body("L'exposant {$this->submission->exhibitor->name} a mis à jour sa soumission pour l'événement {$this->event->title}.")
+                    ->actions([
+                        \Filament\Notifications\Actions\Action::make('voir')
+                            ->label('Voir la soumission')
+                            ->url(route('filament.admin.resources.exhibitor-submissions.view', $this->submission->id)),
+                    ])
+                    ->icon('heroicon-o-pencil-square')
+                    ->iconColor('warning')
+                    ->sendToDatabase($admin);
+
+                \Illuminate\Support\Facades\Log::info("Admin notification sent to: {$admin->email} for submission update");
+            }
+
             return redirect()->route('info_validation', ['id' => $this->event->id]);
         } else {
             session()->flash('error', 'An error occurred while updating the form. Please try again.');
@@ -82,8 +101,30 @@ new class extends Component {
         $this->submission->update_requested_at = now();
         $this->submission->save();
 
-        // session()->flash('success', __('Form modification request submitted successfully'));
-        // $this->dispatch('refreshPage');
+        // Send notification to admin users with super_admin role
+        $adminUsers = \App\Models\User::role('super_admin')->get();
+        foreach ($adminUsers as $admin) {
+            // Send Laravel notification for email
+            $admin->notify(new \App\Notifications\Admin\ExhibitorModificationRequest($this->event, $this->submission->exhibitor, $this->submission));
+
+            // Send direct database notification for Filament panel
+            \Filament\Notifications\Notification::make()
+                ->title('Demande de modification de formulaire')
+                ->body("L'exposant {$this->submission->exhibitor->name} a demandé à modifier sa soumission pour l'événement {$this->event->title}.")
+                ->actions([
+                    \Filament\Notifications\Actions\Action::make('voir')
+                        ->label('Voir la soumission')
+                        ->url(route('filament.admin.resources.exhibitor-submissions.view', $this->submission->id)),
+                ])
+                ->icon('heroicon-o-clipboard-document-check')
+                ->iconColor('warning')
+                ->sendToDatabase($admin);
+
+            \Illuminate\Support\Facades\Log::info("Admin notification sent to: {$admin->email} for form modification request");
+        }
+
+        session()->flash('success', __('Form modification request submitted successfully'));
+        $this->dispatch('refreshPage');
     }
 
     public function isLastExhibitorForm()
