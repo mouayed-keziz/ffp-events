@@ -34,6 +34,7 @@
                             @error("formData.{$activeStep}.sections.{$sectionIndex}.fields.{$fieldIndex}.answer")
                                 <div class="text-error text-sm mt-1">{{ $message }}</div>
                             @enderror
+                            <div class="h-4" />
                             {{-- Debug information to help troubleshoot --}}
                             @include('website.components.forms.debug-path', [
                                 'answerPath' => $answerPath,
