@@ -17,6 +17,7 @@ enum LogEvent: string implements HasLabel, HasColor, HasIcon
 
     case Login = 'login';
     case Logout = 'Logout';
+    case Register = 'register';
 
     public function getLabel(): ?string
     {
@@ -30,6 +31,7 @@ enum LogEvent: string implements HasLabel, HasColor, HasIcon
 
             self::Login => __('panel/logs.events.login'),
             self::Logout => __('panel/logs.events.logout'),
+            self::Register => __('panel/logs.events.register'),
         };
     }
 
@@ -45,6 +47,7 @@ enum LogEvent: string implements HasLabel, HasColor, HasIcon
 
             self::Login => 'info',
             self::Logout => 'info',
+            self::Register => 'success',
         };
     }
 
@@ -60,6 +63,7 @@ enum LogEvent: string implements HasLabel, HasColor, HasIcon
 
             self::Login => 'heroicon-o-arrow-left-start-on-rectangle',
             self::Logout => 'heroicon-o-arrow-left-end-on-rectangle',
+            self::Register => 'heroicon-o-user-plus',
         };
     }
 }

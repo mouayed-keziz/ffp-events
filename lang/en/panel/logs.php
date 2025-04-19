@@ -9,6 +9,7 @@ return [
         'restoration' => 'Restoration',
         'login' => 'Login',
         'logout' => 'Logout',
+        'register' => 'Registration',
     ],
     'resource' => [
         'single' => 'Log',

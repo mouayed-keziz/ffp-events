@@ -11,6 +11,7 @@ return [
 
         'login' => 'Connexion',
         'logout' => 'Déconnexion',
+        'register' => 'Inscription',
     ],
     'names' => [
         'categories' => 'Catégories',

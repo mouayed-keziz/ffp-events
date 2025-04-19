@@ -53,4 +53,27 @@ class AuthenticationActivity
             ])
             ->log('User logged out');
     }
+
+    /**
+     * Log a user registration event.
+     *
+     * @param Model|null $user
+     * @return void
+     */
+    public static function logRegister(?Model $user): void
+    {
+        if ($user === null) {
+            return;
+        }
+
+        activity()
+            ->useLog(LogName::Authentication->value)
+            ->event(LogEvent::Register->value)
+            ->causedBy($user)
+            ->withProperties([
+                'email' => $user->email,
+                'name' => $user->name,
+            ])
+            ->log('User registered');
+    }
 }

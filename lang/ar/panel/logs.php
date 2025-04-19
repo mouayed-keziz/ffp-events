@@ -9,6 +9,7 @@ return [
         'restoration' => 'استعادة',
         'login' => 'تسجيل الدخول',
         'logout' => 'تسجيل الخروج',
+        'register' => 'تسجيل حساب',
     ],
     'resource' => [
         'single' => 'سجل',

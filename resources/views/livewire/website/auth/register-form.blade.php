@@ -2,6 +2,7 @@
 
 use Livewire\Volt\Component;
 use App\Models\Visitor;
+use App\Activity\AuthenticationActivity;
 
 new class extends Component {
     public $name;
@@ -25,6 +26,10 @@ new class extends Component {
 
         $visitor = Visitor::create($validated);
         auth()->guard('visitor')->login($visitor);
+
+        // Log the visitor registration activity
+        AuthenticationActivity::logRegister($visitor);
+
         return redirect()->to(route('events'));
     }
 }; ?>
