@@ -45,7 +45,8 @@
                     <p style="color:rgb(0,0,0);font-size:14px;line-height:24px;margin:16px 0">
                         <strong>{{ __('emails/visitor-registration-successful.participation_details') }}</strong><br>
                         {{ __('emails/visitor-registration-successful.event') }} {{ $event->title }}<br>
-                        {{ __('emails/visitor-registration-successful.date') }} {{ $event->formatted_date }}<br>
+                        {{ __('emails/visitor-registration-successful.date') }}
+                        {{ $event->start_date->format('d/m/Y') }}<br>
                         {{ __('emails/visitor-registration-successful.location') }} {{ $event->location }}<br>
                         {{ __('emails/visitor-registration-successful.status') }}
                         {{ __('emails/visitor-registration-successful.status_confirmed') }}
