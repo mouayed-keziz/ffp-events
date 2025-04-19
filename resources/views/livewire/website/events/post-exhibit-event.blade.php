@@ -106,6 +106,28 @@ new class extends Component {
         }
 
         if ($success) {
+            // Send notification to admin users with super_admin role
+            $adminUsers = \App\Models\User::role('super_admin')->get();
+            foreach ($adminUsers as $admin) {
+                // Send Laravel notification for email
+                $admin->notify(new \App\Notifications\Admin\ExhibitorPostSubmission($this->event, $this->submission->exhibitor, $this->submission));
+
+                // Send direct database notification for Filament panel
+                \Filament\Notifications\Notification::make()
+                    ->title('Formulaire post-paiement soumis')
+                    ->body("L'exposant {$this->submission->exhibitor->name} a soumis un formulaire post-paiement pour l'événement {$this->event->title}.")
+                    ->actions([
+                        \Filament\Notifications\Actions\Action::make('voir')
+                            ->label('Voir la soumission')
+                            ->url(route('filament.admin.resources.exhibitor-submissions.view', $this->submission->id)),
+                    ])
+                    ->icon('heroicon-o-document-check')
+                    ->iconColor('warning')
+                    ->sendToDatabase($admin);
+
+                \Illuminate\Support\Facades\Log::info("Admin notification sent to: {$admin->email} for post-payment form submission");
+            }
+
             $this->formSubmitted = true;
             $this->successMessage = __('website/exhibit-event.post_form_submitted_success');
             return redirect()->route('event_details', $this->event)->with('success', __('website/exhibit-event.post_form_submitted_success'));

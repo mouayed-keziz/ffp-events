@@ -119,9 +119,11 @@ new class extends Component {
             @endif
 
             @if ($submission->status === ExhibitorSubmissionStatus::FULLY_PAYED)
-                <a href="#" class="btn rounded-md text-sm font-semibold btn-primary uppercase">
-                    {{ __('website/event.create_download_badges') }}
-                </a>
+                <div class="tooltip" data-tip="coming soon ...">
+                    <a href="#" disabled class="btn rounded-md text-sm font-semibold btn-primary uppercase">
+                        {{ __('website/event.create_download_badges') }}
+                    </a>
+                </div>
             @endif
 
             @if (
