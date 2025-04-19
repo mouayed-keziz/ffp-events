@@ -10,6 +10,43 @@ return [
         'login' => 'تسجيل الدخول',
         'logout' => 'تسجيل الخروج',
         'register' => 'تسجيل حساب',
+
+        // Visitor events
+        'visitor_submitted' => 'تسجيل الزائر',
+
+        // Exhibitor events
+        'exhibitor_submitted' => 'تسجيل العارض',
+        'exhibitor_uploaded_payment_proof' => 'تحميل إثبات الدفع',
+        'exhibitor_submitted_post_forms' => 'تقديم نموذج ما بعد الدفع',
+        'exhibitor_requested_update' => 'طلب تحديث',
+        'exhibitor_updated_submission' => 'تحديث التقديم',
+        'exhibitor_downloaded_invoice' => 'تنزيل الفاتورة',
+
+        // Admin actions on exhibitor submissions
+        'exhibitor_submission_accepted' => 'قبول التقديم',
+        'exhibitor_submission_rejected' => 'رفض التقديم',
+        'exhibitor_payment_validated' => 'تأكيد الدفع',
+        'exhibitor_payment_rejected' => 'رفض الدفع',
+        'exhibitor_payment_slice_deleted' => 'حذف شريحة الدفع',
+        'exhibitor_submission_marked_ready' => 'تمييز كجاهز',
+        'exhibitor_submission_archived' => 'أرشفة التقديم',
+        'exhibitor_update_request_approved' => 'الموافقة على طلب التحديث',
+        'exhibitor_update_request_denied' => 'رفض طلب التحديث',
+    ],
+    'exhibitor_submissions' => [
+        'create' => 'تقديم النموذج',
+        'update' => 'تحديث النموذج',
+        'payment_proof' => 'تقديم إثبات الدفع',
+        'post_form' => 'تقديم نموذج ما بعد الدفع',
+        'old_data' => 'البيانات السابقة',
+        'new_data' => 'البيانات الجديدة',
+    ],
+    'visitor_submissions' => [
+        'create' => 'تقديم التسجيل',
+        'update' => 'تحديث التسجيل',
+        'attendance' => 'تسجيل الحضور',
+        'old_data' => 'البيانات السابقة',
+        'new_data' => 'البيانات الجديدة',
     ],
     'resource' => [
         'single' => 'سجل',

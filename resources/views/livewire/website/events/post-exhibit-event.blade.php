@@ -106,6 +106,10 @@ new class extends Component {
         }
 
         if ($success) {
+            // Log the post form submission
+            $user = auth()->guard('exhibitor')->user();
+            \App\Activity\ExhibitorSubmissionActivity::logPostFormSubmission($user, $this->submission);
+
             // Send notification to admin users with super_admin role
             $adminUsers = \App\Models\User::role('super_admin')->get();
             foreach ($adminUsers as $admin) {

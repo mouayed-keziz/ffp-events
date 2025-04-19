@@ -63,6 +63,13 @@ new class extends Component {
         $success = $actions->saveFormSubmission($this->event, $this->formData);
 
         if ($success) {
+            // Get the exhibitor user and submission
+            $user = auth()->guard('exhibitor')->user();
+            $submission = \App\Models\ExhibitorSubmission::where('event_announcement_id', $this->event->id)->where('exhibitor_id', $user->id)->latest()->first();
+
+            // Log the exhibitor submission
+            \App\Activity\ExhibitorSubmissionActivity::logCreate($user, $submission);
+
             // Instead of showing success message, redirect to info validation
             return redirect()->route('info_validation', ['id' => $this->event->id]);
         } else {

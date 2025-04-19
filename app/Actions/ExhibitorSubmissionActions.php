@@ -76,6 +76,9 @@ class ExhibitorSubmissionActions
                 $record->status = ExhibitorSubmissionStatus::ACCEPTED;
                 $record->save();
 
+                // Log submission acceptance activity
+                \App\Activity\ExhibitorSubmissionActivity::logSubmissionAccepted(auth()->user(), $record);
+
                 // Create payment slices
                 $sort = 1;
                 foreach ($data['payment_slices'] as $sliceData) {
@@ -156,6 +159,11 @@ class ExhibitorSubmissionActions
                 $record->rejection_reason = $data['rejection_reason'];
                 $record->save();
 
+                // Log submission rejection activity
+                \App\Activity\ExhibitorSubmissionActivity::logSubmissionRejected(auth()->user(), $record, [
+                    'rejection_reason' => $data['rejection_reason']
+                ]);
+
                 // Send notification to exhibitor if associated with one
                 if ($record->exhibitor) {
                     // Get the current locale for localized notification
@@ -205,6 +213,10 @@ class ExhibitorSubmissionActions
 
                 // Check if all payments are valid to update the submission status
                 $submission = $record->exhibitorSubmission;
+
+                // Log payment validation activity
+                \App\Activity\ExhibitorSubmissionActivity::logPaymentValidated(auth()->user(), $submission, $record);
+
                 $allSlices = $submission->paymentSlices;
                 $allValid = $allSlices->every(fn($slice) => $slice->status === PaymentSliceStatus::VALID);
 
@@ -280,6 +292,9 @@ class ExhibitorSubmissionActions
 
                 // Update submission status if needed
                 $submission = $record->exhibitorSubmission;
+
+                // Log payment rejection activity
+                \App\Activity\ExhibitorSubmissionActivity::logPaymentRejected(auth()->user(), $submission, $record);
                 if ($submission->paymentSlices()->where('status', PaymentSliceStatus::VALID)->count() > 0) {
                     $submission->status = ExhibitorSubmissionStatus::PARTLY_PAYED;
                 } else {
@@ -350,8 +365,19 @@ class ExhibitorSubmissionActions
                 // Get the submission before deleting the record
                 $submission = $record->exhibitorSubmission;
 
+                // Store the payment slice details for logging before it's deleted
+                $paymentProperties = [
+                    'payment_id' => $record->id,
+                    'payment_amount' => $record->price,
+                    'payment_currency' => $record->currency,
+                    'due_date' => $record->due_to
+                ];
+
                 // Delete the record
                 $record->delete();
+
+                // Log payment slice deletion activity
+                \App\Activity\ExhibitorSubmissionActivity::logPaymentSliceDeleted(auth()->user(), $submission, $paymentProperties);
 
                 // Check remaining payment slices to update submission status
                 $remainingSlices = $submission->paymentSlices;
@@ -406,6 +432,9 @@ class ExhibitorSubmissionActions
                 $record->status = ExhibitorSubmissionStatus::READY;
                 $record->save();
 
+                // Log marking submission as ready
+                \App\Activity\ExhibitorSubmissionActivity::logSubmissionMarkedReady(auth()->user(), $record);
+
                 Notification::make()
                     ->title(__('panel/exhibitor_submission.success_messages.submission_ready'))
                     ->success()
@@ -426,6 +455,9 @@ class ExhibitorSubmissionActions
             ->action(function (ExhibitorSubmission $record): void {
                 $record->status = ExhibitorSubmissionStatus::ARCHIVE;
                 $record->save();
+
+                // Log archiving submission
+                \App\Activity\ExhibitorSubmissionActivity::logSubmissionArchived(auth()->user(), $record);
 
                 Notification::make()
                     ->title(__('panel/exhibitor_submission.success_messages.submission_archived'))
@@ -456,6 +488,11 @@ class ExhibitorSubmissionActions
                 $record->edit_deadline = $data['edit_deadline'];
                 $record->update_requested_at = null;
                 $record->save();
+
+                // Log update request approval
+                \App\Activity\ExhibitorSubmissionActivity::logUpdateRequestApproved(auth()->user(), $record, [
+                    'edit_deadline' => $data['edit_deadline']
+                ]);
 
                 // Send notification to exhibitor if associated with one
                 if ($record->exhibitor) {

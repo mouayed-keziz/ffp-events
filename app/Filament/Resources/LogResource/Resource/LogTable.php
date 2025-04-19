@@ -46,7 +46,7 @@ class LogTable
                 ->label(__('panel/logs.columns.event'))
                 ->placeholder(__('panel/logs.empty_states.event')),
 
-            Tables\Columns\TextColumn::make('subject.recordTitle')
+            Tables\Columns\TextColumn::make('subject.id')
                 ->tooltip(fn($record) => $record->subjectField)
                 ->limit(30)
                 ->state(fn($record) => $record->subjectField)

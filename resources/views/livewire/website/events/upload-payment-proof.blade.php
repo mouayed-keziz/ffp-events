@@ -50,6 +50,10 @@ new class extends Component {
             $this->submission->status = ExhibitorSubmissionStatus::PARTLY_PAYED;
             $this->submission->save();
 
+            // Log payment proof upload
+            $user = auth()->guard('exhibitor')->user();
+            \App\Activity\ExhibitorSubmissionActivity::logPaymentProof($user, $this->submission, $this->currentPayment);
+
             // Send notification to admin users with super_admin role
             $adminUsers = \App\Models\User::role('super_admin')->get();
             foreach ($adminUsers as $admin) {

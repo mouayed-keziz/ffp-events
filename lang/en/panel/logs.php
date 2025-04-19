@@ -10,6 +10,43 @@ return [
         'login' => 'Login',
         'logout' => 'Logout',
         'register' => 'Registration',
+
+        // Visitor events
+        'visitor_submitted' => 'Visitor Registration',
+
+        // Exhibitor events
+        'exhibitor_submitted' => 'Exhibitor Registration',
+        'exhibitor_uploaded_payment_proof' => 'Payment Proof Upload',
+        'exhibitor_submitted_post_forms' => 'Post-Payment Form Submission',
+        'exhibitor_requested_update' => 'Update Request',
+        'exhibitor_updated_submission' => 'Submission Update',
+        'exhibitor_downloaded_invoice' => 'Invoice Download',
+
+        // Admin actions on exhibitor submissions
+        'exhibitor_submission_accepted' => 'Submission Accepted',
+        'exhibitor_submission_rejected' => 'Submission Rejected',
+        'exhibitor_payment_validated' => 'Payment Validated',
+        'exhibitor_payment_rejected' => 'Payment Rejected',
+        'exhibitor_payment_slice_deleted' => 'Payment Slice Deleted',
+        'exhibitor_submission_marked_ready' => 'Marked as Ready',
+        'exhibitor_submission_archived' => 'Submission Archived',
+        'exhibitor_update_request_approved' => 'Update Request Approved',
+        'exhibitor_update_request_denied' => 'Update Request Denied',
+    ],
+    'exhibitor_submissions' => [
+        'create' => 'Form submission',
+        'update' => 'Form update',
+        'payment_proof' => 'Payment proof submission',
+        'post_form' => 'Post-payment form submission',
+        'old_data' => 'Previous data',
+        'new_data' => 'New data',
+    ],
+    'visitor_submissions' => [
+        'create' => 'Registration submission',
+        'update' => 'Registration update',
+        'attendance' => 'Attendance registration',
+        'old_data' => 'Previous data',
+        'new_data' => 'New data',
     ],
     'resource' => [
         'single' => 'Log',

@@ -62,6 +62,13 @@ new class extends Component {
         $success = $actions->saveFormSubmission($this->event, $this->formData);
 
         if ($success) {
+            // Get the visitor user and submission
+            $user = auth()->guard('visitor')->user();
+            $submission = \App\Models\VisitorSubmission::where('event_announcement_id', $this->event->id)->where('visitor_id', $user->id)->latest()->first();
+
+            // Log the visitor submission
+            \App\Activity\VisitorSubmissionActivity::logCreate($user, $submission);
+
             $this->formSubmitted = true;
             $this->redirect(route('visit_event_form_submitted', $this->event->id));
             $this->successMessage = __('website/visit-event.form_success');

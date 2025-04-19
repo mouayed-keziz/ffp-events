@@ -150,6 +150,11 @@ class EventController extends Controller
         if (!$exhibitor_submission->canDownloadInvoice) {
             return redirect()->route('event_details', ['id' => $event->id]);
         }
+
+        // Log invoice download activity
+        $user = Auth('exhibitor')->user();
+        \App\Activity\ExhibitorSubmissionActivity::logInvoiceDownload($user, $exhibitor_submission);
+
         $pdf = Pdf::loadView('pdf.exhibitor-submission-invoice', [
             'event' => $event,
             'exhibitor' => $exhibitor_submission->exhibitor,

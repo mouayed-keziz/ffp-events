@@ -68,6 +68,10 @@ new class extends Component {
         $success = $actions->updateExistingSubmission($this->submission, $this->formData);
 
         if ($success) {
+            // Log the submission update
+            $user = auth()->guard('exhibitor')->user();
+            \App\Activity\ExhibitorSubmissionActivity::logUpdate($user, $this->submission);
+
             // Send notification to admin users with super_admin role
             $adminUsers = \App\Models\User::role('super_admin')->get();
             foreach ($adminUsers as $admin) {
@@ -100,6 +104,10 @@ new class extends Component {
     {
         $this->submission->update_requested_at = now();
         $this->submission->save();
+
+        // Log the update request
+        $user = auth()->guard('exhibitor')->user();
+        \App\Activity\ExhibitorSubmissionActivity::logRequestUpdate($user, $this->submission);
 
         // Send notification to admin users with super_admin role
         $adminUsers = \App\Models\User::role('super_admin')->get();
