@@ -39,13 +39,15 @@ class EditEventAnnouncementVisitorForm extends EditRecord
                     ->schema([
                         TextInput::make('title')
                             ->label(__("panel/forms.exhibitors.section_title_label"))
-                            ->required()
+                            // TODO
+                            // ->required()
                             ->translatable(),
                         ComponentsBuilder::make('fields')
                             ->collapsed()
                             ->collapsible()
                             ->label(__("panel/forms.exhibitors.fields"))
                             ->addActionLabel(__("panel/forms.exhibitors.add_field"))
+                            ->blockNumbers(false)
                             ->blocks([
                                 Components\InputBlock::make(FormField::INPUT->value)
                                     ->icon('heroicon-o-pencil')

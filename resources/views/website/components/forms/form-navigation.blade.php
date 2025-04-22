@@ -29,7 +29,7 @@
     @else
         <button type="submit" class="btn font-semibold btn-sm rounded-md btn-primary" wire:loading.attr="disabled">
             <div class="flex items-center">
-                <span wire:loading.remove>
+                <span>
                     @if ($disabled)
                         {{ __('website/exhibit-event.next') }}
                     @else

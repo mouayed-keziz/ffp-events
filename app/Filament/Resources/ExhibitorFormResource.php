@@ -130,6 +130,7 @@ class ExhibitorFormResource extends Resource
                                     ->collapsible()
                                     ->label(__("panel/forms.exhibitors.fields"))
                                     ->addActionLabel(__("panel/forms.exhibitors.add_field"))
+                                    ->blockNumbers(false)
                                     ->blocks([
                                         Components\InputBlock::make(FormField::INPUT->value)
                                             ->icon('heroicon-o-pencil')
