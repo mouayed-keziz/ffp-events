@@ -100,8 +100,8 @@ if (empty($productsData)) {
                                 {{ $data['quantity_label'][app()->getLocale()] ?? __('Qty') }}
                             </span>
                         </div>
-                        <div class="grid grid-cols-7 gap-2 items-center">
-                            <div class="col-span-7 sm:col-span-4">
+                        <div class="flex items-center gap-2">
+                            <div class="flex-grow">
                                 <input
                                     class="input input-sm input-bordered rounded-md w-full {{ $disabled ? 'cursor-not-allowed' : '' }}"
                                     type="number"
@@ -112,7 +112,7 @@ if (empty($productsData)) {
                                     placeholder="{{ $data['quantity_label'][app()->getLocale()] ?? __('Qty') }}" />
                             </div>
 
-                            <div class="col-span-7 sm:col-span-3 text-right">
+                            <div class="flex-shrink-0 text-right whitespace-nowrap">
                                 @include('website.components.forms.priced.price-badge', [
                                     'price' => $product['price'][$this->preferred_currency ?? 'DZD'] ?? 0,
                                     'currency' => $this->preferred_currency ?? 'DZD',

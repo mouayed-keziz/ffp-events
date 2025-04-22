@@ -42,7 +42,7 @@ class AdminPanelProvider extends PanelProvider
             // ->sidebarCollapsibleOnDesktop()
             ->id('admin')
             ->path('admin')
-            ->spa()
+            ->spa(true)
             ->login()
             ->profile(isSimple: false)
             ->databaseNotifications()
