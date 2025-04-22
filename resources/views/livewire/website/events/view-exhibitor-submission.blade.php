@@ -165,7 +165,7 @@ new class extends Component {
         @include('website.components.forms.price-indicator', [
             'totalPrice' => $totalPrice,
             'currency' => $preferred_currency,
-            'disabled' => $disabled,
+            'disabled' => false,
         ])
     @endif
 </div>

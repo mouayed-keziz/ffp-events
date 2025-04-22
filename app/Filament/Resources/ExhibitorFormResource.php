@@ -123,7 +123,7 @@ class ExhibitorFormResource extends Resource
                             ->schema([
                                 TextInput::make('title')
                                     ->label(__("panel/forms.exhibitors.section_title_label"))
-                                    ->required()
+                                    // ->required()
                                     ->translatable(),
                                 ComponentsBuilder::make('fields')
                                     ->collapsed()
