@@ -45,6 +45,11 @@ class ArticleForm
                                             ->label(__('panel/articles.form.slug'))
                                             ->placeholder(__('panel/articles.placeholders.slug'))
                                             ->required()
+                                            ->unique(
+                                                ignoreRecord: true,
+                                                table: 'articles',
+                                                column: 'slug',
+                                            )
                                             ->maxLength(255)
                                             ->suffixAction(
                                                 Forms\Components\Actions\Action::make('generateSlug')

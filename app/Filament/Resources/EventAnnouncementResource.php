@@ -63,9 +63,10 @@ class EventAnnouncementResource extends Resource
 
     public static function sidebar(EventAnnouncement $record): FilamentPageSidebar
     {
-        $EDIT_GROUP = "edit";
-        $EDIT_FORMS = "forms";
-        $SUBMISSIONS = "submissions";
+        $GENERAL_GROUP = __('panel/event_announcement.sidebar_groups.general');
+        $EVENT_MANAGEMENT = __('panel/event_announcement.sidebar_groups.event_management');
+        $FORM_MANAGEMENT = __('panel/event_announcement.sidebar_groups.form_management');
+        $REGISTRATION_MANAGEMENT = __('panel/event_announcement.sidebar_groups.registrations');
         return FilamentPageSidebar::make()
             ->setTitle("{$record->title}")
             ->setDescription("{$record->description}")
@@ -82,7 +83,7 @@ class EventAnnouncementResource extends Resource
                     ->url(fn() => static::getUrl('edit', ['record' => $record->id]))
                     ->icon('heroicon-o-pencil')
                     ->hidden(fn() => !auth()->user()->hasRole(Role::SUPER_ADMIN->value))
-                    ->group($EDIT_GROUP)
+                    ->group($EVENT_MANAGEMENT)
                     ->isActiveWhen(
                         fn() =>
                         request()->routeIs(Pages\EditEventAnnouncement::getRouteName())
@@ -91,7 +92,7 @@ class EventAnnouncementResource extends Resource
                     ->url(fn() => static::getUrl('edit-terms', ['record' => $record->id]))
                     ->icon('heroicon-o-document-text')
                     ->hidden(fn() => !auth()->user()->hasRole(Role::SUPER_ADMIN->value))
-                    ->group($EDIT_GROUP)
+                    ->group($EVENT_MANAGEMENT)
                     ->isActiveWhen(
                         fn() =>
                         request()->routeIs(Pages\EditEventAnnouncementTerms::getRouteName())
@@ -100,7 +101,7 @@ class EventAnnouncementResource extends Resource
                     ->url(fn() => static::getUrl('edit-visitor-form', ['record' => $record->id]))
                     ->icon('heroicon-o-clipboard-document-check')
                     ->hidden(fn() => !auth()->user()->hasRole(Role::SUPER_ADMIN->value))
-                    ->group($EDIT_FORMS)
+                    ->group($FORM_MANAGEMENT)
                     ->isActiveWhen(
                         fn() =>
                         request()->routeIs(Pages\EditEventAnnouncementVisitorForm::getRouteName())
@@ -109,26 +110,26 @@ class EventAnnouncementResource extends Resource
                     ->url(fn() => static::getUrl('exhibitor-forms', ['record' => $record->id]))
                     ->icon('heroicon-o-clipboard-document-list')
                     ->hidden(fn() => !auth()->user()->hasRole(Role::SUPER_ADMIN->value))
-                    ->group($EDIT_FORMS)
+                    ->group($FORM_MANAGEMENT)
                     ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementExhibitorForms::getRouteName()])),
 
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_post_payment_forms'))
                     ->url(fn() => static::getUrl('exhibitor-post-payment-forms', ['record' => $record->id]))
                     ->icon('heroicon-o-clipboard-document-list')
                     ->hidden(fn() => !auth()->user()->hasRole(Role::SUPER_ADMIN->value))
-                    ->group($EDIT_FORMS)
+                    ->group($FORM_MANAGEMENT)
                     ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementExhibitorPostPaymentForms::getRouteName()])),
 
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_visitor_submissions'))
                     ->url(fn() => static::getUrl('visitor-submissions', ['record' => $record->id]))
                     ->icon('heroicon-o-user-group')
-                    ->group($SUBMISSIONS)
+                    ->group($REGISTRATION_MANAGEMENT)
                     ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementVisitorSubmissions::getRouteName()])),
 
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_submissions'))
                     ->url(fn() => static::getUrl('exhibitor-submissions', ['record' => $record->id]))
                     ->icon('heroicon-o-user-group')
-                    ->group($SUBMISSIONS)
+                    ->group($REGISTRATION_MANAGEMENT)
                     ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementExhibitorSubmissions::getRouteName()])),
             ]);
     }

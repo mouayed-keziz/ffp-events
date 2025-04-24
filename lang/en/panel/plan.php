@@ -2,8 +2,8 @@
 
 return [
     'tier' => [
-        'single' => 'Plan Tier',
-        'plural' => 'Plan Tiers',
+        'single' => 'Sponsorship Plan',
+        'plural' => 'Sponsorship Plans',
         'title' => 'Title',
         'plans_count' => 'Number of Plans',
     ],
