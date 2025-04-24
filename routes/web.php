@@ -66,10 +66,3 @@ Route::middleware('local_middleware')->group(function () {
         Route::get('/verify-email-change', [ProfileController::class, 'verifyEmailChange'])->name('verify-email-change');
     });
 });
-
-
-Route::get('/session', function () {
-    $lifetime = (int) config('session.lifetime');
-    $expiresAt = now()->addMinutes($lifetime);
-    return "Session lifetime: {$lifetime} minutes<br>Session expires at: " . $expiresAt->format('Y-m-d H:i:s');
-});

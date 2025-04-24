@@ -82,9 +82,8 @@ if (empty($productsData)) {
                             <input type="checkbox" id="product_{{ $productId }}"
                                 wire:model.live="formData.{{ $answerPath }}.products.{{ $productAnswerIndex }}.selected"
                                 wire:change="updateProductQuantity('{{ $answerPath }}', {{ $productId }}, $event.target.checked ? {{ $quantity }} : 0)"
-                                class="checkbox checkbox-sm rounded-md {{ App::getLocale() === 'ar' ? 'ml-2' : '' }} {{ $disabled ? 'cursor-not-allowed' : '' }}"
-                                {{ $disabled ? 'disabled' : '' }}
-                                class="checkbox checkbox-sm {{ $isSelected ? 'checkbox-primary' : '' }}" />
+                                class="checkbox checkbox-sm rounded-md {{ App::getLocale() === 'ar' ? 'ml-2' : '' }} {{ $disabled ? 'cursor-not-allowed' : '' }} {{ $isSelected ? 'checkbox-primary' : 'checkbox-primary' }}"
+                                {{ $disabled ? 'disabled' : '' }} />
 
                             <label for="product_{{ $productId }}"
                                 class="font-medium text-sm text-base truncate {{ $disabled ? 'cursor-not-allowed' : 'cursor-pointer' }}"
