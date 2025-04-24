@@ -37,7 +37,7 @@
                         Formulaire post-paiement soumis
                     </h1>
                     <p style="color:rgb(0,0,0);font-size:14px;line-height:24px;margin:16px 0">
-                        Bonjour {{ $admin->name }},
+                        Bonjour {{ $admin->name ?? 'Administrateur' }},
                     </p>
                     <p style="color:rgb(0,0,0);font-size:14px;line-height:24px;margin:16px 0">
                         L'exposant <strong>{{ $exhibitor->name }}</strong> a soumis un formulaire post-paiement pour

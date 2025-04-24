@@ -35,13 +35,13 @@ class ExhibitorPaymentProofMail extends Mailable
         Exhibitor $exhibitor,
         ExhibitorSubmission $submission,
         ExhibitorPaymentSlice $payment,
-        User $admin
+        $notifiable = null
     ) {
         $this->event = $event;
         $this->exhibitor = $exhibitor;
         $this->submission = $submission;
         $this->payment = $payment;
-        $this->admin = $admin;
+        $this->admin = $notifiable;
         $this->locale = 'fr'; // Force French locale as requested
         $this->direction = 'ltr';
     }

@@ -37,7 +37,7 @@
                         Demande de modification de formulaire
                     </h1>
                     <p style="color:rgb(0,0,0);font-size:14px;line-height:24px;margin:16px 0">
-                        Bonjour {{ $admin->name }},
+                        Bonjour {{ $admin->name ?? 'Administrateur' }},
                     </p>
                     <p style="color:rgb(0,0,0);font-size:14px;line-height:24px;margin:16px 0">
                         L'exposant <strong>{{ $exhibitor->name }}</strong> a demandé à modifier sa soumission pour

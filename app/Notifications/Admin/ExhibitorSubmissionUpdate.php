@@ -10,6 +10,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\App;
+use App\Settings\CompanyInformationsSettings;
 
 class ExhibitorSubmissionUpdate extends Notification implements ShouldQueue
 {
@@ -19,16 +20,18 @@ class ExhibitorSubmissionUpdate extends Notification implements ShouldQueue
     public $exhibitor;
     public $submission;
     public $locale;
+    public $isCompanyEmail;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(EventAnnouncement $event, Exhibitor $exhibitor, ExhibitorSubmission $submission)
+    public function __construct(EventAnnouncement $event, Exhibitor $exhibitor, ExhibitorSubmission $submission, bool $isCompanyEmail = false)
     {
         $this->event = $event;
         $this->exhibitor = $exhibitor;
         $this->submission = $submission;
         $this->locale = 'fr'; // Force French locale as requested
+        $this->isCompanyEmail = $isCompanyEmail;
     }
 
     /**
@@ -38,7 +41,9 @@ class ExhibitorSubmissionUpdate extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        // If this is for the company email, only use mail channel
+        // Otherwise, only use database channel for admin notifications
+        return $this->isCompanyEmail ? ['mail'] : ['database'];
     }
 
     /**
@@ -51,7 +56,7 @@ class ExhibitorSubmissionUpdate extends Notification implements ShouldQueue
             $this->exhibitor,
             $this->submission,
             $notifiable
-        ))->to($notifiable->email);
+        ))->to($notifiable->email ?? app(CompanyInformationsSettings::class)->email);
     }
 
     /**

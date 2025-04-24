@@ -237,13 +237,35 @@ class ExhibitorFormActions extends BaseFormActions
             Log::info("Exhibitor notification sent to: {$exhibitor->email} with locale: {$locale}");
         }
 
-        // Send notification to admin users with super_admin role
-        $adminUsers = \App\Models\User::role('super_admin')->get();
-        foreach ($adminUsers as $admin) {
-            // Send Laravel notification for email
-            $admin->notify(new \App\Notifications\Admin\NewExhibitorSubmission($event, $exhibitor, $submission));
+        // Get all admin and super_admin users for database notifications
+        $adminUsers = \App\Models\User::role(['admin', 'super_admin'])->get();
 
-            // Send direct database notification for Filament panel
+        // Send a single email to the company email from settings
+        $companySettings = app(\App\Settings\CompanyInformationsSettings::class);
+        // Create a temporary instance that can receive notifications
+        $companyUser = new \stdClass();
+        $companyUser->email = $companySettings->email;
+        $companyUser->name = $companySettings->name;
+
+        // Send email notification to company email only
+        \Illuminate\Support\Facades\Notification::route('mail', $companySettings->email)
+            ->notify(new \App\Notifications\Admin\NewExhibitorSubmission(
+                $event,
+                $exhibitor,
+                $submission,
+                true
+            ));
+
+        // Send database notifications to all admins and super_admins
+        foreach ($adminUsers as $admin) {
+            // Send database notification only
+            $admin->notify(new \App\Notifications\Admin\NewExhibitorSubmission(
+                $event,
+                $exhibitor,
+                $submission
+            ));
+
+            // Also send direct database notification for Filament panel
             \Filament\Notifications\Notification::make()
                 ->title("Nouvelle soumission d'exposant")
                 ->body("L'exposant {$exhibitor->name} a soumis une demande pour l'événement {$event->title}.")

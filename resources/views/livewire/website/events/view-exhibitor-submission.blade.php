@@ -72,13 +72,21 @@ new class extends Component {
             $user = auth()->guard('exhibitor')->user();
             \App\Activity\ExhibitorSubmissionActivity::logUpdate($user, $this->submission);
 
-            // Send notification to admin users with super_admin role
-            $adminUsers = \App\Models\User::role('super_admin')->get();
+            // Get all admin and super_admin users for database notifications
+            $adminUsers = \App\Models\User::role(['admin', 'super_admin'])->get();
+
+            // Send a single email to the company email from settings
+            $companySettings = app(\App\Settings\CompanyInformationsSettings::class);
+
+            // Send email notification to company email only using notification routing
+            \Illuminate\Support\Facades\Notification::route('mail', $companySettings->email)->notify(new \App\Notifications\Admin\ExhibitorSubmissionUpdate($this->event, $this->submission->exhibitor, $this->submission, true));
+
+            // Send database notifications to all admins and super_admins
             foreach ($adminUsers as $admin) {
-                // Send Laravel notification for email
+                // Send database notification only
                 $admin->notify(new \App\Notifications\Admin\ExhibitorSubmissionUpdate($this->event, $this->submission->exhibitor, $this->submission));
 
-                // Send direct database notification for Filament panel
+                // Also send direct database notification for Filament panel
                 \Filament\Notifications\Notification::make()
                     ->title("Mise à jour de soumission d'exposant")
                     ->body("L'exposant {$this->submission->exhibitor->name} a mis à jour sa soumission pour l'événement {$this->event->title}.")
@@ -109,13 +117,21 @@ new class extends Component {
         $user = auth()->guard('exhibitor')->user();
         \App\Activity\ExhibitorSubmissionActivity::logRequestUpdate($user, $this->submission);
 
-        // Send notification to admin users with super_admin role
-        $adminUsers = \App\Models\User::role('super_admin')->get();
+        // Get all admin and super_admin users for database notifications
+        $adminUsers = \App\Models\User::role(['admin', 'super_admin'])->get();
+
+        // Send a single email to the company email from settings
+        $companySettings = app(\App\Settings\CompanyInformationsSettings::class);
+
+        // Send email notification to company email only using notification routing
+        \Illuminate\Support\Facades\Notification::route('mail', $companySettings->email)->notify(new \App\Notifications\Admin\ExhibitorModificationRequest($this->event, $this->submission->exhibitor, $this->submission, true));
+
+        // Send database notifications to all admins and super_admins
         foreach ($adminUsers as $admin) {
-            // Send Laravel notification for email
+            // Send database notification only
             $admin->notify(new \App\Notifications\Admin\ExhibitorModificationRequest($this->event, $this->submission->exhibitor, $this->submission));
 
-            // Send direct database notification for Filament panel
+            // Also send direct database notification for Filament panel
             \Filament\Notifications\Notification::make()
                 ->title('Demande de modification de formulaire')
                 ->body("L'exposant {$this->submission->exhibitor->name} a demandé à modifier sa soumission pour l'événement {$this->event->title}.")

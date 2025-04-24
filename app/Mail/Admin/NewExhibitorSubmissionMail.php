@@ -32,12 +32,12 @@ class NewExhibitorSubmissionMail extends Mailable
         EventAnnouncement $event,
         Exhibitor $exhibitor,
         ExhibitorSubmission $submission,
-        User $admin
+        $notifiable = null
     ) {
         $this->event = $event;
         $this->exhibitor = $exhibitor;
         $this->submission = $submission;
-        $this->admin = $admin;
+        $this->admin = $notifiable;
         $this->locale = 'fr'; // Force French locale as requested
         $this->direction = 'ltr';
     }

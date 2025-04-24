@@ -37,7 +37,7 @@
                         Preuve de paiement soumise
                     </h1>
                     <p style="color:rgb(0,0,0);font-size:14px;line-height:24px;margin:16px 0">
-                        Bonjour {{ $admin->name }},
+                        Bonjour {{ $admin->name ?? 'Administrateur' }},
                     </p>
                     <p style="color:rgb(0,0,0);font-size:14px;line-height:24px;margin:16px 0">
                         Une nouvelle preuve de paiement vient d'être soumise par un exposant pour l'événement

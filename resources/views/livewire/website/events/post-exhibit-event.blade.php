@@ -110,13 +110,21 @@ new class extends Component {
             $user = auth()->guard('exhibitor')->user();
             \App\Activity\ExhibitorSubmissionActivity::logPostFormSubmission($user, $this->submission);
 
-            // Send notification to admin users with super_admin role
-            $adminUsers = \App\Models\User::role('super_admin')->get();
+            // Get all admin and super_admin users for database notifications
+            $adminUsers = \App\Models\User::role(['admin', 'super_admin'])->get();
+
+            // Send a single email to the company email from settings
+            $companySettings = app(\App\Settings\CompanyInformationsSettings::class);
+
+            // Send email notification to company email only using notification routing
+            \Illuminate\Support\Facades\Notification::route('mail', $companySettings->email)->notify(new \App\Notifications\Admin\ExhibitorPostSubmission($this->event, $this->submission->exhibitor, $this->submission, true));
+
+            // Send database notifications to all admins and super_admins
             foreach ($adminUsers as $admin) {
-                // Send Laravel notification for email
+                // Send database notification only
                 $admin->notify(new \App\Notifications\Admin\ExhibitorPostSubmission($this->event, $this->submission->exhibitor, $this->submission));
 
-                // Send direct database notification for Filament panel
+                // Also send direct database notification for Filament panel
                 \Filament\Notifications\Notification::make()
                     ->title('Formulaire post-paiement soumis')
                     ->body("L'exposant {$this->submission->exhibitor->name} a soumis un formulaire post-paiement pour l'événement {$this->event->title}.")
