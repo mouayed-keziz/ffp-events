@@ -49,6 +49,24 @@
                     </p>
                 </div>
             @endif
+
+
+            @if ($currentStep === 0 && property_exists($this, 'terms_accepted'))
+                <div class="mt-6 p-4 rounded-lg">
+                    <div class="flex justify-start items-center gap-2">
+                        <input type="checkbox" name="terms_accepted" wire:model="terms_accepted"
+                            class="checkbox rounded-lg {{ $errors->has('terms_accepted') ? 'checkbox-error' : '' }}">
+                        <span class="label-text font-semibold text-neutral">
+                            {{ __('website/visit-event.terms_acceptance') }}
+                            <a target="_blank" href="#"
+                                class="link link-primary">{{ __('website/visit-event.terms_and_conditions') }}</a>
+                        </span>
+                    </div>
+                    @error('terms_accepted')
+                        <div class="text-error text-sm">{{ $message }}</div>
+                    @enderror
+                </div>
+            @endif
             <!-- Form Navigation Component -->
             @include('website.components.forms.form-navigation', [
                 'currentStep' => $currentStep,

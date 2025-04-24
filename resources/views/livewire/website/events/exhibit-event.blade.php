@@ -25,6 +25,7 @@ new class extends Component {
     public string $successMessage = '';
     public string $preferred_currency = 'DZD';
     public float $totalPrice = 0;
+    public bool $terms_accepted = false;
 
     public function mount(EventAnnouncement $event)
     {
@@ -100,6 +101,7 @@ new class extends Component {
             'disabled' => $disabled,
             'formStep' => $currentStep, // For regular forms, formStep equals currentStep
         ])
+
         <!-- Floating Price Indicator Component with Currency Selector -->
         @include('website.components.forms.price-indicator', [
             'totalPrice' => $totalPrice,

@@ -42,6 +42,7 @@ return [
         "manage_exhibitor_post_payment_forms" => "Manage Post-Payment Forms",
         "manage_visitor_submissions" => "Manage Visitor Submissions",
         "manage_exhibitor_submissions" => "Manage Exhibitor Submissions",
+        'duplicate' => 'Duplicate',
         'delete' => 'Delete Announcement',
         'view' => 'Announcement Details',
         'restore' => 'Restore Announcement',
@@ -54,6 +55,20 @@ return [
         'photo' => 'No image',
         'deleted_at' => 'Not deleted',
     ],
+    'modals' => [
+        'duplicate' => [
+            'heading' => 'Duplicate Event: :title',
+            'description' => 'This action will create a copy of this event with its associated forms, but without any existing submissions.',
+            'submit' => 'Duplicate',
+        ],
+    ],
+    'notifications' => [
+        'duplicated' => [
+            'title' => 'Event Duplicated',
+            'body' => 'The event has been successfully duplicated.',
+        ],
+    ],
+    'cloned' => '(cloned)',
     'tabs' => [
         'general' => 'General Information',
         'dates_location' => 'Dates & Location',

@@ -43,6 +43,7 @@ return [
         "manage_exhibitor_post_payment_forms" => "إدارة إستبيانات العارضين بعد الدفع",
         "manage_visitor_submissions" => "إدارة تسجيلات الزوار",
         "manage_exhibitor_submissions" => "إدارة تسجيلات العارضين",
+        'duplicate' => 'نسخ',
         'delete' => 'حذف الإعلان',
         'view' => 'تفاصيل الإعلان',
         'restore' => 'استعادة الإعلان',
@@ -55,6 +56,20 @@ return [
         'photo' => 'لا توجد صورة',
         'deleted_at' => 'غير محذوف',
     ],
+    'modals' => [
+        'duplicate' => [
+            'heading' => 'نسخ الفعالية: :title',
+            'description' => 'سيتم إنشاء نسخة من هذه الفعالية مع النماذج المرتبطة بها، ولكن بدون التسجيلات الموجودة.',
+            'submit' => 'نسخ',
+        ],
+    ],
+    'notifications' => [
+        'duplicated' => [
+            'title' => 'تم نسخ الفعالية',
+            'body' => 'تم نسخ الفعالية بنجاح.',
+        ],
+    ],
+    'cloned' => '(منسوخة)',
     'tabs' => [
         'general' => 'معلومات عامة',
         'dates_location' => 'التواريخ والموقع',

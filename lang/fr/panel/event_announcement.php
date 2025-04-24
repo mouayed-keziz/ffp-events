@@ -42,6 +42,7 @@ return [
         "manage_exhibitor_post_payment_forms" => "Gérer les formulaires post-paiement",
         "manage_visitor_submissions" => "Gérer les soumissions des visiteurs",
         "manage_exhibitor_submissions" => "Gérer les soumissions des exposants",
+        'duplicate' => 'Dupliquer',
         'delete' => 'Supprimer l\'annonce',
         'view' => 'Détails de l\'annonce',
         'restore' => 'Restaurer l\'annonce',
@@ -54,6 +55,20 @@ return [
         'photo' => 'Aucune Image',
         'deleted_at' => 'Non supprimé',
     ],
+    'modals' => [
+        'duplicate' => [
+            'heading' => 'Dupliquer l\'événement: :title',
+            'description' => 'Cette action va créer une copie de cet événement avec ses formulaires associés, mais sans les soumissions existantes.',
+            'submit' => 'Dupliquer',
+        ],
+    ],
+    'notifications' => [
+        'duplicated' => [
+            'title' => 'Événement dupliqué',
+            'body' => 'L\'événement a été dupliqué avec succès.',
+        ],
+    ],
+    'cloned' => '(cloné)',
     'tabs' => [
         'general' => 'Informations Générales',
         'dates_location' => 'Dates et Lieu',

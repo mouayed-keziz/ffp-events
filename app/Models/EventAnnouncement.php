@@ -130,6 +130,72 @@ class EventAnnouncement extends Model implements HasMedia
         ];
     }
 
+    /**
+     * Create a duplicate of this event announcement with related forms
+     * but without submissions.
+     * 
+     * @return EventAnnouncement
+     */
+    public function duplicate(): self
+    {
+        // Get available locales from translations
+        $availableLocales = array_keys($this->getTranslations('title'));
+
+        // Clone basic attributes
+        $clone = $this->replicate();
+
+        // Update translatable fields, adding "(cloned)" to title in each locale
+        $titleTranslations = [];
+        foreach ($availableLocales as $locale) {
+            $titleTranslations[$locale] = $this->getTranslation('title', $locale) . ' ' . __('panel/event_announcement.cloned', [], $locale);
+        }
+
+        // Set the cloned titles
+        $clone->setTranslations('title', $titleTranslations);
+
+        // Save the clone to create a new record
+        $clone->push();
+
+        // Clone media (image)
+        if ($this->hasMedia('image')) {
+            $media = $this->getMedia('image')->first();
+            if ($media) {
+                $media->copy($clone, 'image');
+            }
+        }
+
+        // Clone related forms
+        // 1. Clone visitor form if exists
+        if ($visitorForm = $this->visitorForm) {
+            $clonedVisitorForm = $visitorForm->replicate();
+            $clonedVisitorForm->event_announcement_id = $clone->id;
+            $clonedVisitorForm->save();
+
+            // Clone form fields if needed
+            // (This depends on your schema, adjust as necessary)
+        }
+
+        // 2. Clone exhibitor forms if exist
+        foreach ($this->exhibitorForms as $exhibitorForm) {
+            $clonedExhibitorForm = $exhibitorForm->replicate();
+            $clonedExhibitorForm->event_announcement_id = $clone->id;
+            $clonedExhibitorForm->save();
+
+            // Clone form fields if needed
+        }
+
+        // 3. Clone exhibitor post payment forms if exist
+        foreach ($this->exhibitorPostPaymentForms as $postPaymentForm) {
+            $clonedPostPaymentForm = $postPaymentForm->replicate();
+            $clonedPostPaymentForm->event_announcement_id = $clone->id;
+            $clonedPostPaymentForm->save();
+
+            // Clone form fields if needed
+        }
+
+        return $clone;
+    }
+
     // ------------------ RELATIONSHIPS ------------------
 
     public function visitorForm()

@@ -6,6 +6,8 @@ use App\Enums\Role;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Actions\Action;
+use App\Models\EventAnnouncement;
 
 class EventAnnouncementTable
 {
@@ -84,17 +86,36 @@ class EventAnnouncementTable
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Action::make('duplicate')
+                    ->label(__('panel/event_announcement.actions.duplicate'))
+                    ->icon('heroicon-o-document-duplicate')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->modalHeading(fn(EventAnnouncement $record) => __('panel/event_announcement.modals.duplicate.heading', ['title' => $record->title]))
+                    ->modalDescription(__('panel/event_announcement.modals.duplicate.description'))
+                    ->modalSubmitActionLabel(__('panel/event_announcement.modals.duplicate.submit'))
+                    ->action(function (EventAnnouncement $record): void {
+                        // Create a new event announcement
+                        $newEventAnnouncement = $record->duplicate();
+
+                        // Notification of success
+                        \Filament\Notifications\Notification::make()
+                            ->title(__('panel/event_announcement.notifications.duplicated.title'))
+                            ->success()
+                            ->body(__('panel/event_announcement.notifications.duplicated.body'))
+                            ->send();
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
-                        ->visible(auth()->user()->hasRole(Role::SUPER_ADMIN->value))
+                        ->visible(fn() => auth()->check() && auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                         ->label(__('panel/event_announcement.actions.delete')),
                     Tables\Actions\ForceDeleteBulkAction::make()
-                        ->visible(auth()->user()->hasRole(Role::SUPER_ADMIN->value))
+                        ->visible(fn() => auth()->check() && auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                         ->label(__('panel/event_announcement.actions.force_delete')),
                     Tables\Actions\RestoreBulkAction::make()
-                        ->visible(auth()->user()->hasRole(Role::SUPER_ADMIN->value))
+                        ->visible(fn() => auth()->check() && auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                         ->label(__('panel/event_announcement.actions.restore')),
                 ]),
             ]);
