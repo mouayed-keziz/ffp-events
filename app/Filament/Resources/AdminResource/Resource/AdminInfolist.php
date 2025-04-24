@@ -20,29 +20,16 @@ class AdminInfolist
                         ->label(__('panel/admins.form.email'))
                         ->default(__('panel/admins.empty_states.email')),
 
-                    Infolists\Components\TextEntry::make('roles.name')
+                    Infolists\Components\TextEntry::make('roles.formatted_name')
                         ->label(__('panel/admins.columns.roles'))
                         ->badge()
-                        ->formatStateUsing(function ($state, $record) {
-                            $role = $record->roles->first()?->name;
-                            return $role ? \App\Enums\Role::tryFrom($role)?->getLabel() ?? $role : null;
-                        })
-                        ->color(function ($record) {
-                            $role = $record->roles->first()?->name;
-                            return $role ? \App\Enums\Role::tryFrom($role)?->getColor() : "gray";
-                        })
-                        ->icon(function ($record) {
-                            $role = $record->roles->first()?->name;
-                            return $role ? \App\Enums\Role::tryFrom($role)?->getIcon() : null;
-                        })
+                        ->state(fn($record) => $record->roles->first()?->formatted_name)
+                        ->color(fn($record) => $record->roles->first()?->color ?? 'gray')
+                        ->icon(fn($record) => $record->roles->first()?->icon)
                         ->default(__('panel/admins.empty_states.roles')),
 
                     Infolists\Components\TextEntry::make('created_at')
                         ->label(__('panel/admins.columns.created_at'))
-                        ->dateTime(),
-
-                    Infolists\Components\TextEntry::make('verified_at')
-                        ->label(__('panel/admins.columns.verified_at'))
                         ->dateTime(),
                 ])
             ]);

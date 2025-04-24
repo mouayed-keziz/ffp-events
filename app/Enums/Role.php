@@ -23,7 +23,7 @@ enum Role: string implements HasLabel, HasColor, HasIcon
     {
         return match ($this) {
             self::ADMIN => 'primary',
-            self::SUPER_ADMIN => 'danger',
+            self::SUPER_ADMIN => 'success',
         };
     }
 

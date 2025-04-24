@@ -56,5 +56,11 @@ return [
             "error_title" => "Failed to regenerate password",
             "error_body" => "An error occurred while regenerating the password."
         ]
+    ],
+    'tabs' => [
+        'all' => 'All Users',
+        'admin' => 'Admins',
+        'super_admin' => 'Super Admins',
+        'deleted' => 'Deleted'
     ]
 ];

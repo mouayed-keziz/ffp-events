@@ -4,9 +4,11 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\Role as RoleEnum;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,7 +23,22 @@ class User extends Authenticatable implements HasMedia, FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->hasRole("super_admin");
+        // return true;
+        return $this->hasRole(RoleEnum::ADMIN->value) || $this->hasRole(RoleEnum::SUPER_ADMIN->value);
+    }
+
+    /**
+     * Override the roles relationship to use our custom Role model
+     */
+    public function roles(): MorphToMany
+    {
+        return $this->morphToMany(
+            Role::class,
+            'model',
+            config('permission.table_names.model_has_roles'),
+            config('permission.column_names.model_morph_key'),
+            'role_id'
+        );
     }
 
     /**

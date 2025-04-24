@@ -38,12 +38,7 @@ class AdminForm
                         ->label(__('panel/admins.form.roles'))
                         ->placeholder(__('panel/admins.empty_states.roles'))
                         ->relationship('roles', 'name')
-                        ->options([
-                            'admin' => \App\Enums\Role::ADMIN->getLabel(),
-                            'super_admin' => \App\Enums\Role::SUPER_ADMIN->getLabel(),
-                        ])
-                        ->preload()
-                        ->searchable(),
+                        ->getOptionLabelFromRecordUsing(fn(\App\Models\Role $record) => $record->formatted_name),
                 ])
             ]);
     }

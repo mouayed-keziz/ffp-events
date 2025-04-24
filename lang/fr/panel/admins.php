@@ -69,5 +69,11 @@ return [
             "error_title" => "Échec de la régénération du mot de passe",
             "error_body" => "Une erreur s'est produite lors de la régénération du mot de passe."
         ]
+    ],
+    'tabs' => [
+        'all' => 'Tous les utilisateurs',
+        'admin' => 'Administrateurs',
+        'super_admin' => 'Super administrateurs',
+        'deleted' => 'Supprimés'
     ]
 ];

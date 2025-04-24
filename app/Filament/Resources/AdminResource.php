@@ -86,9 +86,9 @@ class AdminResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->whereHas('roles', function ($query) {
-                $query->whereIn('name', ['admin', 'super_admin']);
-            })
+            // ->whereHas('roles', function ($query) {
+            //     $query->whereIn('name', ['admin', 'super_admin']);
+            // })
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
