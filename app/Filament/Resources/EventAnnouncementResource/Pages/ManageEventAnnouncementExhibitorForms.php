@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 
+use App\Enums\Role;
 use App\Filament\Resources\EventAnnouncementResource;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
 use Filament\Actions;
@@ -26,6 +27,11 @@ class ManageEventAnnouncementExhibitorForms extends ManageRelatedRecords
     protected static string $relationship = 'exhibitorForms';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    public static function canAccess(array $parameters = []): bool
+    {
+        return auth()->user()->hasRole(Role::SUPER_ADMIN->value);
+    }
 
     public static function getNavigationLabel(): string
     {

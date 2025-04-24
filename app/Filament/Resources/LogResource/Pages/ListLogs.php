@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\LogResource\Pages;
 
 use App\Actions\LogActions;
+use App\Enums\Role;
 use App\Filament\Exports\LogExporter;
 use App\Filament\Resources\LogResource;
 
@@ -15,6 +16,11 @@ use Filament\Resources\Pages\ListRecords;
 class ListLogs extends ListRecords
 {
     protected static string $resource = LogResource::class;
+
+    public static function canAccess(array $parameters = []): bool
+    {
+        return auth()->user()->hasRole(Role::SUPER_ADMIN->value);
+    }
 
     protected function getHeaderActions(): array
     {

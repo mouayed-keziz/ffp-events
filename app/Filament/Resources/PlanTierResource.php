@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Role;
 use App\Filament\Navigation\Sidebar;
 use App\Filament\Resources\PlanTierResource\Pages;
 use App\Filament\Resources\PlanTierResource\RelationManagers;
@@ -90,11 +91,12 @@ class PlanTierResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value)),
                 ]),
             ]);
     }
@@ -111,6 +113,7 @@ class PlanTierResource extends Resource
         return [
             'index' => Pages\ListPlanTiers::route('/'),
             'create' => Pages\CreatePlanTier::route('/create'),
+            'view' => Pages\ViewPlanTier::route('/{record}'),
             'edit' => Pages\EditPlanTier::route('/{record}/edit'),
         ];
     }

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Role;
 use App\Filament\Navigation\Sidebar;
 use App\Filament\Resources\AdminResource\Pages;
 use App\Filament\Resources\AdminResource\RelationManagers;
@@ -25,6 +26,13 @@ class AdminResource extends Resource
     protected static ?string $navigationIcon = Sidebar::ADMIN["icon"];
     protected static ?int $navigationSort = Sidebar::ADMIN["sort"];
     protected static ?string $recordTitleAttribute = 'adminTitle';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()->hasRole(Role::SUPER_ADMIN->value);
+    }
+
+
     public static function getNavigationBadge(): ?string
     {
         return User::whereHas('roles', function ($query) {

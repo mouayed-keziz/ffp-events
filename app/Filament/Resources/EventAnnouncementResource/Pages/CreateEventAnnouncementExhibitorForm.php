@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 
+use App\Enums\Role;
 use App\Filament\Resources\EventAnnouncementResource;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
@@ -15,6 +16,11 @@ class CreateEventAnnouncementExhibitorForm extends CreateRelatedRecord
     protected static string $resource = EventAnnouncementResource::class;
 
     protected static string $relationship = 'exhibitorForms';
+
+    public static function canAccess(array $parameters = []): bool
+    {
+        return auth()->user()->hasRole(Role::SUPER_ADMIN->value);
+    }
 
     public function getTitle(): string
     {

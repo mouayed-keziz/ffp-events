@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Activity\CompanyInformationActivity;
+use App\Enums\Role;
 use App\Filament\Navigation\Sidebar;
 use App\Settings\CompanyInformationsSettings;
 use Filament\Forms;
@@ -16,6 +17,11 @@ class ManageCompanyInformations extends SettingsPage
     protected static string $settings = CompanyInformationsSettings::class;
     protected static ?string $navigationIcon = Sidebar::SETTINGS["icon"];
     protected static ?int $navigationSort = Sidebar::SETTINGS["sort"];
+
+    public static function canAccess(array $parameters = []): bool
+    {
+        return auth()->user()->hasRole(Role::SUPER_ADMIN->value);
+    }
 
     public function getTitle(): string
     {

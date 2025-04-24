@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\EventAnnouncementResource\Resource;
 
+use App\Enums\Role;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -87,10 +88,13 @@ class EventAnnouncementTable
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
+                        ->visible(auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                         ->label(__('panel/event_announcement.actions.delete')),
                     Tables\Actions\ForceDeleteBulkAction::make()
+                        ->visible(auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                         ->label(__('panel/event_announcement.actions.force_delete')),
                     Tables\Actions\RestoreBulkAction::make()
+                        ->visible(auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                         ->label(__('panel/event_announcement.actions.restore')),
                 ]),
             ]);

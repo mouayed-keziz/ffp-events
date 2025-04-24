@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\ExportType;
+use App\Enums\Role;
 use App\Filament\Navigation\Sidebar;
 use App\Filament\Resources\ExportResource\Pages;
 use App\Filament\Resources\ExportResource\Resource\ExportTable;
@@ -20,6 +21,11 @@ class ExportResource extends Resource
     protected static ?string $model = Export::class;
     protected static ?int $navigationSort = Sidebar::EXPORT["sort"];
     protected static ?string $navigationIcon = Sidebar::EXPORT["icon"];
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()->hasRole(Role::SUPER_ADMIN->value);
+    }
 
     public static function getNavigationBadge(): ?string
     {

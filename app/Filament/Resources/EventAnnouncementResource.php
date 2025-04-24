@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Role;
 use App\Filament\Navigation\Sidebar;
 use App\Filament\Resources\EventAnnouncementResource\Pages;
 use App\Models\EventAnnouncement;
@@ -80,6 +81,7 @@ class EventAnnouncementResource extends Resource
                 PageNavigationItem::make(__('panel/event_announcement.actions.edit'))
                     ->url(fn() => static::getUrl('edit', ['record' => $record->id]))
                     ->icon('heroicon-o-pencil')
+                    ->hidden(fn() => !auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     ->group($EDIT_GROUP)
                     ->isActiveWhen(
                         fn() =>
@@ -88,6 +90,7 @@ class EventAnnouncementResource extends Resource
                 PageNavigationItem::make(__('panel/event_announcement.actions.edit_terms'))
                     ->url(fn() => static::getUrl('edit-terms', ['record' => $record->id]))
                     ->icon('heroicon-o-document-text')
+                    ->hidden(fn() => !auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     ->group($EDIT_GROUP)
                     ->isActiveWhen(
                         fn() =>
@@ -96,6 +99,7 @@ class EventAnnouncementResource extends Resource
                 PageNavigationItem::make(__('panel/event_announcement.actions.edit_visitor_form'))
                     ->url(fn() => static::getUrl('edit-visitor-form', ['record' => $record->id]))
                     ->icon('heroicon-o-clipboard-document-check')
+                    ->hidden(fn() => !auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     ->group($EDIT_FORMS)
                     ->isActiveWhen(
                         fn() =>
@@ -104,12 +108,14 @@ class EventAnnouncementResource extends Resource
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_forms'))
                     ->url(fn() => static::getUrl('exhibitor-forms', ['record' => $record->id]))
                     ->icon('heroicon-o-clipboard-document-list')
+                    ->hidden(fn() => !auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     ->group($EDIT_FORMS)
                     ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementExhibitorForms::getRouteName()])),
 
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_post_payment_forms'))
                     ->url(fn() => static::getUrl('exhibitor-post-payment-forms', ['record' => $record->id]))
                     ->icon('heroicon-o-clipboard-document-list')
+                    ->hidden(fn() => !auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     ->group($EDIT_FORMS)
                     ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementExhibitorPostPaymentForms::getRouteName()])),
 

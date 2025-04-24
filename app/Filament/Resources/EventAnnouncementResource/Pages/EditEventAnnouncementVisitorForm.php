@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 
 use App\Enums\FormField;
+use App\Enums\Role;
 use App\Filament\Resources\EventAnnouncementResource;
 use App\Models\EventAnnouncement;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
@@ -23,6 +24,12 @@ class EditEventAnnouncementVisitorForm extends EditRecord
     use NestedPage;
 
     protected static string $resource = EventAnnouncementResource::class;
+
+    public static function canAccess(array $parameters = []): bool
+    {
+        return auth()->user()->hasRole(Role::SUPER_ADMIN->value);
+    }
+
 
     public function form(Form $form): Form
     {

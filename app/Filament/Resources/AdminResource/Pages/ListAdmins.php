@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\AdminResource\Pages;
 
+use App\Enums\Role as EnumsRole;
 use App\Filament\Resources\AdminResource;
 use App\Models\Role;
 use Filament\Actions;
@@ -18,6 +19,10 @@ class ListAdmins extends ListRecords
         return [
             Actions\CreateAction::make()->icon("heroicon-o-user-plus"),
         ];
+    }
+    public static function canAccess(array $parameters = []): bool
+    {
+        return auth()->user()->hasRole(EnumsRole::SUPER_ADMIN->value);
     }
 
     public function getTabs(): array

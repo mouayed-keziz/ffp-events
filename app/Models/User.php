@@ -84,13 +84,6 @@ class User extends Authenticatable implements HasMedia, FilamentUser
         return $this->hasMedia('image') ? $this->getFirstMediaUrl('image') : null;
     }
 
-    public function scopeExhibitors($query)
-    {
-        return $query->whereHas('roles', function ($q) {
-            $q->where('name', 'exhibitor');
-        });
-    }
-
     public function getVisitorTitleAttribute()
     {
         return __("panel/visitors.resource.single") . " - " . $this->name;

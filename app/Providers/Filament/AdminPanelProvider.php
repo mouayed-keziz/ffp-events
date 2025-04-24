@@ -101,6 +101,7 @@ class AdminPanelProvider extends PanelProvider
                     ->enabled(config("app.debug"), true)
                     ->users([
                         "super admin " => 'admin@admin.dev',
+                        "admin" => 'admin2@admin.dev',
                     ])
             ]);
     }

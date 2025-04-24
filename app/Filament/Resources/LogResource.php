@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Enums\LogEvent;
 use App\Enums\LogName;
+use App\Enums\Role;
 use App\Filament\Exports\LogExporter;
 use App\Filament\Navigation\Sidebar;
 use App\Filament\Resources\LogResource\Pages;
@@ -20,6 +21,12 @@ class LogResource extends Resource
     protected static ?string $model = Log::class;
     protected static ?int $navigationSort = Sidebar::LOG["sort"];
     protected static ?string $navigationIcon = Sidebar::LOG["icon"];
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()->hasRole(Role::SUPER_ADMIN->value);
+    }
+
     // public static function getNavigationBadge(): ?string
     // {
     //     return static::getModel()::count();

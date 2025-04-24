@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Role;
 use App\Filament\Resources\BannerResource\Pages;
 use App\Models\Banner;
 use App\Filament\Navigation\Sidebar;
@@ -25,6 +26,11 @@ class BannerResource extends Resource
     protected static ?string $model = Banner::class;
     protected static ?int $navigationSort = Sidebar::BANNER["sort"];
     protected static ?string $navigationIcon = Sidebar::BANNER["icon"];
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return auth()->user()->hasRole(Role::SUPER_ADMIN->value);
+    }
 
     public static function getNavigationBadgeColor(): ?string
     {
