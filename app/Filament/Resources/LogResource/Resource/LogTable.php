@@ -37,7 +37,27 @@ class LogTable
                 ->sortable()
                 ->toggleable()
                 ->label(__('panel/logs.columns.causer'))
-                ->placeholder(__('panel/logs.empty_states.causer')),
+                ->placeholder(__('panel/logs.empty_states.causer'))
+                ->url(function ($record) {
+                    if (!$record->causer) {
+                        return null;
+                    }
+
+                    $causerType = class_basename($record->causer_type);
+                    $causerId = $record->causer_id;
+
+                    if ($causerType === 'User') {
+                        return route('filament.admin.resources.admins.view', ['record' => $causerId]);
+                    } elseif ($causerType === 'Exhibitor') {
+                        return route('filament.admin.resources.exhibitors.view', ['record' => $causerId]);
+                    } elseif ($causerType === 'Visitor') {
+                        return route('filament.admin.resources.visitors.view', ['record' => $causerId]);
+                    }
+                    return null;
+                }),
+            Tables\Columns\TextColumn::make('causer.roles.name')->badge()
+                ->toggleable()
+                ->placeholder(__('panel/admins.empty_states.roles')),
 
             Tables\Columns\TextColumn::make('event')
                 ->badge()
