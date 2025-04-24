@@ -27,7 +27,9 @@ class AdminResource extends Resource
     protected static ?string $recordTitleAttribute = 'adminTitle';
     public static function getNavigationBadge(): ?string
     {
-        return User::admins()->count();
+        return User::whereHas('roles', function ($query) {
+            $query->whereIn('name', ['admin', 'super_admin']);
+        })->count();
     }
     public static function getNavigationBadgeColor(): ?string
     {
@@ -84,7 +86,9 @@ class AdminResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->admins()
+            ->whereHas('roles', function ($query) {
+                $query->whereIn('name', ['admin', 'super_admin']);
+            })
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);

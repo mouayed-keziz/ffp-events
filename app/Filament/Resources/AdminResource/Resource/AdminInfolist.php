@@ -23,7 +23,18 @@ class AdminInfolist
                     Infolists\Components\TextEntry::make('roles.name')
                         ->label(__('panel/admins.columns.roles'))
                         ->badge()
-                        ->color("gray")
+                        ->formatStateUsing(function ($state, $record) {
+                            $role = $record->roles->first()?->name;
+                            return $role ? \App\Enums\Role::tryFrom($role)?->getLabel() ?? $role : null;
+                        })
+                        ->color(function ($record) {
+                            $role = $record->roles->first()?->name;
+                            return $role ? \App\Enums\Role::tryFrom($role)?->getColor() : "gray";
+                        })
+                        ->icon(function ($record) {
+                            $role = $record->roles->first()?->name;
+                            return $role ? \App\Enums\Role::tryFrom($role)?->getIcon() : null;
+                        })
                         ->default(__('panel/admins.empty_states.roles')),
 
                     Infolists\Components\TextEntry::make('created_at')

@@ -12,42 +12,38 @@ class AdminForm
         return $form
             ->schema([
                 Forms\Components\Section::make([
-                    Forms\Components\Section::make("hello")
-                        ->schema([
-                            Forms\Components\KeyValue::make('test')
-                                ->label('Test')
-                                ->keyLabel('Currency')
-                                ->valueLabel('Price'),
-                        ]),
+
                     Forms\Components\TextInput::make('name')
                         ->label(__('panel/admins.form.name'))
                         ->required()
-                        ->maxLength(255)
-                        ->suffixAction(
-                            Forms\Components\Actions\Action::make('setStaticPrices')
-                                ->label('Set Static Prices')
-                                ->icon('heroicon-o-plus')
-                                ->action(function ($set) {
-                                    // Set static prices for the KeyValue input
-                                    $staticPrices = [
-                                        'EUR' => 100,
-                                        'USD' => 120,
-                                    ];
-                                    $set('test', $staticPrices);
-                                })
-                        ),
+                        ->maxLength(255),
 
                     Forms\Components\TextInput::make('email')
                         ->label(__('panel/admins.form.email'))
                         ->email()
                         ->required()
+                        ->unique(table: 'users', ignorable: fn($record) => $record)
+                        ->unique(table: 'exhibitors')
+                        ->unique(table: 'visitors')
                         ->maxLength(255),
 
                     Forms\Components\TextInput::make('password')
                         ->label(__('panel/admins.form.password'))
                         ->password()
-                        ->required()
+                        ->required(fn(string $operation): bool => $operation === 'create')
+                        ->visible(fn(string $operation): bool => $operation === 'create')
                         ->maxLength(255),
+
+                    Forms\Components\Select::make('roles')
+                        ->label(__('panel/admins.form.roles'))
+                        ->placeholder(__('panel/admins.empty_states.roles'))
+                        ->relationship('roles', 'name')
+                        ->options([
+                            'admin' => \App\Enums\Role::ADMIN->getLabel(),
+                            'super_admin' => \App\Enums\Role::SUPER_ADMIN->getLabel(),
+                        ])
+                        ->preload()
+                        ->searchable(),
                 ])
             ]);
     }

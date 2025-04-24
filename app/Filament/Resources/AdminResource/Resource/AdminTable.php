@@ -4,6 +4,7 @@ namespace App\Filament\Resources\AdminResource\Resource;
 
 use App\Filament\Resources\AdminResource\Resource\AdminActions;
 use App\Models\User;
+use App\Enums\Role;
 use Filament\Tables;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
@@ -31,6 +32,18 @@ class AdminTable
                     ->searchable()
                     ->label(__('panel/admins.columns.roles'))
                     ->badge()
+                    ->formatStateUsing(function ($state, User $record) {
+                        $role = $record->roles->first()?->name;
+                        return $role ? Role::tryFrom($role)?->getLabel() ?? $role : null;
+                    })
+                    ->color(function (User $record) {
+                        $role = $record->roles->first()?->name;
+                        return $role ? Role::tryFrom($role)?->getColor() : null;
+                    })
+                    ->icon(function (User $record) {
+                        $role = $record->roles->first()?->name;
+                        return $role ? Role::tryFrom($role)?->getIcon() : null;
+                    })
                     ->default(__('panel/admins.empty_states.roles')),
 
                 Tables\Columns\TextColumn::make('created_at')
@@ -51,13 +64,17 @@ class AdminTable
                     }),
             ])
             ->filters([
-                // SelectFilter::make('roles')
-                //     ->label(__('panel/admins.filters.roles.label'))
-                //     ->placeholder(__('panel/admins.filters.roles.placeholder'))
-                //     ->multiple()
-                //     ->relationship('roles', 'name')
-                //     ->preload()
-                //     ->searchable(),
+                SelectFilter::make('roles')
+                    ->label(__('panel/admins.filters.roles.label'))
+                    ->placeholder(__('panel/admins.filters.roles.placeholder'))
+                    ->multiple()
+                    ->options([
+                        'admin' => Role::ADMIN->getLabel(),
+                        'super_admin' => Role::SUPER_ADMIN->getLabel(),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $data['values'] ? $query->whereHas('roles', fn($q) => $q->whereIn('name', $data['values'])) : $query;
+                    }),
 
                 SelectFilter::make('verified')
                     ->label(__('panel/admins.filters.verification.label'))

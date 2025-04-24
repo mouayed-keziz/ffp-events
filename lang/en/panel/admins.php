@@ -18,6 +18,7 @@ return [
         'name' => 'Name',
         'email' => 'Email',
         'password' => 'Password',
+        'roles' => 'Roles',
     ],
     'empty_states' => [
         'title' => 'No admins yet',

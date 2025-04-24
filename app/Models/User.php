@@ -73,12 +73,6 @@ class User extends Authenticatable implements HasMedia, FilamentUser
             $q->where('name', 'exhibitor');
         });
     }
-    public function scopeAdmins($query)
-    {
-        return $query->whereHas('roles', function ($q) {
-            $q->where('name', 'admin');
-        });
-    }
 
     public function getVisitorTitleAttribute()
     {
