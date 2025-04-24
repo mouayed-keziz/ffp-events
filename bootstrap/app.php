@@ -18,7 +18,11 @@ return Application::configure(basePath: dirname(__DIR__))
             'is_exhibitor'    => \App\Http\Middleware\IsExhibitor::class,
             'is_visitor'      => \App\Http\Middleware\IsVisitor::class,
             'is_guest'        => \App\Http\Middleware\GuestOnly::class,
+            'custom.session.lifetime' => \App\Http\Middleware\CustomSessionLifetime::class,
         ]);
+
+        // Apply our custom session lifetime middleware globally
+        $middleware->prependToGroup('web', \App\Http\Middleware\CustomSessionLifetime::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
