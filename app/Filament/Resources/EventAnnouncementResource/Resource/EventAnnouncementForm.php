@@ -114,11 +114,11 @@ class EventAnnouncementForm
                                         ->required()
                                         ->label(__('panel/event_announcement.fields.contact_phone_number')),
                                 ]),
-                            Forms\Components\Select::make('currencies')
-                                ->multiple()
-                                ->options(Currency::class)
-                                ->required()
-                                ->label(__('panel/event_announcement.fields.currencies')),
+                            // Forms\Components\Select::make('currencies')
+                            //     ->multiple()
+                            //     ->options(Currency::class)
+                            //     ->required()
+                            //     ->label(__('panel/event_announcement.fields.currencies')),
                         ]),
                     // Media
                     Forms\Components\Tabs\Tab::make(__('panel/event_announcement.tabs.media'))
