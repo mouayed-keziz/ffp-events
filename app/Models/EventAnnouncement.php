@@ -11,6 +11,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Log;
 
 class EventAnnouncement extends Model implements HasMedia
 {
@@ -164,33 +165,44 @@ class EventAnnouncement extends Model implements HasMedia
             }
         }
 
-        // Clone related forms
-        // 1. Clone visitor form if exists
-        if ($visitorForm = $this->visitorForm) {
-            $clonedVisitorForm = $visitorForm->replicate();
-            $clonedVisitorForm->event_announcement_id = $clone->id;
-            $clonedVisitorForm->save();
-
-            // Clone form fields if needed
-            // (This depends on your schema, adjust as necessary)
+        // The observer will automatically create an empty visitor form
+        // We need to copy the sections from the original visitor form
+        $visitorForm = $this->visitorForm()->first();
+        if ($visitorForm && $clone->visitorForm) {
+            // Update the automatically created visitor form with sections from the original
+            $clone->visitorForm->sections = $visitorForm->sections;
+            $clone->visitorForm->save();
+            Log::info('Updated cloned visitor form with sections from original form for event: ' . $clone->id);
         }
 
-        // 2. Clone exhibitor forms if exist
+        // Clone exhibitor forms if they exist
         foreach ($this->exhibitorForms as $exhibitorForm) {
             $clonedExhibitorForm = $exhibitorForm->replicate();
             $clonedExhibitorForm->event_announcement_id = $clone->id;
             $clonedExhibitorForm->save();
 
-            // Clone form fields if needed
+            // Clone media for the exhibitor form
+            if ($exhibitorForm->hasMedia('images')) {
+                $media = $exhibitorForm->getMedia('images')->first();
+                if ($media) {
+                    $media->copy($clonedExhibitorForm, 'images');
+                }
+            }
         }
 
-        // 3. Clone exhibitor post payment forms if exist
+        // Clone exhibitor post payment forms if they exist
         foreach ($this->exhibitorPostPaymentForms as $postPaymentForm) {
             $clonedPostPaymentForm = $postPaymentForm->replicate();
             $clonedPostPaymentForm->event_announcement_id = $clone->id;
             $clonedPostPaymentForm->save();
 
-            // Clone form fields if needed
+            // Clone media for the exhibitor post payment form
+            if ($postPaymentForm->hasMedia('images')) {
+                $media = $postPaymentForm->getMedia('images')->first();
+                if ($media) {
+                    $media->copy($clonedPostPaymentForm, 'images');
+                }
+            }
         }
 
         return $clone;
