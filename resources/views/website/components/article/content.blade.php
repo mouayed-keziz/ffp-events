@@ -9,6 +9,7 @@
     <div class="flex justify-between items-center my-6">
         @include('website.components.article.tags', ['tags' => $article->categories])
         @livewire('website.share', [
+            'id' => 'content',
             'title' => $article->title,
             'description' => $article->description,
             'url' => route('article', $article),

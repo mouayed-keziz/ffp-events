@@ -12,6 +12,7 @@ class EventAnnouncementForm
     {
         return $form->schema([
             Forms\Components\Tabs::make(__('panel/event_announcement.resource.label'))
+                ->persistTabInQueryString()
                 ->columnSpanFull()
                 ->tabs([
                     // General Information (removed location and website_url)

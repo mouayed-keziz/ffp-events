@@ -40,6 +40,7 @@
                     @endif
                 </div>
                 @livewire('website.share', [
+                    'id' => 'banner',
                     'title' => $event->title,
                     'description' => $event->description,
                     'url' => route('event_details', $event),

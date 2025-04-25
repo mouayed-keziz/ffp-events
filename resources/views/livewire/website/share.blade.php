@@ -10,9 +10,10 @@ new class extends Component {
     public $instagramLink;
     public $url;
     public $model;
-
-    public function mount($title = '', $description = '', $url = '', $model = null)
+    public $id;
+    public function mount($title = '', $description = '', $url = '', $model = null, $id = null)
     {
+        $this->id = $id;
         $this->title = $title;
         $this->description = $description;
         $this->url = $url;
@@ -130,7 +131,7 @@ new class extends Component {
             x-transition:leave-end="opacity-0 {{ $this->isRtl() ? 'md:-translate-x-4' : 'md:translate-x-4' }} -translate-y-4 md:translate-y-0 scale-50"
             class="btn btn-circle btn-md md:btn-md bg-white text-gray-800 shadow-md transform scale-90 mb-1 md:mb-0 md:mx-0.5 hover:scale-100 hover:bg-gray-50 transition-all"
             style="transition-delay: 80ms;" wire:click="shareToInstagram">
-            @include('website.svg.share.instagram')
+            @include('website.svg.share.instagram', ['id' => $id])
         </button>
 
         <!-- LinkedIn -->

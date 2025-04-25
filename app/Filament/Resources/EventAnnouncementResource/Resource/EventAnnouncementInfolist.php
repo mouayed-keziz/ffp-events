@@ -14,6 +14,7 @@ class EventAnnouncementInfolist
         return $infolist
             ->schema([
                 Tabs::make(__('panel/event_announcement.resource.label'))
+                    ->persistTabInQueryString()
                     ->columnSpan(2)
                     ->tabs([
                         // General Tab
@@ -77,11 +78,11 @@ class EventAnnouncementInfolist
                                         Infolists\Components\TextEntry::make('contact.phone_number')
                                             ->label(__('panel/event_announcement.fields.contact_phone_number')),
                                     ]),
-                                Section::make(__('Currencies'))
-                                    ->schema([
-                                        Infolists\Components\TextEntry::make('currencies')
-                                            ->label(__('panel/event_announcement.fields.currencies')),
-                                    ]),
+                                // Section::make(__('Currencies'))
+                                //     ->schema([
+                                //         Infolists\Components\TextEntry::make('currencies')
+                                //             ->label(__('panel/event_announcement.fields.currencies')),
+                                //     ]),
                             ]),
                         // Media Tab
                         Tabs\Tab::make(__('panel/event_announcement.tabs.media'))

@@ -43,6 +43,7 @@
                 </div>
                 {{-- Share Button --}}
                 @livewire('website.share', [
+                    'id' => 'banner',
                     'title' => $article->title,
                     'description' => $article->description,
                     'url' => route('article', $article),
