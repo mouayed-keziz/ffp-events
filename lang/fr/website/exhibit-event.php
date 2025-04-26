@@ -47,5 +47,8 @@ return [
     'upload_payment_proof_for' => 'Téléverser la preuve de paiement pour exposer à',
 
     'total_order' => "Total du bon de commande",
-    "total" => "Total"
+    "total" => "Total",
+
+    // Terms and conditions
+    'terms_and_conditions' => 'Termes et conditions de participation et exposition de',
 ];

@@ -48,4 +48,7 @@ return [
 
     'total_order' => 'Purchase order total',
     'total' => 'Total',
+
+    // Terms and Conditions
+    'terms_and_conditions' => 'Terms and Conditions of Participation and Exhibition at',
 ];

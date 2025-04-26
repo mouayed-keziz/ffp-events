@@ -58,7 +58,7 @@
                             class="checkbox rounded-lg {{ $errors->has('terms_accepted') ? 'checkbox-error' : '' }}">
                         <span class="label-text font-semibold text-neutral">
                             {{ __('website/visit-event.terms_acceptance') }}
-                            <a target="_blank" href="#"
+                            <a target="_blank" href="{{ route('event_terms_and_conditions', ['id' => $event->id]) }}"
                                 class="link link-primary">{{ __('website/visit-event.terms_and_conditions') }}</a>
                         </span>
                     </div>

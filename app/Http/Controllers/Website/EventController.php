@@ -220,4 +220,15 @@ class EventController extends Controller
             "submission" => $exhibitor_submission
         ]);
     }
+
+    public static function TermsAndConditions($id)
+    {
+        $event = EventAnnouncement::find($id);
+        if (!$event) {
+            return redirect()->route('events');
+        }
+        return view('website.pages.events.terms-and-conditions', [
+            'event' => $event
+        ]);
+    }
 }

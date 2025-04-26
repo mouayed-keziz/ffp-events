@@ -48,4 +48,7 @@ return [
 
     'total_order' => 'إجمالي طلب الشراء',
     'total' => 'الإجمالي',
+
+    // Terms and conditions
+    'terms_and_conditions' => 'شروط وأحكام المشاركة والمعرض في',
 ];
