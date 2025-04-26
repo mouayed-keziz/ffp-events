@@ -30,6 +30,7 @@ class ArticlesRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->recordTitleAttribute('title')
             ->columns(ArticleTable::ArticleColumns())
             ->filters([

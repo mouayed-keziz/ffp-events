@@ -16,14 +16,40 @@ class ExhibitorExporter extends Exporter
         return [
             ExportColumn::make('id')
                 ->label('ID'),
-            ExportColumn::make('name'),
-            ExportColumn::make('email'),
-            ExportColumn::make('verified_at'),
-            ExportColumn::make('currency'),
-            ExportColumn::make('created_at'),
-            ExportColumn::make('updated_at'),
-            ExportColumn::make('deleted_at'),
-            ExportColumn::make('new_email'),
+
+            ExportColumn::make('name')
+                ->label('Name'),
+
+            ExportColumn::make('email')
+                ->label('Email Address'),
+
+            // Fix Currency enum conversion to string
+            ExportColumn::make('currency')
+                ->label('Currency')
+                ->state(function (Exhibitor $record) {
+                    // Convert Currency enum to string
+                    return $record->currency ? $record->currency->value : null;
+                }),
+
+            // Add submissions count
+            ExportColumn::make('submissions_count')
+                ->label('Number of Submissions')
+                ->state(fn(Exhibitor $record) => $record->submissions()->count()),
+
+            ExportColumn::make('verified_at')
+                ->label('Verification Date'),
+
+            ExportColumn::make('new_email')
+                ->label('New Email Address'),
+
+            ExportColumn::make('created_at')
+                ->label('Created Date'),
+
+            ExportColumn::make('updated_at')
+                ->label('Last Updated'),
+
+            ExportColumn::make('deleted_at')
+                ->label('Deleted Date'),
         ];
     }
 

@@ -6,10 +6,16 @@ use App\Models\User;
 use Filament\Actions\Exports\ExportColumn;
 use Filament\Actions\Exports\Exporter;
 use Filament\Actions\Exports\Models\Export;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserExporter extends Exporter
 {
     protected static ?string $model = User::class;
+
+    // protected static function getEloquentQuery(): Builder
+    // {
+    //     return parent::getEloquentQuery()->with('roles');
+    // }
 
     public static function getColumns(): array
     {
@@ -18,6 +24,12 @@ class UserExporter extends Exporter
                 ->label('ID'),
             ExportColumn::make('name'),
             ExportColumn::make('email'),
+            ExportColumn::make('roles')
+                ->getStateUsing(function (User $record): string {
+                    return $record->roles->pluck('name')->map(function ($role) {
+                        return $role instanceof \App\Enums\Role ? $role->getLabel() : $role;
+                    })->join(', ');
+                }),
             ExportColumn::make('verified_at'),
             ExportColumn::make('created_at'),
             ExportColumn::make('updated_at'),

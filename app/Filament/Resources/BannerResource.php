@@ -95,6 +95,7 @@ class BannerResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->reorderable("order")
             ->columns([
                 ImageColumn::make('image')

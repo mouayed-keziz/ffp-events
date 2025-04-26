@@ -36,5 +36,12 @@ return [
 
     'type' => [
         'log' => 'Export des journaux',
+        'article' => 'Export des articles',
+        'event_announcement' => 'Export des annonces d\'événement',
+        'user' => 'Export des utilisateurs',
+        'category' => 'Export des catégories',
+        'exhibitor' => 'Export des exposants',
+        'product' => 'Export des produits',
+        'visitor' => 'Export des visiteurs',
     ],
 ];

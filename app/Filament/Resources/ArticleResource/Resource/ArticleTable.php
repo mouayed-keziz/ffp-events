@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\ArticleResource\Resource;
 
+use App\Filament\Exports\ArticleExporter;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Tables\Actions\ExportBulkAction;
 
 class ArticleTable
 {
@@ -103,6 +105,13 @@ class ArticleTable
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
+            ->headerActions([
+                Tables\Actions\ExportAction::make()
+                    // ->label(__("panel/logs.actions.export.label"))
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->exporter(ArticleExporter::class)
+            ])
             ->columns(self::ArticleColumns())
             ->filters([
                 // Tables\Filters\TrashedFilter::make(),
@@ -113,6 +122,9 @@ class ArticleTable
                 Tables\Actions\EditAction::make()->button()->outlined(),
             ])
             ->bulkActions([
+                ExportBulkAction::make()
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->exporter(ArticleExporter::class),
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
                         ->visible(fn($livewire) => ! $livewire->isDeletedTab()),

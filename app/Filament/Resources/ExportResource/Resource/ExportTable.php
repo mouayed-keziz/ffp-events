@@ -3,9 +3,11 @@
 namespace App\Filament\Resources\ExportResource\Resource;
 
 use App\Enums\ExportType;
+use App\Filament\Exports\ExportExporter;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms;
 use Filament\Tables;
+use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,6 +25,7 @@ class ExportTable
 
             Tables\Columns\TextColumn::make('exporter')
                 ->searchable()
+                ->badge()
                 ->sortable()
                 ->toggleable()
                 ->label(__('panel/exports.columns.exporter'))
@@ -78,7 +81,7 @@ class ExportTable
             Tables\Columns\TextColumn::make('completed_at')
                 ->toggleable()
                 ->sortable()
-                ->tooltip(fn($record) => $record->completed_at->diffForHumans())
+                ->tooltip(fn($record) => $record->completed_at?->diffForHumans())
                 ->label(__('panel/exports.columns.completed_at'))
                 ->dateTime()
                 ->placeholder('-'),
@@ -88,6 +91,13 @@ class ExportTable
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
+            ->headerActions([
+                Tables\Actions\ExportAction::make()
+                    // ->label(__("panel/logs.actions.export.label"))
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->exporter(ExportExporter::class)
+            ])
             ->columns(self::ExportColumns())
             ->filters([
                 Tables\Filters\Filter::make('created_at')
@@ -141,6 +151,9 @@ class ExportTable
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
+                ExportBulkAction::make()
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->exporter(ExportExporter::class),
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),

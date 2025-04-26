@@ -3,17 +3,26 @@
 namespace App\Filament\Resources\EventAnnouncementResource\Resource;
 
 use App\Enums\Role;
+use App\Filament\Exports\EventAnnouncementExporter;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Actions\Action;
 use App\Models\EventAnnouncement;
+use Filament\Tables\Actions\ExportBulkAction;
 
 class EventAnnouncementTable
 {
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
+            ->headerActions([
+                Tables\Actions\ExportAction::make()
+                    // ->label(__("panel/logs.actions.export.label"))
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->exporter(EventAnnouncementExporter::class)
+            ])
             ->columns([
                 Tables\Columns\ImageColumn::make('image')
                     ->label(__('panel/event_announcement.fields.image'))
@@ -108,6 +117,9 @@ class EventAnnouncementTable
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    ExportBulkAction::make()
+                        ->icon('heroicon-o-arrow-down-tray')
+                        ->exporter(EventAnnouncementExporter::class),
                     Tables\Actions\DeleteBulkAction::make()
                         ->visible(fn() => auth()->check() && auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                         ->label(__('panel/event_announcement.actions.delete')),

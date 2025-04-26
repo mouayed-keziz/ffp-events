@@ -81,6 +81,7 @@ class PaymentSlicesRelationManager extends RelationManager
         $exhibitorActions = new ExhibitorSubmissionActions();
 
         return $table
+            ->defaultSort('created_at', 'desc')
             ->reorderable('sort')
             ->columns([
                 Tables\Columns\TextColumn::make('price')

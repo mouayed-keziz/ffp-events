@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Enums\Role;
+use App\Filament\Exports\ProductExporter;
 use App\Filament\Navigation\Sidebar;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
@@ -20,6 +21,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Actions\ExportBulkAction;
 
 class ProductResource extends Resource
 {
@@ -102,6 +104,13 @@ class ProductResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
+            ->headerActions([
+                Tables\Actions\ExportAction::make()
+                    // ->label(__("panel/logs.actions.export.label"))
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->exporter(ProductExporter::class)
+            ])
             ->columns([
                 ImageColumn::make('image')
                     ->label(__("panel/product.image"))
@@ -125,6 +134,9 @@ class ProductResource extends Resource
                 Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
+                ExportBulkAction::make()
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->exporter(ProductExporter::class),
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()
                         ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value)),
