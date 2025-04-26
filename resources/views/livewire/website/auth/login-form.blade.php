@@ -51,7 +51,7 @@ new class extends Component {
 <div class="flex justify-center mt-16">
     <div class="card w-full max-w-md shadow-lg bg-white rounded-lg p-6">
         <h2 class="text-xl font-bold text-center mb-6">{{ __('website/login.title') }}</h2>
-        <form wire:submit.prevent="login" method="POST">
+        <form wire:submit.prevent="login">
             @csrf
             <div class="form-control mb-4">
                 <label class="label">
