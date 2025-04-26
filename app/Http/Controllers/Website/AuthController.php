@@ -25,7 +25,7 @@ class AuthController extends Controller
         $email = request()->query('email');
         $token = DB::table('password_reset_tokens')->where('email', $email)->first();
         if (!$token) {
-            return redirect()->route('login');
+            return redirect()->route('signin');
         }
         return view('website.pages.auth.email-sent', ["email" => $email]);
     }

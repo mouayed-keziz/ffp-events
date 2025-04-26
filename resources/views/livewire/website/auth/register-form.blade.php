@@ -126,7 +126,7 @@ new class extends Component {
             <!-- Already have an account -->
             <div class="text-center text-sm text-neutral-500">
                 <span>{{ __('website/register.already_have_account') }}</span>
-                <a href="{{ route('login') }}" class="link link-primary">{{ __('website/register.login') }}</a>
+                <a href="{{ route('signin') }}" class="link link-primary">{{ __('website/register.login') }}</a>
             </div>
         </form>
     </div>

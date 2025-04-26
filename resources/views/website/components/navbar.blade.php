@@ -48,7 +48,7 @@
                                 @if (checkUser())
                                     @livewire('website.user-menu')
                                 @else
-                                    <a href="{{ route('login') }}"
+                                    <a href="{{ route('signin') }}"
                                         class="btn btn-outline text-[1rem] border-base-200 border-2">
                                         {{ __('website/navbar.login') }}
                                     </a>
@@ -97,7 +97,7 @@
                 @if (checkUser())
                     {{-- Optionally include the user menu in drawer if needed --}}
                 @else
-                    <a href="{{ route('login') }}" class="btn btn-outline text-[1rem] border-base-200 border-2">
+                    <a href="{{ route('signin') }}" class="btn btn-outline text-[1rem] border-base-200 border-2">
                         {{ __('website/navbar.login') }}
                     </a>
                     <a href="{{ route('register') }}" class="btn btn-primary text-[1rem]">

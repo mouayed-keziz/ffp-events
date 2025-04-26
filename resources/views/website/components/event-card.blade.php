@@ -47,7 +47,7 @@
                             (Auth::guard('visitor')->check() && !empty($event->visitorForm->sections))))
                     <a href="{{ Auth::guard('web')->check() || Auth::guard('exhibitor')->check() || Auth::guard('visitor')->check()
                         ? route('event_details', ['id' => $event['id']])
-                        : route('login') }}"
+                        : route('signin') }}"
                         class="btn text-[1rem] font-bold btn-outline border-base-200 border-2 flex-1 normal-case">
                         {{ __('website/home.events.visit') }}
                     </a>
@@ -63,7 +63,7 @@
                         (Auth::guard('exhibitor')->check() && !empty($event->exhibitorForms->toArray())))
                     <a href="{{ Auth::guard('web')->check() || Auth::guard('exhibitor')->check() || Auth::guard('visitor')->check()
                         ? route('event_details', ['id' => $event['id']])
-                        : route('login') }}"
+                        : route('signin') }}"
                         class="btn text-[1rem] font-bold btn-primary flex-1 normal-case">
                         {{ __('website/home.events.exhibit') }}
                     </a>

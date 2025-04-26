@@ -19,6 +19,6 @@ class IsExhibitor
         if (auth()->guard('exhibitor')->check()) {
             return $next($request);
         }
-        return redirect()->guest(route('login'));
+        return redirect()->guest(route('signin'));
     }
 }

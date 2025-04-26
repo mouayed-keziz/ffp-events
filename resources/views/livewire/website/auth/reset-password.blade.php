@@ -20,7 +20,7 @@ new class extends Component {
 
         $record = DB::table('password_reset_tokens')->where('token', $this->token)->first();
         if (!$record) {
-            return redirect()->route('login');
+            return redirect()->route('signin');
         }
 
         // Check if token is less than 24 hours old
@@ -38,11 +38,11 @@ new class extends Component {
         } elseif ($this->user === 'visitor') {
             $model = \App\Models\Visitor::class;
         } else {
-            return redirect()->route('login');
+            return redirect()->route('signin');
         }
         $userRecord = $model::where('email', $this->email)->first();
         if (!$userRecord) {
-            return redirect()->route('login');
+            return redirect()->route('signin');
         }
     }
 
@@ -62,12 +62,12 @@ new class extends Component {
             $model = \App\Models\Visitor::class;
             $guard = 'visitor';
         } else {
-            return redirect()->route('login');
+            return redirect()->route('signin');
         }
 
         $userRecord = $model::where('email', $this->email)->first();
         if (!$userRecord) {
-            return redirect()->route('login');
+            return redirect()->route('signin');
         }
 
         $userRecord->password = Hash::make($this->password);

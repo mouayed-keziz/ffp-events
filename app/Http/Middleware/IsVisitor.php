@@ -18,6 +18,6 @@ class IsVisitor
         if (auth()->guard('visitor')->check()) {
             return $next($request);
         }
-        return redirect()->guest(route('login'));
+        return redirect()->guest(route('signin'));
     }
 }

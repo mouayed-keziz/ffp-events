@@ -19,6 +19,6 @@ class IsAdmin
         if (auth()->guard('web')->check()) {
             return $next($request);
         }
-        return redirect()->guest(route('login'));
+        return redirect()->guest(route('signin'));
     }
 }

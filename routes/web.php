@@ -50,8 +50,8 @@ Route::middleware('local_middleware')->group(function () {
 
     Route::prefix("auth")->group(function () {
         Route::middleware("is_guest")->group(function () {
-            Route::get('/login', [AuthController::class, 'LogIn'])->name('login');
-            Route::post("/login", fn() => redirect()->route("login"));
+            Route::get('/login', [AuthController::class, 'LogIn'])->name('signin');
+            Route::post("/login", fn() => redirect()->route('signin'));
             Route::get('/register', [AuthController::class, 'Register'])->name('register');
             Route::get('/restore-account', [AuthController::class, 'RestoreAccount'])->name('restore-account');
             Route::get('/email-sent', [AuthController::class, 'EmailSent'])->name('email-sent');

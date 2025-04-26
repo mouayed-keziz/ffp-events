@@ -117,7 +117,7 @@ new class extends Component {
         session()->invalidate();
         session()->regenerateToken();
 
-        $this->redirectRoute('login');
+        $this->redirectroute('signin');
     }
 }; ?>
 
