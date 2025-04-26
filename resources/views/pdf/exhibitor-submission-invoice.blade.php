@@ -361,10 +361,7 @@ $pageInfo = 'Page: 1 / ' . $totalPages;
                         <td class="label">Sous-total</td>
                         <td class="text-right">{{ $subtotal }}</td>
                     </tr>
-                    <tr>
-                        <td class="label">Total Discount</td>
-                        <td class="text-right">{{ $discount }}</td>
-                    </tr>
+                 
                     <tr>
                         <td class="label">TVA {{ $settings->tva }}%</td>
                         <td class="text-right">{{ $vat }}</td>

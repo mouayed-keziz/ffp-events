@@ -43,7 +43,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->spa(true)
             ->login()
-            ->profile(isSimple: false)
+            // ->profile(isSimple: false)
             ->databaseNotifications()
             ->databaseNotificationsPolling("30s")
             ->databaseTransactions()
