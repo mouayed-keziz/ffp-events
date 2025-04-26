@@ -29,8 +29,14 @@ class ListAdmins extends ListRecords
     {
         return [
             'all' => Tab::make(__('panel/admins.tabs.all'))
+                ->modifyQueryUsing(
+                    fn(Builder $query) =>
+                    $query->whereNull('deleted_at')
+                        ->whereHas('roles', fn(Builder $q) => $q->whereIn('name', ['admin', 'super_admin']))
+                )
                 ->badge(function () {
                     return $this->getModel()::query()
+                        ->whereNull('deleted_at')
                         ->whereHas('roles', fn(Builder $query) => $query->whereIn('name', ['admin', 'super_admin']))
                         ->count();
                 }),
@@ -38,10 +44,12 @@ class ListAdmins extends ListRecords
             'admin' => Tab::make(__('panel/admins.tabs.admin'))
                 ->modifyQueryUsing(
                     fn(Builder $query) =>
-                    $query->whereHas('roles', fn(Builder $q) => $q->where('name', 'admin'))
+                    $query->whereNull('deleted_at')
+                        ->whereHas('roles', fn(Builder $q) => $q->where('name', 'admin'))
                 )
                 ->badge(function () {
                     return $this->getModel()::query()
+                        ->whereNull('deleted_at')
                         ->whereHas('roles', fn(Builder $query) => $query->where('name', 'admin'))
                         ->count();
                 }),
@@ -49,10 +57,12 @@ class ListAdmins extends ListRecords
             'super_admin' => Tab::make(__('panel/admins.tabs.super_admin'))
                 ->modifyQueryUsing(
                     fn(Builder $query) =>
-                    $query->whereHas('roles', fn(Builder $q) => $q->where('name', 'super_admin'))
+                    $query->whereNull('deleted_at')
+                        ->whereHas('roles', fn(Builder $q) => $q->where('name', 'super_admin'))
                 )
                 ->badge(function () {
                     return $this->getModel()::query()
+                        ->whereNull('deleted_at')
                         ->whereHas('roles', fn(Builder $query) => $query->where('name', 'super_admin'))
                         ->count();
                 }),
