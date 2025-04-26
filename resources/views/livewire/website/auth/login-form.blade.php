@@ -51,7 +51,7 @@ new class extends Component {
 <div class="flex justify-center mt-16">
     <div class="card w-full max-w-md shadow-lg bg-white rounded-lg p-6">
         <h2 class="text-xl font-bold text-center mb-6">{{ __('website/login.title') }}</h2>
-        <form wire:submit.prevent="login">
+        <div>
             @csrf
             <div class="form-control mb-4">
                 <label class="label">
@@ -82,7 +82,7 @@ new class extends Component {
             </div>
 
             <div class="form-control mb-6">
-                <button type="submit"
+                <button wire:click="login" type="button"
                     class="btn btn-neutral w-full rounded-lg">{{ __('website/login.login_button') }}</button>
             </div>
 
@@ -90,6 +90,6 @@ new class extends Component {
                 <span>{{ __('website/login.no_account') }}</span>
                 <a href="{{ route('register') }}" class="link link-primary">{{ __('website/login.register_today') }}</a>
             </div>
-        </form>
+        </div>
     </div>
 </div>

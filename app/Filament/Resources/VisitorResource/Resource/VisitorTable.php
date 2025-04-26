@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\VisitorResource\Resource;
 
+use App\Filament\Exports\VisitorExporter;
 use App\Models\User;
 use App\Models\Visitor;
 use Filament\Tables;
@@ -91,6 +92,8 @@ class VisitorTable
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\ExportBulkAction::make()
+                        ->exporter(VisitorExporter::class),
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
