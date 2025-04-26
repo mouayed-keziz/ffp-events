@@ -25,10 +25,10 @@ class ListLogs extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            ExportAction::make()
-                ->label(__("panel/logs.actions.export.label"))
-                ->icon('heroicon-o-arrow-down-tray')
-                ->exporter(LogExporter::class),
+            // ExportAction::make()
+            //     ->label(__("panel/logs.actions.export.label"))
+            //     ->icon('heroicon-o-arrow-down-tray')
+            //     ->exporter(LogExporter::class),
             Actions\Action::make("delete-all-logs")
                 ->outlined()
                 ->label(__('panel/logs.actions.delete_all.label'))

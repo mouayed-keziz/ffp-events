@@ -24,9 +24,17 @@ class AppServiceProvider extends ServiceProvider
     {
         // Add this line to suppress the deprecation warning
         error_reporting(E_ALL ^ E_DEPRECATED);
+
+        // Force HTTPS in production
         if ($this->app->environment('production')) {
             URL::forceScheme('https');
+
+            // Make sure asset URLs are properly generated with the correct scheme
+            $this->app['url']->macro('asset', function ($path) {
+                return url($path, [], true);
+            });
         }
+
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch->locales(['ar', 'en', 'fr']);
         });

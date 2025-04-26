@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\AdminResource\Resource;
 
+use App\Filament\Exports\UserExporter;
 use App\Filament\Resources\AdminResource\Resource\AdminActions;
 use App\Models\User;
 use App\Models\Role;
@@ -10,12 +11,19 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Actions\ExportBulkAction;
 
 class AdminTable
 {
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                Tables\Actions\ExportAction::make()
+                    // ->label(__("panel/logs.actions.export.label"))
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->exporter(UserExporter::class)
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->toggleable()
@@ -62,6 +70,9 @@ class AdminTable
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    ExportBulkAction::make()
+                        ->icon('heroicon-o-arrow-down-tray')
+                        ->exporter(UserExporter::class),
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),

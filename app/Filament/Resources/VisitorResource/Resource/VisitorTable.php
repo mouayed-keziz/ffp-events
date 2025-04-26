@@ -15,6 +15,12 @@ class VisitorTable
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                Tables\Actions\ExportAction::make()
+                    // ->label(__("panel/logs.actions.export.label"))
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->exporter(VisitorExporter::class)
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->toggleable()

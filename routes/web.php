@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
 
 Route::get('language/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'ar', 'fr'])) session()->put('locale', $locale);
@@ -18,6 +19,16 @@ Route::get('language/{locale}', function ($locale) {
 })->name('language.switch');
 
 Route::get('media/download/{id}', [\App\Http\Controllers\MediaController::class, 'download'])->name('media.download');
+
+// Explicitly register Livewire routes to fix 404 errors in production
+Livewire::setScriptRoute(function ($handle) {
+    return Route::get('/livewire/livewire.js', $handle);
+});
+
+Livewire::setUpdateRoute(function ($handle) {
+    return Route::post('/livewire/update', $handle)
+        ->middleware('web');
+});
 
 Route::prefix('admin')->middleware(['auth:web'])->group(function () {
     Route::get('exhibitor-submissions/{record}/download-invoice', [\App\Http\Controllers\Admin\ExhibitorSubmissionController::class, 'downloadInvoice'])

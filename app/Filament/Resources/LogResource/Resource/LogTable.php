@@ -88,6 +88,12 @@ class LogTable
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                Tables\Actions\ExportAction::make()
+                    // ->label(__("panel/logs.actions.export.label"))
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->exporter(LogExporter::class)
+            ])
             ->striped()
             ->columns(self::LogColumns())
             ->defaultSort('created_at', 'desc')

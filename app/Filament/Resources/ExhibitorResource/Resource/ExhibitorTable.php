@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ExhibitorResource\Resource;
 
+use App\Filament\Exports\ExhibitorExporter;
 use App\Filament\Resources\ExhibitorResource\Resource\ExhibitorActions;
 use App\Models\Exhibitor;
 use App\Models\User;
@@ -10,12 +11,19 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Actions\ExportBulkAction;
 
 class ExhibitorTable
 {
     public static function table(Table $table): Table
     {
         return $table
+            ->headerActions([
+                Tables\Actions\ExportAction::make()
+                    // ->label(__("panel/logs.actions.export.label"))
+                    ->icon('heroicon-o-arrow-down-tray')
+                    ->exporter(ExhibitorExporter::class)
+            ])
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->toggleable()
@@ -95,6 +103,9 @@ class ExhibitorTable
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    ExportBulkAction::make()
+                        ->icon('heroicon-o-arrow-down-tray')
+                        ->exporter(ExhibitorExporter::class),
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
