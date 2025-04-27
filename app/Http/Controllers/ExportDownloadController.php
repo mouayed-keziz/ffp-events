@@ -39,13 +39,13 @@ class ExportDownloadController extends Controller
         } else {
             $filePath = "filament_exports/{$export->id}/{$baseFilename}.{$fileExtension}";
         }
+        dd($export->file_disk);
 
         // Check if the file exists
         if (!Storage::disk($export->file_disk)->exists($filePath)) {
             abort(404, 'Export file not found.');
         }
 
-        dd("hello");
         // Return the file as a download
         return Storage::disk($export->file_disk)->download(
             $filePath,
@@ -53,3 +53,4 @@ class ExportDownloadController extends Controller
         );
     }
 }
+Illuminate\Support\Facades\Storage::disk($export->file_disk);
