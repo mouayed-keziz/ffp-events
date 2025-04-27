@@ -53,4 +53,3 @@ class ExportDownloadController extends Controller
         );
     }
 }
-Illuminate\Support\Facades\Storage::disk($export->file_disk);
