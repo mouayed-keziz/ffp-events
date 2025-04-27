@@ -15,8 +15,9 @@ class ExportDownloadController extends Controller
     public function download(Request $request, Export $export, $format = null): StreamedResponse
     {
         $format = $request->query('format', $format);
-
+        dd("hello");
         Gate::authorize('download', $export);
+        dd("world");
         // Convert the format string to ExportFormat enum
         try {
             $formatEnum = $format ? ExportFormat::from($format) : ExportFormat::Csv;
