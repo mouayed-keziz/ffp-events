@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use App\Models\Export;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Actions\Exports\Http\Controllers\DownloadExport;
@@ -15,9 +16,15 @@ class ExportDownloadController extends Controller
     public function download(Request $request, Export $export, $format = null): StreamedResponse
     {
         $format = $request->query('format', $format);
-        dd("hello");
-        Gate::authorize('download', $export);
-        dd("world");
+
+        $user = auth()->user();
+        if (!$user) {
+            abort(403, 'Unauthorized action.');
+        }
+        if (!$user->hasRole(Role::SUPER_ADMIN->value)) {
+            abort(403, 'Unauthorized action.');
+        }
+
         // Convert the format string to ExportFormat enum
         try {
             $formatEnum = $format ? ExportFormat::from($format) : ExportFormat::Csv;
