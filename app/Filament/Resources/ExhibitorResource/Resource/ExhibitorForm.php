@@ -20,6 +20,9 @@ class ExhibitorForm
                     Forms\Components\TextInput::make('email')
                         ->label(__('panel/exhibitors.form.email'))
                         ->email()
+                        ->unique(table: 'users')
+                        ->unique(table: 'exhibitors', ignorable: fn($record) => $record)
+                        ->unique(table: 'visitors')
                         ->required()
                         ->maxLength(255),
 

@@ -20,6 +20,9 @@ class VisitorForm
                     Forms\Components\TextInput::make('email')
                         ->label(__('panel/visitors.form.email'))
                         ->email()
+                        ->unique(table: 'users')
+                        ->unique(table: 'exhibitors')
+                        ->unique(table: 'visitors', ignorable: fn($record) => $record)
                         ->required()
                         ->maxLength(255),
 
