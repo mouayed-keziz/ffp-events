@@ -100,7 +100,7 @@ class AdminPanelProvider extends PanelProvider
                 FilamentDeveloperLoginsPlugin::make()
                     ->enabled(config("app.debug"), true)
                     ->users([
-                        "super admin " => 'admin@admin.dev',
+                        "super admin " => 'registration@ffp-events.com',
                         // "admin" => 'admin2@admin.dev',
                     ])
             ]);
