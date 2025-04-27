@@ -139,14 +139,14 @@ class ExportTable
                     ->icon("heroicon-o-arrow-down-tray")
                     ->disabled(fn($record) => $record->completed_at === null)
                     ->url(function ($record) {
-                        return route('download.export', ['export' => $record, 'format' => ExportFormat::Csv], absolute: true);
+                        return route('filament.exports.download', ['export' => $record, 'format' => ExportFormat::Csv], absolute: true);
                     }, shouldOpenInNewTab: true),
                 Tables\Actions\Action::make(strtoupper(ExportFormat::Xlsx->value))
                     ->label(strtoupper(ExportFormat::Xlsx->value))
                     ->color("success")
                     ->icon("heroicon-o-arrow-down-tray")
                     ->url(function ($record) {
-                        return route('download.export', ['export' => $record, 'format' => ExportFormat::Xlsx], absolute: true);
+                        return route('filament.exports.download', ['export' => $record, 'format' => ExportFormat::Xlsx], absolute: true);
                     }, shouldOpenInNewTab: true),
                 Tables\Actions\DeleteAction::make(),
             ])

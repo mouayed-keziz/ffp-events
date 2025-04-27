@@ -7,6 +7,7 @@ use App\Http\Controllers\Website\ProfileController;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\EventAnnouncement;
+use Filament\Actions\Exports\Http\Controllers\DownloadExport;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,9 +22,13 @@ Route::get('language/{locale}', function ($locale) {
 Route::get('media/download/{id}', [\App\Http\Controllers\MediaController::class, 'download'])->name('media.download');
 
 // Custom export download route with middleware
-Route::get('exports/{export}/download/{format}', [\App\Http\Controllers\ExportDownloadController::class, 'download'])
+Route::get('filament/exports/{export}/download', [\App\Http\Controllers\ExportDownloadController::class, 'download'])
     ->middleware(['web', 'auth'])
-    ->name('download.export');
+    ->name('filament.exports.download');
+// Route::get('/app/filament/exports/{export}/download', [
+//     'as' => 'filament.exports.download',
+//     'uses' => 'Filament\Actions\Exports\Http\Controllers\DownloadExport'
+// ]);
 
 // Explicitly register Livewire routes to fix 404 errors in production
 Livewire::setScriptRoute(function ($handle) {

@@ -12,13 +12,21 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ExportDownloadController extends Controller
 {
-    public function download(Request $request, Export $export, ExportFormat $format): StreamedResponse
+    public function download(Request $request, Export $export, $format = null): StreamedResponse
     {
+        $format = $request->query('format', $format);
 
         Gate::authorize('download', $export);
+        // Convert the format string to ExportFormat enum
+        try {
+            $formatEnum = $format ? ExportFormat::from($format) : ExportFormat::Csv;
+        } catch (\ValueError $e) {
+            abort(400, 'Invalid export format.');
+        }
+
         // Generate file path based on the format
         $baseFilename = pathinfo($export->file_name, PATHINFO_FILENAME);
-        $fileExtension = strtolower($format->value);
+        $fileExtension = strtolower($formatEnum->value);
         if ($fileExtension === "csv") {
             $filePath = "filament_exports/{$export->id}/0000000000000001.{$fileExtension}";
         } else {
