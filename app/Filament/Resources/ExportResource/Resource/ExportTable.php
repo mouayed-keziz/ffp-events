@@ -11,6 +11,7 @@ use Filament\Tables\Actions\ExportBulkAction;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Actions\Exports\Http\Controllers\DownloadExport;
 
 class ExportTable
 {
