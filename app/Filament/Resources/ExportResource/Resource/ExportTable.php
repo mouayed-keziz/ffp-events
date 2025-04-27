@@ -138,16 +138,15 @@ class ExportTable
                     ->color("success")
                     ->icon("heroicon-o-arrow-down-tray")
                     ->disabled(fn($record) => $record->completed_at === null)
-                    ->tooltip(fn($record) => $record->completed_at !== null ? "not yet buddy" : null)
                     ->url(function ($record) {
-                        return route('filament.exports.download', ['export' => $record, 'format' => ExportFormat::Csv], absolute: false);
+                        return route('download.export', ['export' => $record, 'format' => ExportFormat::Csv], absolute: true);
                     }, shouldOpenInNewTab: true),
                 Tables\Actions\Action::make(strtoupper(ExportFormat::Xlsx->value))
                     ->label(strtoupper(ExportFormat::Xlsx->value))
                     ->color("success")
                     ->icon("heroicon-o-arrow-down-tray")
                     ->url(function ($record) {
-                        return route('filament.exports.download', ['export' => $record, 'format' => ExportFormat::Xlsx], absolute: false);
+                        return route('download.export', ['export' => $record, 'format' => ExportFormat::Xlsx], absolute: true);
                     }, shouldOpenInNewTab: true),
                 Tables\Actions\DeleteAction::make(),
             ])

@@ -64,4 +64,12 @@ class ExportPolicy
     {
         return auth()->user()->hasRole(Role::SUPER_ADMIN->value);;
     }
+
+    /**
+     * Determine whether the user can download the export.
+     */
+    public function download(User $user, Export $export): bool
+    {
+        return auth()->user()->hasRole(Role::SUPER_ADMIN->value);
+    }
 }

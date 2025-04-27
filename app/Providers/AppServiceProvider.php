@@ -33,6 +33,9 @@ class AppServiceProvider extends ServiceProvider
             $this->app['url']->macro('asset', function ($path) {
                 return url($path, [], true);
             });
+
+            // Use secure cookies in production to maintain session state
+            config(['session.secure' => true]);
         }
 
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {

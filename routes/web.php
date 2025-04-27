@@ -20,6 +20,11 @@ Route::get('language/{locale}', function ($locale) {
 
 Route::get('media/download/{id}', [\App\Http\Controllers\MediaController::class, 'download'])->name('media.download');
 
+// Custom export download route with middleware
+Route::get('exports/{export}/download/{format}', [\App\Http\Controllers\ExportDownloadController::class, 'download'])
+    ->middleware(['web', 'auth'])
+    ->name('download.export');
+
 // Explicitly register Livewire routes to fix 404 errors in production
 Livewire::setScriptRoute(function ($handle) {
     return Route::get('/livewire/livewire.js', $handle);
@@ -63,6 +68,7 @@ Route::middleware('local_middleware')->group(function () {
         Route::middleware("is_guest")->group(function () {
             Route::get('/login', [AuthController::class, 'LogIn'])->name('signin');
             // Route::post("/login", fn() => redirect()->route('signin'));
+            Route::redirect("/redirec-login", '/auth/login')->name("login");
             Route::get('/register', [AuthController::class, 'Register'])->name('register');
             Route::get('/restore-account', [AuthController::class, 'RestoreAccount'])->name('restore-account');
             Route::get('/email-sent', [AuthController::class, 'EmailSent'])->name('email-sent');
