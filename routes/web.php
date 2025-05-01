@@ -56,16 +56,20 @@ Route::middleware('local_middleware')->group(function () {
         Route::get('/event/{id}', [EventController::class, 'Event'])->name('event_details');
 
         Route::get('/event/{id}/visit', [EventController::class, 'VisitEvent'])->name('visit_event')->middleware("is_visitor");
-        Route::get('/event/{id}/visit-event-form-submitted', [EventController::class, 'VisitFormSubmitted'])->name('visit_event_form_submitted')->middleware("is_visitor");
+        // Route::get('/event/{id}/visit-event-form-submitted', [EventController::class, 'VisitFormSubmitted'])->name('visit_event_form_submitted')->middleware("is_visitor");
+        Route::get('/event/{id}/visit-confirmation', [EventController::class, 'VisitFormSubmitted'])->name('visit_event_form_submitted')->middleware("is_visitor");
         Route::middleware("is_exhibitor")->group(function () {
             Route::get("/event/{id}/terms-and-consitions", [EventController::class, 'TermsAndConditions'])->name('event_terms_and_conditions');
+            Route::get("/event/{id}/terms-and-conditions", [EventController::class, 'TermsAndConditions'])->name('event_terms_and_conditions');
             Route::get('/event/{id}/exhibit', [EventController::class, 'ExhibitEvent'])->name('exhibit_event')->middleware("is_exhibitor");
             Route::get("/event/{id}/info-validation", [EventController::class, 'InfoValidation'])->name('info_validation');
-            Route::get("/event/{id}/view-exhibitor-answers", [EventController::class, 'ViewExhibitorAnswers'])->name('view_exhibitor_answers');
+            // Route::get("/event/{id}/view-exhibitor-answers", [EventController::class, 'ViewExhibitorAnswers'])->name('view_exhibitor_answers');
+            Route::get("/event/{id}/submission", [EventController::class, 'ViewExhibitorAnswers'])->name('view_exhibitor_answers');
             Route::get("/event/{id}/download-invoice", [EventController::class, 'DownloadInvoice'])->name('download_invoice');
             Route::get("/event/{id}/upload-payment-proof", [EventController::class, 'UploadPaymentProof'])->name('upload_payment_proof');
             Route::get("/event/{id}/payment-validation", [EventController::class, 'PaymentValidation'])->name('payment_validation');
-            Route::get("/event/{id}/post-exhibit-event", [EventController::class, 'PostExhibitEvent'])->name('post_exhibit_event');
+            // Route::get("/event/{id}/post-exhibit-event", [EventController::class, 'PostExhibitEvent'])->name('post_exhibit_event');
+            Route::get("/event/{id}/post-exhibition", [EventController::class, 'PostExhibitEvent'])->name('post_exhibit_event');
         });
     });
 
@@ -73,9 +77,10 @@ Route::middleware('local_middleware')->group(function () {
         Route::middleware("is_guest")->group(function () {
             Route::get('/login', [AuthController::class, 'LogIn'])->name('signin');
             // Route::post("/login", fn() => redirect()->route('signin'));
-            Route::redirect("/redirec-login", '/auth/login')->name("login");
+            Route::redirect("/redirect-login", '/auth/login')->name("login");
             Route::get('/register', [AuthController::class, 'Register'])->name('register');
-            Route::get('/restore-account', [AuthController::class, 'RestoreAccount'])->name('restore-account');
+            // Route::get('/restore-account', [AuthController::class, 'RestoreAccount'])->name('restore-account');
+            Route::get('/forgot-password', [AuthController::class, 'RestoreAccount'])->name('restore-account');
             Route::get('/email-sent', [AuthController::class, 'EmailSent'])->name('email-sent');
             Route::get('/reset-password', [AuthController::class, 'ResetPassword'])->name('reset-password');
         });
