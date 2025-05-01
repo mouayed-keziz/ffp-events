@@ -22,9 +22,9 @@ Route::get('language/{locale}', function ($locale) {
 Route::get('media/download/{id}', [\App\Http\Controllers\MediaController::class, 'download'])->name('media.download');
 
 // Custom export download route with middleware
-Route::get('filament/exports/{export}/download', [\App\Http\Controllers\ExportDownloadController::class, 'download'])
-    ->middleware(['web', 'auth'])
-    ->name('filament.exports.download');
+// Route::get('filament/exports/{export}/download', [\App\Http\Controllers\ExportDownloadController::class, 'download'])
+//     ->middleware(['web', 'auth'])
+//     ->name('filament.exports.download');
 // Route::get('/app/filament/exports/{export}/download', [
 //     'as' => 'filament.exports.download',
 //     'uses' => 'Filament\Actions\Exports\Http\Controllers\DownloadExport'
