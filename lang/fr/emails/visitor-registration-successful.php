@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'subject' => 'Votre inscription à :event_name est approuvée – Téléchargez votre badge',
+    'subject' => 'Votre inscription au :event_name est approuvée – Téléchargez votre badge',
     'greeting' => 'Bonjour :name,',
-    'approval_notice' => 'Nous avons le plaisir de vous informer que votre inscription à :event_name a été approuvée.',
+    'approval_notice' => 'Nous avons le plaisir de vous informer que votre inscription au :event_name a été approuvée.',
     'participation_details' => 'Détails de votre participation :',
     'event' => 'Événement :',
     'date' => 'Date :',

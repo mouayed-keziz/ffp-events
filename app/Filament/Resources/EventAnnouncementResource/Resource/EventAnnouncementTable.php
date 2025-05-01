@@ -98,6 +98,7 @@ class EventAnnouncementTable
                 Tables\Actions\EditAction::make(),
                 Action::make('duplicate')
                     ->label(__('panel/event_announcement.actions.duplicate'))
+                    ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     ->icon('heroicon-o-document-duplicate')
                     ->color('success')
                     ->requiresConfirmation()

@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'subject' => 'Votre inscription à :event_name a été refusée',
+    'subject' => 'Votre inscription au :event_name a été refusée',
     'greeting' => 'Bonjour :name,',
-    'rejection_notice' => 'Après examen, nous ne pouvons pas valider votre inscription à :event_name.',
+    'rejection_notice' => 'Après examen, nous ne pouvons pas valider votre inscription au :event_name.',
     'reason_title' => 'Motif du refus :',
     'modify_instructions' => 'Si vous souhaitez soumettre une nouvelle réponse, veuillez vous connecter à votre espace personnel et demander la modification du formulaire en suivant ce lien :',
     'event_page_link' => 'Voir l\'événement',

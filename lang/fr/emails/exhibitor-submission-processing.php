@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'subject' => 'Votre inscription à :event_name est en cours de traitement',
+    'subject' => 'Votre inscription au :event_name est en cours de traitement',
     'greeting' => 'Bonjour :name,',
     'submission_notice' => 'Nous vous remercions pour votre demande de participation à :event_name.',
     'processing_info' => 'Nous avons bien reçu votre candidature et elle est actuellement en cours de traitement par notre équipe.',

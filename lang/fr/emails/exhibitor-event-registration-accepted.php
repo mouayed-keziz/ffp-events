@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'subject' => 'Confirmation de votre inscription à :event_name',
+    'subject' => 'Confirmation de votre inscription au :event_name',
     'greeting' => 'Bonjour :exhibitor_name,',
-    'intro' => 'Votre inscription à :event_name a bien été prise en compte et acceptée.',
+    'intro' => 'Votre inscription au :event_name a bien été prise en compte et acceptée.',
     'details' => 'Détails de l\'inscription :',
     'event_name' => 'Nom de l\'événement : :event_name',
     'date' => 'Date : :date',
