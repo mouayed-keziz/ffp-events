@@ -26,10 +26,16 @@ class EventAnnouncementForm
                             Forms\Components\Textarea::make('description')
                                 ->label(__('panel/event_announcement.fields.description'))
                                 ->translatable(),
-                            Forms\Components\RichEditor::make('content')
+                            Forms\Components\RichEditor::make('content.fr')
                                 ->required()
-                                ->label(__('panel/event_announcement.fields.content'))
-                                ->translatable(),
+                                ->label(__('panel/event_announcement.fields.content') . " - fr"),
+                            Forms\Components\RichEditor::make('content.en')
+                                ->required()
+                                ->label(__('panel/event_announcement.fields.content') . " - en"),
+                            Forms\Components\RichEditor::make('content.ar')
+                                ->required()
+                                ->label(__('panel/event_announcement.fields.content') . " - ar")
+                            // ->translatable(),
                         ]),
                     // Dates & Location
                     Forms\Components\Tabs\Tab::make(__('panel/event_announcement.tabs.dates_location'))
