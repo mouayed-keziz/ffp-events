@@ -107,6 +107,7 @@ class ProductResource extends Resource
             ->defaultSort('created_at', 'desc')
             ->headerActions([
                 Tables\Actions\ExportAction::make()
+                    ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     // ->label(__("panel/logs.actions.export.label"))
                     ->icon('heroicon-o-arrow-down-tray')
                     ->exporter(ProductExporter::class)
@@ -136,6 +137,7 @@ class ProductResource extends Resource
             ->bulkActions([
                 ExportBulkAction::make()
                     ->icon('heroicon-o-arrow-down-tray')
+                    ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     ->exporter(ProductExporter::class),
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()

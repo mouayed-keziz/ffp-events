@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\VisitorResource\Resource;
 
+use App\Enums\Role;
 use App\Filament\Exports\VisitorExporter;
 use App\Models\User;
 use App\Models\Visitor;
@@ -18,6 +19,7 @@ class VisitorTable
             ->defaultSort('created_at', 'desc')
             ->headerActions([
                 Tables\Actions\ExportAction::make()
+                    ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     // ->label(__("panel/logs.actions.export.label"))
                     ->icon('heroicon-o-arrow-down-tray')
                     ->exporter(VisitorExporter::class)
@@ -100,6 +102,7 @@ class VisitorTable
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\ExportBulkAction::make()
+                        ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                         ->exporter(VisitorExporter::class),
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),

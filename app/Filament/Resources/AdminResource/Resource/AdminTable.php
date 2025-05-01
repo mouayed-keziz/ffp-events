@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\AdminResource\Resource;
 
+use App\Enums\Role as EnumsRole;
 use App\Filament\Exports\UserExporter;
 use App\Filament\Resources\AdminResource\Resource\AdminActions;
 use App\Models\User;
@@ -21,6 +22,7 @@ class AdminTable
             ->defaultSort('created_at', 'desc')
             ->headerActions([
                 Tables\Actions\ExportAction::make()
+                    ->visible(fn() => auth()->user()->hasRole(EnumsRole::SUPER_ADMIN->value))
                     // ->label(__("panel/logs.actions.export.label"))
                     ->icon('heroicon-o-arrow-down-tray')
                     ->exporter(UserExporter::class)
@@ -73,6 +75,7 @@ class AdminTable
                 Tables\Actions\BulkActionGroup::make([
                     ExportBulkAction::make()
                         ->icon('heroicon-o-arrow-down-tray')
+                        ->visible(fn() => auth()->user()->hasRole(EnumsRole::SUPER_ADMIN->value))
                         ->exporter(UserExporter::class),
                     Tables\Actions\DeleteBulkAction::make(),
                     Tables\Actions\ForceDeleteBulkAction::make(),

@@ -4,6 +4,7 @@ namespace App\Filament\Resources\LogResource\Resource;
 
 use App\Enums\LogEvent;
 use App\Enums\LogName;
+use App\Enums\Role;
 use App\Filament\Exports\LogExporter;
 use Filament\Forms;
 use Filament\Tables;
@@ -91,6 +92,7 @@ class LogTable
             ->headerActions([
                 Tables\Actions\ExportAction::make()
                     // ->label(__("panel/logs.actions.export.label"))
+                    ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     ->icon('heroicon-o-arrow-down-tray')
                     ->exporter(LogExporter::class)
             ])
@@ -147,6 +149,7 @@ class LogTable
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     ExportBulkAction::make()
+                        ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                         ->icon('heroicon-o-arrow-down-tray')
                         ->exporter(LogExporter::class),
                     Tables\Actions\DeleteBulkAction::make(),

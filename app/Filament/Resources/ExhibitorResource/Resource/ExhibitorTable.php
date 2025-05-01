@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ExhibitorResource\Resource;
 
+use App\Enums\Role;
 use App\Filament\Exports\ExhibitorExporter;
 use App\Filament\Resources\ExhibitorResource\Resource\ExhibitorActions;
 use App\Models\Exhibitor;
@@ -22,6 +23,7 @@ class ExhibitorTable
             ->headerActions([
                 Tables\Actions\ExportAction::make()
                     // ->label(__("panel/logs.actions.export.label"))
+                    ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     ->icon('heroicon-o-arrow-down-tray')
                     ->exporter(ExhibitorExporter::class)
             ])
@@ -105,6 +107,7 @@ class ExhibitorTable
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     ExportBulkAction::make()
+                        ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                         ->icon('heroicon-o-arrow-down-tray')
                         ->exporter(ExhibitorExporter::class),
                     Tables\Actions\DeleteBulkAction::make(),

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\CategoryResource\Resource;
 
+use App\Enums\Role;
 use App\Filament\Exports\CategoryExporter;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,6 +18,7 @@ class CategoryTable
             ->headerActions([
                 Tables\Actions\ExportAction::make()
                     // ->label(__("panel/logs.actions.export.label"))
+                    ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     ->icon('heroicon-o-arrow-down-tray')
                     ->exporter(CategoryExporter::class)
             ])
@@ -47,6 +49,7 @@ class CategoryTable
             ])
             ->bulkActions([
                 ExportBulkAction::make()
+                    ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     ->icon('heroicon-o-arrow-down-tray')
                     ->exporter(CategoryExporter::class),
                 Tables\Actions\BulkActionGroup::make([

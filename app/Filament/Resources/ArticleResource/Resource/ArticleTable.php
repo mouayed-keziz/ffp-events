@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ArticleResource\Resource;
 
+use App\Enums\Role;
 use App\Filament\Exports\ArticleExporter;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -109,6 +110,7 @@ class ArticleTable
             ->headerActions([
                 Tables\Actions\ExportAction::make()
                     // ->label(__("panel/logs.actions.export.label"))
+                    ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     ->icon('heroicon-o-arrow-down-tray')
                     ->exporter(ArticleExporter::class)
             ])
@@ -124,6 +126,7 @@ class ArticleTable
             ->bulkActions([
                 ExportBulkAction::make()
                     ->icon('heroicon-o-arrow-down-tray')
+                    ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     ->exporter(ArticleExporter::class),
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make()

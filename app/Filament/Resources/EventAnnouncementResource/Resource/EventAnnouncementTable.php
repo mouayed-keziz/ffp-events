@@ -21,6 +21,7 @@ class EventAnnouncementTable
                 Tables\Actions\ExportAction::make()
                     // ->label(__("panel/logs.actions.export.label"))
                     ->icon('heroicon-o-arrow-down-tray')
+                    ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     ->exporter(EventAnnouncementExporter::class)
             ])
             ->columns([
@@ -119,6 +120,7 @@ class EventAnnouncementTable
                 Tables\Actions\BulkActionGroup::make([
                     ExportBulkAction::make()
                         ->icon('heroicon-o-arrow-down-tray')
+                        ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                         ->exporter(EventAnnouncementExporter::class),
                     Tables\Actions\DeleteBulkAction::make()
                         ->visible(fn() => auth()->check() && auth()->user()->hasRole(Role::SUPER_ADMIN->value))

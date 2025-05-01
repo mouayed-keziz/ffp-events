@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ExportResource\Resource;
 
 use App\Enums\ExportType;
+use App\Enums\Role;
 use App\Filament\Exports\ExportExporter;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms;
@@ -96,6 +97,7 @@ class ExportTable
             ->headerActions([
                 Tables\Actions\ExportAction::make()
                     // ->label(__("panel/logs.actions.export.label"))
+                    ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     ->icon('heroicon-o-arrow-down-tray')
                     ->exporter(ExportExporter::class)
             ])
@@ -153,6 +155,7 @@ class ExportTable
             ->bulkActions([
                 ExportBulkAction::make()
                     ->icon('heroicon-o-arrow-down-tray')
+                    ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     ->exporter(ExportExporter::class),
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
