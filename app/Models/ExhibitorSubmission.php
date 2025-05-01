@@ -92,6 +92,11 @@ class ExhibitorSubmission extends Model implements HasMedia
                 $this->status === ExhibitorSubmissionStatus::ARCHIVE
             );
     }
+    public function getCanAdminDownloadInvoiceAttribute()
+    {
+        $invoiceData = $this->getInvoiceData();
+        return !empty($invoiceData);
+    }
 
 
     public function exhibitor(): BelongsTo

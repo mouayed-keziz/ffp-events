@@ -586,7 +586,7 @@ class ExhibitorSubmissionActions
                 return route('admin.exhibitor_submissions.download_invoice', ['record' => $record->id]);
             }, shouldOpenInNewTab: true)
             ->visible(function (ExhibitorSubmission $record) {
-                return $record->canDownloadInvoice;
+                return $record->canAdminDownloadInvoice;
             });
     }
 }
