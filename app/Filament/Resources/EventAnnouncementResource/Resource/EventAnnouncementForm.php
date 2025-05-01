@@ -4,6 +4,7 @@ namespace App\Filament\Resources\EventAnnouncementResource\Resource;
 
 use App\Enums\Currency;
 use Filament\Forms;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 
 class EventAnnouncementForm
@@ -26,16 +27,32 @@ class EventAnnouncementForm
                             Forms\Components\Textarea::make('description')
                                 ->label(__('panel/event_announcement.fields.description'))
                                 ->translatable(),
-                            Forms\Components\RichEditor::make('content.fr')
-                                ->required()
-                                ->label(__('panel/event_announcement.fields.content') . " - fr"),
-                            Forms\Components\RichEditor::make('content.en')
-                                ->required()
-                                ->label(__('panel/event_announcement.fields.content') . " - en"),
-                            Forms\Components\RichEditor::make('content.ar')
-                                ->required()
-                                ->label(__('panel/event_announcement.fields.content') . " - ar")
-                            // ->translatable(),
+                            Section::make(__('panel/event_announcement.fields.content') . " - fr")
+                                ->collapsible()
+                                ->collapsed()
+                                ->schema([
+                                    Forms\Components\RichEditor::make('content.fr')
+                                        ->required()
+                                    // ->label(__('panel/event_announcement.fields.content') . " - fr"),
+                                ]),
+
+                            Section::make(__('panel/event_announcement.fields.content') . " - en")
+                                ->collapsible()
+                                ->collapsed()
+                                ->schema([
+                                    Forms\Components\RichEditor::make('content.en')
+                                        ->required()
+                                    // ->label(__('panel/event_announcement.fields.content') . " - fr"),
+                                ]),
+
+                            Section::make(__('panel/event_announcement.fields.content') . " - ar")
+                                ->collapsible()
+                                ->collapsed()
+                                ->schema([
+                                    Forms\Components\RichEditor::make('content.ar')
+                                        ->required()
+                                    // ->label(__('panel/event_announcement.fields.content') . " - fr"),
+                                ]),
                         ]),
                     // Dates & Location
                     Forms\Components\Tabs\Tab::make(__('panel/event_announcement.tabs.dates_location'))
