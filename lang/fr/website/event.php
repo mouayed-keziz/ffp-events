@@ -26,7 +26,7 @@ return [
     'submission_rejected' => 'Votre inscription a été refusée par notre équipe',
     'proof_processing' => 'Votre preuve de paiement est en cours de traitement par notre équipe, vous allez recevoir une notification par mail une fois cela est fait',
     'submission_accepted' => 'Vos données ont été validées par notre équipe, veuillez maintenant téléverser votre preuve de paiement via le bouton en bas.',
-    'payment_validated' => 'Félicitations, votre inscription et paiement de :price :currency comme exposant à :event est validé',
+    'payment_validated' => 'Félicitations, votre inscription et paiement de :price :currency comme exposant au :event est validé',
     'payment_pending' => 'Vous avez des paiements de :price :currency avant le :due_date en attente pour cet événement.',
     'finalize_responses' => 'Vous pouvez maintenant finaliser vos réponses pour cet événement via le bouton "Finaliser Mes Réponses".',
     'fully_paid' => 'Félicitations, tous vos paiements pour :event ont été validés. Votre participation en tant qu\'exposant est confirmée.',

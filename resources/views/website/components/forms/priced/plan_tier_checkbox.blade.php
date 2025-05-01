@@ -6,7 +6,8 @@
             {{ $data['label'][app()->getLocale()] ?? ($data['label']['fr'] ?? '') }}
         </span>
         @if (isset($data['description']) && !empty($data['description'][app()->getLocale()]))
-            <span class="label-text-alt font-semibold text-[#83909B] text-sm pl-[10px]">
+            <span
+                class="label-text-alt font-semibold text-[#83909B] text-sm {{ app()->getLocale() === 'ar' ? 'pr-[10px]' : 'pl-[10px]' }}">
                 {{ $data['description'][app()->getLocale()] }}
             </span>
         @endif
@@ -45,7 +46,7 @@ $dir = app()->getLocale() === 'ar' ? 'rtl' : 'ltr';
 $chevronClass = $dir === 'rtl' ? 'ms-1' : 'me-1';
                 @endphp
 
-                <div class="space-y-3 pl-[10px]">
+                <div class="space-y-3 {{ app()->getLocale() === 'ar' ? 'pr-[10px]' : 'pl-[10px]' }}">
                     @foreach ($data['plan_tier_details']['plans'] as $planIndex => $plan)
                         @php
                             // Find the corresponding plan in our answer structure

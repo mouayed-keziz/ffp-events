@@ -10,7 +10,7 @@
     </label>
     @if ($data['description'][app()->getLocale()] ?? false)
         <small
-            class="mb-2 label-text-alt font-semibold text-[#83909B] text-sm pl-[10px]">{{ $data['description'][app()->getLocale()] }}</small>
+            class="mb-2 label-text-alt font-semibold text-[#83909B] text-sm {{ app()->getLocale() === 'ar' ? 'pr-[10px]' : 'pl-[10px]' }}">{{ $data['description'][app()->getLocale()] }}</small>
     @endif
 
     @php
@@ -47,7 +47,8 @@ if (empty($optionsData)) {
 
     @endphp
 
-    <div class="flex flex-col gap-2 {{ $disabled ? 'opacity-60' : '' }} pl-[10px]" x-data="{ selected: @entangle('formData.' . $answerPath . '.selectedValue') }">
+    <div class="flex flex-col gap-2 {{ $disabled ? 'opacity-60' : '' }} {{ app()->getLocale() === 'ar' ? 'pr-[10px]' : 'pl-[10px]' }}"
+        x-data="{ selected: @entangle('formData.' . $answerPath . '.selectedValue') }">
         @php
             $radioName = 'radio_' . str_replace('.', '_', $answerPath);
         @endphp

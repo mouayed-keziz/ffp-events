@@ -10,6 +10,11 @@
         </span>
     </label>
 
+    @if (isset($data['description']) && !empty($data['description'][app()->getLocale()]))
+        <small
+            class="mb-2 label-text-alt font-semibold text-[#83909B] text-sm {{ app()->getLocale() === 'ar' ? 'pr-[10px]' : 'pl-[10px]' }}">{{ $data['description'][app()->getLocale()] }}</small>
+    @endif
+
     @php
         // Initialize options array in answer structure if it doesn't exist
 $optionsData = data_get($this, 'formData.' . $answerPath . '.options', []);
@@ -43,7 +48,7 @@ foreach ($optionsData as $idx => $optionData) {
     @endphp
 
     <select
-        class="select select-bordered bg-white mb-2 rounded-md pl-[10px] {{ $disabled ? 'opacity-60 cursor-not-allowed' : '' }}"
+        class="select select-bordered bg-white mb-2 rounded-md {{ app()->getLocale() === 'ar' ? 'pr-[10px]' : 'pl-[10px]' }} {{ $disabled ? 'opacity-60 cursor-not-allowed' : '' }}"
         wire:change="updateSelectOption('{{ $answerPath }}', $event.target.value)"
         @if ($data['required'] ?? false) required @endif {{ $disabled ? 'disabled' : '' }}>
 

@@ -89,7 +89,7 @@
             this.$refs.fileInput.value = '';
             @this.set('formData.{{ $answerPath }}', null);
         }
-    }" class="relative pl-[10px]">
+    }" class="relative {{ app()->getLocale() === 'ar' ? 'pr-[10px]' : 'pl-[10px]' }}">
         <input type="file" wire:model="formData.{{ $answerPath }}"
             accept="{{ ($data['file_type'] ?? \App\Enums\FileUploadType::ANY) === \App\Enums\FileUploadType::IMAGE ? 'image/*' : (($data['file_type'] ?? \App\Enums\FileUploadType::ANY) === \App\Enums\FileUploadType::PDF ? 'application/pdf' : '*/*') }}"
             x-ref="fileInput" class="hidden" @change="handleFileChange($event)"

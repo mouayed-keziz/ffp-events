@@ -7,7 +7,8 @@
             {{ $data['label'][app()->getLocale()] ?? ($data['label']['fr'] ?? '') }}
         </span>
         @if (isset($data['description']) && !empty($data['description'][app()->getLocale()]))
-            <span class="label-text-alt font-semibold text-[#83909B] text-sm pl-[10px]">
+            <span
+                class="label-text-alt font-semibold text-[#83909B] text-sm {{ app()->getLocale() === 'ar' ? 'pr-[10px]' : 'pl-[10px]' }}">
                 {{ $data['description'][app()->getLocale()] }}
             </span>
         @endif
@@ -35,7 +36,7 @@
         }
     }" class="relative">
         <button type="button" @click="open = !open"
-            class="input input-bordered bg-white rounded-md w-full flex justify-between items-center pl-[10px]"
+            class="input input-bordered bg-white rounded-md w-full flex justify-between items-center {{ app()->getLocale() === 'ar' ? 'pr-[10px]' : 'pl-[10px]' }}"
             :class="selectedOption ? '' : 'text-gray-500'">
             <div class="flex items-center gap-2 overflow-hidden">
                 <span x-text="selectedOption ? selectedOption.value : '{{ __('Select an option') }}'"
@@ -55,7 +56,7 @@
         </button>
 
         <div x-show="open" @click.away="open = false" x-transition
-            class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 overflow-auto focus:outline-none pl-[10px]"
+            class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 overflow-auto focus:outline-none {{ app()->getLocale() === 'ar' ? 'pr-[10px]' : 'pl-[10px]' }}"
             style="display: none;">
             @foreach ($options as $option)
                 @php

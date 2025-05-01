@@ -7,7 +7,8 @@
             {{ $data['label'][app()->getLocale()] ?? ($data['label']['fr'] ?? '') }}
         </div>
         @if (isset($data['description']) && !empty($data['description'][app()->getLocale()]))
-            <div class="label-text-alt font-semibold text-[#83909B] text-sm pl-[10px] mt-1">
+            <div
+                class="label-text-alt font-semibold text-[#83909B] text-sm {{ app()->getLocale() === 'ar' ? 'pr-[10px]' : 'pl-[10px]' }} mt-1">
                 {{ $data['description'][app()->getLocale()] }}
             </div>
         @endif
@@ -34,7 +35,7 @@ if (empty($optionsData)) {
         }
     @endphp
 
-    <div class="space-y-3 pl-[10px]">
+    <div class="space-y-3 {{ app()->getLocale() === 'ar' ? 'pr-[10px]' : 'pl-[10px]' }}">
         @foreach ($data['options'] ?? [] as $optionIndex => $option)
             @php
                 // Find the corresponding option in our answer structure

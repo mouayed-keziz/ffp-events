@@ -11,9 +11,10 @@
     </label>
     @if ($data['description'][app()->getLocale()] ?? false)
         <small
-            class="mb-2 font-semibold text-[#83909B] text-sm pl-[10px]">{{ $data['description'][app()->getLocale()] }}</small>
+            class="mb-2 font-semibold text-[#83909B] text-sm {{ app()->getLocale() === 'ar' ? 'pr-[10px]' : 'pl-[10px]' }}">{{ $data['description'][app()->getLocale()] }}</small>
     @endif
-    <div class="flex flex-col gap-2 pl-[10px]" x-data="{ options: @entangle('formData.' . $answerPath . '.options') }">
+    <div class="flex flex-col gap-2 {{ app()->getLocale() === 'ar' ? 'pr-[10px]' : 'pl-[10px]' }}"
+        x-data="{ options: @entangle('formData.' . $answerPath . '.options') }">
         @foreach ($data['options'] as $optionIndex => $option)
             @php
                 // Find the corresponding option in our answer structure
