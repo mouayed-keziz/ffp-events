@@ -59,7 +59,7 @@ Route::middleware('local_middleware')->group(function () {
         // Route::get('/event/{id}/visit-event-form-submitted', [EventController::class, 'VisitFormSubmitted'])->name('visit_event_form_submitted')->middleware("is_visitor");
         Route::get('/event/{id}/visit-confirmation', [EventController::class, 'VisitFormSubmitted'])->name('visit_event_form_submitted')->middleware("is_visitor");
         Route::middleware("is_exhibitor")->group(function () {
-            Route::get("/event/{id}/terms-and-consitions", [EventController::class, 'TermsAndConditions'])->name('event_terms_and_conditions');
+            // Route::get("/event/{id}/terms-and-consitions", [EventController::class, 'TermsAndConditions'])->name('event_terms_and_conditions');
             Route::get("/event/{id}/terms-and-conditions", [EventController::class, 'TermsAndConditions'])->name('event_terms_and_conditions');
             Route::get('/event/{id}/exhibit', [EventController::class, 'ExhibitEvent'])->name('exhibit_event')->middleware("is_exhibitor");
             Route::get("/event/{id}/info-validation", [EventController::class, 'InfoValidation'])->name('info_validation');
