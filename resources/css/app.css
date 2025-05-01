@@ -4,8 +4,9 @@
 
 body {
     @apply bg-zinc-50;
-    font-family: "Montserrat", "Cairo", serif;
+    font-family: "Montserrat", "Cairo", Arial, sans-serif;
 }
+
 .scrollbar-hide::-webkit-scrollbar {
     display: none;
 }
@@ -16,11 +17,9 @@ body {
 }
 
 .bg-glow {
-    background: radial-gradient(
-            at left bottom,
+    background: radial-gradient(at left bottom,
             rgba(255, 165, 0, 0.15),
-            transparent 70%
-        ),
+            transparent 70%),
         radial-gradient(at top left, rgba(0, 191, 255, 0.15), transparent 70%),
         radial-gradient(at center, rgba(255, 255, 255, 0.2), transparent 70%);
     background-repeat: no-repeat;
