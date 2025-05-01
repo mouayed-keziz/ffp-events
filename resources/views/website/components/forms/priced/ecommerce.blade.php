@@ -2,11 +2,12 @@
 
 <div class="mb-4">
     <label class="label">
-        <span class="label-text font-medium {{ isset($data['required']) && $data['required'] ? 'required' : '' }}">
+        <span
+            class="label-text font-semibold text-[#546675] text-sm {{ isset($data['required']) && $data['required'] ? 'required' : '' }}">
             {{ $data['label'][app()->getLocale()] ?? ($data['label']['fr'] ?? '') }}
         </span>
         @if (isset($data['description']) && !empty($data['description'][app()->getLocale()]))
-            <span class="label-text-alt text-xs text-gray-500">
+            <span class="label-text-alt font-semibold text-[#83909B] text-sm pl-[10px]">
                 {{ $data['description'][app()->getLocale()] }}
             </span>
         @endif
@@ -38,7 +39,7 @@ if (empty($productsData)) {
             }
         @endphp
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pl-[10px]">
             @foreach ($data['products'] as $productIndex => $product)
                 @php
                     // Find the corresponding product in our answer structure
@@ -86,13 +87,11 @@ if (empty($productsData)) {
                                 {{ $disabled ? 'disabled' : '' }} />
 
                             <label for="product_{{ $productId }}"
-                                class="font-medium text-sm text-base truncate {{ $disabled ? 'cursor-not-allowed' : 'cursor-pointer' }}"
+                                class="font-semibold text-[#546675] text-sm truncate {{ $disabled ? 'cursor-not-allowed' : 'cursor-pointer' }}"
                                 title="{{ $productName }}">{{ $productName }}</label>
                         </div>
 
-                        {{-- <div class="text-sm text-gray-500 mb-2">{{ __('Code') }}: {{ $productCode ?? '-' }}</div> --}}
-
-                        <div class="mt-4 mb-1 text-red-300 text-sm font-semibold">
+                        <div class="mt-4 mb-1 font-semibold text-[#83909B] text-sm">
                             <span
                                 class="label-text 
                                 {{ isset($data['quantity_label']) && $data['quantity_label'] ? 'required' : '' }}">
@@ -102,7 +101,7 @@ if (empty($productsData)) {
                         <div class="flex items-center gap-2">
                             <div class="flex-grow">
                                 <input
-                                    class="input input-sm input-bordered rounded-md w-full {{ $disabled ? 'cursor-not-allowed' : '' }}"
+                                    class="input input-sm input-bordered rounded-md w-full pl-[10px] {{ $disabled ? 'cursor-not-allowed' : '' }}"
                                     type="number"
                                     wire:model.live="formData.{{ $answerPath }}.products.{{ $productAnswerIndex }}.quantity"
                                     wire:change="$refresh" min="1" step="1"

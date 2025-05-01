@@ -2,7 +2,7 @@
 
 <div class="form-control w-full">
     <label class="label">
-        <span class="label-text">
+        <span class="label-text font-semibold text-[#546675] text-sm">
             {{ $data['label'][app()->getLocale()] ?? '' }}
             @if ($data['required'] ?? false)
                 <span class="text-error">*</span>
@@ -11,7 +11,7 @@
     </label>
 
     <input type="number"
-        class="input input-bordered bg-white rounded-md {{ $disabled ? 'opacity-60 cursor-not-allowed' : '' }}"
+        class="input input-bordered bg-white rounded-md pl-[10px] {{ $disabled ? 'opacity-60 cursor-not-allowed' : '' }}"
         wire:model.live="formData.{{ $answerPath }}" @if ($data['required'] ?? false) required @endif
         {{ $disabled ? 'disabled' : '' }} placeholder="{{ $data['placeholder'][app()->getLocale()] ?? '' }}"
         @if (isset($data['min'])) min="{{ $data['min'] }}" @endif

@@ -1,11 +1,12 @@
 @props(['data', 'answerPath', 'disabled' => false])
 <div class="mb-4">
     <label class="label">
-        <span class="label-text font-medium {{ isset($data['required']) && $data['required'] ? 'required' : '' }}">
+        <span
+            class="label-text font-semibold text-[#546675] text-sm {{ isset($data['required']) && $data['required'] ? 'required' : '' }}">
             {{ $data['label'][app()->getLocale()] ?? ($data['label']['fr'] ?? '') }}
         </span>
         @if (isset($data['description']) && !empty($data['description'][app()->getLocale()]))
-            <span class="label-text-alt text-xs text-gray-500">
+            <span class="label-text-alt font-semibold text-[#83909B] text-sm pl-[10px]">
                 {{ $data['description'][app()->getLocale()] }}
             </span>
         @endif
@@ -14,7 +15,7 @@
     <div>
         @if (isset($data['plan_tier_id']))
             @if (isset($data['plan_tier_details']['title']))
-                <div class="font-medium text-lg mb-4">
+                <div class="font-semibold text-[#546675] text-lg mb-4">
                     {{ $data['plan_tier_details']['title'] ?? __('Plan Tier') }}
                 </div>
             @endif
@@ -44,7 +45,7 @@ $dir = app()->getLocale() === 'ar' ? 'rtl' : 'ltr';
 $chevronClass = $dir === 'rtl' ? 'ms-1' : 'me-1';
                 @endphp
 
-                <div class="space-y-3">
+                <div class="space-y-3 pl-[10px]">
                     @foreach ($data['plan_tier_details']['plans'] as $planIndex => $plan)
                         @php
                             // Find the corresponding plan in our answer structure
@@ -71,7 +72,8 @@ $chevronClass = $dir === 'rtl' ? 'ms-1' : 'me-1';
                                         wire:change="togglePlanSelection('{{ $answerPath }}', '{{ $plan['id'] }}')"
                                         {{ $isSelected ? 'checked' : '' }} {{ $disabled ? 'disabled' : '' }}
                                         class="checkbox checkbox-sm checkbox-primary" />
-                                    <label for="plan_{{ $plan['id'] }}" class="font-medium cursor-pointer">
+                                    <label for="plan_{{ $plan['id'] }}"
+                                        class="font-semibold text-[#546675] cursor-pointer">
                                         {{ $plan['title'] }}
                                     </label>
 

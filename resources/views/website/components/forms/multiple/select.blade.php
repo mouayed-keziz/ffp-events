@@ -2,7 +2,7 @@
 
 <div class="form-control">
     <label class="label">
-        <span class="label-text">
+        <span class="label-text font-semibold text-[#546675] text-sm">
             {{ $data['label'][app()->getLocale()] ?? '' }}
             @if ($data['required'] ?? false)
                 <span class="text-error">*</span>
@@ -43,7 +43,7 @@ foreach ($optionsData as $idx => $optionData) {
     @endphp
 
     <select
-        class="select select-bordered bg-white mb-2 rounded-md {{ $disabled ? 'opacity-60 cursor-not-allowed' : '' }}"
+        class="select select-bordered bg-white mb-2 rounded-md pl-[10px] {{ $disabled ? 'opacity-60 cursor-not-allowed' : '' }}"
         wire:change="updateSelectOption('{{ $answerPath }}', $event.target.value)"
         @if ($data['required'] ?? false) required @endif {{ $disabled ? 'disabled' : '' }}>
 

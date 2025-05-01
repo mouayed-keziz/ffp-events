@@ -1,6 +1,6 @@
 @props(['data', 'answerPath', 'disabled' => false])
 <div class="mb-8">
-    <label class="block text-gray-700 mb-2 {{ $disabled ? 'opacity-60' : '' }}">
+    <label class="block font-semibold text-[#546675] text-sm mb-2 {{ $disabled ? 'opacity-60' : '' }}">
         {{ $data['label'][app()->getLocale()] ?? __('website/forms.file_upload.label') }}
         @if ($data['required'] ?? false)
             <span class="text-error">*</span>
@@ -89,7 +89,7 @@
             this.$refs.fileInput.value = '';
             @this.set('formData.{{ $answerPath }}', null);
         }
-    }" class="relative">
+    }" class="relative pl-[10px]">
         <input type="file" wire:model="formData.{{ $answerPath }}"
             accept="{{ ($data['file_type'] ?? \App\Enums\FileUploadType::ANY) === \App\Enums\FileUploadType::IMAGE ? 'image/*' : (($data['file_type'] ?? \App\Enums\FileUploadType::ANY) === \App\Enums\FileUploadType::PDF ? 'application/pdf' : '*/*') }}"
             x-ref="fileInput" class="hidden" @change="handleFileChange($event)"
@@ -156,8 +156,4 @@
             </template>
         </div>
     </div>
-
-
-
-
 </div>
