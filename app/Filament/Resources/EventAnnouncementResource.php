@@ -97,6 +97,15 @@ class EventAnnouncementResource extends Resource
                         fn() =>
                         request()->routeIs(Pages\EditEventAnnouncementTerms::getRouteName())
                     ),
+                PageNavigationItem::make(__('panel/event_announcement.actions.edit_badge_templates'))
+                    ->url(fn() => static::getUrl('edit-badge-templates', ['record' => $record->id]))
+                    ->icon('heroicon-o-identification')
+                    ->hidden(fn() => !auth()->user()->hasRole(Role::SUPER_ADMIN->value))
+                    ->group($EVENT_MANAGEMENT)
+                    ->isActiveWhen(
+                        fn() =>
+                        request()->routeIs(Pages\EditEventAnnouncementBadgeTemplates::getRouteName())
+                    ),
                 PageNavigationItem::make(__('panel/event_announcement.actions.edit_visitor_form'))
                     ->url(fn() => static::getUrl('edit-visitor-form', ['record' => $record->id]))
                     ->icon('heroicon-o-clipboard-document-check')
@@ -143,6 +152,7 @@ class EventAnnouncementResource extends Resource
             'edit' => Pages\EditEventAnnouncement::route('/{record}/edit'),
             'edit-terms' => Pages\EditEventAnnouncementTerms::route('/{record}/edit-terms'),
             'edit-visitor-form' => Pages\EditEventAnnouncementVisitorForm::route("/{record}/visitor-form"),
+            'edit-badge-templates' => Pages\EditEventAnnouncementBadgeTemplates::route('/{record}/edit-badge-templates'),
 
             'exhibitor-forms' => Pages\ManageEventAnnouncementExhibitorForms::route('/{record}/exhibitor-forms'),
             'exhibitorForms.create' => Pages\CreateEventAnnouncementExhibitorForm::route('/{record}/exhibitor-forms/create'),

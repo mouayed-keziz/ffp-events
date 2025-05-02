@@ -66,11 +66,36 @@ class EventAnnouncement extends Model implements HasMedia
     {
         $this->addMediaCollection('image')
             ->singleFile();
+
+        // Badge templates collections
+        $this->addMediaCollection('visitor_badge_template')
+            ->singleFile();
+
+        $this->addMediaCollection('exhibitor_badge_template')
+            ->singleFile();
+
+        $this->addMediaCollection('sponsor_badge_template')
+            ->singleFile();
     }
 
     public function getImageAttribute()
     {
         return $this->getFirstMediaUrl('image') ? $this->getFirstMediaUrl('image') : asset("placeholder_wide.png");
+    }
+
+    public function getVisitorBadgeTemplateAttribute()
+    {
+        return $this->getFirstMediaUrl('visitor_badge_template');
+    }
+
+    public function getExhibitorBadgeTemplateAttribute()
+    {
+        return $this->getFirstMediaUrl('exhibitor_badge_template');
+    }
+
+    public function getSponsorBadgeTemplateAttribute()
+    {
+        return $this->getFirstMediaUrl('sponsor_badge_template');
     }
     public function getIsVisitorRegistrationOpenAttribute()
     {
