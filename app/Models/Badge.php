@@ -15,6 +15,7 @@ class Badge extends Model implements HasMedia
     protected $fillable = [
         'code',
         'name',
+        'email',
         'position',
         'company',
         'visitor_submission_id',

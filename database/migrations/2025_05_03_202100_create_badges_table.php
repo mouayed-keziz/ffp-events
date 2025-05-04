@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code')->unique();
             $table->string('name');
+            $table->string('email')->nullable();
             $table->string('position')->nullable();
             $table->string('company')->nullable();
             $table->foreignId('visitor_submission_id')->nullable()->constrained('visitor_submissions')->onDelete('cascade');

@@ -234,7 +234,7 @@ class VisitEventFormActions extends BaseFormActions
 
             // Use visitor name directly from the visitor model
             $name = $submission->visitor ? $submission->visitor->name : 'Unknown';
-
+            $email = $submission->visitor ? $submission->visitor->email : 'unknown@unknown.com';
             // Generate QR code data (random unique code)
             $qrData = Str::uuid()->toString();
 
@@ -258,6 +258,7 @@ class VisitEventFormActions extends BaseFormActions
             $badge = Badge::create([
                 'code' => $qrData,
                 'name' => $name,
+                'email' => $email,
                 'visitor_submission_id' => $submission->id
             ]);
 
