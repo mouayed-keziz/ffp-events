@@ -2,15 +2,19 @@
 
 namespace App\Forms;
 
+use App\Models\Badge;
 use App\Models\EventAnnouncement;
 use App\Models\Visitor;
 use App\Models\VisitorSubmission;
 use App\Enums\FormField;
 use App\Notifications\Visitor\VisitorEventRegistrationSuccessful;
+use App\Services\BadgeService;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 
 class VisitEventFormActions extends BaseFormActions
@@ -194,12 +198,16 @@ class VisitEventFormActions extends BaseFormActions
                 Log::info("Media added: {$media->id} with fileId: {$fileInfo['fileId']}");
             }
 
-            // Send notification if visitor is authenticated
+            // Generate a badge for the visitor submission
+            // Only generate badge if visitor is authenticated (so we have a name)
             if ($visitor) {
+                $badge = $this->generateBadgeForVisitorSubmission($event, $submission, $processedData);
+                Log::info("Badge generated for visitor: {$visitor->name}");
+
                 // Get the current locale for localized notification
                 $locale = App::getLocale();
 
-                // Send the notification
+                // Send the notification with badge
                 $visitor->notify(new VisitorEventRegistrationSuccessful($event, $submission, $locale));
                 Log::info("Visitor notification sent to: {$visitor->email} with locale: {$locale}");
             }
@@ -208,6 +216,66 @@ class VisitEventFormActions extends BaseFormActions
         } catch (\Exception $e) {
             report($e);
             return false;
+        }
+    }
+
+    /**
+     * Generate a badge for a visitor submission
+     */
+    protected function generateBadgeForVisitorSubmission(EventAnnouncement $event, VisitorSubmission $submission, array $processedData): ?Badge
+    {
+        try {
+            // Get the badge template path from the event announcement
+            $templatePath = BadgeService::getTemplatePath($event->id, 'visitor');
+            if (!$templatePath) {
+                Log::warning("No badge template found for event: {$event->id}");
+                return null;
+            }
+
+            // Use visitor name directly from the visitor model
+            $name = $submission->visitor ? $submission->visitor->name : 'Unknown';
+
+            // Generate QR code data (random unique code)
+            $qrData = Str::uuid()->toString();
+
+            // Generate badge image using BadgeService - for visitor badge, only name is used
+            $badgeImage = BadgeService::generateBadgePreview($templatePath, [
+                'name' => $name,
+                'qr_data' => $qrData
+            ]);
+
+            if (!$badgeImage) {
+                Log::warning("Failed to generate badge image for submission: {$submission->id}");
+                return null;
+            }
+
+            // Create temporary file to save the image
+            $tempFile = tempnam(sys_get_temp_dir(), 'badge_');
+            $tempFilePath = $tempFile . '.png';
+            $badgeImage->toPng()->save($tempFilePath);
+
+            // Create badge record - for visitor badge, only name is required
+            $badge = Badge::create([
+                'code' => $qrData,
+                'name' => $name,
+                'visitor_submission_id' => $submission->id
+            ]);
+
+            // Add the generated image to the badge media library
+            $badge->addMedia($tempFilePath)
+                ->usingName('badge_' . $submission->id)
+                ->toMediaCollection('image');
+
+            // Remove temporary file
+            if (file_exists($tempFilePath)) {
+                unlink($tempFilePath);
+            }
+
+            Log::info("Badge created for visitor submission: {$submission->id}");
+            return $badge;
+        } catch (\Exception $e) {
+            Log::error("Error generating badge: " . $e->getMessage());
+            return null;
         }
     }
 }

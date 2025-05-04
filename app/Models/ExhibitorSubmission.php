@@ -140,4 +140,12 @@ class ExhibitorSubmission extends Model implements HasMedia
 
         return $invoiceData;
     }
+
+    /**
+     * Get the badges associated with the exhibitor submission.
+     */
+    public function badges()
+    {
+        return $this->hasMany(Badge::class);
+    }
 }

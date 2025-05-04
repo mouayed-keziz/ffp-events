@@ -24,4 +24,6 @@ return [
     'badge_instructions' => 'Vous pouvez télécharger votre badge de partificipation et l\'imprimer pour pouvoir le présenter le jour de l\'évènement, vous pouvez télécharger votre badge également depuis votre profile, ou bien via l\'email que vous venez de recevoir.',
     'download_badge' => 'Télécharger le badge',
     'go_to_home' => 'Retour à l\'accueil',
+    'badge_not_found' => 'Votre badge n\'est pas encore disponible. Veuillez vérifier à nouveau plus tard ou contacter le support.',
+    'badge_image_not_found' => 'L\'image du badge n\'a pas pu être trouvée. Veuillez réessayer plus tard ou contacter le support.',
 ];

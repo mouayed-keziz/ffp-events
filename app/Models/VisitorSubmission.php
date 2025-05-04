@@ -48,4 +48,12 @@ class VisitorSubmission extends Model implements HasMedia
     {
         $this->addMediaCollection('attachments');
     }
+
+    /**
+     * Get the badge associated with the visitor submission.
+     */
+    public function badge()
+    {
+        return $this->hasOne(Badge::class);
+    }
 }

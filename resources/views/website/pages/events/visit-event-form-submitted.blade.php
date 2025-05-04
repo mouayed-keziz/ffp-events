@@ -17,15 +17,28 @@
                     <p class="text-gray-400 text-sm mt-4 text-center max-w-3xl">
                         {{ __('website/visit-event.badge_instructions') }}
                     </p>
-
+                    @if (session('error'))
+                        <div class="w-full max-w-2xl">
+                            <div class="alert alert-error my-4 w-full text-white">
+                                {{ session('error') }}
+                            </div>
+                        </div>
+                    @endif
                     <div class="flex gap-2 mt-8">
                         <a href="{{ route('events') }}"
                             class="btn font-semibold btn-sm rounded-md btn-outline border-base-200 border-2">
                             {{ __('website/visit-event.go_to_home') }}
                         </a>
-                        <a href="#" disabled class="btn font-semibold btn-sm rounded-md btn-primary">
-                            {{ __('website/visit-event.download_badge') }}
-                        </a>
+                        @if (isset($submission) && $submission->badge && $submission->badge->getFirstMedia('image'))
+                            <a href="{{ route('download_visitor_badge', ['id' => $event->id]) }}"
+                                class="btn font-semibold btn-sm rounded-md btn-primary">
+                                {{ __('website/visit-event.download_badge') }}
+                            </a>
+                        @else
+                            <button disabled class="btn font-semibold btn-sm rounded-md btn-primary opacity-50">
+                                {{ __('website/visit-event.download_badge') }}
+                            </button>
+                        @endif
                     </div>
                 </div>
             </div>

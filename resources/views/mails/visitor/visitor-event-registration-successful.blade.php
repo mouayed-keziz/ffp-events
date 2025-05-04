@@ -67,12 +67,15 @@
                             </tr>
                         </tbody>
                     </table>
-                    <p style="color:rgb(0,0,0);font-size:14px;line-height:24px;margin:16px 0">
-                        {{ __('emails/visitor-registration-successful.badge_attached') }}
-                    </p>
-                    <p style="color:rgb(0,0,0);font-size:14px;line-height:24px;margin:16px 0">
-                        {{ __('emails/visitor-registration-successful.badge_instructions') }}
-                    </p>
+
+                    @if ($submission->badge && $submission->badge->getFirstMedia('image'))
+                        <p style="color:rgb(0,0,0);font-size:14px;line-height:24px;margin:16px 0">
+                            {{ __('emails/visitor-registration-successful.badge_attached') }}
+                        </p>
+                        <p style="color:rgb(0,0,0);font-size:14px;line-height:24px;margin:16px 0">
+                            {{ __('emails/visitor-registration-successful.badge_instructions') }}
+                        </p>
+                    @endif
                     <p style="color:rgb(0,0,0);font-size:14px;line-height:24px;margin:16px 0">
                         {{ __('emails/visitor-registration-successful.questions') }}
                     </p>

@@ -24,4 +24,6 @@ return [
     'badge_instructions' => 'You can download your participation badge and print it to present it on the day of the event. You can also download your badge from your profile or via the email you just received.',
     'download_badge' => 'Download Badge',
     'go_to_home' => 'Return to Home',
+    'badge_not_found' => 'Your badge is not available yet. Please check again later or contact support.',
+    'badge_image_not_found' => 'The badge image could not be found. Please try again later or contact support.',
 ];

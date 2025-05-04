@@ -168,8 +168,6 @@ class BadgeService
             $qrAreaX = $sliceX + $textAreaWidth;
             $qrAreaY = $sliceY; // QR area starts below text area
 
-
-
             // --- Add Text (Name, Job, Company) ---
             $textPadding = intval($sliceWidth * 0.05); // 5% padding inside text area
             $availableTextWidth = $sliceWidth - (2 * $textPadding);
@@ -202,20 +200,31 @@ class BadgeService
             // Calculate Y positions for text lines, centered vertically within the text area
             $nameFontSize = $fontSize; // Use base font size for name
             $otherFontSize = intval($fontSize * 0.9); // Slightly smaller for job/company
-            $totalTextBlockHeight = $nameFontSize + $otherFontSize + $otherFontSize + ($lineHeight - $fontSize) + ($lineHeight * 0.9 - $otherFontSize) * 2; // Approximate height
-            $textBlockStartY = $textAreaY + max($textPadding, intval(($sliceHeight - $totalTextBlockHeight) / 2)); // Center the whole block
 
-            // Name
-            $nameY = $textBlockStartY + intval($nameFontSize / 2);
-            $drawText("Nom : " . $data['name'] ??  'KEZIZ MOUAYED', $nameY, $nameFontSize, '#000000'); // Darker text
+            // Determine if this is a visitor badge (name only) or exhibitor badge (name, position, company)
+            $isVisitorBadge = !isset($data['job']) && !isset($data['company']);
 
-            // Job Title
-            $jobY = $nameY + intval($lineHeight * 0.8); // Position below name
-            $drawText("Position : " . $data['job'] ??  'Software Engineer', $jobY, $otherFontSize, '#000000');
+            if ($isVisitorBadge) {
+                // For visitor badges - show only name
+                $nameY = $textAreaY + intval($sliceHeight / 2); // Center name vertically
+                $drawText("Nom : " . ($data['name'] ?? 'Unknown'), $nameY, $nameFontSize, '#000000');
+            } else {
+                // For exhibitor badges - show name, position, company
+                $totalTextBlockHeight = $nameFontSize + ($otherFontSize * 2) + ($lineHeight * 2);
+                $textBlockStartY = $textAreaY + max($textPadding, intval(($sliceHeight - $totalTextBlockHeight) / 2));
 
-            // Company
-            $companyY = $jobY + intval($lineHeight * 0.8); // Position below job
-            $drawText("Entreprise : " . $data['company'] ??  'Example Corp', $companyY, $otherFontSize, '#000000');
+                // Name
+                $nameY = $textBlockStartY + intval($nameFontSize / 2);
+                $drawText("Nom : " . ($data['name'] ?? 'Unknown'), $nameY, $nameFontSize, '#000000');
+
+                // Job Title
+                $jobY = $nameY + intval($lineHeight * 0.8);
+                $drawText("Position : " . ($data['job'] ?? 'N/A'), $jobY, $otherFontSize, '#000000');
+
+                // Company
+                $companyY = $jobY + intval($lineHeight * 0.8);
+                $drawText("Entreprise : " . ($data['company'] ?? 'N/A'), $companyY, $otherFontSize, '#000000');
+            }
 
 
             // --- Generate and Add QR Code (Smaller) ---

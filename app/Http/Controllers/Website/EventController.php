@@ -77,7 +77,8 @@ class EventController extends Controller
             return redirect()->route('visit_event', ['id' => $event->id]);
         }
         return view("website.pages.events.visit-event-form-submitted", [
-            'event' => $event
+            'event' => $event,
+            'submission' => $visitorSubmission
         ]);
     }
 
@@ -230,5 +231,47 @@ class EventController extends Controller
         return view('website.pages.events.terms-and-conditions', [
             'event' => $event
         ]);
+    }
+
+    public function DownloadVisitorBadge($id)
+    {
+        $event = EventAnnouncement::find($id);
+        if (!$event) {
+            return redirect()->route('events');
+        }
+
+        // Get visitor submission
+        $visitorSubmission = Auth('visitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
+        if (!$visitorSubmission) {
+            return redirect()->route('visit_event', ['id' => $event->id]);
+        }
+
+        // Check if the submission has a badge
+        $badge = $visitorSubmission->badge;
+        if (!$badge) {
+            return redirect()->back()->with('error', __('website/visit-event.badge_not_found'));
+        }
+
+        // Get the badge image
+        $badgeMedia = $badge->getFirstMedia('image');
+        if (!$badgeMedia || !file_exists($badgeMedia->getPath())) {
+            return redirect()->back()->with('error', __('website/visit-event.badge_image_not_found'));
+        }
+
+        // Get the event name in French
+        $eventName = $event->getTranslation('title', 'fr', false);
+
+        // Get the visitor's name
+        $visitorName = $badge->name;
+
+        // Create the filename in the required format: {event_name in fr} - {nom}.png
+        $filename = $eventName . ' - ' . $visitorName . '.png';
+
+        // Return the badge image for download
+        return response()->download(
+            $badgeMedia->getPath(),
+            $filename,
+            ['Content-Type' => 'image/png']
+        );
     }
 }
