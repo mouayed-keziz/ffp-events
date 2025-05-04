@@ -38,7 +38,7 @@ class EditEventAnnouncementBadgeTemplates extends EditRecord
                 Section::make(__('panel/event_announcement.badge_templates.section_title'))
                     ->description(__('panel/event_announcement.badge_templates.section_description'))
                     ->schema([
-                        Grid::make(3)
+                        Grid::make(2)
                             ->schema([
                                 SpatieMediaLibraryFileUpload::make('visitor_badge_template')
                                     ->label(__('panel/event_announcement.badge_templates.visitor_badge'))
@@ -181,73 +181,7 @@ class EditEventAnnouncementBadgeTemplates extends EditRecord
                                         },
                                     ]),
 
-                                SpatieMediaLibraryFileUpload::make('sponsor_badge_template')
-                                    ->label(__('panel/event_announcement.badge_templates.sponsor_badge'))
-                                    ->helperText(__('panel/event_announcement.badge_templates.aspect_ratio_hint'))
-                                    ->collection('sponsor_badge_template')
-                                    ->image()
-                                    ->imageEditor()
-                                    ->imageResizeMode('cover')
-                                    ->panelAspectRatio('1.4:1')
-                                    ->panelLayout('integrated')
-                                    // ->hint(__('panel/event_announcement.badge_templates.aspect_ratio_hint'))
-                                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/jpg'])
-                                    ->maxSize(10240) // 10MB limit
-                                    ->imagePreviewHeight(250)
-                                    // ->minHeight(1080)
-                                    ->rules([
-                                        function () {
-                                            return function (string $attribute, $value, \Closure $fail) {
-                                                if (empty($value)) {
-                                                    return;
-                                                }
 
-                                                Log::info('Validating sponsor badge template', [
-                                                    'attribute' => $attribute,
-                                                    'valueType' => gettype($value),
-                                                ]);
-
-                                                // Value might be TemporaryUploadedFile or array
-                                                $file = $value;
-
-                                                if (!$file || !method_exists($file, 'getRealPath') || !$file->getRealPath()) {
-                                                    Log::info('Invalid file object');
-                                                    return;
-                                                }
-
-                                                try {
-                                                    $manager = new ImageManager(new Driver());
-                                                    $image = $manager->read($file->getRealPath());
-                                                    // $image = Image::make($file->getRealPath());
-                                                    $width = $image->width();
-                                                    $height = $image->height();
-                                                    $aspectRatio = $height / $width;
-
-                                                    if ($aspectRatio < 1.39 || $aspectRatio > 1.42) {
-                                                        $fail(__('panel/event_announcement.badge_templates.aspect_ratio_error'));
-                                                        return;
-                                                    }
-
-                                                    if ($height < 1080) {
-                                                        $fail(__('panel/event_announcement.badge_templates.min_height_error'));
-                                                        return;
-                                                    }
-
-                                                    Log::info('Image dimensions', [
-                                                        'width' => $width,
-                                                        'height' => $height,
-                                                        'aspectRatio' => $aspectRatio,
-                                                    ]);
-                                                } catch (\Exception $e) {
-                                                    Log::error('Failed to process image', [
-                                                        'error' => $e->getMessage(),
-                                                        'trace' => $e->getTraceAsString()
-                                                    ]);
-                                                    $fail('Failed to process image: ' . $e->getMessage());
-                                                }
-                                            };
-                                        },
-                                    ]),
                             ])
                     ])
             ]);

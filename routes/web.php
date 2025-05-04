@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\BadgeController;
 use App\Http\Controllers\Website\GuestController;
 use App\Http\Controllers\Website\EventController;
 use App\Http\Controllers\Website\AuthController;
 use App\Http\Controllers\Website\ProfileController;
+use App\Http\Controllers\BadgePreviewController;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\EventAnnouncement;
@@ -21,15 +23,6 @@ Route::get('language/{locale}', function ($locale) {
 
 Route::get('media/download/{id}', [\App\Http\Controllers\MediaController::class, 'download'])->name('media.download');
 
-// Custom export download route with middleware
-// Route::get('filament/exports/{export}/download', [\App\Http\Controllers\ExportDownloadController::class, 'download'])
-//     ->middleware(['web', 'auth'])
-//     ->name('filament.exports.download');
-// Route::get('/app/filament/exports/{export}/download', [
-//     'as' => 'filament.exports.download',
-//     'uses' => 'Filament\Actions\Exports\Http\Controllers\DownloadExport'
-// ]);
-
 // Explicitly register Livewire routes to fix 404 errors in production
 Livewire::setScriptRoute(function ($handle) {
     return Route::get('/livewire/livewire.js', $handle);
@@ -41,13 +34,9 @@ Livewire::setUpdateRoute(function ($handle) {
 });
 
 Route::prefix('admin')->middleware(['auth:web'])->group(function () {
-    Route::get('exhibitor-submissions/{record}/download-invoice', [\App\Http\Controllers\Admin\ExhibitorSubmissionController::class, 'downloadInvoice'])
-        ->name('admin.exhibitor_submissions.download_invoice');
+    Route::get('exhibitor-submissions/{record}/download-invoice', [\App\Http\Controllers\Admin\ExhibitorSubmissionController::class, 'downloadInvoice'])->name('admin.exhibitor_submissions.download_invoice');
 });
 Route::middleware('local_middleware')->group(function () {
-
-    // Admin routes
-
     Route::view("/notifications", "website.pages.notifications")->name("notifications")->middleware("is_authenticated");
     Route::get("/profile",  [ProfileController::class, 'MyProfile'])->name("my-profile")->middleware("is_authenticated");
     Route::get("/subscriptions",  [ProfileController::class, 'MySubscriptions'])->name("my-subscriptions")->middleware("is_authenticated");
@@ -95,3 +84,6 @@ Route::middleware('local_middleware')->group(function () {
         Route::get('/verify-email-change', [ProfileController::class, 'verifyEmailChange'])->name('verify-email-change');
     });
 });
+
+// Badge preview route
+Route::get('/badge-preview', [BadgeController::class, 'show'])->name('badge.preview');
