@@ -147,6 +147,7 @@ class ExportTable
                     ->label(strtoupper(ExportFormat::Xlsx->value))
                     ->color("success")
                     ->icon("heroicon-o-arrow-down-tray")
+                    ->disabled(fn($record) => $record->completed_at === null)
                     ->url(function ($record) {
                         return route('filament.exports.download', ['export' => $record, 'format' => ExportFormat::Xlsx], absolute: true);
                     }, shouldOpenInNewTab: true),
