@@ -26,6 +26,9 @@ class LogExporter extends Exporter
                 ->state(fn($record) => $record->subjectField),
             ExportColumn::make('created_at')
                 ->formatStateUsing(fn($state) => $state->format('Y-m-d H:i:s')),
+            ExportColumn::make('properties')
+                ->label('Properties')
+                ->formatStateUsing(fn($state) => json_encode($state)),
         ];
     }
 
