@@ -43,5 +43,6 @@ return [
         'exhibitor' => 'Exhibitor Export',
         'product' => 'Product Export',
         'visitor' => 'Visitor Export',
+        "export" => 'Export Export',
     ],
 ];
