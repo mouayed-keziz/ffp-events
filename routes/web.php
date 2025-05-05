@@ -24,14 +24,14 @@ Route::get('language/{locale}', function ($locale) {
 Route::get('media/download/{id}', [\App\Http\Controllers\MediaController::class, 'download'])->name('media.download');
 
 // Explicitly register Livewire routes to fix 404 errors in production
-Livewire::setScriptRoute(function ($handle) {
-    return Route::get('/livewire/livewire.js', $handle);
-});
+// Livewire::setScriptRoute(function ($handle) {
+//     return Route::get('/livewire/livewire.js', $handle);
+// });
 
-Livewire::setUpdateRoute(function ($handle) {
-    return Route::post('/livewire/update', $handle)
-        ->middleware('web');
-});
+// Livewire::setUpdateRoute(function ($handle) {
+//     return Route::post('/livewire/update', $handle)
+//         ->middleware('web');
+// });
 
 Route::prefix('admin')->middleware(['auth:web'])->group(function () {
     Route::get('exhibitor-submissions/{record}/download-invoice', [\App\Http\Controllers\Admin\ExhibitorSubmissionController::class, 'downloadInvoice'])->name('admin.exhibitor_submissions.download_invoice');
