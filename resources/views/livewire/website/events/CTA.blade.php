@@ -118,12 +118,13 @@ new class extends Component {
                 </a>
             @endif
 
-            @if ($submission->status === ExhibitorSubmissionStatus::FULLY_PAYED)
-                <div class="tooltip" data-tip="coming soon ...">
-                    <a href="#" disabled class="btn rounded-md text-sm font-semibold btn-primary uppercase">
-                        {{ __('website/event.create_download_badges') }}
-                    </a>
-                </div>
+            @if (
+                $submission->status === ExhibitorSubmissionStatus::PARTLY_PAYED ||
+                    $submission->status === ExhibitorSubmissionStatus::FULLY_PAYED)
+                <a href="{{ route('manage_exhibitor_badges', $event) }}"
+                    class="w-full btn rounded-md text-sm font-semibold btn-primary uppercase">
+                    {{ __('website/event.create_download_badges') }}
+                </a>
             @endif
 
             @if (

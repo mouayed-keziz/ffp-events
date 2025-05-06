@@ -60,6 +60,7 @@ Route::middleware('local_middleware')->group(function () {
             Route::get("/event/{id}/payment-validation", [EventController::class, 'PaymentValidation'])->name('payment_validation');
             // Route::get("/event/{id}/post-exhibit-event", [EventController::class, 'PostExhibitEvent'])->name('post_exhibit_event');
             Route::get("/event/{id}/post-exhibition", [EventController::class, 'PostExhibitEvent'])->name('post_exhibit_event');
+            Route::get("/event/{id}/manage-badges", [EventController::class, 'ManageExhibitorBadges'])->name('manage_exhibitor_badges');
         });
     });
 
