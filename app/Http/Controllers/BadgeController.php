@@ -36,7 +36,7 @@ class BadgeController extends Controller
 
         // Prepare dummy data
         $dummyData = [
-            'name' => 'KEZIZ Mouayed',
+            'name' => 'MMMMMMMMMM',
             'job' => 'Software Engineer',
             'company' => 'FFP-events',
             'qr_data' => 'EVENT:' . $eventId . ';TYPE:' . $badgeType . ';UID:' . Str::uuid(), // Example QR data

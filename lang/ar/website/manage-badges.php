@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'page_title' => 'إنشاء وتنزيل الشارات لـ :event',
+    'team_members' => 'أعضاء الفريق',
+    'description' => 'أضف وراجع أعضاء فريقك الذين سيحضرون الحدث الخاص بك لتتمكن من تنزيل شاراتهم',
+    'name' => 'الاسم',
+    'company' => 'الشركة',
+    'position' => 'المنصب في الشركة',
+    'name_placeholder' => 'محمد أحمد',
+    'company_placeholder' => 'اسم الشركة',
+    'position_placeholder' => 'مدير',
+    'add_member' => 'إضافة عضو',
+    'save' => 'حفظ',
+    'save_and_download' => 'حفظ وتنزيل كل الشارات',
+    'no_badges' => 'لم تتم إضافة أي أعضاء للفريق بعد. أضف أول عضو!',
+    'delete' => 'حذف',
+
+    // Validation messages
+    'name_required' => 'حقل الاسم مطلوب.',
+    'name_max' => 'يجب ألا يتجاوز الاسم 255 حرفًا.',
+    'company_required' => 'حقل الشركة مطلوب.',
+    'company_max' => 'يجب ألا يتجاوز اسم الشركة 255 حرفًا.',
+    'position_required' => 'حقل المنصب مطلوب.',
+    'position_max' => 'يجب ألا يتجاوز المنصب 255 حرفًا.',
+];

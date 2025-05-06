@@ -3,7 +3,7 @@
 @section('content')
     @include('website.components.exhibit-event.banner', [
         'event' => $event,
-        'title' => __('website/exhibit-event.terms_and_conditions') . ' ' . $event->title,
+        'title' => __('website/manage-badges.page_title', ['event' => $event->title]),
         'withEndDate' => false,
     ])
     <main class="w-full max-w-5xl mx-auto px-2 md:px-4 py-8">

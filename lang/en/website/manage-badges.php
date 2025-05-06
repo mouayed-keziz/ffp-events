@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'page_title' => 'Create and download badges for :event',
+    'team_members' => 'Team Members',
+    'description' => 'Add and review your team members who will attend your event to download their badges',
+    'name' => 'Name',
+    'company' => 'Company',
+    'position' => 'Position in the company',
+    'name_placeholder' => 'John Doe',
+    'company_placeholder' => 'Company Name',
+    'position_placeholder' => 'Manager',
+    'add_member' => 'Add member',
+    'save' => 'Save',
+    'save_and_download' => 'Save and download all badges',
+    'no_badges' => 'No team members added yet. Add your first member!',
+    'delete' => 'Delete',
+
+    // Validation messages
+    'name_required' => 'The name field is required.',
+    'name_max' => 'The name must not be greater than 255 characters.',
+    'company_required' => 'The company field is required.',
+    'company_max' => 'The company must not be greater than 255 characters.',
+    'position_required' => 'The position field is required.',
+    'position_max' => 'The position must not be greater than 255 characters.',
+];
