@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Services\BadgeService;
+use App\Models\EventAnnouncement;
+use App\Models\ExhibitorSubmission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Log;
@@ -65,5 +67,39 @@ class BadgeController extends Controller
             ]);
             return Response::make('Failed to encode badge image.', 500);
         }
+    }
+
+    /**
+     * Download badges zip file
+     *
+     * @param Request $request
+     * @param EventAnnouncement $event
+     * @param ExhibitorSubmission $submission
+     * @param string $zipPath
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
+    public function downloadBadgesZip(Request $request, EventAnnouncement $event, ExhibitorSubmission $submission, $zipPath)
+    {
+        // Check if user has permission
+        if (!auth('exhibitor')->check() || auth('exhibitor')->id() !== $submission->exhibitor_id) {
+            abort(403, 'Unauthorized');
+        }
+
+        // Validate that the submission belongs to the event
+        if ($submission->event_announcement_id !== $event->id) {
+            abort(404, 'Submission not found for this event');
+        }
+
+        $fullPath = storage_path('app/temp/' . $zipPath);
+
+        // Check if file exists
+        if (!file_exists($fullPath)) {
+            abort(404, 'File not found');
+        }
+
+        // Download the file
+        return response()->download($fullPath, "badges_{$event->title}_{$submission->exhibitor->name}.zip", [
+            'Content-Type' => 'application/zip'
+        ])->deleteFileAfterSend();
     }
 }

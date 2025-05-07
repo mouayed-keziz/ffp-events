@@ -87,5 +87,8 @@ Route::middleware('local_middleware')->group(function () {
     });
 });
 
-// Badge preview route
+// Badge routes
 Route::get('/badge-preview', [BadgeController::class, 'show'])->name('badge.preview');
+Route::get('/exhibitor/events/{event}/submissions/{submission}/badges/download/{zipPath}', [BadgeController::class, 'downloadBadgesZip'])
+    ->middleware('auth:exhibitor')
+    ->name('exhibitor.badges.download');

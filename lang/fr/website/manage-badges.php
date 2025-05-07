@@ -23,4 +23,9 @@ return [
     'company_max' => 'Le nom de l\'entreprise ne doit pas dépasser 255 caractères.',
     'position_required' => 'Le champ fonction est obligatoire.',
     'position_max' => 'La fonction ne doit pas dépasser 255 caractères.',
+
+    // Success and error messages
+    'badges_saved_success' => 'Badges enregistrés avec succès.',
+    'badges_save_error' => 'Erreur lors de l\'enregistrement des badges. Veuillez réessayer.',
+    'template_not_found' => 'Modèle de badge introuvable. Veuillez contacter l\'administrateur.',
 ];

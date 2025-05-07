@@ -4,6 +4,8 @@ use Livewire\Volt\Component;
 use App\Models\EventAnnouncement;
 use App\Models\ExhibitorSubmission;
 use App\Models\Badge;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 new class extends Component {
     public $event;
@@ -46,16 +48,244 @@ new class extends Component {
     {
         $this->validate();
 
-        // For now, just dump the badges data
-        dd($this->badges);
+        $savedBadges = $this->processBadges();
+
+        if ($savedBadges->isNotEmpty()) {
+            $this->notifyExhibitor($savedBadges);
+            $this->notifyAdmins($savedBadges);
+
+            session()->flash('success', __('website/manage-badges.badges_saved_success'));
+            $this->loadBadges();
+        } else {
+            session()->flash('error', __('website/manage-badges.badges_save_error'));
+        }
     }
 
     public function saveAndDownloadBadges()
     {
         $this->validate();
 
-        // For now, just dump the badges data
-        dd($this->badges);
+        $savedBadges = $this->processBadges();
+
+        if ($savedBadges->isNotEmpty()) {
+            $this->notifyExhibitor($savedBadges);
+            $this->notifyAdmins($savedBadges);
+
+            session()->flash('success', __('website/manage-badges.badges_saved_success'));
+            $this->loadBadges();
+
+            // Generate the zip file for download
+            $zipPath = $this->generateBadgesZip($savedBadges);
+
+            // Redirect to a download route
+            return redirect()->route('exhibitor.badges.download', [
+                'event' => $this->event->id,
+                'submission' => $this->submission->id,
+                'zipPath' => basename($zipPath),
+            ]);
+        } else {
+            session()->flash('error', __('website/manage-badges.badges_save_error'));
+        }
+    }
+
+    /**
+     * Process and save badges
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    protected function processBadges()
+    {
+        $badgeService = app(\App\Services\BadgeService::class);
+        $savedBadges = collect([]);
+
+        // Get the template path for exhibitor badges
+        $templatePath = $badgeService::getTemplatePath($this->event->id, 'exhibitor');
+
+        if (!$templatePath) {
+            session()->flash('error', __('website/manage-badges.template_not_found'));
+            return collect([]);
+        }
+
+        foreach ($this->badges as $badgeData) {
+            // Skip empty badges
+            if (empty($badgeData['name']) || empty($badgeData['company']) || empty($badgeData['position'])) {
+                continue;
+            }
+
+            // Create or update the badge
+            $badge = isset($badgeData['id']) ? Badge::find($badgeData['id']) : new Badge();
+
+            if (!$badge) {
+                $badge = new Badge();
+            }
+
+            // Generate a unique code for new badges
+            if (!isset($badgeData['id'])) {
+                $badge->code = 'EXH-' . $this->event->id . '-' . $this->submission->id . '-' . uniqid();
+            }
+
+            $badge->fill([
+                'name' => $badgeData['name'],
+                'company' => $badgeData['company'],
+                'position' => $badgeData['position'],
+                'email' => $this->submission->exhibitor->email, // Use exhibitor email
+                'exhibitor_submission_id' => $this->submission->id,
+            ]);
+
+            $badge->save(); // Generate badge image
+            $imageData = [
+                'name' => $badge->name,
+                'company' => $badge->company,
+                'job' => $badge->position, // Change position to job for compatibility with BadgeService
+                'qr_data' => $badge->code,
+            ];
+
+            // Log the data for debugging
+            \Illuminate\Support\Facades\Log::info('Generating badge image', [
+                'badge_id' => $badge->id,
+                'template_path' => $templatePath,
+                'image_data' => $imageData,
+            ]);
+
+            $badgeImage = $badgeService::generateBadgePreview($templatePath, $imageData);
+            if ($badgeImage) {
+                // Create temp file
+                $tempPath = storage_path('app/temp/' . $badge->code . '.png');
+
+                // Ensure temp directory exists
+                if (!file_exists(storage_path('app/temp'))) {
+                    mkdir(storage_path('app/temp'), 0755, true);
+                }
+
+                // Log badge image creation
+                \Illuminate\Support\Facades\Log::info('Badge image generated successfully', [
+                    'badge_id' => $badge->id,
+                    'temp_path' => $tempPath,
+                ]);
+
+                try {
+                    // Save the image as PNG
+                    $badgeImage->toPng()->save($tempPath);
+
+                    if (file_exists($tempPath)) {
+                        // Add the image to the badge's media collection
+                        $badge->clearMediaCollection('image');
+                        $badge
+                            ->addMedia($tempPath)
+                            ->withCustomProperties(['mime_type' => 'image/png']) // Set PNG mime type
+                            ->toMediaCollection('image');
+
+                        // Delete temp file after adding to media collection
+                        @unlink($tempPath);
+                    }
+                } catch (\Exception $e) {
+                    // Log the error
+                    \Illuminate\Support\Facades\Log::error('Error saving badge image', [
+                        'badge_id' => $badge->id,
+                        'error' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString(),
+                    ]);
+                }
+
+                $savedBadges->push($badge);
+            }
+        }
+
+        return $savedBadges;
+    }
+
+    protected function generateBadgesZip($badges)
+    {
+        // Create a temporary zip file
+        $zipFileName = 'badges_' . $this->submission->id . '_' . time() . '.zip';
+        $zipFilePath = storage_path('app/temp/' . $zipFileName);
+
+        // Ensure the temp directory exists
+        if (!file_exists(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0755, true);
+        }
+
+        $zip = new \ZipArchive();
+        if ($zip->open($zipFilePath, \ZipArchive::CREATE) === true) {
+            foreach ($badges as $badge) {
+                if ($badge->hasMedia('image')) {
+                    $badgePath = $badge->getFirstMediaPath('image');
+                    // Use PNG extension for the files in the ZIP
+                    $badgeFileName = "badge_{$badge->code}.png";
+                    $zip->addFile($badgePath, $badgeFileName);
+                }
+            }
+            $zip->close();
+        }
+
+        return $zipFilePath;
+    }
+
+    /**
+     * Notify the exhibitor about their badges
+     *
+     * @param \Illuminate\Support\Collection $badges
+     * @return void
+     */
+    protected function notifyExhibitor($badges)
+    {
+        $exhibitor = $this->submission->exhibitor;
+        $exhibitor->notify(new \App\Notifications\Exhibitor\ExhibitorGeneratedBadges($this->event, $this->submission, $badges));
+    }
+
+    /**
+     * Notify admins about the badges submission
+     *
+     * @param \Illuminate\Support\Collection $badges
+     * @return void
+     */
+    protected function notifyAdmins($badges)
+    {
+        // Get all admin and super_admin users for database notifications
+        $adminUsers = \App\Models\User::role(['admin', 'super_admin'])->get();
+
+        /*
+        // Send a single email to the company email from settings (COMMENTED AS REQUESTED)
+        $companySettings = app(\App\Settings\CompanyInformationsSettings::class);
+        
+        // Send email notification to company email only using notification routing (COMMENTED AS REQUESTED)
+        \Illuminate\Support\Facades\Notification::route('mail', $companySettings->email)
+            ->notify(new \App\Notifications\Admin\ExhibitorBadgesSubmission(
+                $this->event, 
+                $this->submission->exhibitor, 
+                $this->submission, 
+                $badges,
+                true
+            ));
+        */
+
+        // Send database notifications to all admins and super_admins
+        foreach ($adminUsers as $admin) {
+            /*
+            // Send database notification only (COMMENTED AS REQUESTED)
+            $admin->notify(new \App\Notifications\Admin\ExhibitorBadgesSubmission(
+                $this->event,
+                $this->submission->exhibitor,
+                $this->submission,
+                $badges
+            ));
+            */
+
+            // Send direct database notification for Filament panel
+            \Filament\Notifications\Notification::make()
+                ->title('Badges soumis')
+                ->body("L'exposant {$this->submission->exhibitor->name} a soumis {$badges->count()} badges pour l'événement {$this->event->title}.")
+                ->actions([
+                    \Filament\Notifications\Actions\Action::make('voir')
+                        ->label('Voir la soumission')
+                        ->url(route('filament.admin.resources.exhibitor-submissions.view', $this->submission->id)),
+                ])
+                ->icon('heroicon-o-identification')
+                ->iconColor('success')
+                ->sendToDatabase($admin);
+
+            \Illuminate\Support\Facades\Log::info("Admin notification sent to: {$admin->email} for badges submission");
+        }
     }
 
     public function deleteBadge($index)

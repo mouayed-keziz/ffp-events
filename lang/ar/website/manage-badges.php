@@ -23,4 +23,9 @@ return [
     'company_max' => 'يجب ألا يتجاوز اسم الشركة 255 حرفًا.',
     'position_required' => 'حقل المنصب مطلوب.',
     'position_max' => 'يجب ألا يتجاوز المنصب 255 حرفًا.',
+
+    // Success and error messages
+    'badges_saved_success' => 'تم حفظ الشارات بنجاح.',
+    'badges_save_error' => 'خطأ في حفظ الشارات. يرجى المحاولة مرة أخرى.',
+    'template_not_found' => 'لم يتم العثور على قالب الشارة. يرجى الاتصال بالمسؤول.',
 ];

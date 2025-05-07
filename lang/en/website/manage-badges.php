@@ -23,4 +23,9 @@ return [
     'company_max' => 'The company must not be greater than 255 characters.',
     'position_required' => 'The position field is required.',
     'position_max' => 'The position must not be greater than 255 characters.',
+
+    // Success and error messages
+    'badges_saved_success' => 'Badges successfully saved.',
+    'badges_save_error' => 'Error saving badges. Please try again.',
+    'template_not_found' => 'Badge template not found. Please contact the administrator.',
 ];

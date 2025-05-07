@@ -173,7 +173,7 @@ class BadgeService
             $availableTextWidth = $sliceWidth - (2 * $textPadding);
 
             // Make font size smaller relative to the text area height
-            $fontSize = max(6, intval($sliceHeight / 10)); // Smaller base font size (e.g., 1/10th height), min 10px
+            $fontSize = max(6, intval($sliceHeight / 10)) - 5; // Smaller base font size (e.g., 1/10th height), min 10px
             $lineHeight = intval($fontSize * 1.5); // Adjust line spacing accordingly
 
             // Center X position for text within the slice
