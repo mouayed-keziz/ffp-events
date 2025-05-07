@@ -472,6 +472,39 @@ class ExhibitorSubmissionActivity
             ->log('Admin approved update request');
     }
 
+
+    /**
+     * Log when an exhibitor updates their badges
+     * 
+     * @param Model|null $exhibitor
+     * @param Model|null $submission
+     * @param array|null $properties
+     * @return void
+     */
+    public static function logBadgesUpdated(?Model $exhibitor, ?Model $submission, ?array $properties = []): void
+    {
+        if ($exhibitor === null || $submission === null) {
+            return;
+        }
+
+        $baseProperties = [
+            'email' => $exhibitor->email,
+            'name' => $exhibitor->name,
+            'submission_id' => $submission->id,
+            'event_id' => $submission->event_announcement_id,
+            'event_title' => $submission->eventAnnouncement->title ?? null,
+            'badge_count' => $properties['badge_count'] ?? 0,
+        ];
+
+        activity()
+            ->useLog(LogName::ExhibitorSubmissions->value)
+            ->event(LogEvent::ExhibitorUpdatedBadges->value)
+            ->causedBy($exhibitor)
+            ->performedOn($submission)
+            ->withProperties(array_merge($baseProperties, $properties ?? []))
+            ->log('Exhibitor updated badges for their submission');
+    }
+
     /**
      * Log when an admin denies an update request.
      *

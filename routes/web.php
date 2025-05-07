@@ -92,3 +92,9 @@ Route::get('/badge-preview', [BadgeController::class, 'show'])->name('badge.prev
 Route::get('/exhibitor/events/{event}/submissions/{submission}/badges/download/{zipPath}', [BadgeController::class, 'downloadBadgesZip'])
     ->middleware('auth:exhibitor')
     ->name('exhibitor.badges.download');
+
+// Clear badge redirect session route
+Route::post('/clear-badge-redirect-session', function () {
+    session()->forget('badge_download_redirect');
+    return response()->json(['success' => true]);
+})->middleware('auth:exhibitor')->name('clear.badge.redirect.session');

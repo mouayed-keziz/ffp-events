@@ -11,6 +11,7 @@ new class extends Component {
     public $event;
     public $submission;
     public $badges = [];
+    public $originalBadges = [];
     public $newBadge = [
         'name' => '',
         'company' => '',
@@ -32,6 +33,7 @@ new class extends Component {
     public function loadBadges()
     {
         $this->badges = $this->submission->badges->toArray();
+        $this->originalBadges = json_encode($this->badges); // Store original badges as JSON for comparison
     }
 
     public function addBadge()
@@ -51,11 +53,17 @@ new class extends Component {
         $savedBadges = $this->processBadges();
 
         if ($savedBadges->isNotEmpty()) {
+            // Log the activity
+            \App\Activity\ExhibitorSubmissionActivity::logBadgesUpdated($this->submission->exhibitor, $this->submission, ['badge_count' => $savedBadges->count()]);
+
             $this->notifyExhibitor($savedBadges);
             $this->notifyAdmins($savedBadges);
 
             session()->flash('success', __('website/manage-badges.badges_saved_success'));
             $this->loadBadges();
+
+            // Redirect to event details page after saving
+            return redirect()->route('event_details', ['id' => $this->event->id]);
         } else {
             session()->flash('error', __('website/manage-badges.badges_save_error'));
         }
@@ -68,6 +76,9 @@ new class extends Component {
         $savedBadges = $this->processBadges();
 
         if ($savedBadges->isNotEmpty()) {
+            // Log the activity
+            \App\Activity\ExhibitorSubmissionActivity::logBadgesUpdated($this->submission->exhibitor, $this->submission, ['badge_count' => $savedBadges->count()]);
+
             $this->notifyExhibitor($savedBadges);
             $this->notifyAdmins($savedBadges);
 
@@ -77,11 +88,12 @@ new class extends Component {
             // Generate the zip file for download
             $zipPath = $this->generateBadgesZip($savedBadges);
 
-            // Redirect to a download route
+            // Redirect to the badge download route with a query parameter to redirect afterward
             return redirect()->route('exhibitor.badges.download', [
                 'event' => $this->event->id,
                 'submission' => $this->submission->id,
                 'zipPath' => basename($zipPath),
+                'redirect_to' => route('event_details', ['id' => $this->event->id]),
             ]);
         } else {
             session()->flash('error', __('website/manage-badges.badges_save_error'));
@@ -244,37 +256,21 @@ new class extends Component {
         // Get all admin and super_admin users for database notifications
         $adminUsers = \App\Models\User::role(['admin', 'super_admin'])->get();
 
-        /*
-        // Send a single email to the company email from settings (COMMENTED AS REQUESTED)
+        // Send a single email to the company email from settings
         $companySettings = app(\App\Settings\CompanyInformationsSettings::class);
-        
-        // Send email notification to company email only using notification routing (COMMENTED AS REQUESTED)
-        \Illuminate\Support\Facades\Notification::route('mail', $companySettings->email)
-            ->notify(new \App\Notifications\Admin\ExhibitorBadgesSubmission(
-                $this->event, 
-                $this->submission->exhibitor, 
-                $this->submission, 
-                $badges,
-                true
-            ));
-        */
+
+        // Send email notification to company email only using notification routing
+        \Illuminate\Support\Facades\Notification::route('mail', $companySettings->email)->notify(new \App\Notifications\Admin\ExhibitorUpdatedBadges($this->event, $this->submission->exhibitor, $this->submission, $badges, true));
 
         // Send database notifications to all admins and super_admins
         foreach ($adminUsers as $admin) {
-            /*
-            // Send database notification only (COMMENTED AS REQUESTED)
-            $admin->notify(new \App\Notifications\Admin\ExhibitorBadgesSubmission(
-                $this->event,
-                $this->submission->exhibitor,
-                $this->submission,
-                $badges
-            ));
-            */
+            // Send database notification for record keeping
+            $admin->notify(new \App\Notifications\Admin\ExhibitorUpdatedBadges($this->event, $this->submission->exhibitor, $this->submission, $badges));
 
             // Send direct database notification for Filament panel
             \Filament\Notifications\Notification::make()
-                ->title('Badges soumis')
-                ->body("L'exposant {$this->submission->exhibitor->name} a soumis {$badges->count()} badges pour l'événement {$this->event->title}.")
+                ->title('Badges mis à jour')
+                ->body("L'exposant {$this->submission->exhibitor->name} a mis à jour {$badges->count()} badges pour l'événement {$this->event->title}.")
                 ->actions([
                     \Filament\Notifications\Actions\Action::make('voir')
                         ->label('Voir la soumission')
@@ -284,7 +280,7 @@ new class extends Component {
                 ->iconColor('success')
                 ->sendToDatabase($admin);
 
-            \Illuminate\Support\Facades\Log::info("Admin notification sent to: {$admin->email} for badges submission");
+            \Illuminate\Support\Facades\Log::info("Admin notification sent to: {$admin->email} for badge updates");
         }
     }
 
@@ -318,6 +314,51 @@ new class extends Component {
             'badges.*.position.max' => __('website/manage-badges.position_max'),
         ];
     }
+
+    /**
+     * Check if badges have been modified
+     *
+     * @return bool
+     */
+    public function badgesHaveChanged()
+    {
+        // If the badges count is different, something has changed
+        $originalBadgesArray = json_decode($this->originalBadges, true) ?: [];
+        if (count($this->badges) !== count($originalBadgesArray)) {
+            return true;
+        }
+
+        // Compare each badge to see if any fields changed
+        foreach ($this->badges as $index => $badge) {
+            // Skip checking empty new badges
+            if (!isset($badge['id']) && empty($badge['name']) && empty($badge['company']) && empty($badge['position'])) {
+                continue;
+            }
+
+            // If this is a new badge with some data, it's a change
+            if (!isset($badge['id']) && (!empty($badge['name']) || !empty($badge['company']) || !empty($badge['position']))) {
+                return true;
+            }
+
+            // Check if the badge exists in original badges
+            $originalBadge = null;
+            foreach ($originalBadgesArray as $ob) {
+                if (isset($ob['id']) && isset($badge['id']) && $ob['id'] === $badge['id']) {
+                    $originalBadge = $ob;
+                    break;
+                }
+            }
+
+            // If the badge was in the original set but fields changed
+            if ($originalBadge) {
+                if ($originalBadge['name'] !== $badge['name'] || $originalBadge['company'] !== $badge['company'] || $originalBadge['position'] !== $badge['position']) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }; ?>
 
 <div>
@@ -343,9 +384,10 @@ new class extends Component {
                     <label class="mb-2 label-text-alt font-semibold text-[#83909B] text-sm">
                         {{ __('website/manage-badges.name') }} *
                     </label>
-                    <input type="text" wire:model.lazy="badges.{{ $index }}.name"
+                    <input type="text" wire:model.debounce.500ms="badges.{{ $index }}.name"
                         class="input input-bordered bg-white mb-2 rounded-md {{ $errors->has('badges.' . $index . '.name') ? 'input-error' : '' }}"
-                        required placeholder="{{ __('website/manage-badges.name_placeholder') }}">
+                        required placeholder="{{ __('website/manage-badges.name_placeholder') }}"
+                        @if (isset($badge['id'])) disabled @endif>
                     @error('badges.' . $index . '.name')
                         <span class="text-error text-xs mt-1">{{ $message }}</span>
                     @enderror
@@ -355,9 +397,10 @@ new class extends Component {
                     <label class="mb-2 label-text-alt font-semibold text-[#83909B] text-sm">
                         {{ __('website/manage-badges.company') }} *
                     </label>
-                    <input type="text" wire:model.lazy="badges.{{ $index }}.company"
+                    <input type="text" wire:model.debounce.500ms="badges.{{ $index }}.company"
                         class="input input-bordered bg-white mb-2 rounded-md {{ $errors->has('badges.' . $index . '.company') ? 'input-error' : '' }}"
-                        required placeholder="{{ __('website/manage-badges.company_placeholder') }}">
+                        required placeholder="{{ __('website/manage-badges.company_placeholder') }}"
+                        @if (isset($badge['id'])) disabled @endif>
                     @error('badges.' . $index . '.company')
                         <span class="text-error text-xs mt-1">{{ $message }}</span>
                     @enderror
@@ -367,9 +410,10 @@ new class extends Component {
                     <label class="mb-2 label-text-alt font-semibold text-[#83909B] text-sm">
                         {{ __('website/manage-badges.position') }} *
                     </label>
-                    <input type="text" wire:model.lazy="badges.{{ $index }}.position"
+                    <input type="text" wire:model.debounce.500ms="badges.{{ $index }}.position"
                         class="input input-bordered bg-white mb-2 rounded-md {{ $errors->has('badges.' . $index . '.position') ? 'input-error' : '' }}"
-                        required placeholder="{{ __('website/manage-badges.position_placeholder') }}">
+                        required placeholder="{{ __('website/manage-badges.position_placeholder') }}"
+                        @if (isset($badge['id'])) disabled @endif>
                     @error('badges.' . $index . '.position')
                         <span class="text-error text-xs mt-1">{{ $message }}</span>
                     @enderror
@@ -379,15 +423,23 @@ new class extends Component {
     </div>
 
     <div class="flex gap-2 mt-6 justify-start items-center flex-wrap">
-        <button wire:click="addBadge" class="btn font-semibold btn-sm rounded-md btn-outline border-base-200 border-2">
+        <button wire:click="addBadge" class="btn font-semibold btn-sm rounded-md btn-outline border-base-200 border-2"
+            wire:loading.attr="disabled">
             {{ __('website/manage-badges.add_member') }}
         </button>
-        <button wire:click="saveBadges"
-            class="btn font-semibold btn-sm rounded-md btn-outline border-base-200 border-2">
-            {{ __('website/manage-badges.save') }}
+        <button wire:click="saveBadges" class="btn font-semibold btn-sm rounded-md btn-outline border-base-200 border-2"
+            wire:loading.attr="disabled" wire:target="saveBadges" @if (!$this->badgesHaveChanged()) disabled @endif>
+            <span wire:loading.remove wire:target="saveBadges">{{ __('website/manage-badges.save') }}</span>
+            <span wire:loading wire:target="saveBadges" class="loading loading-spinner loading-sm"></span>
+            <span wire:loading wire:target="saveBadges">{{ __('website/manage-badges.saving') }}</span>
         </button>
-        <button wire:click="saveAndDownloadBadges" class="btn font-semibold btn-sm rounded-md btn-primary">
-            {{ __('website/manage-badges.save_and_download') }}
+        <button wire:click="saveAndDownloadBadges" class="btn font-semibold btn-sm rounded-md btn-primary"
+            wire:loading.attr="disabled" wire:target="saveAndDownloadBadges"
+            @if (!$this->badgesHaveChanged()) disabled @endif>
+            <span wire:loading.remove
+                wire:target="saveAndDownloadBadges">{{ __('website/manage-badges.save_and_download') }}</span>
+            <span wire:loading wire:target="saveAndDownloadBadges" class="loading loading-spinner loading-sm"></span>
+            <span wire:loading wire:target="saveAndDownloadBadges">{{ __('website/manage-badges.downloading') }}</span>
         </button>
     </div>
 </div>

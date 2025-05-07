@@ -28,4 +28,7 @@ return [
     'badges_saved_success' => 'Badges enregistrés avec succès.',
     'badges_save_error' => 'Erreur lors de l\'enregistrement des badges. Veuillez réessayer.',
     'template_not_found' => 'Modèle de badge introuvable. Veuillez contacter l\'administrateur.',
+
+    'saving' => 'Enregistrement en cours...',
+    'downloading' => 'Téléchargement en cours...',
 ];

@@ -95,6 +95,15 @@ class BadgeController extends Controller
         // Check if file exists
         if (!file_exists($fullPath)) {
             abort(404, 'File not found');
+        }        // Get redirection URL from request if available
+        $redirectUrl = $request->query('redirect_to');
+
+        // Set flash message for after download redirection
+        if ($redirectUrl) {
+            session()->flash('success', __('website/manage-badges.badges_download_success'));
+
+            // Store the redirect URL in session instead of cookie
+            session(['badge_download_redirect' => $redirectUrl]);
         }
 
         // Download the file

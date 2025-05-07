@@ -29,6 +29,7 @@ enum LogEvent: string implements HasLabel, HasColor, HasIcon
     case ExhibitorRequestedUpdate = 'exhibitor_requested_update';
     case ExhibitorUpdatedSubmission = 'exhibitor_updated_submission';
     case ExhibitorDownloadedInvoice = 'exhibitor_downloaded_invoice';
+    case ExhibitorUpdatedBadges = 'exhibitor_updated_badges';
 
         // Admin actions on exhibitor submissions
     case ExhibitorSubmissionAccepted = 'exhibitor_submission_accepted';
@@ -65,6 +66,7 @@ enum LogEvent: string implements HasLabel, HasColor, HasIcon
             self::ExhibitorRequestedUpdate => __('panel/logs.events.exhibitor_requested_update'),
             self::ExhibitorUpdatedSubmission => __('panel/logs.events.exhibitor_updated_submission'),
             self::ExhibitorDownloadedInvoice => __('panel/logs.events.exhibitor_downloaded_invoice'),
+            self::ExhibitorUpdatedBadges => __('panel/logs.events.exhibitor_updated_badges'),
 
             // Admin actions on exhibitor submissions
             self::ExhibitorSubmissionAccepted => __('panel/logs.events.exhibitor_submission_accepted'),
@@ -103,6 +105,7 @@ enum LogEvent: string implements HasLabel, HasColor, HasIcon
             self::ExhibitorRequestedUpdate => 'warning',
             self::ExhibitorUpdatedSubmission => 'warning',
             self::ExhibitorDownloadedInvoice => 'info',
+            self::ExhibitorUpdatedBadges => 'warning',
 
             // Admin actions on exhibitor submissions
             self::ExhibitorSubmissionAccepted => 'success',
@@ -141,6 +144,7 @@ enum LogEvent: string implements HasLabel, HasColor, HasIcon
             self::ExhibitorRequestedUpdate => 'heroicon-o-pencil',
             self::ExhibitorUpdatedSubmission => 'heroicon-o-document-plus',
             self::ExhibitorDownloadedInvoice => 'heroicon-o-document-arrow-down',
+            self::ExhibitorUpdatedBadges => 'heroicon-o-identification',
 
             // Admin actions on exhibitor submissions
             self::ExhibitorSubmissionAccepted => 'heroicon-o-check-circle',

@@ -28,4 +28,9 @@ return [
     'badges_saved_success' => 'Badges successfully saved.',
     'badges_save_error' => 'Error saving badges. Please try again.',
     'template_not_found' => 'Badge template not found. Please contact the administrator.',
+    'badges_download_success' => 'Badges have been successfully downloaded. You will be redirected to the event page.',
+
+    // Button states
+    'saving' => 'Saving...',
+    'downloading' => 'Downloading...',
 ];
