@@ -12,6 +12,7 @@ new class extends Component {
     public $submission;
     public $badges = [];
     public $originalBadges = [];
+    public $deletedBadgeIds = [];
     public $newBadge = [
         'name' => '',
         'company' => '',
@@ -109,6 +110,19 @@ new class extends Component {
     {
         $badgeService = app(\App\Services\BadgeService::class);
         $savedBadges = collect([]);
+
+        // First, delete any badges that were removed
+        if (!empty($this->deletedBadgeIds)) {
+            foreach ($this->deletedBadgeIds as $badgeId) {
+                $badgeToDelete = Badge::find($badgeId);
+                if ($badgeToDelete) {
+                    $badgeToDelete->delete();
+                    \Illuminate\Support\Facades\Log::info("Badge deleted: {$badgeId}");
+                }
+            }
+            // Clear the deleted badges array
+            $this->deletedBadgeIds = [];
+        }
 
         // Get the template path for exhibitor badges
         $templatePath = $badgeService::getTemplatePath($this->event->id, 'exhibitor');
@@ -286,6 +300,11 @@ new class extends Component {
 
     public function deleteBadge($index)
     {
+        // If the badge has an ID, store it for deletion from the database later
+        if (isset($this->badges[$index]['id'])) {
+            $this->deletedBadgeIds[] = $this->badges[$index]['id'];
+        }
+
         array_splice($this->badges, $index, 1);
 
         // Add an empty badge if all badges are deleted
