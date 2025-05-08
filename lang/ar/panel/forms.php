@@ -28,6 +28,7 @@ return [
         'checkbox_priced'  => 'مربع اختيار بسعر',
         'radio_priced'     => 'زر راديو بسعر',
         'ecommerce'        => 'تجارة إلكترونية',
+        'ecommerce_2' =>  'تجارة إلكترونية 2',
         'plan_tier'        => 'مستوى الخطة',
         'plan_tier_checkbox' => 'مستويات خطة متعددة',
     ],

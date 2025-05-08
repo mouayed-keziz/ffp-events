@@ -28,6 +28,7 @@ return [
         'checkbox_priced'  => 'Case à cocher tarifée',
         'radio_priced'     => 'Bouton radio tarifé',
         'ecommerce'        => 'E-commerce',
+        'ecommerce_2' =>  'E-commerce 2',
         'plan_tier'        => 'Niveau de Plan',
         'plan_tier_checkbox' => 'Niveaux de Plan Multiple',
     ],

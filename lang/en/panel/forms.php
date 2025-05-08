@@ -28,6 +28,7 @@ return [
         'checkbox_priced'  => 'Checkbox Priced',
         'radio_priced'     => 'Radio Priced',
         'ecommerce'        => 'E-commerce',
+        'ecommerce_2' =>  'E-commerce 2',
         'plan_tier'        => 'Plan Tier',
         'plan_tier_checkbox' => 'Multiple Plan Tier',
     ],
