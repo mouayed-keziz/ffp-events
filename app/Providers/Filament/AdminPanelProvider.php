@@ -98,7 +98,7 @@ class AdminPanelProvider extends PanelProvider
                 SpatieLaravelTranslatablePlugin::make()
                     ->defaultLocales(['fr', 'en', 'ar']),
                 FilamentDeveloperLoginsPlugin::make()
-                    ->enabled(config("app.debug"), true)
+                    ->enabled(config("app.env") === "local")
                     ->users([
                         "super admin " => 'registration@ffp-events.com',
                         // "admin" => 'admin2@admin.dev',
