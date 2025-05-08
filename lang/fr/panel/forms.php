@@ -65,6 +65,8 @@ return [
             'product' => 'Produit',
             'add_product' => 'Ajouter un produit',
             'quantity_label' => 'Libellé de quantité',
+            'number1_label' => 'Libellé du premier nombre',
+            'number2_label' =>  'Libellé du deuxième nombre',
         ]
     ],
 ];

@@ -66,6 +66,8 @@ return [
             'product' => 'المنتج',
             'add_product' => 'أضف منتج',
             'quantity_label' => 'تسمية الكمية',
+            'number1_label' => 'تسمية الرقم 1',
+            'number2_label' =>  'تسمية الرقم 2',
         ]
     ],
 ];
