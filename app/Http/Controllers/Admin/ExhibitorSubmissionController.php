@@ -20,7 +20,7 @@ class ExhibitorSubmissionController extends Controller
         $exhibitorSubmission = ExhibitorSubmission::findOrFail($record);
 
         // Check if invoice can be downloaded
-        if (!$exhibitorSubmission->canDownloadInvoice) {
+        if (!$exhibitorSubmission->canAdminDownloadInvoice) {
             abort(403, 'Invoice cannot be downloaded for this submission.');
         }
 

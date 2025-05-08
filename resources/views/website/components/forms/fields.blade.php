@@ -76,6 +76,14 @@
                 ])
             @break
 
+            @case(App\Enums\FormField::ECOMMERCE_2->value)
+                @include('website.components.forms.priced.ecommerce-2', [
+                    'data' => $field['data'],
+                    'answerPath' => $answerPath ?? null,
+                    'disabled' => $disabled ?? false,
+                ])
+            @break
+
             @case(App\Enums\FormField::PLAN_TIER->value)
                 @include('website.components.forms.priced.plan_tier', [
                     'data' => $field['data'],

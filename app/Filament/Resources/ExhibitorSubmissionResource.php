@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ExhibitorSubmissionResource\Pages;
 use App\Filament\Resources\ExhibitorSubmissionResource\RelationManagers;
+use App\Filament\Resources\ExhibitorSubmissionResource\RelationManagers\BadgesRelationManager;
 use App\Filament\Resources\ExhibitorSubmissionResource\RelationManagers\PaymentSlicesRelationManager;
 use App\Models\ExhibitorSubmission;
 use Filament\Forms;
@@ -62,7 +63,8 @@ class ExhibitorSubmissionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            PaymentSlicesRelationManager::class
+            PaymentSlicesRelationManager::class,
+            BadgesRelationManager::class
         ];
     }
 
