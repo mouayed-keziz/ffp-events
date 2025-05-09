@@ -61,33 +61,22 @@ class VisitorTable
                     }),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make()
-                    ->label(__('panel/visitors.filters.trashed.label'))
-                    ->placeholder(__('panel/visitors.filters.trashed.placeholder')),
-
-                // SelectFilter::make('roles')
-                //     ->label(__('panel/visitors.filters.roles.label'))
-                //     ->placeholder(__('panel/visitors.filters.roles.placeholder'))
-                //     ->multiple()
-                //     ->relationship('roles', 'name')
-                //     ->preload()
-                //     ->searchable(),
-
-                SelectFilter::make('verified')
-                    ->label(__('panel/visitors.filters.verification.label'))
-                    ->placeholder(__('panel/visitors.filters.verification.placeholder'))
-                    ->options([
-                        'verified' => __('panel/visitors.filters.verification.verified'),
-                        'unverified' => __('panel/visitors.filters.verification.unverified'),
-                    ])
-                    ->attribute('verified_at')
-                    ->query(function (Builder $query, array $data): Builder {
-                        return match ($data['value']) {
-                            'verified' => $query->whereNotNull('verified_at'),
-                            'unverified' => $query->whereNull('verified_at'),
-                            default => $query,
-                        };
-                    }),
+                // SelectFilter::make('verified')
+                //     ->label(__('panel/visitors.filters.verification.label'))
+                //     ->placeholder(__('panel/visitors.filters.verification.placeholder'))
+                //     ->options([
+                //         'verified' => __('panel/visitors.filters.verification.verified'),
+                //         'unverified' => __('panel/visitors.filters.verification.unverified'),
+                //     ])
+                //     ->attribute('verified_at')
+                //     ->query(function (Builder $query, array $data): Builder {
+                //         return match ($data['value']) {
+                //             'verified' => $query->whereNotNull('verified_at'),
+                //             'unverified' => $query->whereNull('verified_at'),
+                //             default => $query,
+                //         };
+                //     }),
+                // TrashedFilter removed
             ])
             ->actions([
                 Tables\Actions\ViewAction::make()->button(),

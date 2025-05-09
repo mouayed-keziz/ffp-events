@@ -26,6 +26,10 @@ return [
         'email' => 'لم يتم توفير بريد إلكتروني',
         'roles' => 'لم يتم تعيين أي دور',
     ],
+    'tabs' => [
+        'all' => 'كل العارضين',
+        'deleted' => 'العارضين المحذوفين',
+    ],
     'filters' => [
         'roles' => [
             'label' => 'الأدوار',
@@ -36,13 +40,6 @@ return [
             'placeholder' => 'اختر الحالة',
             'verified' => 'تم التحقق',
             'unverified' => 'غير متحقق',
-        ],
-        'trashed' => [
-            'label' => 'العارضون المحذوفون',
-            'placeholder' => 'اختر حالة الحذف',
-            'with_trashed' => 'مع المحذوف',
-            'only_trashed' => 'المحذوف فقط',
-            'without_trashed' => 'بدون المحذوف',
         ],
     ],
     'actions' => [

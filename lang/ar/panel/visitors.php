@@ -27,6 +27,10 @@ return [
         'roles' => 'لم يتم تعيين أي دور',
         'verification' => 'لم يتم التحقق',
     ],
+    'tabs' => [
+        'all' => 'كل الزائرين',
+        'deleted' => 'الزائرين المحذوفين',
+    ],
     'filters' => [
         'roles' => [
             'label' => 'الأدوار',
@@ -37,13 +41,6 @@ return [
             'placeholder' => 'اختر الحالة',
             'verified' => 'تم التحقق',
             'unverified' => 'غير متحقق',
-        ],
-        'trashed' => [
-            'label' => 'الزائرون المحذوفون',
-            'placeholder' => 'اختر حالة الحذف',
-            'with_trashed' => 'مع المحذوف',
-            'only_trashed' => 'المحذوف فقط',
-            'without_trashed' => 'بدون المحذوف',
         ],
     ],
     'stats' => [

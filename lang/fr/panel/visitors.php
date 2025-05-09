@@ -26,6 +26,10 @@ return [
         'email' => 'Aucun email fourni',
         'roles' => 'Aucun rôle assigné',
     ],
+    'tabs' => [
+        'all' => 'Tous les visiteurs',
+        'deleted' => 'Visiteurs supprimés',
+    ],
     'fields' => [
         'name' => 'Nom',
         'email' => 'Email',
@@ -49,13 +53,6 @@ return [
             'placeholder' => 'Sélectionner le statut',
             'verified' => 'Vérifié',
             'unverified' => 'Non vérifié',
-        ],
-        'trashed' => [
-            'label' => 'Visiteurs supprimés',
-            'placeholder' => 'Sélectionner le statut de suppression',
-            'with_trashed' => 'Avec supprimés',
-            'only_trashed' => 'Uniquement supprimés',
-            'without_trashed' => 'Sans supprimés',
         ],
     ],
     'stats' => [

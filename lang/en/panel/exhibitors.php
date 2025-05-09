@@ -26,6 +26,10 @@ return [
         'email' => 'No email provided',
         'roles' => 'No roles assigned',
     ],
+    'tabs' => [
+        'all' => 'All Exhibitors',
+        'deleted' => 'Deleted Exhibitors',
+    ],
     'filters' => [
         'roles' => [
             'label' => 'Roles',
@@ -36,13 +40,6 @@ return [
             'placeholder' => 'Select status',
             'verified' => 'Verified',
             'unverified' => 'Unverified',
-        ],
-        'trashed' => [
-            'label' => 'Deleted Exhibitors',
-            'placeholder' => 'Select deleted status',
-            'with_trashed' => 'With deleted',
-            'only_trashed' => 'Only deleted',
-            'without_trashed' => 'Without deleted',
         ],
     ],
     'actions' => [

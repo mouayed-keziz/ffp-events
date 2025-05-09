@@ -72,25 +72,22 @@ class ExhibitorTable
                 //     ->preload()
                 //     ->searchable(),
 
-                SelectFilter::make('verified')
-                    ->label(__('panel/exhibitors.filters.verification.label'))
-                    ->placeholder(__('panel/exhibitors.filters.verification.placeholder'))
-                    ->options([
-                        'verified' => __('panel/exhibitors.filters.verification.verified'),
-                        'unverified' => __('panel/exhibitors.filters.verification.unverified'),
-                    ])
-                    ->attribute('verified_at')
-                    ->query(function (Builder $query, array $data): Builder {
-                        return match ($data['value']) {
-                            'verified' => $query->whereNotNull('verified_at'),
-                            'unverified' => $query->whereNull('verified_at'),
-                            default => $query,
-                        };
-                    }),
-
-                Tables\Filters\TrashedFilter::make()
-                    ->label(__('panel/exhibitors.filters.trashed.label'))
-                    ->placeholder(__('panel/exhibitors.filters.trashed.placeholder')),
+                // SelectFilter::make('verified')
+                //     ->label(__('panel/exhibitors.filters.verification.label'))
+                //     ->placeholder(__('panel/exhibitors.filters.verification.placeholder'))
+                //     ->options([
+                //         'verified' => __('panel/exhibitors.filters.verification.verified'),
+                //         'unverified' => __('panel/exhibitors.filters.verification.unverified'),
+                //     ])
+                //     ->attribute('verified_at')
+                //     ->query(function (Builder $query, array $data): Builder {
+                //         return match ($data['value']) {
+                //             'verified' => $query->whereNotNull('verified_at'),
+                //             'unverified' => $query->whereNull('verified_at'),
+                //             default => $query,
+                //         };
+                //     }),
+                // TrashedFilter removed
             ])
             // ->filtersFormColumns(3)
             // ->filtersLayout(FiltersLayout::Modal)
