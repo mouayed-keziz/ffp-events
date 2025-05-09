@@ -70,6 +70,10 @@ class LogTable
             Tables\Columns\TextColumn::make('subject.id')
                 ->tooltip(fn($record) => $record->subjectField)
                 ->limit(30)
+                ->url(fn($record) => $record->subjectLink)
+                ->extraAttributes([
+                    'target' => '_blank',
+                ])
                 ->state(fn($record) => $record->subjectField)
                 ->searchable()
                 ->toggleable()

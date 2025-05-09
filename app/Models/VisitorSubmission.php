@@ -24,7 +24,14 @@ class VisitorSubmission extends Model implements HasMedia
         'answers' => 'array',
         'status' => SubmissionStatus::class
     ];
-
+    public function getRecordTitleAttribute()
+    {
+        return __("panel/visitor_submissions.single") . " - " . $this->visitor->name;
+    }
+    public function getRecordLinkAttribute()
+    {
+        return route('filament.admin.resources.event-announcements.visitor-submission.view', ["record" => $this->eventAnnouncement->id, 'visitorSubmission' => $this->id]);
+    }
     /**
      * Get the visitor that owns the submission.
      */

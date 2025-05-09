@@ -38,7 +38,14 @@ class ExhibitorSubmission extends Model implements HasMedia
         'update_requested_at' => 'datetime',
         'status' => ExhibitorSubmissionStatus::class
     ];
-
+    public function getRecordTitleAttribute()
+    {
+        return __("panel/exhibitor_submission.resource.label") . " - " . $this->exhibitor->name;
+    }
+    public function getRecordLinkAttribute()
+    {
+        return route('filament.admin.resources.exhibitor-submissions.view', ['record' => $this->id]);
+    }
     public function getIsEditableAttribute(): bool
     {
         if (!$this->edit_deadline) {

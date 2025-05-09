@@ -24,4 +24,14 @@ class Log extends Activity
         }
         return $this->subject->recordTitle;
     }
+    public function getSubjectLinkAttribute()
+    {
+        if ($this->log_name === LogName::Authentication) {
+            return null;
+        }
+        if ($this->subject === null) {
+            return null;
+        }
+        return $this->subject->recordLink;
+    }
 }
