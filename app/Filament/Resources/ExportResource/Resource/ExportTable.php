@@ -154,11 +154,11 @@ class ExportTable
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                ExportBulkAction::make()
-                    ->icon('heroicon-o-arrow-down-tray')
-                    ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
-                    ->exporter(ExportExporter::class),
                 Tables\Actions\BulkActionGroup::make([
+                    ExportBulkAction::make()
+                        ->icon('heroicon-o-arrow-down-tray')
+                        ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
+                        ->exporter(ExportExporter::class),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
