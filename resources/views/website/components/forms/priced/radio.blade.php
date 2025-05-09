@@ -17,15 +17,27 @@
     @php
         // Initialize options array in answer structure if it doesn't exist
 $optionsData = data_get($this, 'formData.' . $answerPath . '.options', []);
+$hasSelectedOption = false;
+$firstSelectedOption = null;
+
 if (empty($optionsData)) {
     // Initialize the answer with all available options
     $optionsData = collect($data['options'] ?? [])
-        ->map(function ($option) {
+        ->map(function ($option) use (&$hasSelectedOption, &$firstSelectedOption) {
+            $isSelected = $option['selected'] ?? false;
+            $optionValue = $option['option'][app()->getLocale()] ?? ($option['option']['fr'] ?? '');
+
+            // Track if we found a selected option
+            if ($isSelected && !$hasSelectedOption) {
+                $hasSelectedOption = true;
+                $firstSelectedOption = $optionValue;
+            }
+
             return [
                 'option' => $option['option'] ?? [],
                 'price' => $option['price'] ?? [],
-                'selected' => false,
-                'value' => $option['option'][app()->getLocale()] ?? ($option['option']['fr'] ?? ''),
+                'selected' => $isSelected,
+                'value' => $optionValue,
             ];
         })
         ->toArray();
@@ -33,8 +45,20 @@ if (empty($optionsData)) {
     // Set the initial options data in the model
     data_set($this, 'formData.' . $answerPath . '.options', $optionsData);
 
-    // Also create a selectedValue property for radio functionality
-    data_set($this, 'formData.' . $answerPath . '.selectedValue', null);
+    // Set the selectedValue property for radio functionality
+    // If an option was marked as selected, use its value
+    data_set($this, 'formData.' . $answerPath . '.selectedValue', $firstSelectedOption);
+} else {
+    // Check if we have a selected option in existing data
+    foreach ($optionsData as $optData) {
+        if ($optData['selected'] ?? false) {
+            $hasSelectedOption = true;
+            if (empty(data_get($this, 'formData.' . $answerPath . '.selectedValue'))) {
+                data_set($this, 'formData.' . $answerPath . '.selectedValue', $optData['value']);
+            }
+            break;
+        }
+    }
 }
 
 // Find the selected value if any

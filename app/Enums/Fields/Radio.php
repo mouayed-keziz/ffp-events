@@ -27,11 +27,13 @@ class Radio
         if (isset($field['data']['options'])) {
             $fieldData['data']['options'] = $field['data']['options'];
 
-            // Initialize the answer with all available options (none selected)
-            $fieldData['answer']['options'] = collect($field['data']['options'])->map(function ($option) {
+            // Initialize the answer with options (first selected if required)
+            $isRequired = $fieldData['data']['required'] ?? false;
+
+            $fieldData['answer']['options'] = collect($field['data']['options'])->map(function ($option, $index) use ($isRequired) {
                 return [
                     'option' => $option['option'] ?? [],
-                    'selected' => false,
+                    'selected' => ($isRequired && $index === 0), // Select first option if required
                     'value' => $option['option'][app()->getLocale()] ?? ($option['option']['fr'] ?? '')
                 ];
             })->toArray();

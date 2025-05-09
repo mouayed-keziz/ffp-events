@@ -7,7 +7,7 @@
     }
 @endphp
 
-@if (false)
+@if (true)
     <div class="debugpath mt-2 p-2 bg-gray-200  text-xs rounded" x-data="{ open: false }">
         <div class="flex items-center gap-2 cursor-pointer" @click="open = !open">
             <p>Debug - Answer Path: {{ $title }}</p>
