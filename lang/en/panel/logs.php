@@ -21,6 +21,7 @@ return [
         'exhibitor_requested_update' => 'Update Request',
         'exhibitor_updated_submission' => 'Submission Update',
         'exhibitor_downloaded_invoice' => 'Invoice Download',
+        'exhibitor_updated_badges' => 'Badges Update',
 
         // Admin actions on exhibitor submissions
         'exhibitor_submission_accepted' => 'Submission Accepted',

@@ -23,6 +23,7 @@ return [
         'exhibitor_requested_update' => 'Demande de mise à jour',
         'exhibitor_updated_submission' => 'Mise à jour de soumission',
         'exhibitor_downloaded_invoice' => 'Téléchargement de facture',
+        'exhibitor_updated_badges' => 'Mise à jour des badges',
 
         // Admin actions on exhibitor submissions
         'exhibitor_submission_accepted' => 'Soumission acceptée',

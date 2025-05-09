@@ -21,6 +21,7 @@ return [
         'exhibitor_requested_update' => 'طلب تحديث',
         'exhibitor_updated_submission' => 'تحديث التقديم',
         'exhibitor_downloaded_invoice' => 'تنزيل الفاتورة',
+        'exhibitor_updated_badges' => 'تحديث الشارات',
 
         // Admin actions on exhibitor submissions
         'exhibitor_submission_accepted' => 'قبول التقديم',
