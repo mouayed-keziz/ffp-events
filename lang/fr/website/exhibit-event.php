@@ -35,7 +35,7 @@ return [
     'payment_notification' => 'Votre preuve de paiement est bien transmise à notre équipe et vous allez recevoir une notification ici et par email pour vous notifier une fois la validation terminée.',
 
     // Form steps
-    'info_validation' => 'Info Validation',
+    'info_validation' => 'Validation des informations',
     'payment' => 'Paiement',
     'payment_validation' => 'Validation du paiement',
 
