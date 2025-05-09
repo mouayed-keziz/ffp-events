@@ -91,24 +91,24 @@ $chevronClass = $dir === 'rtl' ? 'ms-1' : 'me-1';
                                     {{ $disabled ? 'disabled' : '' }}>
                                     <span x-show="!expanded">
                                         @if ($dir === 'rtl')
-                                            {{ __('See more') }}
+                                            {{ __('website/forms.plan_tier.see_more') }}
                                             <x-heroicon-o-chevron-down
                                                 class="w-4 h-4 inline-block {{ $chevronClass }}" />
                                         @else
                                             <x-heroicon-o-chevron-down
                                                 class="w-4 h-4 inline-block {{ $chevronClass }}" />
-                                            {{ __('See more') }}
+                                            {{ __('website/forms.plan_tier.see_more') }}
                                         @endif
                                     </span>
                                     <span x-show="expanded">
                                         @if ($dir === 'rtl')
-                                            {{ __('See less') }}
+                                            {{ __('website/forms.plan_tier.see_less') }}
                                             <x-heroicon-o-chevron-up
                                                 class="w-4 h-4 inline-block {{ $chevronClass }}" />
                                         @else
                                             <x-heroicon-o-chevron-up
                                                 class="w-4 h-4 inline-block {{ $chevronClass }}" />
-                                            {{ __('See less') }}
+                                            {{ __('website/forms.plan_tier.see_less') }}
                                         @endif
                                     </span>
                                 </button>

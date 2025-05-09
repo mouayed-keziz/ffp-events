@@ -11,4 +11,8 @@ return [
         'pdf_only' => 'Seuls les fichiers PDF sont acceptés.',
         'any_file' => 'Tout type de fichier',
     ],
+    'plan_tier' => [
+        'see_more' => 'Voir plus',
+        'see_less' => 'Voir moins',
+    ],
 ];
