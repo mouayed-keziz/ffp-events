@@ -20,8 +20,7 @@ class RadioBlock
                 LabelInput::make(),
                 DescriptionInput::make(),
                 Toggle::make('required')
-                    ->label('Required')
-                    ->helperText('Is this field required?')
+                    ->label(__('panel/forms.exhibitors.blocks.required'))
                     ->default(false)
                     ->columnSpanFull(),
                 Options::make()
