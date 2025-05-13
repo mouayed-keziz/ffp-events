@@ -47,18 +47,25 @@ class VisitorSubmissionsPerEventChart extends ChartWidget
             $query->whereBetween('created_at', [$startDate, $endDate]);
         }])->get();
 
+        // Fix UTF-8 encoding issues in labels
         $labels = $events->pluck('title')->map(function ($title) {
-            return strlen($title) > 30 ? substr($title, 0, 27) . '...' : $title;
+            // Ensure the title is valid UTF-8
+            $title = mb_convert_encoding($title, 'UTF-8', 'UTF-8');
+            return mb_strlen($title) > 30 ? mb_substr($title, 0, 27) . '...' : $title;
         })->toArray();
         $data = $events->pluck('visitor_submissions_count')->toArray();
 
         // Calculate total submissions
         $totalSubmissions = array_sum($data);
 
+        // Ensure label text is properly encoded
+        $labelText = mb_convert_encoding(__('panel/widgets.charts.visitor_submissions'), 'UTF-8', 'UTF-8');
+        $totalText = mb_convert_encoding(__('panel/widgets.charts.total'), 'UTF-8', 'UTF-8');
+
         return [
             'datasets' => [
                 [
-                    'label' => __('panel/widgets.charts.visitor_submissions') . " ({$totalSubmissions} " . __('panel/widgets.charts.total') . ")",
+                    'label' => "{$labelText} ({$totalSubmissions} {$totalText})",
                     'data' => $data,
                     'backgroundColor' => 'rgba(54, 162, 235, 0.5)',
                     'borderColor' => 'rgb(54, 162, 235)',
