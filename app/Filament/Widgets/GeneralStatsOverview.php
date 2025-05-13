@@ -12,7 +12,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 class GeneralStatsOverview extends BaseWidget
 {
     protected static ?int $sort = -3;
-    protected int | string | array $columnSpan = 2; // Span both columns of the dashboard
+    protected int | string | array $columnSpan = 4; // Span both columns of the dashboard
 
     protected function getStats(): array
     {

@@ -13,7 +13,7 @@ class VisitorSubmissionsByEventOverTimeChart extends ChartWidget
 {
     protected static ?string $pollingInterval = '30s';
     protected static bool $isLazy = true;
-    protected int | string | array $columnSpan = 2; // Adjusted columnSpan
+    protected int | string | array $columnSpan = 4; // Adjusted columnSpan
     protected static ?int $sort = 3;
 
     public ?string $filter = 'month'; // Added filter property
