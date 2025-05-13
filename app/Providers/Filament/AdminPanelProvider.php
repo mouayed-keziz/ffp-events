@@ -6,6 +6,8 @@ use App\Filament\Resources\VisitorResource\Widgets\UserStats;
 use App\Filament\Widgets\GeneralStatsOverview;
 use App\Filament\Widgets\VisitorSubmissionsPerEventChart;
 use App\Filament\Widgets\ExhibitorSubmissionsPerEventChart;
+use App\Filament\Widgets\VisitorSubmissionsByEventOverTimeChart; // Added import
+use App\Filament\Widgets\ExhibitorSubmissionsByEventOverTimeChart; // Added import
 use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -70,6 +72,8 @@ class AdminPanelProvider extends PanelProvider
                 GeneralStatsOverview::class,
                 VisitorSubmissionsPerEventChart::class,
                 ExhibitorSubmissionsPerEventChart::class,
+                VisitorSubmissionsByEventOverTimeChart::class, // Added widget
+                ExhibitorSubmissionsByEventOverTimeChart::class, // Added widget
                 // UserStats::class,
                 // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,

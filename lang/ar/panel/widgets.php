@@ -8,7 +8,7 @@ return [
         'total_visitors_desc' => 'عدد حسابات الزوار المسجلة',
         'total_events' => 'إجمالي الأحداث',
         'total_events_desc' => 'عدد إعلانات الأحداث التي تم إنشاؤها',
-        'total_articles' => 'إجمالي المقالات',
+        'total_articles' => 'إجمالي المقالات (نشطة)',
         'total_articles_desc' => 'عدد المقالات المنشورة',
     ],
     'charts' => [
@@ -18,5 +18,7 @@ return [
         'exhibitor_submissions' => 'طلبات العارضين',
         'event_visitor_submissions_heading' => 'طلبات الزوار اليومية (آخر 30 يومًا)',
         'event_exhibitor_submissions_heading' => 'طلبات العارضين اليومية (آخر 30 يومًا)',
+        'visitor_submissions_by_event_over_time_heading' => 'طلبات الزوار حسب الحدث (آخر 30 يومًا)',
+        'exhibitor_submissions_by_event_over_time_heading' => 'طلبات العارضين حسب الحدث (آخر 30 يومًا)',
     ]
 ];
