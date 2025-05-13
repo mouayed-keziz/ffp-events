@@ -72,6 +72,9 @@ class VisitorSubmissionsByEventOverTimeChart extends ChartWidget
         ];
         $colorIndex = 0;
 
+        // Ensure total text is properly encoded
+        $totalText = mb_convert_encoding(__('panel/widgets.charts.total'), 'UTF-8', 'UTF-8');
+
         foreach ($events as $event) {
             $dailyCounts = [];
             // Initialize daily counts for all dates in the range
@@ -97,12 +100,15 @@ class VisitorSubmissionsByEventOverTimeChart extends ChartWidget
                 $color = $colorPalette[$colorIndex % count($colorPalette)];
                 $colorIndex++;
 
+                // Ensure title is properly encoded
+                $title = mb_convert_encoding($event->title, 'UTF-8', 'UTF-8');
+                $truncatedTitle = (mb_strlen($title) > 20) ? mb_substr($title, 0, 17) . '...' : $title;
+
                 $datasets[] = [
-                    'label' => (strlen($event->title) > 20 ? substr($event->title, 0, 17) . '...' : $event->title) .
-                        " ({$runningTotal} " . __('panel/widgets.charts.total') . ")",
+                    'label' => "{$truncatedTitle} ({$runningTotal} {$totalText})",
                     'data' => $cumulativeData,
                     'borderColor' => $color,
-                    'backgroundColor' => str_replace('rgb', 'rgba', str_replace(')', ', 0.1)', $color)),
+                    'backgroundColor' => preg_replace('/rgb\((.*?)\)/', 'rgba($1, 0.1)', $color),
                     'tension' => 0.2,
                     'fill' => false
                 ];

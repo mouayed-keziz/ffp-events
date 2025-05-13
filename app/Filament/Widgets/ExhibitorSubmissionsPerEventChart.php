@@ -5,7 +5,7 @@ namespace App\Filament\Widgets;
 use App\Models\EventAnnouncement;
 use Filament\Widgets\ChartWidget;
 use Filament\Support\RawJs;
-use Carbon\Carbon; // Added import
+use Carbon\Carbon;
 
 class ExhibitorSubmissionsPerEventChart extends ChartWidget
 {
@@ -47,18 +47,26 @@ class ExhibitorSubmissionsPerEventChart extends ChartWidget
             $query->whereBetween('created_at', [$startDate, $endDate]);
         }])->get();
 
+        // Fix UTF-8 encoding issues in labels
         $labels = $events->pluck('title')->map(function ($title) {
-            return strlen($title) > 30 ? substr($title, 0, 27) . '...' : $title;
+            // Ensure the title is valid UTF-8
+            $title = mb_convert_encoding($title, 'UTF-8', 'UTF-8');
+            return mb_strlen($title) > 30 ? mb_substr($title, 0, 27) . '...' : $title;
         })->toArray();
+
         $data = $events->pluck('exhibitor_submissions_count')->toArray();
 
         // Calculate total submissions
         $totalSubmissions = array_sum($data);
 
+        // Ensure label text is properly encoded
+        $labelText = mb_convert_encoding(__('panel/widgets.charts.exhibitor_submissions'), 'UTF-8', 'UTF-8');
+        $totalText = mb_convert_encoding(__('panel/widgets.charts.total'), 'UTF-8', 'UTF-8');
+
         return [
             'datasets' => [
                 [
-                    'label' => __('panel/widgets.charts.exhibitor_submissions') . " ({$totalSubmissions} " . __('panel/widgets.charts.total') . ")",
+                    'label' => "{$labelText} ({$totalSubmissions} {$totalText})",
                     'data' => $data,
                     'backgroundColor' => 'rgba(255, 99, 132, 0.5)',
                     'borderColor' => 'rgb(255, 99, 132)',
