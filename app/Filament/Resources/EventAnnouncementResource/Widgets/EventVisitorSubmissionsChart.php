@@ -6,6 +6,7 @@ use App\Models\EventAnnouncement;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Contracts\Support\Htmlable;
 use Carbon\Carbon;
+use Filament\Support\RawJs;
 
 class EventVisitorSubmissionsChart extends ChartWidget
 {
@@ -52,13 +53,29 @@ class EventVisitorSubmissionsChart extends ChartWidget
                     'data' => $data,
                     'borderColor' => 'rgb(54, 162, 235)',
                     'backgroundColor' => 'rgba(54, 162, 235, 0.5)',
-                    'fill' => '',
+                    'fill' => 'start',
                 ],
             ],
             'labels' => $labels,
         ];
     }
-
+    protected function getOptions(): RawJs
+    {
+        return RawJs::make(<<<JS
+        {
+            scales: {
+                y: {
+                    min: 0,
+                    ticks: {
+                        callback: (value) => {
+                            return Number.isInteger(value) ? value : '';
+                        },
+                    },
+                },
+            },
+        }
+    JS);
+    }
     protected function getType(): string
     {
         return 'line';
