@@ -15,9 +15,16 @@ return [
         'visitor_submissions' => 'Soumissions Visiteurs',
         'exhibitor_submissions_per_event_heading' => 'Soumissions Exposants par Événement',
         'exhibitor_submissions' => 'Soumissions Exposants',
-        'event_visitor_submissions_heading' => 'Soumissions Visiteurs Journalières (30 derniers jours)',
-        'event_exhibitor_submissions_heading' => 'Soumissions Exposants Journalières (30 derniers jours)',
-        'visitor_submissions_by_event_over_time_heading' => 'Soumissions Visiteurs par Événement (30 derniers jours)',
-        'exhibitor_submissions_by_event_over_time_heading' => 'Soumissions Exposants par Événement (30 derniers jours)',
-    ]
+        'event_visitor_submissions_heading' => 'Soumissions Visiteurs Journalières',
+        'event_exhibitor_submissions_heading' => 'Soumissions Exposants Journalières',
+        'visitor_submissions_by_event_over_time_heading' => 'Soumissions Visiteurs par Événement',
+        'exhibitor_submissions_by_event_over_time_heading' => 'Soumissions Exposants par Événement',
+    ],
+    'filters' => [
+        'today' => 'Aujourd\'hui',
+        'last_7_days' => '7 Derniers Jours',
+        'last_30_days' => '30 Derniers Jours',
+        'last_365_days' => '365 Derniers Jours',
+    ],
+    'filter' => 'Filtre',
 ];

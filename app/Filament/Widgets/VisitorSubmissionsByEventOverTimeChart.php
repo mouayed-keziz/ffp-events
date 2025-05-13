@@ -7,32 +7,51 @@ use Filament\Widgets\ChartWidget;
 use Illuminate\Contracts\Support\Htmlable;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Filament\Support\RawJs; // Added import
+use Filament\Support\RawJs;
 
 class VisitorSubmissionsByEventOverTimeChart extends ChartWidget
 {
     protected static ?string $pollingInterval = '30s';
     protected static bool $isLazy = true;
-    protected int | string | array $columnSpan = 1;
-    protected static ?int $sort = 3; // Assuming this is after GeneralStats (1) and PerEventCharts (2)
+    protected int | string | array $columnSpan = 2; // Adjusted columnSpan
+    protected static ?int $sort = 3;
+
+    public ?string $filter = 'month'; // Added filter property
 
     public function getHeading(): string | Htmlable | null
     {
         return __('panel/widgets.charts.visitor_submissions_by_event_over_time_heading');
     }
 
+    protected function getFilters(): ?array // Added getFilters method
+    {
+        return [
+            'today' => __('panel/widgets.filters.today'),
+            'week' => __('panel/widgets.filters.last_7_days'),
+            'month' => __('panel/widgets.filters.last_30_days'),
+            'year' => __('panel/widgets.filters.last_365_days'),
+        ];
+    }
+
     protected function getData(): array
     {
-        $startDate = Carbon::now()->subDays(29)->startOfDay();
-        $endDate = Carbon::now()->endOfDay();
+        $now = Carbon::now();
+        $endDate = $now->copy()->endOfDay();
+        $startDate = match ($this->filter) {
+            'today' => $now->copy()->startOfDay(),
+            'week' => $now->copy()->subDays(6)->startOfDay(),
+            'month' => $now->copy()->subDays(29)->startOfDay(),
+            'year' => $now->copy()->subDays(364)->startOfDay(),
+            default => $now->copy()->subDays(29)->startOfDay(),
+        };
 
         $dateLabels = [];
         for ($date = $startDate->copy(); $date->lte($endDate); $date->addDay()) {
             $dateLabels[] = $date->format('M d');
         }
 
-        $events = EventAnnouncement::with(['visitorSubmissions' => function ($query) use ($startDate) {
-            $query->where('created_at', '>=', $startDate)
+        $events = EventAnnouncement::with(['visitorSubmissions' => function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('created_at', [$startDate, $endDate])
                 ->select('event_announcement_id', DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
                 ->groupBy('event_announcement_id', 'date')
                 ->orderBy('date', 'ASC');
@@ -56,8 +75,8 @@ class VisitorSubmissionsByEventOverTimeChart extends ChartWidget
         foreach ($events as $event) {
             $dailyCounts = [];
             // Initialize daily counts for all dates in the range
-            for ($date = $startDate->copy(); $date->lte($endDate); $date->addDay()) {
-                $dailyCounts[$date->toDateString()] = 0;
+            for ($dateLoop = $startDate->copy(); $dateLoop->lte($endDate); $dateLoop->addDay()) {
+                $dailyCounts[$dateLoop->toDateString()] = 0;
             }
 
             // Populate with actual submission counts
@@ -94,7 +113,6 @@ class VisitorSubmissionsByEventOverTimeChart extends ChartWidget
         return [
             'datasets' => $datasets,
             'labels' => $dateLabels,
-            // 'options' key removed
         ];
     }
 

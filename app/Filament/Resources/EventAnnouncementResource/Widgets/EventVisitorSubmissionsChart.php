@@ -11,6 +11,7 @@ use Filament\Support\RawJs;
 class EventVisitorSubmissionsChart extends ChartWidget
 {
     public ?EventAnnouncement $record = null;
+    public ?string $filter = 'month'; // Added filter property
 
     protected static ?string $pollingInterval = '30s';
     protected static bool $isLazy = true;
@@ -22,14 +23,31 @@ class EventVisitorSubmissionsChart extends ChartWidget
         return __('panel/widgets.charts.event_visitor_submissions_heading');
     }
 
+    protected function getFilters(): ?array // Added getFilters method
+    {
+        return [
+            'today' => __('panel/widgets.filters.today'),
+            'week' => __('panel/widgets.filters.last_7_days'),
+            'month' => __('panel/widgets.filters.last_30_days'),
+            'year' => __('panel/widgets.filters.last_365_days'),
+        ];
+    }
+
     protected function getData(): array
     {
         if (!$this->record) {
             return [];
         }
 
-        $startDate = Carbon::now()->subDays(29)->startOfDay();
-        $endDate = Carbon::now()->endOfDay();
+        $now = Carbon::now();
+        $endDate = $now->copy()->endOfDay();
+        $startDate = match ($this->filter) {
+            'today' => $now->copy()->startOfDay(),
+            'week' => $now->copy()->subDays(6)->startOfDay(),
+            'month' => $now->copy()->subDays(29)->startOfDay(),
+            'year' => $now->copy()->subDays(364)->startOfDay(),
+            default => $now->copy()->subDays(29)->startOfDay(),
+        };
 
         $dates = collect();
         for ($date = $startDate->copy(); $date->lte($endDate); $date->addDay()) {
@@ -37,7 +55,7 @@ class EventVisitorSubmissionsChart extends ChartWidget
         }
 
         $submissionsByDate = $this->record->visitorSubmissions()
-            ->where('created_at', '>=', $startDate)
+            ->whereBetween('created_at', [$startDate, $endDate]) // Updated to use dynamic date range
             ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
             ->groupBy('date')
             ->orderBy('date', 'ASC')
