@@ -2,9 +2,10 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Resources\EventAnnouncementResource\Widgets\EventAnnouncementAdvancedStats;
-use App\Filament\Resources\EventAnnouncementResource\Widgets\EventAnnouncementStats;
 use App\Filament\Resources\VisitorResource\Widgets\UserStats;
+use App\Filament\Widgets\GeneralStatsOverview;
+use App\Filament\Widgets\VisitorSubmissionsPerEventChart;
+use App\Filament\Widgets\ExhibitorSubmissionsPerEventChart;
 use DutchCodingCompany\FilamentDeveloperLogins\FilamentDeveloperLoginsPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -26,6 +27,7 @@ use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Auth;
 use Filament\SpatieLaravelTranslatablePlugin;
 use CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin;
+use Filament\Widgets\Widget;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Outerweb\FilamentTranslatableFields\Filament\Plugins\FilamentTranslatableFieldsPlugin;
 
@@ -65,10 +67,11 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
-                EventAnnouncementStats::class,
-                UserStats::class,
-                EventAnnouncementAdvancedStats::class,
-                Widgets\AccountWidget::class,
+                GeneralStatsOverview::class,
+                VisitorSubmissionsPerEventChart::class,
+                ExhibitorSubmissionsPerEventChart::class,
+                // UserStats::class,
+                // Widgets\AccountWidget::class,
                 // Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([

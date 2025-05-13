@@ -11,12 +11,22 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Guava\FilamentNestedResources\Concerns\NestedPage;
 use Guava\FilamentNestedResources\Concerns\NestedRelationManager;
+use App\Filament\Resources\EventAnnouncementResource\Widgets\EventExhibitorSubmissionsChart;
+use App\Filament\Resources\EventAnnouncementResource\Widgets\EventVisitorSubmissionsChart;
 
 class ManageEventAnnouncementExhibitorSubmissions extends ManageRelatedRecords
 {
     use NestedPage;
     use NestedRelationManager;
     use HasPageSidebar;
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            // EventVisitorSubmissionsChart::class,
+            EventExhibitorSubmissionsChart::class,
+        ];
+    }
 
     protected static string $resource = EventAnnouncementResource::class;
     protected static string $relationship = 'exhibitorSubmissions';

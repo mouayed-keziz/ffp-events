@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\VisitorResource\Pages;
 
 use App\Filament\Resources\VisitorResource;
-use App\Filament\Resources\VisitorResource\Widgets\UserStats;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Resources\Components\Tab;
@@ -19,11 +18,7 @@ class ListVisitors extends ListRecords
 
     protected function getHeaderWidgets(): array
     {
-        return [
-            // UserStats::class,
-            // Widgets\AccountWidget::class,
-            // Widgets\FilamentInfoWidget::class,
-        ];
+        return [];
     }
 
     protected function getHeaderActions(): array

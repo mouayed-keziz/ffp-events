@@ -4,6 +4,8 @@ namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 
 use App\Filament\Resources\EventAnnouncementResource;
 use App\Filament\Resources\EventAnnouncementResource\Resource\EventAnnouncementInfolist;
+use App\Filament\Resources\EventAnnouncementResource\Widgets\EventExhibitorSubmissionsChart;
+use App\Filament\Resources\EventAnnouncementResource\Widgets\EventVisitorSubmissionsChart;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
@@ -31,5 +33,13 @@ class ViewEventAnnouncement extends ViewRecord
     public function infolist(Infolist $infolist): Infolist
     {
         return EventAnnouncementInfolist::infolist($infolist);
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            // EventVisitorSubmissionsChart::class,
+            // EventExhibitorSubmissionsChart::class,
+        ];
     }
 }

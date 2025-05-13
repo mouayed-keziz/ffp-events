@@ -4,8 +4,6 @@ namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 
 use App\Filament\Resources\EventAnnouncementResource;
 use App\Filament\Resources\EventAnnouncementResource\Resource\EventAnnouncementTable;
-use App\Filament\Resources\EventAnnouncementResource\Widgets\EventAnnouncementAdvancedStats;
-use App\Filament\Resources\EventAnnouncementResource\Widgets\EventAnnouncementStats;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Table;
@@ -21,10 +19,7 @@ class ListEventAnnouncements extends ListRecords
 
     protected function getHeaderWidgets(): array
     {
-        return [
-            // EventAnnouncementStats::class,
-            // EventAnnouncementAdvancedStats::class,
-        ];
+        return [];
     }
 
     protected function getHeaderActions(): array
