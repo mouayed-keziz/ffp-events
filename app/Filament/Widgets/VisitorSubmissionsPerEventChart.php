@@ -9,7 +9,7 @@ use Carbon\Carbon; // Added import
 
 class VisitorSubmissionsPerEventChart extends ChartWidget
 {
-    protected int | string | array $columnSpan = 2; // Changed from 1
+    protected int | string | array $columnSpan = 1; // Changed from 1
     protected static ?int $sort = 2; // Added sort
     protected static ?string $pollingInterval = '30s';
     protected static bool $isLazy = true;
