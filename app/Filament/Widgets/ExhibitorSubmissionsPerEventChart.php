@@ -10,7 +10,7 @@ use Carbon\Carbon;
 class ExhibitorSubmissionsPerEventChart extends ChartWidget
 {
     protected int | string | array $columnSpan = 1; // Changed from 1
-    // protected static ?int $sort = 2; // Added sort
+    protected static ?int $sort = 2; // Added sort
     protected static ?string $pollingInterval = '30s';
     protected static bool $isLazy = true;
 
