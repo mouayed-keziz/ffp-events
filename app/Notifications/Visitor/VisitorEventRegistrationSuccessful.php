@@ -12,7 +12,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\App;
 
-class VisitorEventRegistrationSuccessful extends Notification
+class VisitorEventRegistrationSuccessful extends Notification implements ShouldQueue
 {
     use Queueable;
 

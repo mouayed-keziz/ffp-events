@@ -11,7 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\App;
 
-class ExhibitorPaymentRegistrationAccepted extends Notification
+class ExhibitorPaymentRegistrationAccepted extends Notification implements ShouldQueue
 {
     use Queueable;
 

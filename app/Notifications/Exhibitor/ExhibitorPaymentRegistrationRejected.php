@@ -12,7 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\App;
 
-class ExhibitorPaymentRegistrationRejected extends Notification
+class ExhibitorPaymentRegistrationRejected extends Notification implements ShouldQueue
 {
     use Queueable;
 

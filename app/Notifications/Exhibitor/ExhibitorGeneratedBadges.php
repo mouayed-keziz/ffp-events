@@ -11,7 +11,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Collection;
 
-class ExhibitorGeneratedBadges extends Notification
+class ExhibitorGeneratedBadges extends Notification implements ShouldQueue
 {
     use Queueable;
 
