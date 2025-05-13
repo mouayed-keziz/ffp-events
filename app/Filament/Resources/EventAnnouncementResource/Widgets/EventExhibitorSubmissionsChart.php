@@ -42,7 +42,7 @@ class EventExhibitorSubmissionsChart extends ChartWidget
             ->orderBy('date', 'ASC')
             ->pluck('count', 'date');
 
-        $data = $dates->merge($submissionsByDate)->values()->toArray();
+        $data = $dates->merge($submissionsByDate)->values()->map(fn($value) => max(0, $value))->toArray();
         $labels = $dates->keys()->map(fn($date) => Carbon::parse($date)->format('M d'))->toArray();
 
         return [
