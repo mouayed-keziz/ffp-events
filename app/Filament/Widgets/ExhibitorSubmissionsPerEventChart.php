@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use App\Models\EventAnnouncement;
 use Filament\Widgets\ChartWidget;
+use Filament\Support\RawJs;
 
 class ExhibitorSubmissionsPerEventChart extends ChartWidget
 {
@@ -36,6 +37,33 @@ class ExhibitorSubmissionsPerEventChart extends ChartWidget
             ],
             'labels' => $labels,
         ];
+    }
+
+    protected function getOptions(): RawJs
+    {
+        return RawJs::make(<<<JS
+        {
+            scales: {
+                y: {
+                    min: 0,
+                    ticks: {
+                        callback: (value) => {
+                            return Number.isInteger(value) ? value : '';
+                        },
+                    },
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true, // Or false if you don't want a legend for a single dataset
+                    position: 'top',
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: false // Or true depending on desired behavior
+        }
+    JS);
     }
 
     protected function getType(): string
