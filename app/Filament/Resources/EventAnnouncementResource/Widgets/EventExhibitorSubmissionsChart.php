@@ -52,7 +52,7 @@ class EventExhibitorSubmissionsChart extends ChartWidget
                     'data' => $data,
                     'borderColor' => 'rgb(255, 99, 132)',
                     'backgroundColor' => 'rgba(255, 99, 132, 0.5)',
-                    'fill' => 'start',
+                    'fill' => '',
                 ],
             ],
             'labels' => $labels,
