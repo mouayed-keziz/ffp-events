@@ -20,18 +20,16 @@ class VisitorSubmissionsByEventOverTimeChart extends ChartWidget
 
     public function getHeading(): string | Htmlable | null
     {
-        // Ensure heading is properly encoded
-        return mb_convert_encoding(__('panel/widgets.charts.visitor_submissions_by_event_over_time_heading'), 'UTF-8', 'UTF-8');
+        return __('panel/widgets.charts.visitor_submissions_by_event_over_time_heading');
     }
 
-    protected function getFilters(): ?array
+    protected function getFilters(): ?array // Added getFilters method
     {
-        // Ensure all translation strings are properly encoded
         return [
-            'today' => mb_convert_encoding(__('panel/widgets.filters.today'), 'UTF-8', 'UTF-8'),
-            'week' => mb_convert_encoding(__('panel/widgets.filters.last_7_days'), 'UTF-8', 'UTF-8'),
-            'month' => mb_convert_encoding(__('panel/widgets.filters.last_30_days'), 'UTF-8', 'UTF-8'),
-            'year' => mb_convert_encoding(__('panel/widgets.filters.last_365_days'), 'UTF-8', 'UTF-8'),
+            'today' => __('panel/widgets.filters.today'),
+            'week' => __('panel/widgets.filters.last_7_days'),
+            'month' => __('panel/widgets.filters.last_30_days'),
+            'year' => __('panel/widgets.filters.last_365_days'),
         ];
     }
 
@@ -106,20 +104,11 @@ class VisitorSubmissionsByEventOverTimeChart extends ChartWidget
                 $title = mb_convert_encoding($event->title, 'UTF-8', 'UTF-8');
                 $truncatedTitle = (mb_strlen($title) > 20) ? mb_substr($title, 0, 17) . '...' : $title;
 
-                // Create a safer version of the background color
-                $bgColor = null;
-                if (preg_match('/rgb\((\d+),\s*(\d+),\s*(\d+)\)/', $color, $matches)) {
-                    $bgColor = "rgba({$matches[1]}, {$matches[2]}, {$matches[3]}, 0.1)";
-                } else {
-                    // Fallback for any unexpected format
-                    $bgColor = 'rgba(200, 200, 200, 0.1)';
-                }
-                
                 $datasets[] = [
                     'label' => "{$truncatedTitle} ({$runningTotal} {$totalText})",
                     'data' => $cumulativeData,
                     'borderColor' => $color,
-                    'backgroundColor' => $bgColor,
+                    'backgroundColor' => preg_replace('/rgb\((.*?)\)/', 'rgba($1, 0.1)', $color),
                     'tension' => 0.2,
                     'fill' => false
                 ];
@@ -134,14 +123,14 @@ class VisitorSubmissionsByEventOverTimeChart extends ChartWidget
 
     protected function getOptions(): RawJs
     {
-        // Use an explicit string to avoid any potential heredoc encoding issues
-        $jsOptions = '{
+        return RawJs::make(<<<JS
+        {
             scales: {
                 y: {
                     min: 0,
                     ticks: {
-                        callback: function(value) {
-                            return Number.isInteger(value) ? value : "";
+                        callback: (value) => {
+                            return Number.isInteger(value) ? value : '';
                         },
                     },
                     beginAtZero: true
@@ -149,14 +138,13 @@ class VisitorSubmissionsByEventOverTimeChart extends ChartWidget
             },
             plugins: {
                 legend: {
-                    position: "top",
+                    position: 'top',
                 }
             },
             responsive: true,
             maintainAspectRatio: false
-        }';
-        
-        return RawJs::make($jsOptions);
+        }
+    JS);
     }
 
     protected function getType(): string
