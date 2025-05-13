@@ -20,6 +20,7 @@ return [
         'event_exhibitor_submissions_heading' => 'Daily Exhibitor Submissions',
         'visitor_submissions_by_event_over_time_heading' => 'Visitor Submissions by Event',
         'exhibitor_submissions_by_event_over_time_heading' => 'Exhibitor Submissions by Event',
+        'total' => 'Total',
     ],
     'filters' => [
         'today' => 'Today',

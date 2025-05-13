@@ -19,6 +19,7 @@ return [
         'event_exhibitor_submissions_heading' => 'Soumissions Exposants Journalières',
         'visitor_submissions_by_event_over_time_heading' => 'Soumissions Visiteurs par Événement',
         'exhibitor_submissions_by_event_over_time_heading' => 'Soumissions Exposants par Événement',
+        'total' => 'Total',
     ],
     'filters' => [
         'today' => 'Aujourd\'hui',

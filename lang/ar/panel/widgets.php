@@ -20,6 +20,7 @@ return [
         'event_exhibitor_submissions_heading' => 'طلبات العارضين اليومية',
         'visitor_submissions_by_event_over_time_heading' => 'طلبات الزوار حسب الحدث',
         'exhibitor_submissions_by_event_over_time_heading' => 'طلبات العارضين حسب الحدث',
+        'total' => 'الإجمالي',
     ],
     'filters' => [
         'today' => 'اليوم',

@@ -52,10 +52,13 @@ class ExhibitorSubmissionsPerEventChart extends ChartWidget
         })->toArray();
         $data = $events->pluck('exhibitor_submissions_count')->toArray();
 
+        // Calculate total submissions
+        $totalSubmissions = array_sum($data);
+
         return [
             'datasets' => [
                 [
-                    'label' => __('panel/widgets.charts.exhibitor_submissions'),
+                    'label' => __('panel/widgets.charts.exhibitor_submissions') . " ({$totalSubmissions} " . __('panel/widgets.charts.total') . ")",
                     'data' => $data,
                     'backgroundColor' => 'rgba(255, 99, 132, 0.5)',
                     'borderColor' => 'rgb(255, 99, 132)',

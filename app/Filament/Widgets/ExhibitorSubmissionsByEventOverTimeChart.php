@@ -94,19 +94,18 @@ class ExhibitorSubmissionsByEventOverTimeChart extends ChartWidget
 
             // Only add dataset if there's any submission activity for this event in the period
             if ($runningTotal > 0) {
-                $borderColor = $colorPalette[$colorIndex % count($colorPalette)];
-                $backgroundColor = str_replace('rgb(', 'rgba(', $borderColor);
-                $backgroundColor = str_replace(')', ', 0.1)', $backgroundColor); // Lighter fill
+                $color = $colorPalette[$colorIndex % count($colorPalette)];
+                $colorIndex++;
 
                 $datasets[] = [
-                    'label' => strlen($event->title) > 30 ? substr($event->title, 0, 27) . '...' : $event->title,
+                    'label' => (strlen($event->title) > 20 ? substr($event->title, 0, 17) . '...' : $event->title) .
+                        " ({$runningTotal} " . __('panel/widgets.charts.total') . ")",
                     'data' => $cumulativeData,
-                    'borderColor' => $borderColor,
-                    'backgroundColor' => $backgroundColor, // Optional: for area under line
-                    'fill' => true, // Changed to true for better visibility of distinct lines as areas
-                    'tension' => 0.1,
+                    'borderColor' => $color,
+                    'backgroundColor' => str_replace('rgb', 'rgba', str_replace(')', ', 0.1)', $color)),
+                    'tension' => 0.2,
+                    'fill' => false
                 ];
-                $colorIndex++;
             }
         }
 

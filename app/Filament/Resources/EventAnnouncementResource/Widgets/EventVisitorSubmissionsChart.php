@@ -64,10 +64,13 @@ class EventVisitorSubmissionsChart extends ChartWidget
         $data = $dates->merge($submissionsByDate)->values()->map(fn($value) => max(0, $value))->toArray();
         $labels = $dates->keys()->map(fn($date) => Carbon::parse($date)->format('M d'))->toArray();
 
+        // Calculate total submissions
+        $totalSubmissions = array_sum($data);
+
         return [
             'datasets' => [
                 [
-                    'label' => __('panel/widgets.charts.visitor_submissions'),
+                    'label' => __('panel/widgets.charts.visitor_submissions') . " ({$totalSubmissions} " . __('panel/widgets.charts.total') . ")",
                     'data' => $data,
                     'borderColor' => 'rgb(54, 162, 235)',
                     'backgroundColor' => 'rgba(54, 162, 235, 0.5)',
