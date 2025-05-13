@@ -73,7 +73,7 @@ new class extends Component {
                 'name' => 'password',
                 'wireModel' => 'password',
                 'placeholder' => '••••••••••••••',
-                'label' => __('website/reset_password.password_label'),
+                'label' => __('website/login.password_label'),
             ])
 
             <div class="text-right text-sm mb-6">
