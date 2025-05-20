@@ -44,6 +44,9 @@ return [
         'view' => 'عرض التقديم',
         'open' => 'فتح',
         'download' => 'تحميل',
+        'download_badge' => 'تحميل الشارة',
         'title' => 'إجراءات',
     ],
+    'no_badge_available' => 'لا توجد شارة متاحة لهذا الزائر',
+    'badge_image_not_found' => 'صورة الشارة غير موجودة',
 ];

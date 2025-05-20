@@ -15,6 +15,7 @@ use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Resources\Pages\Concerns;
 use Guava\FilamentNestedResources\Concerns\NestedPage;
+use Filament\Notifications\Notification;
 
 class ViewVisitorSubmission extends ViewRecord
 {
@@ -109,6 +110,42 @@ class ViewVisitorSubmission extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make('downloadBadge')
+                ->label(__('panel/visitor_submissions.actions.download_badge'))
+                // ->icon('heroicon-o-identity')
+                ->color('primary')
+                ->disabled(fn() => !$this->getRecord()->badge || !$this->getRecord()->badge->getFirstMedia('image'))
+                ->tooltip(fn() => !$this->getRecord()->badge
+                    ? __('panel/visitor_submissions.no_badge_available')
+                    : __('panel/visitor_submissions.actions.download_badge'))
+                ->action(function () {
+                    $badge = $this->getRecord()->badge;
+
+                    if (!$badge) {
+                        Notification::make()
+                            ->title(__('panel/visitor_submissions.no_badge_available'))
+                            ->warning()
+                            ->send();
+
+                        return;
+                    }
+
+                    $mediaItem = $badge->getFirstMedia('image');
+
+                    if (!$mediaItem) {
+                        Notification::make()
+                            ->title(__('panel/visitor_submissions.badge_image_not_found'))
+                            ->warning()
+                            ->send();
+
+                        return;
+                    }
+
+                    return response()->download(
+                        $mediaItem->getPath(),
+                        $this->getRecord()->visitor->name . '-badge.png'
+                    );
+                }),
             Actions\DeleteAction::make(),
         ];
     }

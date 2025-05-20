@@ -15,6 +15,10 @@ return [
     'save_and_download' => 'حفظ وتنزيل كل الشارات',
     'no_badges' => 'لم تتم إضافة أي أعضاء للفريق بعد. أضف أول عضو!',
     'delete' => 'حذف',
+    'view_badge' => 'عرض الشارة',
+    'download' => 'تنزيل',
+    'download_all' => 'تنزيل جميع الشارات',
+    'badge_image' => 'صورة الشارة',
 
     // Validation messages
     'name_required' => 'حقل الاسم مطلوب.',

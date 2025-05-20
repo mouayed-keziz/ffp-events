@@ -193,6 +193,26 @@ class EventAnnouncement extends Model implements HasMedia
                 $media->copy($clone, 'image');
             }
         }
+        if ($this->hasMedia('visitor_badge_template')) {
+            $media = $this->getMedia('visitor_badge_template')->first();
+            if ($media) {
+                $media->copy($clone, 'visitor_badge_template');
+            }
+        }
+        if ($this->hasMedia('exhibitor_badge_template')) {
+            $media = $this->getMedia('exhibitor_badge_template')->first();
+            if ($media) {
+                $media->copy($clone, 'exhibitor_badge_template');
+            }
+        }
+        if ($this->hasMedia('sponsor_badge_template')) {
+            $media = $this->getMedia('sponsor_badge_template')->first();
+            if ($media) {
+                $media->copy($clone, 'sponsor_badge_template');
+            }
+        }
+
+
 
         // The observer will automatically create an empty visitor form
         // We need to copy the sections from the original visitor form

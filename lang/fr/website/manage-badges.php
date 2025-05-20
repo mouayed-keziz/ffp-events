@@ -15,6 +15,10 @@ return [
     'save_and_download' => 'Enregistrer et télécharger tous les badges',
     'no_badges' => 'Aucun membre de l\'équipe ajouté. Ajoutez votre premier membre !',
     'delete' => 'Supprimer',
+    'view_badge' => 'Voir le badge',
+    'download' => 'Télécharger',
+    'download_all' => 'Télécharger tous les badges',
+    'badge_image' => 'Image du badge',
 
     // Validation messages
     'name_required' => 'Le champ nom est obligatoire.',

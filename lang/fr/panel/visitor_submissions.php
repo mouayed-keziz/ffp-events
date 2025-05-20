@@ -44,6 +44,9 @@ return [
         'view' => 'Voir la Soumission',
         'open' => 'Ouvrir',
         'download' => 'Télécharger',
+        'download_badge' => 'Télécharger le Badge',
         'title' => 'Actions',
     ],
+    'no_badge_available' => 'Aucun badge disponible pour ce visiteur',
+    'badge_image_not_found' => 'Image du badge introuvable',
 ];

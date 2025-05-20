@@ -44,6 +44,9 @@ return [
         'view' => 'View Submission',
         'open' => 'Open',
         'download' => 'Download',
+        'download_badge' => 'Download Badge',
         'title' => 'Actions',
     ],
+    'no_badge_available' => 'No badge available for this visitor',
+    'badge_image_not_found' => 'Badge image not found',
 ];

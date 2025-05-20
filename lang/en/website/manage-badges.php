@@ -15,6 +15,10 @@ return [
     'save_and_download' => 'Save and download all badges',
     'no_badges' => 'No team members added yet. Add your first member!',
     'delete' => 'Delete',
+    'view_badge' => 'View Badge',
+    'download' => 'Download',
+    'download_all' => 'Download All Badges',
+    'badge_image' => 'Badge Image',
 
     // Validation messages
     'name_required' => 'The name field is required.',
