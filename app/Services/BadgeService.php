@@ -209,13 +209,13 @@ class BadgeService
                 if ($fontPath && file_exists($fontPath)) {
                     $font->file($fontPath);
                 }
-                $font->size(22); // Smaller text (was 32)
+                //$font->size(22); // Smaller text (was 32)
                 $font->color('#000000');
                 $font->align('center');
                 $font->wrap($contentWidth * 0.97); // Wrap text to fit within the content width
                 $font->valign('middle');
                 // Simulate bold by increasing font size
-                $font->size(26); // Smaller text (was 38)
+                $font->size(32); // Smaller text (was 38)
             });
 
             // Add job title if available - larger text
@@ -224,7 +224,7 @@ class BadgeService
                     if ($fontPath && file_exists($fontPath)) {
                         $font->file($fontPath);
                     }
-                    $font->size(16); // Smaller text (was 24)
+                    $font->size(20); // Smaller text (was 24)
                     $font->color('#666666');
                     $font->align('center');
                     $font->valign('middle');
@@ -237,7 +237,7 @@ class BadgeService
                     if ($fontPath && file_exists($fontPath)) {
                         $font->file($fontPath);
                     }
-                    $font->size(16); // Smaller text (was 24)
+                    $font->size(20); // Smaller text (was 24)
                     $font->color('#666666');
                     $font->align('center');
                     $font->valign('middle');
@@ -247,7 +247,7 @@ class BadgeService
             // Add QR code
             $qrImage = $manager->read($qrCodeString);
             $qrX = $contentX + intval(($contentWidth - $qrImage->width()) / 2);
-            $qrY = $companyY + 30; // Reduced spacing between text and QR code
+            $qrY = $companyY + 60;
             $canvas->place($qrImage, 'top-left', $qrX, $qrY);
 
             // Overlay the canvas onto the template
