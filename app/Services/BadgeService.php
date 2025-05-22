@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Models\EventAnnouncement;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\View;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 // Intervention Image v3 Imports
 use Intervention\Image\Drivers\Gd\Driver;
@@ -14,6 +16,7 @@ use Intervention\Image\Typography\FontFactory;
 
 // Endroid QR Code Imports (using Builder with constructor)
 use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\RoundBlockSizeMode;
@@ -24,7 +27,7 @@ class BadgeService
     /**
      * Returns validation rules for badge template images.
      * For use with Filament's SpatieMediaLibraryFileUpload component.
-     * 
+     *
      * @return array
      */
     public static function validateBadgeTemplateRule(): array
@@ -131,8 +134,7 @@ class BadgeService
 
     /**
      * Generates a badge preview image by overlaying text and a QR code onto a template.
-     * Applies text and QR to the middle vertical 1/3 of the top-left quarter.
-     * Text occupies top 2/3 of this slice, QR occupies bottom 1/3 (and is made smaller).
+     * This method uses the CSS-based approach for badge generation.
      *
      * @param string $templatePath Path to the valid A4 portrait template image.
      * @param array $data Associative array containing 'name', 'job', 'company', 'qr_data'.
@@ -140,127 +142,126 @@ class BadgeService
      */
     public static function generateBadgePreview(string $templatePath, array $data): ?ImageInterface
     {
+        return self::generateBadgePreviewWithCSS($templatePath, $data);
+    }
+
+    /**
+     * Generates a badge preview image by overlaying text and a QR code onto a template.
+     * Places content in the left top quarter of the image, with larger text and slightly smaller QR code.
+     * Text includes name (bold), job title and company (smaller, gray) with proper wrapping.
+     *
+     * @param string $templatePath Path to the valid A4 portrait template image.
+     * @param array $data Associative array containing 'name', 'job', 'company', 'qr_data'.
+     * @return ImageInterface|null The generated Intervention Image object or null on error.
+     */
+    public static function generateBadgePreviewWithCSS(string $templatePath, array $data): ?ImageInterface
+    {
         try {
+            // Generate QR code (slightly smaller than before)
+            $builder = new Builder(
+                writer: new PngWriter(),
+                writerOptions: [],
+                validateResult: false,
+                data: $data['qr_data'] ?? Str::uuid()->toString(),
+                encoding: new Encoding('UTF-8'),
+                errorCorrectionLevel: ErrorCorrectionLevel::Low,
+                size: 130, // Reduced to approximately 2/3 of previous size (was 190)
+                margin: 0,
+                roundBlockSizeMode: RoundBlockSizeMode::Margin,
+                backgroundColor: new Color(255, 255, 255, 0) // Transparent background
+            );
+
+            $qrCodeResult = $builder->build();
+            $qrCodeString = $qrCodeResult->getString();
+            $qrCodeBase64 = base64_encode($qrCodeString);
+
+            // Load the background template image
             $manager = new ImageManager(new Driver());
-            $image = $manager->read($templatePath);
+            $templateImage = $manager->read($templatePath);
 
-            // --- Define Regions ---
-            $totalWidth = $image->width();
-            $totalHeight = $image->height();
+            // Get template dimensions
+            $templateWidth = $templateImage->width();
+            $templateHeight = $templateImage->height();
 
-            // 1. Top-left Quarter Dimensions
-            $quarterWidth = intval($totalWidth / 2);
-            $quarterHeight = intval($totalHeight / 2);
+            // Create a blank canvas with the same dimensions as the template
+            $canvas = $manager->create($templateWidth, $templateHeight);
 
-            // 2. Middle Vertical 1/3 Slice of the Top-Left Quarter
-            $sliceHeight = intval(($quarterHeight / 3));
-            $sliceY = $sliceHeight; // Start X of the middle slice (after the first slice)
-            $sliceX = 0;          // Start Y at the top
-            $sliceWidth = $quarterWidth / 2; // Height is the quarter's height
+            // Draw the badge content directly on the canvas
+            // This is a simplified version that places text and QR code in the top-left quarter
 
-            // 3. Divide Slice Horizontally: 2/3 for Text, 1/3 for QR
-            $textAreaWidth = intval(($sliceWidth * 4) / 5);
-            $qrAreaWidth = $sliceWidth - $textAreaWidth; // Remaining height
+            // Define the badge content area (top-left quarter)
+            $contentX = 0;
+            $contentY = 0;
+            $contentWidth = intval($templateWidth / 2);
+            $contentHeight = intval($templateHeight / 2);
 
-            // Define absolute coordinates for the areas within the main image
-            $textAreaX = $sliceX;
-            $textAreaY = $sliceY;
-            $qrAreaX = $sliceX + $textAreaWidth;
-            $qrAreaY = $sliceY; // QR area starts below text area
+            // Calculate text positions
+            $nameY = $contentY + intval($contentHeight * 0.28);
+            $jobY = $nameY + 45; // Increased spacing for larger text
+            $companyY = $jobY + 20; // Reduced spacing between job and company
+            $textCenterX = $contentX + intval($contentWidth / 2);
 
-            // --- Add Text (Name, Job, Company) ---
-            $textPadding = intval($sliceWidth * 0.05); // 5% padding inside text area
-            $availableTextWidth = $sliceWidth - (2 * $textPadding);
-
-            // Make font size smaller relative to the text area height
-            $fontSize = max(6, intval($sliceHeight / 10)) - 5; // Smaller base font size (e.g., 1/10th height), min 10px
-            $lineHeight = intval($fontSize * 1.5); // Adjust line spacing accordingly
-
-            // Center X position for text within the slice
-            $textCenterX = $textAreaX + intval($sliceWidth / 2);
-            //TODO
-            $textCenterX = $textAreaX + intval($sliceWidth / 8);
-
-            // Set path to a valid TTF font file
+            // Set path to the Roboto variable font
             $fontPath = public_path('fonts/Roboto-VariableFont_wdth,wght.ttf');
 
-            // Helper function to draw centered text
-            $drawText = function (string $text, int $yPos, int $currentFontSize, string $color = '#000000') use ($image, $textCenterX, $fontPath, $availableTextWidth) {
-                $image->text($text, $textCenterX, $yPos, function (FontFactory $font) use ($currentFontSize, $color, $fontPath, $availableTextWidth) {
+            // Add name (bold) - larger text
+            $canvas->text($data['name'] ?? 'Unknown', $textCenterX, $nameY, function (FontFactory $font) use ($fontPath, $contentWidth) {
+                if ($fontPath && file_exists($fontPath)) {
+                    $font->file($fontPath);
+                }
+                $font->size(22); // Smaller text (was 32)
+                $font->color('#000000');
+                $font->align('center');
+                $font->wrap($contentWidth * 0.97); // Wrap text to fit within the content width
+                $font->valign('middle');
+                // Simulate bold by increasing font size
+                $font->size(26); // Smaller text (was 38)
+            });
+
+            // Add job title if available - larger text
+            if (isset($data['job'])) {
+                $canvas->text($data['job'] ?? 'N/A', $textCenterX, $jobY, function (FontFactory $font) use ($fontPath) {
                     if ($fontPath && file_exists($fontPath)) {
                         $font->file($fontPath);
                     }
-                    $font->size($currentFontSize);
-                    $font->color($color);
-                    $font->align('start');
-                    $font->valign('middle'); // Vertically align text relative to yPos
+                    $font->size(16); // Smaller text (was 24)
+                    $font->color('#666666');
+                    $font->align('center');
+                    $font->valign('middle');
                 });
-            };
-
-            // Calculate Y positions for text lines, centered vertically within the text area
-            $nameFontSize = $fontSize; // Use base font size for name
-            $otherFontSize = intval($fontSize * 0.9); // Slightly smaller for job/company
-
-            // Determine if this is a visitor badge (name only) or exhibitor badge (name, position, company)
-            $isVisitorBadge = !isset($data['job']) && !isset($data['company']);
-
-            if ($isVisitorBadge) {
-                // For visitor badges - show only name
-                $nameY = $textAreaY + intval($sliceHeight / 2); // Center name vertically
-                $drawText("Nom : " . ($data['name'] ?? 'Unknown'), $nameY, $nameFontSize, '#000000');
-            } else {
-                // For exhibitor badges - show name, position, company
-                $totalTextBlockHeight = $nameFontSize + ($otherFontSize * 2) + ($lineHeight * 2);
-                $textBlockStartY = $textAreaY + max($textPadding, intval(($sliceHeight - $totalTextBlockHeight) / 2));
-
-                // Name
-                $nameY = $textBlockStartY + intval($nameFontSize / 2);
-                $drawText("Nom : " . ($data['name'] ?? 'Unknown'), $nameY, $nameFontSize, '#000000');
-
-                // Job Title
-                $jobY = $nameY + intval($lineHeight * 0.8);
-                $drawText("Position : " . ($data['job'] ?? 'N/A'), $jobY, $otherFontSize, '#000000');
-
-                // Company
-                $companyY = $jobY + intval($lineHeight * 0.8);
-                $drawText("Entreprise : " . ($data['company'] ?? 'N/A'), $companyY, $otherFontSize, '#000000');
             }
 
-
-            // --- Generate and Add QR Code (Smaller) ---
-            // Calculate max size based on making it smaller within the QR area
-            $qrMaxDim = min($sliceWidth / 2, $sliceHeight / 2); // Smallest dimension of the QR area
-            $qrTargetSize = intval($qrMaxDim * 1.3); // Target 75% of the smaller dimension
-
-            if ($qrTargetSize > 10) { // Ensure QR size is usable
-                $builder = new Builder(
-                    writer: new PngWriter(),
-                    writerOptions: [],
-                    validateResult: false,
-                    data: $data['qr_data'] ?? Str::uuid()->toString(),
-                    encoding: new Encoding('UTF-8'),
-                    errorCorrectionLevel: ErrorCorrectionLevel::Low,
-                    size: $qrTargetSize, // Use the smaller calculated target size
-                    margin: 0, // Let Intervention handle positioning/padding
-                    roundBlockSizeMode: RoundBlockSizeMode::Margin
-                );
-
-                $qrCodeResult = $builder->build();
-                $qrCodeString = $qrCodeResult->getString();
-                $qrImage = $manager->read($qrCodeString); // Read generated QR code
-
-                // Center the QR code within the QR area
-                $qrPlaceX = $qrAreaX + intval(($sliceWidth - $qrImage->width() * 0.9));
-                $qrPlaceY = $qrAreaY + intval(($sliceHeight - $qrImage->height()) / 2);
-
-                // Place QR code
-                $image->place($qrImage, 'top-left', $qrPlaceX, $qrPlaceY);
+            // Add company if available - larger text
+            if (isset($data['company'])) {
+                $canvas->text($data['company'] ?? 'N/A', $textCenterX, $companyY, function (FontFactory $font) use ($fontPath) {
+                    if ($fontPath && file_exists($fontPath)) {
+                        $font->file($fontPath);
+                    }
+                    $font->size(16); // Smaller text (was 24)
+                    $font->color('#666666');
+                    $font->align('center');
+                    $font->valign('middle');
+                });
             }
 
-            return $image; // Return the modified Intervention image object
+            // Add QR code
+            $qrImage = $manager->read($qrCodeString);
+            $qrX = $contentX + intval(($contentWidth - $qrImage->width()) / 2);
+            $qrY = $companyY + 30; // Reduced spacing between text and QR code
+            $canvas->place($qrImage, 'top-left', $qrX, $qrY);
 
-        } catch (\Throwable $e) { // Catch broader errors
-            return null; // Return null on any error
+            // Overlay the canvas onto the template
+            $templateImage->place($canvas, 'top-left', 0, 0);
+
+            return $templateImage;
+
+        } catch (\Throwable $e) {
+            // Log the error
+            \Illuminate\Support\Facades\Log::error('Failed to generate badge with CSS: ' . $e->getMessage(), [
+                'exception' => $e,
+                'data' => $data
+            ]);
+            return null;
         }
     }
 }

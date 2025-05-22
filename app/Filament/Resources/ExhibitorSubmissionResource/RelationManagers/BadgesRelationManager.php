@@ -61,7 +61,7 @@ class BadgesRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                // Tables\Actions\CreateAction::make(),
                 Tables\Actions\Action::make('downloadAll')
                     ->label(__('website/manage-badges.download_all'))
                     ->icon('heroicon-o-arrow-down-tray')
@@ -119,4 +119,9 @@ class BadgesRelationManager extends RelationManager
                 ]),
             ]);
     }
+    public function isReadOnly(): bool
+    {
+        return false;
+    }
+
 }
