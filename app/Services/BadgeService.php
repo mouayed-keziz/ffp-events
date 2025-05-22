@@ -198,7 +198,7 @@ class BadgeService
             // Calculate text positions
             $nameY = $contentY + intval($contentHeight * 0.28);
             $jobY = $nameY + 45; // Increased spacing for larger text
-            $companyY = $jobY + 20; // Reduced spacing between job and company
+            $companyY = $jobY + 26; // Reduced spacing between job and company
             $textCenterX = $contentX + intval($contentWidth / 2);
 
             // Set path to the Roboto variable font
@@ -224,7 +224,7 @@ class BadgeService
                     if ($fontPath && file_exists($fontPath)) {
                         $font->file($fontPath);
                     }
-                    $font->size(20); // Smaller text (was 24)
+                    $font->size(23); // Smaller text (was 24)
                     $font->color('#666666');
                     $font->align('center');
                     $font->valign('middle');
@@ -237,7 +237,7 @@ class BadgeService
                     if ($fontPath && file_exists($fontPath)) {
                         $font->file($fontPath);
                     }
-                    $font->size(20); // Smaller text (was 24)
+                    $font->size(23); // Smaller text (was 24)
                     $font->color('#666666');
                     $font->align('center');
                     $font->valign('middle');
@@ -247,7 +247,7 @@ class BadgeService
             // Add QR code
             $qrImage = $manager->read($qrCodeString);
             $qrX = $contentX + intval(($contentWidth - $qrImage->width()) / 2);
-            $qrY = $companyY + 60;
+            $qrY = $companyY + 48;
             $canvas->place($qrImage, 'top-left', $qrX, $qrY);
 
             // Overlay the canvas onto the template
