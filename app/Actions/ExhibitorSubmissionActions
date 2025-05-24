@@ -98,9 +98,6 @@ class ExhibitorSubmissionActions
                     $sort++;
                 }
 
-                // Update submission status based on created payment slices
-                $record->updateStatusBasedOnPaymentSlices();
-
                 // Send notification to exhibitor if associated with one
                 if ($record->exhibitor) {
                     // Get the current locale for localized notification
@@ -220,8 +217,16 @@ class ExhibitorSubmissionActions
                 // Log payment validation activity
                 \App\Activity\ExhibitorSubmissionActivity::logPaymentValidated(auth()->user(), $submission, $record);
 
-                // Update submission status based on payment slices
-                $submission->updateStatusBasedOnPaymentSlices();
+                $allSlices = $submission->paymentSlices;
+                $allValid = $allSlices->every(fn($slice) => $slice->status === PaymentSliceStatus::VALID);
+
+                if ($allValid) {
+                    $submission->status = ExhibitorSubmissionStatus::FULLY_PAYED;
+                    $submission->save();
+                } else {
+                    $submission->status = ExhibitorSubmissionStatus::PARTLY_PAYED;
+                    $submission->save();
+                }
 
                 // Send notification to exhibitor if associated with one
                 if ($submission->exhibitor) {
@@ -290,9 +295,13 @@ class ExhibitorSubmissionActions
 
                 // Log payment rejection activity
                 \App\Activity\ExhibitorSubmissionActivity::logPaymentRejected(auth()->user(), $submission, $record);
-
-                // Update submission status based on payment slices
-                $submission->updateStatusBasedOnPaymentSlices();
+                if ($submission->paymentSlices()->where('status', PaymentSliceStatus::VALID)->count() > 0) {
+                    $submission->status = ExhibitorSubmissionStatus::PARTLY_PAYED;
+                } else {
+                    // If no valid payments, revert to accepted status
+                    $submission->status = ExhibitorSubmissionStatus::ACCEPTED;
+                }
+                $submission->save();
 
                 // Send notification to exhibitor if associated with one
                 if ($submission->exhibitor) {
@@ -370,8 +379,27 @@ class ExhibitorSubmissionActions
                 // Log payment slice deletion activity
                 \App\Activity\ExhibitorSubmissionActivity::logPaymentSliceDeleted(auth()->user(), $submission, $paymentProperties);
 
-                // Update submission status based on remaining payment slices
-                $submission->updateStatusBasedOnPaymentSlices();
+                // Check remaining payment slices to update submission status
+                $remainingSlices = $submission->paymentSlices;
+
+                if ($remainingSlices->isEmpty()) {
+                    // No payment slices left, revert to ACCEPTED status
+                    $submission->status = ExhibitorSubmissionStatus::ACCEPTED;
+                } else if ($remainingSlices->where('status', PaymentSliceStatus::VALID)->count() > 0) {
+                    // At least one valid payment exists
+                    if ($remainingSlices->every(fn($slice) => $slice->status === PaymentSliceStatus::VALID)) {
+                        // All remaining slices are valid
+                        $submission->status = ExhibitorSubmissionStatus::FULLY_PAYED;
+                    } else {
+                        // Some valid payments but not all
+                        $submission->status = ExhibitorSubmissionStatus::PARTLY_PAYED;
+                    }
+                } else {
+                    // No valid payments left
+                    $submission->status = ExhibitorSubmissionStatus::ACCEPTED;
+                }
+
+                $submission->save();
 
                 Notification::make()
                     ->title(__('panel/exhibitor_submission.success_messages.payment_slice_deleted'))

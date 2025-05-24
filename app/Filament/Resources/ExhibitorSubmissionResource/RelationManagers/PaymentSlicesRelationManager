@@ -108,8 +108,24 @@ class PaymentSlicesRelationManager extends RelationManager
                     ->after(function ($record) {
                         // Get the parent exhibitor submission
                         $submission = $record->exhibitorSubmission;
+                        $allSlices = $submission->paymentSlices;
+
+                        // Check payment status of all slices
+                        $validCount = $allSlices->where('status', PaymentSliceStatus::VALID)->count();
+                        $totalCount = $allSlices->count();
+
                         // Update submission status based on payment slices
-                        $submission->updateStatusBasedOnPaymentSlices();
+                        if ($validCount > 0) {
+                            if ($validCount == $totalCount) {
+                                $submission->status = ExhibitorSubmissionStatus::FULLY_PAYED;
+                            } else {
+                                $submission->status = ExhibitorSubmissionStatus::PARTLY_PAYED;
+                            }
+                        } else {
+                            // No valid payments, keep as accepted
+                            $submission->status = ExhibitorSubmissionStatus::ACCEPTED;
+                        }
+                        $submission->save();
 
                         Notification::make()
                             ->title(__('panel/exhibitor_submission.notifications.payment_slice_created'))

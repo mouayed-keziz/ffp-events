@@ -155,4 +155,35 @@ class ExhibitorSubmission extends Model implements HasMedia
     {
         return $this->hasMany(Badge::class);
     }
+
+    /**
+     * Calculate and update the submission status based on payment slices
+     */
+    public function updateStatusBasedOnPaymentSlices(): void
+    {
+        $paymentSlices = $this->paymentSlices;
+
+        // If no payment slices exist, keep status as ACCEPTED
+        if ($paymentSlices->isEmpty()) {
+            $this->status = ExhibitorSubmissionStatus::ACCEPTED;
+            $this->save();
+            return;
+        }
+
+        $validSlicesCount = $paymentSlices->where('status', PaymentSliceStatus::VALID)->count();
+        $totalSlicesCount = $paymentSlices->count();
+
+        if ($validSlicesCount === 0) {
+            // No valid payments
+            $this->status = ExhibitorSubmissionStatus::ACCEPTED;
+        } elseif ($validSlicesCount === $totalSlicesCount) {
+            // All payments are valid
+            $this->status = ExhibitorSubmissionStatus::FULLY_PAYED;
+        } else {
+            // Some payments are valid but not all
+            $this->status = ExhibitorSubmissionStatus::PARTLY_PAYED;
+        }
+
+        $this->save();
+    }
 }
