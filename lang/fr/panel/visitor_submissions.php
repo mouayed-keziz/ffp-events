@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'single' => 'Soumission du Visiteur',
-    'plural' => 'Soumissions des Visiteurs',
+    'single' => 'Inscription du Visiteur',
+    'plural' => 'Inscriptions des Visiteurs',
     'fields' => [
         'event_announcement' => 'Annonce d\'Événement',
         'visitor' => 'Visiteur',
@@ -16,16 +16,16 @@ return [
         'rejected' => 'Rejeté',
     ],
     'sections' => [
-        'submission_answers' => 'Réponses de Soumission',
+        'submission_answers' => 'Réponses d\'Inscription',
     ],
     'visitor_details' => 'Détails du Visiteur',
     'tabs' => [
         'visitor_details' => 'Détails du Visiteur',
-        'submission_answers' => 'Réponses de Soumission',
+        'submission_answers' => 'Réponses d\'Inscription',
     ],
     'field_answer' => 'Réponse',
     'no_file_uploaded' => 'Aucun fichier n\'a été téléchargé',
-    'submission_context_not_found' => 'Contexte de soumission non trouvé',
+    'submission_context_not_found' => 'Contexte d\'inscription non trouvé',
     'file_not_found' => 'Fichier non trouvé',
     'file_not_specified' => 'Type de fichier non spécifié',
     'file_name' => 'Nom du fichier',
@@ -37,11 +37,11 @@ return [
     'no_selection_made' => 'Aucune sélection n\'a été faite',
     'no_checkbox_selected' => 'Aucune option n\'a été sélectionnée',
     'no_answer_provided' => 'Aucune réponse n\'a été fournie',
-    'notes_create' => 'Remarque: Les réponses devront être remplies par le visiteur en utilisant le formulaire en ligne. Ceci crée une soumission vide qui pourra être modifiée ultérieurement.',
+    'notes_create' => 'Remarque: Les réponses devront être remplies par le visiteur en utilisant le formulaire en ligne. Ceci crée une inscription vide qui pourra être modifiée ultérieurement.',
     'field_label' => 'Champ',
     'actions' => [
-        'create' => 'Créer une Soumission',
-        'view' => 'Voir la Soumission',
+        'create' => 'Créer une Inscription',
+        'view' => 'Voir l\'Inscription',
         'open' => 'Ouvrir',
         'download' => 'Télécharger',
         'download_badge' => 'Télécharger le Badge',

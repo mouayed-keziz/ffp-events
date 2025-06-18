@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'single' => 'تقديم الزائر',
-    'plural' => 'تقديمات الزوار',
+    'single' => 'تسجيل الزائر',
+    'plural' => 'تسجيلات الزوار',
     'fields' => [
         'event_announcement' => 'إعلان الفعالية',
         'visitor' => 'الزائر',
@@ -16,16 +16,16 @@ return [
         'rejected' => 'مرفوض',
     ],
     'sections' => [
-        'submission_answers' => 'إجابات التقديم',
+        'submission_answers' => 'إجابات التسجيل',
     ],
     'visitor_details' => 'تفاصيل الزائر',
     'tabs' => [
         'visitor_details' => 'تفاصيل الزائر',
-        'submission_answers' => 'إجابات التقديم',
+        'submission_answers' => 'إجابات التسجيل',
     ],
     'field_answer' => 'الإجابة',
     'no_file_uploaded' => 'لم يتم رفع أي ملف',
-    'submission_context_not_found' => 'سياق التقديم غير موجود',
+    'submission_context_not_found' => 'سياق التسجيل غير موجود',
     'file_not_found' => 'الملف غير موجود',
     'file_not_specified' => 'نوع الملف غير محدد',
     'file_name' => 'اسم الملف',
@@ -37,11 +37,11 @@ return [
     'no_selection_made' => 'لم يتم اختيار أي خيار',
     'no_checkbox_selected' => 'لم يتم تحديد أي خيار',
     'no_answer_provided' => 'لم يتم تقديم إجابة',
-    'notes_create' => 'ملاحظة: سيحتاج الزائر إلى ملء الإجابات باستخدام النموذج على الواجهة الأمامية. هذا ينشئ سجل تقديم فارغ يمكن تحريره لاحقًا.',
+    'notes_create' => 'ملاحظة: سيحتاج الزائر إلى ملء الإجابات باستخدام النموذج على الواجهة الأمامية. هذا ينشئ سجل تسجيل فارغ يمكن تحريره لاحقًا.',
     'field_label' => 'الحقل',
     'actions' => [
-        'create' => 'إنشاء تقديم',
-        'view' => 'عرض التقديم',
+        'create' => 'إنشاء تسجيل',
+        'view' => 'عرض التسجيل',
         'open' => 'فتح',
         'download' => 'تحميل',
         'download_badge' => 'تحميل الشارة',

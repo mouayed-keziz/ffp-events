@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'single' => 'Visitor Submission',
-    'plural' => 'Visitor Submissions',
+    'single' => 'Visitor Registration',
+    'plural' => 'Visitor Registrations',
     'fields' => [
         'event_announcement' => 'Event Announcement',
         'visitor' => 'Visitor',
@@ -16,16 +16,16 @@ return [
         'rejected' => 'Rejected',
     ],
     'sections' => [
-        'submission_answers' => 'Submission Answers',
+        'submission_answers' => 'Registration Answers',
     ],
     'visitor_details' => 'Visitor Details',
     'tabs' => [
         'visitor_details' => 'Visitor Details',
-        'submission_answers' => 'Submission Answers',
+        'submission_answers' => 'Registration Answers',
     ],
     'field_answer' => 'Answer',
     'no_file_uploaded' => 'No file was uploaded',
-    'submission_context_not_found' => 'Submission context not found',
+    'submission_context_not_found' => 'Registration context not found',
     'file_not_found' => 'File not found',
     'file_not_specified' => 'File type not specified',
     'file_name' => 'File name',
@@ -37,11 +37,11 @@ return [
     'no_selection_made' => 'No selection was made',
     'no_checkbox_selected' => 'No option was selected',
     'no_answer_provided' => 'No answer was provided',
-    'notes_create' => 'Note: Answers will need to be filled out by the visitor using the front-end form. This creates an empty submission record that can be edited later.',
+    'notes_create' => 'Note: Answers will need to be filled out by the visitor using the front-end form. This creates an empty registration record that can be edited later.',
     'field_label' => 'Field',
     'actions' => [
-        'create' => 'Create Submission',
-        'view' => 'View Submission',
+        'create' => 'Create Registration',
+        'view' => 'View Registration',
         'open' => 'Open',
         'download' => 'Download',
         'download_badge' => 'Download Badge',
