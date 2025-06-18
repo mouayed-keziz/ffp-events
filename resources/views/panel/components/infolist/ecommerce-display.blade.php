@@ -83,8 +83,16 @@ $products = $state['products'] ?? [];
                     <div class="text-right pt-2">
                         @foreach ($currencies as $currencyCode)
                             @php
-                                $price = $product['price'][$currencyCode] ?? 0;
-                                $totalPrice = $price * $quantity;
+                                // Ensure price is numeric, convert string to float/int, fallback to 0
+                                $price = is_numeric($product['price'][$currencyCode] ?? 0)
+                                    ? (float) ($product['price'][$currencyCode] ?? 0)
+                                    : 0;
+
+                                // Ensure quantity is numeric, convert string to int, fallback to 1
+                                $numericQuantity = is_numeric($quantity) ? (int) $quantity : 1;
+
+                                // Safe multiplication with guaranteed numeric values
+                                $totalPrice = $price * $numericQuantity;
                             @endphp
                             <div class="text-xs mb-1">
                                 <span class="text-gray-500 dark:text-gray-400">
@@ -95,7 +103,7 @@ $products = $state['products'] ?? [];
                                         <span class="font-bold text-primary-600 dark:text-primary-400">
                                             {{ number_format($price, 2) }}
                                         </span> x
-                                        {{ $quantity }} = <span
+                                        {{ $numericQuantity }} = <span
                                             class="font-bold text-primary-600 dark:text-primary-400">
                                             {{ number_format($totalPrice, 2) }}
                                         </span>
