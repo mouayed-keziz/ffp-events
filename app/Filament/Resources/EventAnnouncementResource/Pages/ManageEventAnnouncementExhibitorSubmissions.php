@@ -34,12 +34,12 @@ class ManageEventAnnouncementExhibitorSubmissions extends ManageRelatedRecords
 
     public static function getNavigationLabel(): string
     {
-        return __("panel/visitor_submissions.plural");
+        return __("panel/exhibitor_submission.resource.plural_label");
     }
 
     public function getTitle(): string
     {
-        return __("panel/visitor_submissions.plural");
+        return __("panel/exhibitor_submission.resource.plural_label");
     }
 
     public function table(Table $table): Table
@@ -51,19 +51,19 @@ class ManageEventAnnouncementExhibitorSubmissions extends ManageRelatedRecords
                 Tables\Columns\TextColumn::make('exhibitor.email')
                     ->searchable()
                     ->sortable()
-                    ->label(__("panel/visitor_submissions.fields.visitor")),
+                    ->label(__("panel/exhibitor_submission.fields.exhibitor")),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->label(__("panel/visitor_submissions.fields.status")),
+                    ->label(__("panel/exhibitor_submission.fields.status")),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->label(__("panel/visitor_submissions.fields.created_at")),
+                    ->label(__("panel/exhibitor_submission.fields.created_at")),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
                     ->options(ExhibitorSubmissionStatus::class)
-                    ->label(__("panel/visitor_submissions.fields.status")),
+                    ->label(__("panel/exhibitor_submission.fields.status")),
             ])
             ->headerActions([])
             ->actions([
