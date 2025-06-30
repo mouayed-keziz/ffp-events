@@ -57,6 +57,11 @@ new class extends Component {
         }
     }
 
+    public function rules()
+    {
+        return [];
+    }
+
     public function submitForm()
     {
         $this->validateCurrentStep();
