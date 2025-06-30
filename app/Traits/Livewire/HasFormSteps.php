@@ -42,8 +42,10 @@ trait HasFormSteps
     {
         $actions = new ExhibitorFormActions();
         $validation = $actions->getValidationRules($this->event, $this->currentStep);
-        dd($validation['rules'], $validation['attributes']);
-        $this->validate($validation['rules'], [], $validation['attributes']);
+        // Skip validation if rules are empty
+        if (!empty($validation['rules'])) {
+            $this->validate($validation['rules'], [], $validation['attributes']);
+        }
 
         // Additional terms validation for exhibit-event component on the first step
         // This validation only applies to the exhibit-event component and only when it's the first form step
