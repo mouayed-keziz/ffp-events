@@ -42,6 +42,7 @@ trait HasFormSteps
     {
         $actions = new ExhibitorFormActions();
         $validation = $actions->getValidationRules($this->event, $this->currentStep);
+        dd($validation['rules'], $validation['attributes']);
         $this->validate($validation['rules'], [], $validation['attributes']);
 
         // Additional terms validation for exhibit-event component on the first step
