@@ -94,11 +94,11 @@ class LogTable
     {
         return $table
             ->headerActions([
-                Tables\Actions\ExportAction::make()
-                    // ->label(__("panel/logs.actions.export.label"))
-                    ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
-                    ->icon('heroicon-o-arrow-down-tray')
-                    ->exporter(LogExporter::class)
+                // Tables\Actions\ExportAction::make()
+                //     // ->label(__("panel/logs.actions.export.label"))
+                //     ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
+                //     ->icon('heroicon-o-arrow-down-tray')
+                //     ->exporter(LogExporter::class)
             ])
             ->striped()
             ->columns(self::LogColumns())
@@ -152,10 +152,10 @@ class LogTable
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    ExportBulkAction::make()
-                        ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
-                        ->icon('heroicon-o-arrow-down-tray')
-                        ->exporter(LogExporter::class),
+                    // ExportBulkAction::make()
+                    //     ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
+                    //     ->icon('heroicon-o-arrow-down-tray')
+                    //     ->exporter(LogExporter::class),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
