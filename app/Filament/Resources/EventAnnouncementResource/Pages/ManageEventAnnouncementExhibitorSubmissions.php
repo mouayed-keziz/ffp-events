@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 
 use App\Enums\ExhibitorSubmissionStatus;
+use App\Filament\Exports\ExhibitorSubmissionExporter;
 use App\Filament\Resources\EventAnnouncementResource;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
 use Filament\Actions;
@@ -65,7 +66,13 @@ class ManageEventAnnouncementExhibitorSubmissions extends ManageRelatedRecords
                     ->options(ExhibitorSubmissionStatus::class)
                     ->label(__("panel/exhibitor_submission.fields.status")),
             ])
-            ->headerActions([])
+            ->headerActions([
+                Tables\Actions\ExportAction::make()
+                    ->exporter(ExhibitorSubmissionExporter::class)
+                    // ->label(__('Export Exhibitor Submissions'))
+                    ->icon('heroicon-o-arrow-down-tray')
+                // ->color('success'),
+            ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\DeleteAction::make(),

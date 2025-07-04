@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 
+use App\Filament\Exports\VisitorSubmissionExporter;
 use App\Filament\Resources\EventAnnouncementResource;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
 use Filament\Actions;
@@ -69,6 +70,11 @@ class ManageEventAnnouncementVisitorSubmissions extends ManageRelatedRecords
                     ->label(__("panel/visitor_submissions.fields.status")),
             ])
             ->headerActions([
+                Tables\Actions\ExportAction::make()
+                    ->exporter(VisitorSubmissionExporter::class)
+                    // ->label(__('Export Visitor Submissions'))
+                    ->icon('heroicon-o-arrow-down-tray')
+                // ->color('success'),
                 // Tables\Actions\CreateAction::make()
                 //     ->label(__("panel/visitor_submissions.actions.create")),
             ])

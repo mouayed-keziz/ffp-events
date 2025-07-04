@@ -44,5 +44,8 @@ return [
         'product' => 'Export des produits',
         'visitor' => 'Export des visiteurs',
         'export' => 'Export des exportations',
+        'exhibitor_submission' => 'Export des soumissions des exposants',
+        'visitor_submission' => 'Export des soumissions des visiteurs',
+
     ],
 ];

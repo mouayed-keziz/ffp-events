@@ -17,6 +17,8 @@ enum ExportType: string implements HasLabel, HasColor, HasIcon
     case Exhibitor = 'App\Filament\Exports\ExhibitorExporter';
     case Product = 'App\Filament\Exports\ProductExporter';
     case Visitor = 'App\Filament\Exports\VisitorExporter';
+    case ExhibitorSubmission = 'App\Filament\Exports\ExhibitorSubmissionExporter';
+    case VisitorSubmission = 'App\Filament\Exports\VisitorSubmissionExporter';
 
     public function getLabel(): ?string
     {
@@ -30,6 +32,8 @@ enum ExportType: string implements HasLabel, HasColor, HasIcon
             self::Exhibitor => __('panel/exports.type.exhibitor'),
             self::Product => __('panel/exports.type.product'),
             self::Visitor => __('panel/exports.type.visitor'),
+            self::ExhibitorSubmission => __('panel/exports.type.exhibitor_submission'),
+            self::VisitorSubmission => __('panel/exports.type.visitor_submission'),
         };
     }
 
@@ -45,6 +49,8 @@ enum ExportType: string implements HasLabel, HasColor, HasIcon
             self::Exhibitor => 'danger',
             self::Product => 'primary',
             self::Visitor => 'danger',
+            self::ExhibitorSubmission => 'warning',
+            self::VisitorSubmission => 'warning',
         };
     }
 
@@ -60,6 +66,8 @@ enum ExportType: string implements HasLabel, HasColor, HasIcon
             self::Exhibitor => 'heroicon-o-building-storefront',
             self::Product => 'heroicon-o-shopping-bag',
             self::Visitor => 'heroicon-o-user-group',
+            self::ExhibitorSubmission => 'heroicon-o-clipboard-document-check',
+            self::VisitorSubmission => 'heroicon-o-clipboard-document-check',
         };
     }
 }

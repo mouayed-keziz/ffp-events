@@ -44,5 +44,7 @@ return [
         'product' => 'تصدير المنتجات',
         'visitor' => 'تصدير الزوار',
         'export' => 'تصدير التصديرات',
+        'exhibitor_submission' => 'تصدير طلبات العارضين',
+        'visitor_submission' => 'تصدير طلبات الزوار',
     ],
 ];
