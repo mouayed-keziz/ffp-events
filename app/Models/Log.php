@@ -22,7 +22,8 @@ class Log extends Activity
         if ($this->subject === null) {
             return __('panel/logs.empty_states.deleted_record') . ' - id:' . $this->subject_id;
         }
-        return $this->subject->recordTitle;
+        return __('panel/logs.empty_states.deleted_record') . ' - id:' . $this->subject_id;
+        // return $this->subject->recordTitle;
     }
     public function getSubjectLinkAttribute()
     {

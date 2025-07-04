@@ -23,13 +23,7 @@ class LogExporter extends Exporter
                 ->formatStateUsing(fn($state) => $state->value),
             ExportColumn::make('subject.recordTitle')
                 ->label('Subject')
-                ->state(function ($record) {
-                    try {
-                        return $record->subject?->recordTitle ?? $record->subject?->id ?? '';
-                    } catch (\Exception $e) {
-                        return '';
-                    }
-                }),
+                ->state(fn($record) => $record->subjectField),
             ExportColumn::make('created_at')
                 ->formatStateUsing(fn($state) => $state->format('Y-m-d H:i:s')),
             // ExportColumn::make('properties')
