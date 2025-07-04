@@ -40,7 +40,10 @@ class ExhibitorSubmission extends Model implements HasMedia
     ];
     public function getRecordTitleAttribute()
     {
-        return __("panel/exhibitor_submission.resource.label") . " - " . $this->exhibitor->name;
+        if ($this->exhibitor && $this->exhibitor->name) {
+            return __("panel/exhibitor_submission.resource.label") . " - " . $this->exhibitor->name;
+        }
+        return __("panel/exhibitor_submission.resource.label") . " - " . $this->id;
     }
     public function getRecordLinkAttribute()
     {
