@@ -32,12 +32,13 @@ class ListAdmins extends ListRecords
                 ->modifyQueryUsing(
                     fn(Builder $query) =>
                     $query->whereNull('deleted_at')
-                        ->whereHas('roles', fn(Builder $q) => $q->whereIn('name', ['admin', 'super_admin']))
+                        ->whereHas('roles', fn(Builder $q) => $q->whereIn('name', [EnumsRole::ADMIN->value, EnumsRole::SUPER_ADMIN->value, EnumsRole::HOSTESS->value]))
                 )
+                ->icon(fn() => "heroicon-o-users")
                 ->badge(function () {
                     return $this->getModel()::query()
                         ->whereNull('deleted_at')
-                        ->whereHas('roles', fn(Builder $query) => $query->whereIn('name', ['admin', 'super_admin']))
+                        ->whereHas('roles', fn(Builder $query) => $query->whereIn('name', [EnumsRole::ADMIN->value, EnumsRole::SUPER_ADMIN->value, EnumsRole::HOSTESS->value]))
                         ->count();
                 }),
 
@@ -45,12 +46,13 @@ class ListAdmins extends ListRecords
                 ->modifyQueryUsing(
                     fn(Builder $query) =>
                     $query->whereNull('deleted_at')
-                        ->whereHas('roles', fn(Builder $q) => $q->where('name', 'admin'))
+                        ->whereHas('roles', fn(Builder $q) => $q->where('name', EnumsRole::ADMIN->value))
                 )
+                ->icon(fn() => EnumsRole::ADMIN->getIcon())
                 ->badge(function () {
                     return $this->getModel()::query()
                         ->whereNull('deleted_at')
-                        ->whereHas('roles', fn(Builder $query) => $query->where('name', 'admin'))
+                        ->whereHas('roles', fn(Builder $query) => $query->where('name', EnumsRole::ADMIN->value))
                         ->count();
                 }),
 
@@ -58,25 +60,38 @@ class ListAdmins extends ListRecords
                 ->modifyQueryUsing(
                     fn(Builder $query) =>
                     $query->whereNull('deleted_at')
-                        ->whereHas('roles', fn(Builder $q) => $q->where('name', 'super_admin'))
+                        ->whereHas('roles', fn(Builder $q) => $q->where('name', EnumsRole::SUPER_ADMIN->value))
                 )
+                ->icon(fn() => EnumsRole::SUPER_ADMIN->getIcon())
                 ->badge(function () {
                     return $this->getModel()::query()
                         ->whereNull('deleted_at')
-                        ->whereHas('roles', fn(Builder $query) => $query->where('name', 'super_admin'))
+                        ->whereHas('roles', fn(Builder $query) => $query->where('name', EnumsRole::SUPER_ADMIN->value))
                         ->count();
                 }),
-
+            'hostess' => Tab::make(__('panel/admins.tabs.hostess'))
+                ->modifyQueryUsing(
+                    fn(Builder $query) =>
+                    $query->whereNull('deleted_at')
+                        ->whereHas('roles', fn(Builder $q) => $q->where('name', EnumsRole::HOSTESS->value))
+                )
+                ->icon(fn() => EnumsRole::HOSTESS->getIcon())
+                ->badge(function () {
+                    return $this->getModel()::query()
+                        ->whereNull('deleted_at')
+                        ->whereHas('roles', fn(Builder $query) => $query->where('name', EnumsRole::HOSTESS->value))
+                        ->count();
+                }),
             'deleted' => Tab::make(__('panel/admins.tabs.deleted'))
                 ->modifyQueryUsing(
                     fn(Builder $query) =>
                     $query->onlyTrashed()
-                        ->whereHas('roles', fn(Builder $q) => $q->whereIn('name', ['admin', 'super_admin']))
+                        ->whereHas('roles', fn(Builder $q) => $q->whereIn('name', [EnumsRole::ADMIN->value, EnumsRole::SUPER_ADMIN->value, EnumsRole::HOSTESS->value]))
                 )
                 ->badge(function () {
                     return $this->getModel()::query()
                         ->onlyTrashed()
-                        ->whereHas('roles', fn(Builder $query) => $query->whereIn('name', ['admin', 'super_admin']))
+                        ->whereHas('roles', fn(Builder $query) => $query->whereIn('name', [EnumsRole::ADMIN->value, EnumsRole::SUPER_ADMIN->value, EnumsRole::HOSTESS->value]))
                         ->count();
                 }),
         ];

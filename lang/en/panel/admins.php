@@ -61,6 +61,7 @@ return [
         'all' => 'All Users',
         'admin' => 'Admins',
         'super_admin' => 'Super Admins',
+        'hostess' => 'Hostesses',
         'deleted' => 'Deleted'
     ]
 ];

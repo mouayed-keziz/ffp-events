@@ -74,6 +74,7 @@ return [
         'all' => 'Tous les utilisateurs',
         'admin' => 'Administrateurs',
         'super_admin' => 'Super administrateurs',
+        'hostess' => 'Hôtesses',
         'deleted' => 'Supprimés'
     ]
 ];
