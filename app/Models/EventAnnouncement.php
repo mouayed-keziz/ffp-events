@@ -11,6 +11,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Log;
 
 class EventAnnouncement extends Model implements HasMedia
@@ -287,5 +288,14 @@ class EventAnnouncement extends Model implements HasMedia
     public function exhibitorSubmissions(): HasMany
     {
         return $this->hasMany(ExhibitorSubmission::class);
+    }
+
+    /**
+     * Get the hostesses assigned to this event.
+     */
+    public function hostesses(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'event_announcement_user')
+            ->withTimestamps();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\AdminResource\Resource;
 
+use App\Enums\Role;
 use Filament\Infolists;
 use Filament\Infolists\Infolist;
 
@@ -27,6 +28,16 @@ class AdminInfolist
                         ->color(fn($record) => $record->roles->first()?->color ?? 'gray')
                         ->icon(fn($record) => $record->roles->first()?->icon)
                         ->default(__('panel/admins.empty_states.roles')),
+
+                    Infolists\Components\TextEntry::make('assignedEvents.title')
+                        ->label(__('panel/admins.form.assigned_events'))
+                        ->badge()
+                        ->state(fn($record) => $record->assignedEvents->pluck('title')->join(', '))
+                        ->default(__('panel/admins.empty_states.assigned_events'))
+                        ->visible(function ($record) {
+                            // Only show for hostess role
+                            return $record->hasRole(Role::HOSTESS->value);
+                        }),
 
                     Infolists\Components\TextEntry::make('created_at')
                         ->label(__('panel/admins.columns.created_at'))

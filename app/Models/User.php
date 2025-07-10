@@ -9,6 +9,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -95,5 +96,14 @@ class User extends Authenticatable implements HasMedia, FilamentUser
     public function getAdminTitleAttribute()
     {
         return __("panel/admins.resource.single") . " - " . $this->name;
+    }
+
+    /**
+     * Get the events where this user is assigned as hostess.
+     */
+    public function assignedEvents(): BelongsToMany
+    {
+        return $this->belongsToMany(EventAnnouncement::class, 'event_announcement_user')
+            ->withTimestamps();
     }
 }

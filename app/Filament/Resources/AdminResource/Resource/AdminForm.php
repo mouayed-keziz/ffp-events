@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\AdminResource\Resource;
 
+use App\Enums\Role;
 use Filament\Forms;
 use Filament\Forms\Form;
 
@@ -39,6 +40,19 @@ class AdminForm
                         ->placeholder(__('panel/admins.empty_states.roles'))
                         ->relationship('roles', 'name')
                         ->getOptionLabelFromRecordUsing(fn(\App\Models\Role $record) => $record->formatted_name),
+
+                    Forms\Components\Select::make('assignedEvents')
+                        ->label(__('panel/admins.form.assigned_events'))
+                        ->placeholder(__('panel/admins.empty_states.assigned_events'))
+                        ->relationship('assignedEvents', 'title')
+                        ->multiple()
+                        ->searchable()
+                        ->preload()
+                        ->visible(function ($record) {
+                            // Only show for hostess role
+                            if (!$record) return false;
+                            return $record->hasRole(Role::HOSTESS->value);
+                        }),
                 ])
             ]);
     }

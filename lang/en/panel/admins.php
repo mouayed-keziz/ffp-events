@@ -19,6 +19,7 @@ return [
         'email' => 'Email',
         'password' => 'Password',
         'roles' => 'Roles',
+        'assigned_events' => 'Assigned Events',
     ],
     'empty_states' => [
         'title' => 'No admins yet',
@@ -26,6 +27,7 @@ return [
         'name' => 'No name provided',
         'email' => 'No email provided',
         'roles' => 'No roles assigned',
+        'assigned_events' => 'No events assigned',
     ],
     'filters' => [
         'roles' => [

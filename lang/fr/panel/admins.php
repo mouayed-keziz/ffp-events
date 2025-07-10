@@ -19,6 +19,7 @@ return [
         'email' => 'Email',
         'password' => 'Mot de passe',
         'roles' => 'Rôles',
+        'assigned_events' => 'Événements assignés',
     ],
     'empty_states' => [
         'title' => 'Aucun administrateur',
@@ -26,6 +27,7 @@ return [
         'name' => 'Aucun nom fourni',
         'email' => 'Aucun email fourni',
         'roles' => 'Aucun rôle assigné',
+        "assigned_events" => 'Aucun événement assigné',
     ],
     'fields' => [
         'name' => 'Nom',
@@ -39,6 +41,7 @@ return [
         'name' => 'Aucun nom fourni',
         'email' => 'Aucun email fourni',
         'roles' => 'Aucun rôle attribué',
+        'assigned_events' => 'Aucun événement assigné',
     ],
     'filters' => [
         'roles' => [
