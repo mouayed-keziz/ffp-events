@@ -85,10 +85,10 @@ class AdminResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAdmins::route('/'),
-            'create' => Pages\CreateAdmin::route('/create'),
-            'view' => Pages\ViewAdmin::route('/{record}'),
-            'edit' => Pages\EditAdmin::route('/{record}/edit'),
+            'index' => Pages\ListAdmins::route('/ffp-users'),
+            'create' => Pages\CreateAdmin::route('/ffp-users/create'),
+            'view' => Pages\ViewAdmin::route('/ffp-users/{record}'),
+            'edit' => Pages\EditAdmin::route('/ffp-users/{record}/edit'),
         ];
     }
     public static function getEloquentQuery(): Builder

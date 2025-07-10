@@ -2,8 +2,8 @@
 
 return [
     'resource' => [
-        'single' => 'Admin',
-        'plural' => 'Admins',
+        'single' => 'FFP User',
+        'plural' => 'FFP Users',
     ],
     'columns' => [
         'id' => 'ID',
@@ -22,8 +22,8 @@ return [
         'assigned_events' => 'Assigned Events',
     ],
     'empty_states' => [
-        'title' => 'No admins yet',
-        'description' => 'Create an admin to get started',
+        'title' => 'No FFP users yet',
+        'description' => 'Create an FFP user to get started',
         'name' => 'No name provided',
         'email' => 'No email provided',
         'roles' => 'No roles assigned',
@@ -41,7 +41,7 @@ return [
             'unverified' => 'Unverified',
         ],
         'trashed' => [
-            'label' => 'Deleted Admins',
+            'label' => 'Deleted FFP Users',
             'placeholder' => 'Select deleted status',
             'with_trashed' => 'With deleted',
             'only_trashed' => 'Only deleted',
@@ -52,15 +52,15 @@ return [
         "regenerate_password" => [
             "label" => "Regenerate password",
             "modal_heading" => "Regenerate password",
-            "modal_description" => "Are you sure you want to regenerate this admin's password? They will receive an email with their new password.",
+            "modal_description" => "Are you sure you want to regenerate this FFP user's password? They will receive an email with their new password.",
             "success_title" => "Password regenerated",
-            "success_body" => "The admin will receive an email with their new password.",
+            "success_body" => "The FFP user will receive an email with their new password.",
             "error_title" => "Failed to regenerate password",
             "error_body" => "An error occurred while regenerating the password."
         ]
     ],
     'tabs' => [
-        'all' => 'All Users',
+        'all' => 'All FFP Users',
         'admin' => 'Admins',
         'super_admin' => 'Super Admins',
         'hostess' => 'Hostesses',

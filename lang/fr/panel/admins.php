@@ -2,8 +2,8 @@
 
 return [
     'resource' => [
-        'single' => 'Administrateur',
-        'plural' => 'Administrateurs',
+        'single' => 'Utilisateur FFP',
+        'plural' => 'Utilisateurs FFP',
     ],
     'columns' => [
         'id' => 'ID',
@@ -22,8 +22,8 @@ return [
         'assigned_events' => 'Événements assignés',
     ],
     'empty_states' => [
-        'title' => 'Aucun administrateur',
-        'description' => 'Commencez par créer un administrateur.',
+        'title' => 'Aucun utilisateur FFP',
+        'description' => 'Commencez par créer un utilisateur FFP.',
         'name' => 'Aucun nom fourni',
         'email' => 'Aucun email fourni',
         'roles' => 'Aucun rôle assigné',
@@ -55,7 +55,7 @@ return [
             'unverified' => 'Non vérifié',
         ],
         'trashed' => [
-            'label' => 'Administrateurs supprimés',
+            'label' => 'Utilisateurs FFP supprimés',
             'placeholder' => 'Sélectionner le statut de suppression',
             'with_trashed' => 'Avec supprimés',
             'only_trashed' => 'Uniquement supprimés',
@@ -66,15 +66,15 @@ return [
         "regenerate_password" => [
             "label" => "Régénérer le mot de passe",
             "modal_heading" => "Régénérer le mot de passe",
-            "modal_description" => "Êtes-vous sûr de vouloir régénérer le mot de passe de cet administrateur ? Il recevra un email avec son nouveau mot de passe.",
+            "modal_description" => "Êtes-vous sûr de vouloir régénérer le mot de passe de cet utilisateur FFP ? Il recevra un email avec son nouveau mot de passe.",
             "success_title" => "Mot de passe régénéré",
-            "success_body" => "L'administrateur recevra un email avec son nouveau mot de passe.",
+            "success_body" => "L'utilisateur FFP recevra un email avec son nouveau mot de passe.",
             "error_title" => "Échec de la régénération du mot de passe",
             "error_body" => "Une erreur s'est produite lors de la régénération du mot de passe."
         ]
     ],
     'tabs' => [
-        'all' => 'Tous les utilisateurs',
+        'all' => 'Tous les utilisateurs FFP',
         'admin' => 'Administrateurs',
         'super_admin' => 'Super administrateurs',
         'hostess' => 'Hôtesses',
