@@ -19,7 +19,7 @@ class ListLogs extends ListRecords
 
     public static function canAccess(array $parameters = []): bool
     {
-        return auth()->user()->hasRole(Role::SUPER_ADMIN->value);
+        return auth()->user()->hasRole([Role::SUPER_ADMIN->value]);
     }
 
     protected function getHeaderActions(): array

@@ -14,7 +14,7 @@ class ProductPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return auth()->user()->hasRole([Role::SUPER_ADMIN->value, Role::ADMIN->value]);
     }
 
     /**
@@ -22,7 +22,7 @@ class ProductPolicy
      */
     public function view(User $user, Product $product): bool
     {
-        return true;
+        return auth()->user()->hasRole([Role::SUPER_ADMIN->value, Role::ADMIN->value]);
     }
 
     /**
@@ -38,7 +38,7 @@ class ProductPolicy
      */
     public function update(User $user, Product $product): bool
     {
-        return auth()->user()->hasRole(Role::SUPER_ADMIN->value);
+        return auth()->user()->hasRole([Role::SUPER_ADMIN->value]);
     }
 
     /**

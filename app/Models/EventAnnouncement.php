@@ -13,6 +13,7 @@ use Spatie\Translatable\HasTranslations;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class EventAnnouncement extends Model implements HasMedia
 {
@@ -297,5 +298,21 @@ class EventAnnouncement extends Model implements HasMedia
     {
         return $this->belongsToMany(User::class, 'event_announcement_user')
             ->withTimestamps();
+    }
+
+    /**
+     * Get all badge check logs for this event.
+     */
+    public function badgeCheckLogs(): HasMany
+    {
+        return $this->hasMany(BadgeCheckLog::class);
+    }
+
+    /**
+     * Get current attendees for this event.
+     */
+    public function currentAttendees(): HasMany
+    {
+        return $this->hasMany(CurrentAttendee::class);
     }
 }

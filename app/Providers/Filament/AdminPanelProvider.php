@@ -108,7 +108,8 @@ class AdminPanelProvider extends PanelProvider
                     ->enabled(config("app.env") === "local")
                     ->users([
                         "super admin " => 'registration@ffp-events.com',
-                        // "admin" => 'admin2@admin.dev',
+                        "admin" => 'admin@ffp-events.com',
+                        "hostess" => 'hostess@ffp-events.com',
                     ])
             ]);
     }

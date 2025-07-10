@@ -14,7 +14,7 @@ class PlanTierPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return auth()->user()->hasRole([Role::SUPER_ADMIN->value, Role::ADMIN->value]);;
     }
 
     /**
@@ -22,7 +22,7 @@ class PlanTierPolicy
      */
     public function view(User $user, PlanTier $planTier): bool
     {
-        return true;
+        return auth()->user()->hasRole([Role::SUPER_ADMIN->value, Role::ADMIN->value]);;
     }
 
     /**

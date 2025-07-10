@@ -24,8 +24,10 @@ class User extends Authenticatable implements HasMedia, FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        // return true;
-        return $this->hasRole(RoleEnum::ADMIN->value) || $this->hasRole(RoleEnum::SUPER_ADMIN->value);
+        return
+            $this->hasRole(RoleEnum::ADMIN->value) ||
+            $this->hasRole(RoleEnum::SUPER_ADMIN->value) ||
+            $this->hasRole(RoleEnum::HOSTESS->value);
     }
 
     /**
@@ -105,5 +107,21 @@ class User extends Authenticatable implements HasMedia, FilamentUser
     {
         return $this->belongsToMany(EventAnnouncement::class, 'event_announcement_user')
             ->withTimestamps();
+    }
+
+    /**
+     * Get all badge check logs performed by this user.
+     */
+    public function performedCheckLogs()
+    {
+        return $this->hasMany(BadgeCheckLog::class, 'checked_by_user_id');
+    }
+
+    /**
+     * Get all check-ins performed by this user.
+     */
+    public function performedCheckIns()
+    {
+        return $this->hasMany(CurrentAttendee::class, 'checked_in_by_user_id');
     }
 }

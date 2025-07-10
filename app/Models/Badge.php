@@ -53,4 +53,20 @@ class Badge extends Model implements HasMedia
     {
         return $this->getFirstMediaUrl('image');
     }
+
+    /**
+     * Get all check-in/out logs for this badge.
+     */
+    public function checkLogs()
+    {
+        return $this->hasMany(BadgeCheckLog::class);
+    }
+
+    /**
+     * Get current attendee record if this badge is currently checked in.
+     */
+    public function currentAttendee()
+    {
+        return $this->hasOne(CurrentAttendee::class);
+    }
 }

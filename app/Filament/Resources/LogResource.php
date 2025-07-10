@@ -24,18 +24,9 @@ class LogResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        return auth()->user()->hasRole(Role::SUPER_ADMIN->value);
+        return auth()->user()->hasRole([Role::SUPER_ADMIN->value]);
     }
 
-    // public static function getNavigationBadge(): ?string
-    // {
-    //     return static::getModel()::count();
-    // }
-
-    public static function getNavigationBadgeColor(): ?string
-    {
-        return 'primary';
-    }
     public static function getNavigationGroup(): ?string
     {
         return __(Sidebar::LOG['group']);
