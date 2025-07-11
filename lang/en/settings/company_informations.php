@@ -1,16 +1,17 @@
 <?php
 
 return [
-    'title' => 'Company Information',
-    'description' =>  'Manage your company information.',
-    'navigation_label' => 'Company Information',
+    'title' => 'Platform Settings',
+    'description' =>  'Manage your platform settings and configuration.',
+    'navigation_label' => 'Platform Settings',
     'navigation_group' => 'Settings',
     'tabs' => [
         'general_information' => 'General Information',
         'social_links' => 'Social Links',
         'faq' => 'FAQ',
         'terms' => 'Terms & Conditions',
-        'company_details' => 'Company Details',
+        'invoice_details' => 'Invoice Details',
+        'jobs' => 'Jobs',
     ],
     'fields' => [
         'name' => [
@@ -100,6 +101,23 @@ return [
         'tva' => [
             'label' => 'TVA Percentage',
             'placeholder' => 'Enter TVA percentage'
+        ],
+        'jobs' => [
+            'label' => 'Jobs',
+            'ar' => [
+                'label' => 'Arabic',
+                'placeholder' => 'Enter job title in Arabic'
+            ],
+            'fr' => [
+                'label' => 'French',
+                'placeholder' => 'Enter job title in French'
+            ],
+            'en' => [
+                'label' => 'English',
+                'placeholder' => 'Enter job title in English'
+            ],
+            'empty_label' => 'New Job',
+            'add_action' => 'Add Job'
         ],
     ],
 ];

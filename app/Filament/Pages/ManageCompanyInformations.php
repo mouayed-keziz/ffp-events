@@ -196,7 +196,7 @@ class ManageCompanyInformations extends SettingsPage
                                     ->columnSpan(12),
                             ]),
 
-                        Forms\Components\Tabs\Tab::make(__('settings/company_informations.tabs.company_details'))
+                        Forms\Components\Tabs\Tab::make(__('settings/company_informations.tabs.invoice_details'))
                             ->columns([
                                 'default' => 1,
                                 'sm' => 2,
@@ -287,7 +287,70 @@ class ManageCompanyInformations extends SettingsPage
                                         'lg' => 6
                                     ]),
                             ]),
-                    ])->columnSpan([
+
+                        Forms\Components\Tabs\Tab::make(__('settings/company_informations.tabs.jobs'))
+                            ->schema([
+                                Forms\Components\Repeater::make('jobs')
+                                    ->collapsed()
+                                    ->label(__('settings/company_informations.fields.jobs.label'))
+                                    ->schema([
+                                        Forms\Components\TextInput::make('ar')
+                                            ->label(__('settings/company_informations.fields.jobs.ar.label'))
+                                            ->required()
+                                            ->placeholder(__('settings/company_informations.fields.jobs.ar.placeholder'))
+                                            ->columnSpan([
+                                                'default' => 12,
+                                                'sm' => 12,
+                                                'md' => 4,
+                                                'lg' => 4
+                                            ]),
+                                        Forms\Components\TextInput::make('fr')
+                                            ->label(__('settings/company_informations.fields.jobs.fr.label'))
+                                            ->required()
+                                            ->placeholder(__('settings/company_informations.fields.jobs.fr.placeholder'))
+                                            ->columnSpan([
+                                                'default' => 12,
+                                                'sm' => 12,
+                                                'md' => 4,
+                                                'lg' => 4
+                                            ]),
+                                        Forms\Components\TextInput::make('en')
+                                            ->label(__('settings/company_informations.fields.jobs.en.label'))
+                                            ->required()
+                                            ->placeholder(__('settings/company_informations.fields.jobs.en.placeholder'))
+                                            ->columnSpan([
+                                                'default' => 12,
+                                                'sm' => 12,
+                                                'md' => 4,
+                                                'lg' => 4
+                                            ]),
+                                    ])
+                                    ->columns([
+                                        'default' => 1,
+                                        'sm' => 1,
+                                        'md' => 12,
+                                        'lg' => 12
+                                    ])
+                                    ->itemLabel(function (array $state): ?string {
+                                        $locale = app()->getLocale();
+                                        if (isset($state[$locale]) && !empty($state[$locale])) {
+                                            return $state[$locale];
+                                        }
+                                        // Fallback to any available translation
+                                        foreach (['en', 'fr', 'ar'] as $fallbackLocale) {
+                                            if (isset($state[$fallbackLocale]) && !empty($state[$fallbackLocale])) {
+                                                return $state[$fallbackLocale];
+                                            }
+                                        }
+                                        return __('settings/company_informations.fields.jobs.empty_label');
+                                    })
+                                    ->addActionLabel(__('settings/company_informations.fields.jobs.add_action'))
+                                    ->reorderable()
+                                    ->collapsible()
+                                    ->columnSpan(12),
+                            ]),
+                    ])
+                    ->columnSpan([
                         'default' => 1,
                         'sm' => 2,
                         'lg' => 2

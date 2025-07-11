@@ -1,16 +1,17 @@
 <?php
 
 return [
-    'title' => 'Informations de l\'entreprise',
-    'description' => 'Gérez les informations de votre entreprise.',
-    'navigation_label' => 'Informations de l\'entreprise',
+    'title' => 'Paramètres de la plateforme',
+    'description' => 'Gérez les paramètres et la configuration de votre plateforme.',
+    'navigation_label' => 'Paramètres de la plateforme',
     'navigation_group' => 'Paramètres',
     'tabs' => [
         'general_information' => 'Informations générales',
         'social_links' => 'Liens sociaux',
         'faq' => 'FAQ',
         'terms' => 'Conditions générales',
-        'company_details' => 'Détails de l\'entreprise',
+        'invoice_details' => 'Détails de facturation',
+        'jobs' => 'Postes',
     ],
     'fields' => [
         'name' => [
@@ -100,6 +101,23 @@ return [
         'tva' => [
             'label' => 'Pourcentage TVA',
             'placeholder' => 'Entrez le pourcentage TVA'
+        ],
+        'jobs' => [
+            'label' => 'Postes',
+            'ar' => [
+                'label' => 'Arabe',
+                'placeholder' => 'Entrez le nom du poste en arabe'
+            ],
+            'fr' => [
+                'label' => 'Français',
+                'placeholder' => 'Entrez le nom du poste en français'
+            ],
+            'en' => [
+                'label' => 'Anglais',
+                'placeholder' => 'Entrez le nom du poste en anglais'
+            ],
+            'empty_label' => 'Nouveau poste',
+            'add_action' => 'Ajouter un poste'
         ],
     ],
 ];

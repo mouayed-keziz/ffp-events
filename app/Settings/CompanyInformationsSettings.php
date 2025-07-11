@@ -31,22 +31,24 @@ class CompanyInformationsSettings extends Settings
     public ?string $linkedinLink;
 
     public ?string $instagramLink;
-    
+
     public string $detailedAddress;
-    
+
     public string $location;
-    
+
     public string $capital;
-    
+
     public string $rc;
-    
+
     public string $nif;
-    
+
     public string $ai;
-    
+
     public string $nis;
-    
+
     public int $tva;
+
+    public array $jobs;
 
     public static function group(): string
     {
