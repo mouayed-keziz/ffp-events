@@ -51,7 +51,7 @@ new class extends Component {
                     </label>
                     <input type="text" name="name" wire:model="name"
                         class="input input-bordered w-full rounded-lg bg-white {{ $errors->has('name') ? 'input-error' : '' }}"
-                        required placeholder="John Doe">
+                        required placeholder="Ahmed Mohamed">
                     @error('name')
                         @include('website.components.global.input-error', ['message' => $message])
                     @enderror
