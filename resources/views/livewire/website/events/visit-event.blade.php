@@ -4,6 +4,7 @@ use App\Models\EventAnnouncement;
 use App\Models\VisitorSubmission;
 use App\Forms\VisitEventFormActions;
 use App\Actions\Forms\FormFieldActions;
+use App\Settings\CompanyInformationsSettings;
 use Livewire\WithFileUploads;
 
 new class extends Component {
@@ -15,10 +16,20 @@ new class extends Component {
     public bool $formSubmitted = false;
     public string $successMessage = '';
 
+    // Badge information popup
+    public bool $showBadgeInfoModal = false;
+    public string $badgeCompany = '';
+    public string $badgePosition = '';
+    public array $availableJobs = [];
+
     public function mount(EventAnnouncement $event)
     {
         $this->event = $event;
         $this->initFormData();
+
+        // Load available jobs from settings
+        $settings = app(CompanyInformationsSettings::class);
+        $this->availableJobs = $settings->jobs ?? [];
 
         // Redirect to event page if no visitor form available
         if (empty($this->formData)) {
@@ -58,8 +69,36 @@ new class extends Component {
         $validation = $actions->getValidationRules($this->event);
         $this->validate($validation['rules'], [], $validation['attributes']);
 
-        // Save the form submission
-        $success = $actions->saveFormSubmission($this->event, $this->formData);
+        // Show badge information modal instead of immediately saving
+        $this->showBadgeInfoModal = true;
+    }
+
+    public function cancelBadgeInfo()
+    {
+        $this->showBadgeInfoModal = false;
+        $this->badgeCompany = '';
+        $this->badgePosition = '';
+    }
+
+    public function submitWithBadgeInfo()
+    {
+        // Validate badge information
+        $this->validate(
+            [
+                'badgeCompany' => 'required|string|max:255',
+                'badgePosition' => 'required|string',
+            ],
+            [
+                'badgeCompany.required' => __('website/visit-event.company_required'),
+                'badgePosition.required' => __('website/visit-event.position_required'),
+            ],
+        );
+
+        $actions = new VisitEventFormActions();
+
+        // The badgePosition already contains the French job title since we store 'fr' value in the select
+        // Save the form submission with badge information
+        $success = $actions->saveFormSubmission($this->event, $this->formData, $this->badgeCompany, $this->badgePosition);
 
         if ($success) {
             // Get the visitor user and submission
@@ -144,5 +183,66 @@ new class extends Component {
                 </div>
             @endif
         </form>
+    @endif
+
+    {{-- Badge Information Modal --}}
+    @if ($showBadgeInfoModal)
+        <div class="modal modal-open">
+            <div class="modal-box w-11/12 max-w-md">
+                <h3 class="font-bold text-lg mb-4">{{ __('website/visit-event.badge_info_title') }}</h3>
+                <p class="text-sm text-gray-600 mb-6">{{ __('website/visit-event.badge_info_description') }}</p>
+
+                <form wire:submit.prevent="submitWithBadgeInfo">
+                    {{-- Company Input --}}
+                    <div class="form-control w-full mb-4">
+                        <label class="label">
+                            <span class="label-text">{{ __('website/visit-event.company') }} <span
+                                    class="text-red-500">*</span></span>
+                        </label>
+                        <input type="text" wire:model="badgeCompany"
+                            placeholder="{{ __('website/visit-event.company_placeholder') }}"
+                            class="input input-bordered w-full @error('badgeCompany') input-error @enderror" required />
+                        @error('badgeCompany')
+                            <label class="label">
+                                <span class="label-text-alt text-error">{{ $message }}</span>
+                            </label>
+                        @enderror
+                    </div>
+
+                    {{-- Position Select --}}
+                    <div class="form-control w-full mb-6">
+                        <label class="label">
+                            <span class="label-text">{{ __('website/visit-event.position') }} <span
+                                    class="text-red-500">*</span></span>
+                        </label>
+                        <select wire:model="badgePosition"
+                            class="select select-bordered w-full @error('badgePosition') select-error @enderror"
+                            required>
+                            <option value="">{{ __('website/visit-event.position_placeholder') }}</option>
+                            @foreach ($availableJobs as $job)
+                                <option value="{{ $job['fr'] }}">{{ $job[app()->getLocale()] ?? $job['fr'] }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('badgePosition')
+                            <label class="label">
+                                <span class="label-text-alt text-error">{{ $message }}</span>
+                            </label>
+                        @enderror
+                    </div>
+
+                    {{-- Modal Actions --}}
+                    <div class="modal-action">
+                        <button type="button" wire:click="cancelBadgeInfo" class="btn btn-ghost">
+                            {{ __('website/visit-event.cancel') }}
+                        </button>
+                        <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
+                            <span wire:loading class="loading loading-spinner loading-sm"></span>
+                            <span>{{ __('website/visit-event.continue_registration') }}</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     @endif
 </div>

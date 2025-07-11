@@ -19,6 +19,18 @@ return [
     'terms_acceptance' => 'I accept the terms and conditions of participation and exhibition of SIFFP 7th edition',
     'terms_and_conditions' => 'Terms and conditions',
 
+    // Badge information popup
+    'badge_info_title' => 'Badge Information',
+    'badge_info_description' => 'To complete your registration, please provide the following information that will appear on your badge.',
+    'company' => 'Company',
+    'company_placeholder' => 'Your company name',
+    'position' => 'Position',
+    'position_placeholder' => 'Select your position',
+    'continue_registration' => 'Complete Registration',
+    'cancel' => 'Cancel',
+    'company_required' => 'The company field is required.',
+    'position_required' => 'The position field is required.',
+
     // Success page
     'registration_success' => 'Congratulations, you are registered as a visitor for :event',
     'badge_instructions' => 'You can download your participation badge and print it to present it on the day of the event. You can also download your badge from your profile or via the email you just received.',

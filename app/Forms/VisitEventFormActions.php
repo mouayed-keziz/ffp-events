@@ -160,7 +160,7 @@ class VisitEventFormActions extends BaseFormActions
     /**
      * Save the form submission to the database
      */
-    public function saveFormSubmission(EventAnnouncement $event, array $formData): bool
+    public function saveFormSubmission(EventAnnouncement $event, array $formData, string $badgeCompany = '', string $badgePosition = ''): bool
     {
         try {
             // Process the form data (handle file uploads, translatable fields, etc.)
@@ -201,7 +201,7 @@ class VisitEventFormActions extends BaseFormActions
             // Generate a badge for the visitor submission
             // Only generate badge if visitor is authenticated (so we have a name)
             if ($visitor) {
-                $badge = $this->generateBadgeForVisitorSubmission($event, $submission, $processedData);
+                $badge = $this->generateBadgeForVisitorSubmission($event, $submission, $processedData, $badgeCompany, $badgePosition);
                 Log::info("Badge generated for visitor: {$visitor->name}");
 
                 // Get the current locale for localized notification
@@ -222,7 +222,7 @@ class VisitEventFormActions extends BaseFormActions
     /**
      * Generate a badge for a visitor submission
      */
-    protected function generateBadgeForVisitorSubmission(EventAnnouncement $event, VisitorSubmission $submission, array $processedData): ?Badge
+    protected function generateBadgeForVisitorSubmission(EventAnnouncement $event, VisitorSubmission $submission, array $processedData, string $badgeCompany = '', string $badgePosition = ''): ?Badge
     {
         try {
             // Get the badge template path from the event announcement
@@ -238,9 +238,11 @@ class VisitEventFormActions extends BaseFormActions
             // Generate QR code data (random unique code)
             $qrData = Str::uuid()->toString();
 
-            // Generate badge image using BadgeService - for visitor badge, only name is used
+            // Generate badge image using BadgeService - for visitor badge, include name, company, and job
             $badgeImage = BadgeService::generateBadgePreview($templatePath, [
                 'name' => $name,
+                'company' => $badgeCompany,
+                'job' => $badgePosition, // This should be the French job title
                 'qr_data' => $qrData
             ]);
 
@@ -254,11 +256,13 @@ class VisitEventFormActions extends BaseFormActions
             $tempFilePath = $tempFile . '.png';
             $badgeImage->toPng()->save($tempFilePath);
 
-            // Create badge record - for visitor badge, only name is required
+            // Create badge record - for visitor badge, include company and position
             $badge = Badge::create([
                 'code' => $qrData,
                 'name' => $name,
                 'email' => $email,
+                'company' => $badgeCompany,
+                'position' => $badgePosition, // Store the French job title
                 'visitor_submission_id' => $submission->id
             ]);
 

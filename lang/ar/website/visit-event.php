@@ -19,6 +19,18 @@ return [
     'terms_acceptance' => 'أوافق على شروط وأحكام المشاركة والعرض للنسخة السابعة من المعرض',
     'terms_and_conditions' => 'الشروط والأحكام',
 
+    // Badge information popup
+    'badge_info_title' => 'معلومات الشارة الخاصة بك',
+    'badge_info_description' => 'لإكمال تسجيلك، يرجى تقديم المعلومات التالية التي ستظهر على شارتك.',
+    'company' => 'الشركة',
+    'company_placeholder' => 'اسم شركتك',
+    'position' => 'المنصب',
+    'position_placeholder' => 'اختر منصبك',
+    'continue_registration' => 'إكمال التسجيل',
+    'cancel' => 'إلغاء',
+    'company_required' => 'حقل الشركة مطلوب.',
+    'position_required' => 'حقل المنصب مطلوب.',
+
     // Success page
     'registration_success' => 'تهانينا، لقد تم تسجيلك كزائر في :event',
     'badge_instructions' => 'يمكنك تحميل شارة المشاركة وطباعتها لتقديمها في يوم الحدث. يمكنك أيضًا تحميل شارتك من ملفك الشخصي أو عبر البريد الإلكتروني الذي تلقيته للتو.',
