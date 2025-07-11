@@ -165,7 +165,7 @@ class BadgeService
                 data: $data['qr_data'] ?? Str::uuid()->toString(),
                 encoding: new Encoding('UTF-8'),
                 errorCorrectionLevel: ErrorCorrectionLevel::Low,
-                size: 130, // Reduced to approximately 2/3 of previous size (was 190)
+                size: 230, // Increased size for better visibility
                 margin: 0,
                 roundBlockSizeMode: RoundBlockSizeMode::Margin,
                 backgroundColor: new Color(255, 255, 255, 0) // Transparent background
@@ -191,14 +191,14 @@ class BadgeService
 
             // Define the badge content area (top-left quarter)
             $contentX = 0;
-            $contentY = 0;
+            $contentY = -20;
             $contentWidth = intval($templateWidth / 2);
             $contentHeight = intval($templateHeight / 2);
 
             // Calculate text positions
             $nameY = $contentY + intval($contentHeight * 0.28);
             $jobY = $nameY + 45; // Increased spacing for larger text
-            $companyY = $jobY + 26; // Reduced spacing between job and company
+            $companyY = $jobY + 35; // Increased spacing between job and company
             $textCenterX = $contentX + intval($contentWidth / 2);
 
             // Set path to the Roboto variable font
@@ -253,8 +253,8 @@ class BadgeService
             // Overlay the canvas onto the template
             $templateImage->place($canvas, 'top-left', 0, 0);
 
-            return $templateImage;
 
+            return $templateImage;
         } catch (\Throwable $e) {
             // Log the error
             \Illuminate\Support\Facades\Log::error('Failed to generate badge with CSS: ' . $e->getMessage(), [
