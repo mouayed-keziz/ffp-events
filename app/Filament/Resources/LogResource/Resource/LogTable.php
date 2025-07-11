@@ -37,7 +37,7 @@ class LogTable
                 ->searchable()
                 ->sortable()
                 ->toggleable()
-                ->limit(30)
+                ->limit(20)
                 ->label(__('panel/logs.columns.causer'))
                 ->placeholder(__('panel/logs.empty_states.causer'))
                 ->url(function ($record) {
