@@ -9,7 +9,7 @@ return [
     'position' => 'Fonction dans l\'entreprise',
     'name_placeholder' => 'Jean Dupont',
     'company_placeholder' => 'Nom de l\'entreprise',
-    'position_placeholder' => 'Responsable',
+    'position_placeholder' => 'Sélectionnez votre fonction',
     'add_member' => 'Ajouter un membre',
     'save' => 'Enregistrer',
     'save_and_download' => 'Enregistrer et télécharger tous les badges',

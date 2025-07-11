@@ -9,7 +9,7 @@ return [
     'position' => 'Position in the company',
     'name_placeholder' => 'John Doe',
     'company_placeholder' => 'Company Name',
-    'position_placeholder' => 'Manager',
+    'position_placeholder' => 'Select your position',
     'add_member' => 'Add member',
     'save' => 'Save',
     'save_and_download' => 'Save and download all badges',

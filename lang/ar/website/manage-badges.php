@@ -9,7 +9,7 @@ return [
     'position' => 'المنصب في الشركة',
     'name_placeholder' => 'محمد أحمد',
     'company_placeholder' => 'اسم الشركة',
-    'position_placeholder' => 'مدير',
+    'position_placeholder' => 'اختر منصبك',
     'add_member' => 'إضافة عضو',
     'save' => 'حفظ',
     'save_and_download' => 'حفظ وتنزيل كل الشارات',

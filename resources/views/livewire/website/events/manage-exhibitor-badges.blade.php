@@ -4,6 +4,7 @@ use Livewire\Volt\Component;
 use App\Models\EventAnnouncement;
 use App\Models\ExhibitorSubmission;
 use App\Models\Badge;
+use App\Settings\CompanyInformationsSettings;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,6 +14,7 @@ new class extends Component {
     public $badges = [];
     public $originalBadges = [];
     public $deletedBadgeIds = [];
+    public $availableJobs = [];
     public $newBadge = [
         'name' => '',
         'company' => '',
@@ -23,6 +25,11 @@ new class extends Component {
     {
         $this->event = $event;
         $this->submission = $submission;
+
+        // Load available jobs from settings
+        $settings = app(CompanyInformationsSettings::class);
+        $this->availableJobs = $settings->jobs ?? [];
+
         $this->loadBadges();
 
         // Show one empty badge by default if there are no badges
@@ -33,7 +40,23 @@ new class extends Component {
 
     public function loadBadges()
     {
-        $this->badges = $this->submission->badges->toArray();
+        $existingBadges = $this->submission->badges->toArray();
+
+        // Transform badges to include display position for existing badges
+        $this->badges = collect($existingBadges)
+            ->map(function ($badge) {
+                // Find the job object that matches the French position stored in the badge
+                $matchingJob = collect($this->availableJobs)->first(function ($job) use ($badge) {
+                    return $job['fr'] === $badge['position'];
+                });
+
+                // Add display_position for showing in the UI (in current locale)
+                $badge['display_position'] = $matchingJob ? $matchingJob[app()->getLocale()] ?? $matchingJob['fr'] : $badge['position']; // fallback to stored position if job not found
+
+                return $badge;
+            })
+            ->toArray();
+
         $this->originalBadges = json_encode($this->badges); // Store original badges as JSON for comparison
     }
 
@@ -42,7 +65,8 @@ new class extends Component {
         $this->badges[] = [
             'name' => '',
             'company' => '',
-            'position' => '',
+            'position' => '', // This will store the French job title
+            'display_position' => '', // This will store the display text in current locale
             'is_new' => true,
         ];
     }
@@ -429,10 +453,16 @@ new class extends Component {
                     <label class="mb-2 label-text-alt font-semibold text-[#83909B] text-sm">
                         {{ __('website/manage-badges.position') }} *
                     </label>
-                    <input type="text" wire:model.debounce.500ms="badges.{{ $index }}.position"
-                        class="input input-bordered bg-white mb-2 rounded-md {{ $errors->has('badges.' . $index . '.position') ? 'input-error' : '' }}"
-                        required placeholder="{{ __('website/manage-badges.position_placeholder') }}"
-                        @if (isset($badge['id'])) disabled @endif>
+                    <select wire:model="badges.{{ $index }}.position"
+                        class="select select-bordered bg-white mb-2 rounded-md {{ $errors->has('badges.' . $index . '.position') ? 'select-error' : '' }}"
+                        required @if (isset($badge['id'])) disabled @endif>
+                        <option value="">{{ __('website/manage-badges.position_placeholder') }}</option>
+                        @foreach ($availableJobs as $job)
+                            <option value="{{ $job['fr'] }}" @if (isset($badge['position']) && $badge['position'] === $job['fr']) selected @endif>
+                                {{ $job[app()->getLocale()] ?? $job['fr'] }}
+                            </option>
+                        @endforeach
+                    </select>
                     @error('badges.' . $index . '.position')
                         <span class="text-error text-xs mt-1">{{ $message }}</span>
                     @enderror
