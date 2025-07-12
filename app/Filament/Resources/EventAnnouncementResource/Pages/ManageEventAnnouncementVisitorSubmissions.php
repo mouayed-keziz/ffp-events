@@ -72,6 +72,9 @@ class ManageEventAnnouncementVisitorSubmissions extends ManageRelatedRecords
             ->headerActions([
                 Tables\Actions\ExportAction::make()
                     ->exporter(VisitorSubmissionExporter::class)
+                    ->options([
+                        'event_id' => $this->getOwnerRecord()->id,
+                    ])
                     // ->label(__('Export Visitor Submissions'))
                     ->icon('heroicon-o-arrow-down-tray')
                 // ->color('success'),
