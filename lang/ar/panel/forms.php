@@ -31,6 +31,7 @@ return [
         'ecommerce_2' =>  'تجارة إلكترونية 2',
         'plan_tier'        => 'مستوى الخطة',
         'plan_tier_checkbox' => 'مستويات خطة متعددة',
+        'country_select'   => 'اختيار البلد',
     ],
     'file_types' => [
         'image' => 'صورة',
@@ -68,6 +69,12 @@ return [
             'quantity_label' => 'تسمية الكمية',
             'number1_label' => 'تسمية الرقم 1',
             'number2_label' =>  'تسمية الرقم 2',
-        ]
+        ],
+        'country_select' => [
+            'no_country_selected' => 'لم يتم اختيار بلد',
+            'no_countries_available' =>  'لا توجد دول متاحة',
+            'select_country' =>  'اختر بلداً',
+            'country_code' => 'رمز البلد',
+        ],
     ],
 ];

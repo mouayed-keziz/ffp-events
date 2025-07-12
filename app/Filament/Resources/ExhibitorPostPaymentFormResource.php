@@ -131,6 +131,11 @@ class ExhibitorPostPaymentFormResource extends Resource
                                             ->label(function ($state) {
                                                 return FormField::SELECT->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
                                             }),
+                                        Components\CountrySelectBlock::make(FormField::COUNTRY_SELECT->value)
+                                            ->icon('heroicon-o-globe-alt')
+                                            ->label(function ($state) {
+                                                return FormField::COUNTRY_SELECT->getLabel() . (isset($state['label']) && is_array($state['label']) && isset($state['label'][app()->getLocale()]) ? ": " . $state['label'][app()->getLocale()] : '');
+                                            }),
                                         Components\CheckboxBlock::make(FormField::CHECKBOX->value)
                                             ->icon('heroicon-o-check-circle')
                                             ->label(function ($state) {

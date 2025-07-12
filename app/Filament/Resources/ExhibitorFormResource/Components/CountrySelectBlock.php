@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Filament\Resources\ExhibitorFormResource\Components;
+
+use App\Filament\Resources\ExhibitorFormResource\Components\Core\DescriptionInput;
+use App\Filament\Resources\ExhibitorFormResource\Components\Core\LabelInput;
+use Filament\Forms\Components\Builder\Block;
+
+class CountrySelectBlock
+{
+    public static function make(string $name)
+    {
+        return Block::make($name)
+            ->columns(2)
+            ->schema([
+                LabelInput::make(),
+                DescriptionInput::make(),
+            ]);
+    }
+}

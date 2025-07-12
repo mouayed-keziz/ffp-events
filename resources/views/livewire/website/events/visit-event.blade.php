@@ -6,11 +6,14 @@ use App\Forms\VisitEventFormActions;
 use App\Actions\Forms\FormFieldActions;
 use App\Settings\CompanyInformationsSettings;
 use Livewire\WithFileUploads;
+use App\Traits\Livewire\HasFormFieldUpdates;
 
 new class extends Component {
     use WithFileUploads;
+    use HasFormFieldUpdates;
 
     // Event and form data
+
     public EventAnnouncement $event;
     public array $formData = [];
     public bool $formSubmitted = false;

@@ -161,6 +161,10 @@ return [
     'ulid' => 'Le champ :attribute doit être un ULID valide.',
     'uuid' => 'Le champ :attribute doit être un UUID valide.',
 
+    // Custom validation rules
+    'country_select_valid' => 'Veuillez sélectionner un pays valide.',
+    'country_select_valid_optional' => 'Veuillez sélectionner un pays valide si vous choisissez d\'en fournir un.',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

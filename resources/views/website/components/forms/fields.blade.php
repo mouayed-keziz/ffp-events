@@ -19,6 +19,14 @@
                 ])
             @break
 
+            @case(App\Enums\FormField::COUNTRY_SELECT->value)
+                @include('website.components.forms.multiple.country-select', [
+                    'data' => $field['data'],
+                    'answerPath' => $answerPath ?? null,
+                    'disabled' => $disabled ?? false,
+                ])
+            @break
+
             @case(App\Enums\FormField::CHECKBOX->value)
                 @include('website.components.forms.multiple.checkbox', [
                     'data' => $field['data'],

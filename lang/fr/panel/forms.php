@@ -31,6 +31,7 @@ return [
         'ecommerce_2' =>  'E-commerce 2',
         'plan_tier'        => 'Niveau de Plan',
         'plan_tier_checkbox' => 'Niveaux de Plan Multiple',
+        'country_select'   => 'Sélection de Pays',
     ],
     'file_types' => [
         'image' => 'Image',
@@ -67,6 +68,12 @@ return [
             'quantity_label' => 'Libellé de quantité',
             'number1_label' => 'Libellé du premier nombre',
             'number2_label' =>  'Libellé du deuxième nombre',
-        ]
+        ],
+        'country_select' => [
+            'no_country_selected' => 'Aucun pays sélectionné',
+            'no_countries_available' =>  'Aucun pays disponible',
+            'select_country' =>  'Sélectionner un pays',
+            'country_code' => 'Code du pays',
+        ],
     ],
 ];

@@ -143,11 +143,48 @@ class FormFieldActions
     }
 
     /**
+     * Update country selection for country select fields
+     *
+     * @param array $formData Current form data
+     * @param string $answerPath Path to the answer field
+     * @param string $selectedCountryCode Country code to be selected
+     * @return array Updated form data
+     */
+    public static function updateCountrySelection(array $formData, string $answerPath, string $selectedCountryCode): array
+    {
+        // Get field type from the path
+        $fieldTypePath = str_replace('.answer', '.type', $answerPath);
+        $fieldType = Arr::get($formData, $fieldTypePath);
+
+        if ($fieldType !== FormField::COUNTRY_SELECT->value) {
+            return $formData;
+        }
+
+        // Set the simplified answer structure
+        if (empty($selectedCountryCode)) {
+            Arr::set($formData, $answerPath, [
+                'selected_country_code' => null,
+                'selected_country_name' => null
+            ]);
+        } else {
+            // Get the country name for the selected code
+            $countryName = \App\Enums\Fields\CountrySelect::getCountryName($selectedCountryCode);
+
+            Arr::set($formData, $answerPath, [
+                'selected_country_code' => $selectedCountryCode,
+                'selected_country_name' => $countryName
+            ]);
+        }
+
+        return $formData;
+    }
+
+    /**
      * Generic handler for updating form field selections
      *
      * @param array $formData Current form data 
      * @param string $fieldPath Path to the field including form index, section index, and field index
-     * @param string $type Type of update: 'select', 'radio', 'plan', 'product'
+     * @param string $type Type of update: 'select', 'radio', 'plan', 'product', 'country'
      * @param mixed $value Value to set (meaning varies by update type)
      * @param mixed $extraValue Additional value needed for some update types (e.g., quantity)
      * @return array Updated form data
@@ -166,6 +203,9 @@ class FormFieldActions
 
             case 'product':
                 return self::updateProductQuantity($formData, $answerPath, $value, $extraValue);
+
+            case 'country':
+                return self::updateCountrySelection($formData, $answerPath, $value);
 
             default:
                 return $formData;

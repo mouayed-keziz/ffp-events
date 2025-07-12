@@ -161,6 +161,10 @@ return [
     'ulid' => 'يجب أن يكون الحقل :attribute ULID صالحًا.',
     'uuid' => 'يجب أن يكون الحقل :attribute UUID صالحًا.',
 
+    // Custom validation rules
+    'country_select_valid' => 'يرجى اختيار بلد صالح.',
+    'country_select_valid_optional' => 'يرجى اختيار بلد صالح إذا اخترت تقديم واحد.',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

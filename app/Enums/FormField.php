@@ -4,6 +4,7 @@ namespace App\Enums;
 
 use App\Enums\Fields\Checkbox;
 use App\Enums\Fields\CheckboxPriced;
+use App\Enums\Fields\CountrySelect;
 use App\Enums\Fields\Ecommerce;
 use App\Enums\Fields\Ecommerce2;
 use App\Enums\Fields\Input;
@@ -30,6 +31,7 @@ enum FormField: string implements HasLabel
     case ECOMMERCE_2 = "ecommerce_2";
     case PLAN_TIER = "plan_tier";
     case PLAN_TIER_CHECKBOX = "plan_tier_checkbox";
+    case COUNTRY_SELECT = "country_select";
 
     public function getLabel(): ?string
     {
@@ -51,6 +53,7 @@ enum FormField: string implements HasLabel
             self::ECOMMERCE_2->value     => 'heroicon-o-shopping-cart',
             self::PLAN_TIER->value       => 'heroicon-o-table-cells',
             self::PLAN_TIER_CHECKBOX->value => 'heroicon-o-table-cells',
+            self::COUNTRY_SELECT->value  => 'heroicon-o-globe-alt',
         ];
 
         return $icons[$this->value] ?? 'heroicon-o-question-mark';
@@ -71,6 +74,7 @@ enum FormField: string implements HasLabel
             self::ECOMMERCE_2 => Ecommerce2::getInvoiceDetails($field),
             self::PLAN_TIER => PlanTier::getInvoiceDetails($field),
             self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::getInvoiceDetails($field),
+            self::COUNTRY_SELECT => CountrySelect::getInvoiceDetails($field),
         };
     }
 
@@ -92,6 +96,7 @@ enum FormField: string implements HasLabel
             self::ECOMMERCE_2 => Ecommerce2::initializeField($field),
             self::PLAN_TIER => PlanTier::initializeField($field),
             self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::initializeField($field),
+            self::COUNTRY_SELECT => CountrySelect::initializeField($field),
         };
     }
 
@@ -113,6 +118,7 @@ enum FormField: string implements HasLabel
             self::ECOMMERCE_2 => Ecommerce2::getDefaultAnswer($field),
             self::PLAN_TIER => PlanTier::getDefaultAnswer($field),
             self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::getDefaultAnswer($field),
+            self::COUNTRY_SELECT => CountrySelect::getDefaultAnswer($field),
         };
     }
 
@@ -134,6 +140,7 @@ enum FormField: string implements HasLabel
             self::ECOMMERCE_2 => Ecommerce2::getValidationRules($field),
             self::PLAN_TIER => PlanTier::getValidationRules($field),
             self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::getValidationRules($field),
+            self::COUNTRY_SELECT => CountrySelect::getValidationRules($field),
         };
     }
 
@@ -155,6 +162,7 @@ enum FormField: string implements HasLabel
             self::ECOMMERCE_2 => Ecommerce2::processFieldAnswer($answer, $fieldData),
             self::PLAN_TIER => PlanTier::processFieldAnswer($answer, $fieldData),
             self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::processFieldAnswer($answer, $fieldData),
+            self::COUNTRY_SELECT => CountrySelect::processFieldAnswer($answer, $fieldData),
         };
     }
 
@@ -176,6 +184,7 @@ enum FormField: string implements HasLabel
             self::ECOMMERCE_2 => Ecommerce2::calculateFieldPrice($answer, $fieldData, $preferredCurrency),
             self::PLAN_TIER => PlanTier::calculateFieldPrice($answer, $fieldData, $preferredCurrency),
             self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::calculateFieldPrice($answer, $fieldData, $preferredCurrency),
+            self::COUNTRY_SELECT => CountrySelect::calculateFieldPrice($answer, $fieldData, $preferredCurrency),
         };
     }
 
@@ -197,6 +206,7 @@ enum FormField: string implements HasLabel
             self::ECOMMERCE_2 => Ecommerce2::isPriced(),
             self::PLAN_TIER => PlanTier::isPriced(),
             self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::isPriced(),
+            self::COUNTRY_SELECT => CountrySelect::isPriced(),
         };
     }
 
@@ -218,6 +228,7 @@ enum FormField: string implements HasLabel
             self::ECOMMERCE_2 => Ecommerce2::needsQuantity(),
             self::PLAN_TIER => PlanTier::needsQuantity(),
             self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::needsQuantity(),
+            self::COUNTRY_SELECT => CountrySelect::needsQuantity(),
         };
     }
 
@@ -245,6 +256,7 @@ enum FormField: string implements HasLabel
             self::ECOMMERCE_2 => Ecommerce2::createDisplayComponent($field, $label, $answer),
             self::PLAN_TIER => PlanTier::createDisplayComponent($field, $label, $answer),
             self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::createDisplayComponent($field, $label, $answer),
+            self::COUNTRY_SELECT => CountrySelect::createDisplayComponent($field, $label, $answer),
         };
     }
 
@@ -265,6 +277,7 @@ enum FormField: string implements HasLabel
             self::PLAN_TIER => PlanTier::updatePlans($options, $selectedValue),
             self::ECOMMERCE => Ecommerce::updateProducts($options, $selectedValue),
             self::ECOMMERCE_2 => Ecommerce2::updateProducts($options, $selectedValue),
+            self::COUNTRY_SELECT => CountrySelect::updateOptions($options, $selectedValue),
             default => $options
         };
     }

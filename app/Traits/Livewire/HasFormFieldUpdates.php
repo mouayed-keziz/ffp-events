@@ -82,4 +82,23 @@ trait HasFormFieldUpdates
         // Recalculate price after changing selection
         $this->calculateTotalPrice();
     }
+
+    /**
+     * Update country selection for COUNTRY_SELECT field
+     *
+     * @param string $answerPath The path to the answer in formData
+     * @param string $selectedCountryCode The country code of the selected country
+     */
+    public function updateCountrySelectOption($answerPath, $selectedCountryCode)
+    {
+        $this->formData = FormFieldActions::updateCountrySelection($this->formData, $answerPath, $selectedCountryCode);
+
+        // Dispatch a browser event to inform Alpine.js of the change
+        $this->dispatch('countryselected', [
+            'path' => $answerPath,
+            'countryCode' => $selectedCountryCode,
+        ]);
+
+        // No price calculation needed for country select as it's not priced
+    }
 }
