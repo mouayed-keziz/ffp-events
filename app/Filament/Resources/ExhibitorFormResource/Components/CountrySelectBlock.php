@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ExhibitorFormResource\Components;
 use App\Filament\Resources\ExhibitorFormResource\Components\Core\DescriptionInput;
 use App\Filament\Resources\ExhibitorFormResource\Components\Core\LabelInput;
 use Filament\Forms\Components\Builder\Block;
+use Filament\Forms\Components\Toggle;
 
 class CountrySelectBlock
 {
@@ -15,6 +16,11 @@ class CountrySelectBlock
             ->schema([
                 LabelInput::make(),
                 DescriptionInput::make(),
+                Toggle::make('required')
+                    ->columnSpan(1)
+                    ->default(true)
+                    ->inline(false)
+                    ->label(__('panel/forms.exhibitors.blocks.required')),
             ]);
     }
 }
