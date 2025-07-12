@@ -19,18 +19,18 @@ class ExhibitorSubmissionExporter extends Exporter
     protected function getDynamicColumns(?int $eventId): array
     {
         return [
-            ExportColumn::make('exhibitor id')
-                ->label('exhibitor id')
-                ->state(fn(ExhibitorSubmission $record) => $record->exhibitor->id),
-            ExportColumn::make('submission id')
-                ->label('submission id')
-                ->state(fn(ExhibitorSubmission $record) => $record->id),
-            ExportColumn::make('json')
-                ->label('json answers')
-                ->state(fn(ExhibitorSubmission $record) => json_encode($record)),
-            ExportColumn::make('created at')
-                ->label('created at')
-                ->state(fn(ExhibitorSubmission $record) => $record->created_at),
+            // ExportColumn::make('exhibitor id')
+            //     ->label('exhibitor id')
+            //     ->state(fn(ExhibitorSubmission $record) => $record->exhibitor->id),
+            // ExportColumn::make('submission id')
+            //     ->label('submission id')
+            //     ->state(fn(ExhibitorSubmission $record) => $record->id),
+            // ExportColumn::make('json')
+            //     ->label('json answers')
+            //     ->state(fn(ExhibitorSubmission $record) => json_encode($record)),
+            // ExportColumn::make('created at')
+            //     ->label('created at')
+            //     ->state(fn(ExhibitorSubmission $record) => $record->created_at),
         ];
     }
 
