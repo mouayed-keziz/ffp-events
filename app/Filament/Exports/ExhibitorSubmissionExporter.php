@@ -33,11 +33,6 @@ class ExhibitorSubmissionExporter extends Exporter
             //     ->state(fn(ExhibitorSubmission $record) => $record->created_at),
         ];
     }
-    public static function getCsvDelimiter(): string
-    {
-        return ';';
-    }
-
 
     public static function getColumns(): array
     {
@@ -113,19 +108,19 @@ class ExhibitorSubmissionExporter extends Exporter
 
             ExportColumn::make('answers_json')
                 ->label('Answers (JSON)')
-                ->state(fn(ExhibitorSubmission $record) => str_replace(['"', "\n", "\r"], ['""', ' ', ' '], json_encode($record->answers))),
+                ->state(fn(ExhibitorSubmission $record) => json_encode($record->answers)),
 
             ExportColumn::make('answers_json_readable')
                 ->label('Answers (JSON - Readable)')
-                ->state(fn(ExhibitorSubmission $record) => str_replace(['"', "\n", "\r"], ['""', ' ', ' '], json_encode($record->answers, JSON_UNESCAPED_UNICODE))),
+                ->state(fn(ExhibitorSubmission $record) => json_encode($record->answers, JSON_UNESCAPED_UNICODE)),
 
             ExportColumn::make('post_answers_json')
                 ->label('Post Answers (JSON)')
-                ->state(fn(ExhibitorSubmission $record) => str_replace(['"', "\n", "\r"], ['""', ' ', ' '], json_encode($record->post_answers))),
+                ->state(fn(ExhibitorSubmission $record) => json_encode($record->post_answers)),
 
             ExportColumn::make('post_answers_json_readable')
                 ->label('Post Answers (JSON - Readable)')
-                ->state(fn(ExhibitorSubmission $record) => str_replace(['"', "\n", "\r"], ['""', ' ', ' '], json_encode($record->post_answers, JSON_UNESCAPED_UNICODE))),
+                ->state(fn(ExhibitorSubmission $record) => json_encode($record->post_answers, JSON_UNESCAPED_UNICODE)),
         ];
     }
 

@@ -28,10 +28,10 @@ class LogExporter extends Exporter
                 ->formatStateUsing(fn($state) => $state->format('Y-m-d H:i:s')),
             ExportColumn::make('log properties')
                 ->label('Properties')
-                ->state(fn(Log $record) => str_replace(['"', "\n", "\r"], ['""', ' ', ' '], json_encode($record->properties))),
+                ->state(fn(Log $record) => json_encode($record->properties)),
             ExportColumn::make('log properties readable')
                 ->label('Properties (Readable)')
-                ->state(fn(Log $record) => str_replace(['"', "\n", "\r"], ['""', ' ', ' '], json_encode($record->properties, JSON_UNESCAPED_UNICODE))),
+                ->state(fn(Log $record) => json_encode($record->properties, JSON_UNESCAPED_UNICODE)),
         ];
     }
 
