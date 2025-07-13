@@ -69,6 +69,10 @@ class VisitorSubmissionExporter extends Exporter
             ExportColumn::make('answers_json')
                 ->label('Answers (JSON)')
                 ->state(fn(VisitorSubmission $record) => json_encode($record->answers)),
+
+            ExportColumn::make('answers_json_readable')
+                ->label('Answers (JSON - Readable)')
+                ->state(fn(VisitorSubmission $record) => json_encode($record->answers, JSON_UNESCAPED_UNICODE)),
         ];
     }
 

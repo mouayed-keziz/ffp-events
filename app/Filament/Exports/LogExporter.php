@@ -29,6 +29,9 @@ class LogExporter extends Exporter
             ExportColumn::make('log properties')
                 ->label('Properties')
                 ->state(fn(Log $record) => json_encode($record->properties)),
+            ExportColumn::make('log properties readable')
+                ->label('Properties (Readable)')
+                ->state(fn(Log $record) => json_encode($record->properties, JSON_UNESCAPED_UNICODE)),
         ];
     }
 
