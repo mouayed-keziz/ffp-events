@@ -33,6 +33,11 @@ class ExhibitorSubmissionExporter extends Exporter
             //     ->state(fn(ExhibitorSubmission $record) => $record->created_at),
         ];
     }
+    public static function getCsvDelimiter(): string
+    {
+        return ';';
+    }
+
 
     public static function getColumns(): array
     {
