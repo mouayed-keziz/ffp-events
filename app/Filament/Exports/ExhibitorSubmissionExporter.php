@@ -105,6 +105,14 @@ class ExhibitorSubmissionExporter extends Exporter
 
             ExportColumn::make('updated_at')
                 ->label('Last Updated'),
+
+            ExportColumn::make('answers_json')
+                ->label('Answers (JSON)')
+                ->state(fn(ExhibitorSubmission $record) => json_encode($record->answers)),
+
+            ExportColumn::make('post_answers_json')
+                ->label('Post Answers (JSON)')
+                ->state(fn(ExhibitorSubmission $record) => json_encode($record->post_answers)),
         ];
     }
 

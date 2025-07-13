@@ -18,12 +18,12 @@ class VisitorSubmissionExporter extends Exporter
     protected function getDynamicColumns(?int $eventId): array
     {
         return [
-            ExportColumn::make('visitor_special_col')
-                ->label('Visitor Special Column')
-                ->state(fn(VisitorSubmission $record) => "Special visitor data for event {$eventId}"),
-            ExportColumn::make('visitor_event_info')
-                ->label('Visitor Event Info')
-                ->state(fn(VisitorSubmission $record) => "Visitor {$record->visitor->name} in event {$eventId}"),
+            // ExportColumn::make('visitor_special_col')
+            //     ->label('Visitor Special Column')
+            //     ->state(fn(VisitorSubmission $record) => "Special visitor data for event {$eventId}"),
+            // ExportColumn::make('visitor_event_info')
+            //     ->label('Visitor Event Info')
+            //     ->state(fn(VisitorSubmission $record) => "Visitor {$record->visitor->name} in event {$eventId}"),
         ];
     }
 
@@ -65,6 +65,10 @@ class VisitorSubmissionExporter extends Exporter
 
             ExportColumn::make('updated_at')
                 ->label('Last Updated'),
+
+            ExportColumn::make('answers_json')
+                ->label('Answers (JSON)')
+                ->state(fn(VisitorSubmission $record) => json_encode($record->answers)),
         ];
     }
 
