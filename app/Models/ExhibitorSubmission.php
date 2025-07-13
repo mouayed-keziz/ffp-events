@@ -11,10 +11,11 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Translatable\HasTranslations;
 use App\Enums\FormField;
+use App\Traits\HasSubmissionLabelAnswers;
 
 class ExhibitorSubmission extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, HasTranslations;
+    use HasFactory, InteractsWithMedia, HasTranslations, HasSubmissionLabelAnswers;
 
     public $translatable = ['rejection_reason'];
 

@@ -175,4 +175,37 @@ class RadioPriced
 
         return $options;
     }
+
+    /**
+     * Get label-answer pair for radio priced field
+     *
+     * @param array $field The field definition with type, data and answer
+     * @param string $language Language code (default: 'fr')
+     * @return array Array with 'label' and 'answer' keys
+     */
+    public static function getLabelAnswerPair(array $field, string $language = 'fr'): array
+    {
+        $label = $field['data']['label'][$language] ??
+            $field['data']['label']['fr'] ??
+            $field['data']['label']['en'] ??
+            'Unknown Field';
+
+        $answer = '';
+        if (!empty($field['answer']['options'])) {
+            foreach ($field['answer']['options'] as $option) {
+                if (!empty($option['selected']) && $option['selected'] === true) {
+                    $answer = $option['option'][$language] ??
+                        $option['option']['fr'] ??
+                        $option['option']['en'] ??
+                        'Unknown Option';
+                    break;
+                }
+            }
+        }
+
+        return [
+            'label' => $label,
+            'answer' => $answer
+        ];
+    }
 }

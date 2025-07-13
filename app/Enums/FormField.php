@@ -281,4 +281,30 @@ enum FormField: string implements HasLabel
             default => $options
         };
     }
+
+    /**
+     * Get label-answer pair for a field
+     * 
+     * @param array $field The field definition with type, data and answer
+     * @param string $language Language code (default: 'fr')
+     * @return array Array with 'label' and 'answer' keys
+     */
+    public function getLabelAnswerPair(array $field, string $language = 'fr'): array
+    {
+        return match ($this) {
+            self::INPUT => Input::getLabelAnswerPair($field, $language),
+            self::SELECT => Select::getLabelAnswerPair($field, $language),
+            self::CHECKBOX => Checkbox::getLabelAnswerPair($field, $language),
+            self::RADIO => Radio::getLabelAnswerPair($field, $language),
+            self::UPLOAD => Upload::getLabelAnswerPair($field, $language),
+            self::SELECT_PRICED => SelectPriced::getLabelAnswerPair($field, $language),
+            self::CHECKBOX_PRICED => CheckboxPriced::getLabelAnswerPair($field, $language),
+            self::RADIO_PRICED => RadioPriced::getLabelAnswerPair($field, $language),
+            self::ECOMMERCE => Ecommerce::getLabelAnswerPair($field, $language),
+            self::ECOMMERCE_2 => Ecommerce2::getLabelAnswerPair($field, $language),
+            self::PLAN_TIER => PlanTier::getLabelAnswerPair($field, $language),
+            self::PLAN_TIER_CHECKBOX => PlanTierCheckbox::getLabelAnswerPair($field, $language),
+            self::COUNTRY_SELECT => CountrySelect::getLabelAnswerPair($field, $language),
+        };
+    }
 }

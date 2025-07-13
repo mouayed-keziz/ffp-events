@@ -256,4 +256,39 @@ class Ecommerce2
                     ->state($answer)
             ]);
     }
+
+    /**
+     * Get label-answer pair for ecommerce2 field
+     *
+     * @param array $field The field definition with type, data and answer
+     * @param string $language Language code (default: 'fr')
+     * @return array Array with 'label' and 'answer' keys
+     */
+    public static function getLabelAnswerPair(array $field, string $language = 'fr'): array
+    {
+        $label = $field['data']['label'][$language] ??
+            $field['data']['label']['fr'] ??
+            $field['data']['label']['en'] ??
+            'Unknown Field';
+
+        $selectedProducts = [];
+        if (!empty($field['answer']['products'])) {
+            foreach ($field['answer']['products'] as $product) {
+                if (!empty($product['selected']) && $product['selected'] === true) {
+                    $productName = $product['name'] ?? 'Unknown Product';
+                    $number1 = $product['number1'] ?? 1;
+                    $number2 = $product['number2'] ?? 1;
+                    $totalQuantity = $number1 * $number2;
+                    $selectedProducts[] = "{$productName} (x{$totalQuantity})";
+                }
+            }
+        }
+
+        $answer = implode(', ', $selectedProducts);
+
+        return [
+            'label' => $label,
+            'answer' => $answer
+        ];
+    }
 }

@@ -186,4 +186,42 @@ class PlanTierCheckbox
                     ->extraAttributes(['class' => 'mt-3']),
             ]);
     }
+
+    /**
+     * Get label-answer pair for plan tier checkbox field
+     *
+     * @param array $field The field definition with type, data and answer
+     * @param string $language Language code (default: 'fr')
+     * @return array Array with 'label' and 'answer' keys
+     */
+    public static function getLabelAnswerPair(array $field, string $language = 'fr'): array
+    {
+        $label = $field['data']['label'][$language] ??
+            $field['data']['label']['fr'] ??
+            $field['data']['label']['en'] ??
+            'Unknown Field';
+
+        $selectedPlans = [];
+        if (!empty($field['answer']['plans'])) {
+            foreach ($field['answer']['plans'] as $plan) {
+                if (!empty($plan['selected']) && $plan['selected'] === true) {
+                    $planModel = \App\Models\Plan::find($plan['plan_id']);
+                    if ($planModel) {
+                        $planTitle = $planModel->getTranslation('title', $language) ??
+                            $planModel->getTranslation('title', 'fr') ??
+                            $planModel->getTranslation('title', 'en') ??
+                            'Unknown Plan';
+                        $selectedPlans[] = $planTitle;
+                    }
+                }
+            }
+        }
+
+        $answer = implode(', ', $selectedPlans);
+
+        return [
+            'label' => $label,
+            'answer' => $answer
+        ];
+    }
 }

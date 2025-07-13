@@ -234,6 +234,28 @@ class Upload
     }
 
     /**
+     * Get label-answer pair for upload field
+     *
+     * @param array $field The field definition with type, data and answer
+     * @param string $language Language code (default: 'fr')
+     * @return array Array with 'label' and 'answer' keys
+     */
+    public static function getLabelAnswerPair(array $field, string $language = 'fr'): array
+    {
+        $label = $field['data']['label'][$language] ??
+            $field['data']['label']['fr'] ??
+            $field['data']['label']['en'] ??
+            'Unknown Field';
+
+        $answer = !empty($field['answer']) ? 'File uploaded' : 'No file uploaded';
+
+        return [
+            'label' => $label,
+            'answer' => $answer
+        ];
+    }
+
+    /**
      * Attempt to find the visitor submission from various sources in the request
      * 
      * @return VisitorSubmission|null

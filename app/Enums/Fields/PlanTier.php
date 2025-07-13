@@ -93,12 +93,11 @@ class PlanTier
                     'title' => \App\Models\Plan::find($plan['plan_id'])?->getTranslation('title', 'fr') ?? '',
                     'quantity' => 1,
                     'price' => $plan['price'][$currency] ?? 0,
-                    
+
                 ];
             }
         }
         return $details;
-    
     }
 
     public static function processFieldAnswer($answer, array $fieldData = [])
@@ -186,5 +185,41 @@ class PlanTier
                     ->state($answer)
                     ->extraAttributes(['class' => 'mt-3']),
             ]);
+    }
+
+    /**
+     * Get label-answer pair for plan tier field
+     *
+     * @param array $field The field definition with type, data and answer
+     * @param string $language Language code (default: 'fr')
+     * @return array Array with 'label' and 'answer' keys
+     */
+    public static function getLabelAnswerPair(array $field, string $language = 'fr'): array
+    {
+        $label = $field['data']['label'][$language] ??
+            $field['data']['label']['fr'] ??
+            $field['data']['label']['en'] ??
+            'Unknown Field';
+
+        $answer = '';
+        if (!empty($field['answer']['plans'])) {
+            foreach ($field['answer']['plans'] as $plan) {
+                if (!empty($plan['selected']) && $plan['selected'] === true) {
+                    $planModel = \App\Models\Plan::find($plan['plan_id']);
+                    if ($planModel) {
+                        $answer = $planModel->getTranslation('title', $language) ??
+                            $planModel->getTranslation('title', 'fr') ??
+                            $planModel->getTranslation('title', 'en') ??
+                            'Unknown Plan';
+                    }
+                    break;
+                }
+            }
+        }
+
+        return [
+            'label' => $label,
+            'answer' => $answer
+        ];
     }
 }

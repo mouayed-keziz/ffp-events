@@ -108,7 +108,7 @@ class CheckboxPriced
                     'title' => $option['option']['fr'] ?? '',
                     'quantity' => 1,
                     'price' => $option['price'][$currency] ?? 0,
-                    
+
                 ];
             }
         }
@@ -150,5 +150,40 @@ class CheckboxPriced
                     ->label('')
                     ->state($answer)
             ]);
+    }
+
+    /**
+     * Get label-answer pair for checkbox priced field
+     *
+     * @param array $field The field definition with type, data and answer
+     * @param string $language Language code (default: 'fr')
+     * @return array Array with 'label' and 'answer' keys
+     */
+    public static function getLabelAnswerPair(array $field, string $language = 'fr'): array
+    {
+        $label = $field['data']['label'][$language] ??
+            $field['data']['label']['fr'] ??
+            $field['data']['label']['en'] ??
+            'Unknown Field';
+
+        $selectedOptions = [];
+        if (!empty($field['answer']['options'])) {
+            foreach ($field['answer']['options'] as $option) {
+                if (!empty($option['selected']) && $option['selected'] === true) {
+                    $optionLabel = $option['option'][$language] ??
+                        $option['option']['fr'] ??
+                        $option['option']['en'] ??
+                        'Unknown Option';
+                    $selectedOptions[] = $optionLabel;
+                }
+            }
+        }
+
+        $answer = implode(', ', $selectedOptions);
+
+        return [
+            'label' => $label,
+            'answer' => $answer
+        ];
     }
 }

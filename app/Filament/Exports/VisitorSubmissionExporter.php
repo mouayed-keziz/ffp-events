@@ -66,13 +66,19 @@ class VisitorSubmissionExporter extends Exporter
             ExportColumn::make('updated_at')
                 ->label('Last Updated'),
 
-            ExportColumn::make('answers_json')
-                ->label('Answers (JSON)')
-                ->state(fn(VisitorSubmission $record) => json_encode($record->answers)),
+            // New formatted answers column
+            ExportColumn::make('formatted_answers')
+                ->label('Formatted Answers')
+                ->state(fn(VisitorSubmission $record) => $record->getFormattedAnswersJsonAttribute()),
 
-            ExportColumn::make('answers_json_readable')
-                ->label('Answers (JSON - Readable)')
-                ->state(fn(VisitorSubmission $record) => json_encode($record->answers, JSON_UNESCAPED_UNICODE)),
+            // Commented out original JSON columns
+            // ExportColumn::make('answers_json')
+            //     ->label('Answers (JSON)')
+            //     ->state(fn(VisitorSubmission $record) => json_encode($record->answers)),
+
+            // ExportColumn::make('answers_json_readable')
+            //     ->label('Answers (JSON - Readable)')
+            //     ->state(fn(VisitorSubmission $record) => json_encode($record->answers, JSON_UNESCAPED_UNICODE)),
         ];
     }
 

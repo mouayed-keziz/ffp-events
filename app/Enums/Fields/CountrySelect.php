@@ -194,4 +194,26 @@ class CountrySelect
 
         return $countries[$code] ?? null;
     }
+
+    /**
+     * Get label-answer pair for country select field
+     *
+     * @param array $field The field definition with type, data and answer
+     * @param string $language Language code (default: 'fr')
+     * @return array Array with 'label' and 'answer' keys
+     */
+    public static function getLabelAnswerPair(array $field, string $language = 'fr'): array
+    {
+        $label = $field['data']['label'][$language] ??
+            $field['data']['label']['fr'] ??
+            $field['data']['label']['en'] ??
+            'Unknown Field';
+
+        $answer = $field['answer']['selected_country_name'] ?? '';
+
+        return [
+            'label' => $label,
+            'answer' => $answer
+        ];
+    }
 }

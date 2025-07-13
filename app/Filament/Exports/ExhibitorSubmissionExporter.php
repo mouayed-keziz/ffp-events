@@ -106,21 +106,27 @@ class ExhibitorSubmissionExporter extends Exporter
             ExportColumn::make('updated_at')
                 ->label('Last Updated'),
 
-            ExportColumn::make('answers_json')
-                ->label('Answers (JSON)')
-                ->state(fn(ExhibitorSubmission $record) => json_encode($record->answers)),
+            // New formatted answers column
+            ExportColumn::make('formatted_answers')
+                ->label('Formatted Answers')
+                ->state(fn(ExhibitorSubmission $record) => $record->getFormattedAnswersJsonAttribute()),
 
-            ExportColumn::make('answers_json_readable')
-                ->label('Answers (JSON - Readable)')
-                ->state(fn(ExhibitorSubmission $record) => json_encode($record->answers, JSON_UNESCAPED_UNICODE)),
+            // Commented out original JSON columns
+            // ExportColumn::make('answers_json')
+            //     ->label('Answers (JSON)')
+            //     ->state(fn(ExhibitorSubmission $record) => json_encode($record->answers)),
 
-            ExportColumn::make('post_answers_json')
-                ->label('Post Answers (JSON)')
-                ->state(fn(ExhibitorSubmission $record) => json_encode($record->post_answers)),
+            // ExportColumn::make('answers_json_readable')
+            //     ->label('Answers (JSON - Readable)')
+            //     ->state(fn(ExhibitorSubmission $record) => json_encode($record->answers, JSON_UNESCAPED_UNICODE)),
 
-            ExportColumn::make('post_answers_json_readable')
-                ->label('Post Answers (JSON - Readable)')
-                ->state(fn(ExhibitorSubmission $record) => json_encode($record->post_answers, JSON_UNESCAPED_UNICODE)),
+            // ExportColumn::make('post_answers_json')
+            //     ->label('Post Answers (JSON)')
+            //     ->state(fn(ExhibitorSubmission $record) => json_encode($record->post_answers)),
+
+            // ExportColumn::make('post_answers_json_readable')
+            //     ->label('Post Answers (JSON - Readable)')
+            //     ->state(fn(ExhibitorSubmission $record) => json_encode($record->post_answers, JSON_UNESCAPED_UNICODE)),
         ];
     }
 
