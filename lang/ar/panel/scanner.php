@@ -1,0 +1,20 @@
+<?php
+
+return [
+    'title' => 'ماسح الشارات',
+    'navigation_label' => 'ماسح الشارات',
+    'scanner_section_title' => 'ماسح الشارات',
+    'scanner_description' => 'امسح رموز QR على الشارات للتحقق من معلومات الحضور',
+    'results_section_title' => 'نتائج المسح',
+    'start_scanner' => 'تشغيل الماسح',
+    'stop_scanner' => 'إيقاف الماسح',
+    'scanner_placeholder' => 'ابدأ المسح لاكتشاف رموز QR على الشارات',
+    'last_scanned_result' => 'آخر شارة تم مسحها',
+    'scan_data' => 'بيانات الشارة',
+    'scanned_at' => 'تم المسح في',
+    'user' => 'مستخدم الماسح',
+    'format' => 'التنسيق',
+    'length' => 'الطول',
+    'no_results' => 'لم يتم مسح أي شارات بعد',
+    'scan_another' => 'ابدأ المسح لرؤية معلومات الشارة هنا',
+];

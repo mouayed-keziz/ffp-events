@@ -1,0 +1,20 @@
+<?php
+
+return [
+    'title' => 'Scanner de Badges',
+    'navigation_label' => 'Scanner de Badges',
+    'scanner_section_title' => 'Scanner de Badges',
+    'scanner_description' => 'Scannez les codes QR sur les badges pour vérifier les informations des participants',
+    'results_section_title' => 'Résultats du Scan',
+    'start_scanner' => 'Démarrer le Scanner',
+    'stop_scanner' => 'Arrêter le Scanner',
+    'scanner_placeholder' => 'Commencez à scanner pour détecter les codes QR des badges',
+    'last_scanned_result' => 'Dernier Badge Scanné',
+    'scan_data' => 'Données du Badge',
+    'scanned_at' => 'Scanné à',
+    'user' => 'Utilisateur du Scanner',
+    'format' => 'Format',
+    'length' => 'Longueur',
+    'no_results' => 'Aucun badge scanné pour le moment',
+    'scan_another' => 'Commencez à scanner pour voir les informations des badges ici',
+];

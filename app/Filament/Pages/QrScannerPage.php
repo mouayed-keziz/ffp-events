@@ -4,46 +4,61 @@ namespace App\Filament\Pages;
 
 use App\Enums\Role;
 use Filament\Pages\Page;
+use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 
 class QrScannerPage extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-qr-code';
+    protected static ?string $navigationIcon = 'heroicon-o-identification';
     protected static string $view = 'panel.pages.qr-scanner-page';
-    protected static ?string $navigationLabel = 'QR Scanner';
-    protected static ?string $title = 'QR Scanner';
 
-    public static function shouldRegisterNavigation(): bool
+    public $lastScannedCode = '';
+    public $scanStatus = '';
+    public $scannedAt = '';
+    public $scanUser = '';
+
+    public static function getNavigationLabel(): string
     {
-        return auth()->user()->hasRole([Role::HOSTESS->value]);
+        return __('panel/scanner.navigation_label');
     }
-    public static function canAccess(array $parameters = []): bool
+
+    public function getTitle(): string
     {
-        return auth()->user()->hasRole([Role::HOSTESS->value]);
+        return __('panel/scanner.title');
     }
 
-    public bool $scannerActive = false;
-    public string $lastScannedQr = '';
-
-    #[On('qr-code-scanned')]
-    public function handleQrCodeScan($qrData)
+    public function getHeader(): View
     {
-        $this->lastScannedQr = $qrData;
-
-        Log::info('QR Code scanned', [
-            'qr_data' => $qrData,
-            'timestamp' => now(),
+        return view('panel.pages.components.scanner-header', [
+            'page' => $this,
         ]);
     }
 
-    public function startScanner()
+    public static function shouldRegisterNavigation(): bool
     {
-        $this->scannerActive = true;
+        return Auth::user()->hasRole([Role::HOSTESS->value]);
     }
 
-    public function stopScanner()
+    public static function canAccess(array $parameters = []): bool
     {
-        $this->scannerActive = false;
+        return Auth::user()->hasRole([Role::HOSTESS->value]);
+    }
+
+    #[On('qr-code-scanned')]
+    public function handleQrCodeScanned($qrData)
+    {
+        $this->lastScannedCode = $qrData;
+        $this->scannedAt = now()->format('Y-m-d H:i:s');
+        $this->scanUser = Auth::user()->name ?? 'Unknown';
+        $this->scanStatus = __('panel/scanner.scanned_at') . ' ' . now()->format('H:i:s');
+
+        // Debug the result
+        // dd([
+        //     'scanned_code' => $qrData,
+        //     'timestamp' => now(),
+        //     'user' => Auth::user()->name ?? 'Unknown'
+        // ]);
     }
 }
