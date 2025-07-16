@@ -18,7 +18,10 @@ class QrScannerPage extends Page
     {
         return auth()->user()->hasRole([Role::HOSTESS->value]);
     }
-
+    public static function canAccess(array $parameters = []): bool
+    {
+        return auth()->user()->hasRole([Role::HOSTESS->value]);
+    }
 
     public bool $scannerActive = false;
     public string $lastScannedQr = '';
