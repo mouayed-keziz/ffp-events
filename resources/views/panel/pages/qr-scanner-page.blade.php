@@ -1,13 +1,15 @@
 <x-filament::page>
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Scanner Component (1/2 width) -->
         <div>
-            <x-qr-scanner />
+            @include('panel.components.scanner.qr-scanner')
         </div>
 
-        <!-- Results Component (1/2 width) -->
         <div>
-            <x-qr-results :lastScannedCode="$lastScannedCode" :scannedAt="$scannedAt" :scanUser="$scanUser" />
+            @include('panel.components.scanner.qr-results', [
+                'lastScannedCode' => $lastScannedCode,
+                'scannedAt' => $scannedAt,
+                'scanUser' => $scanUser,
+            ])
         </div>
     </div>
 </x-filament::page>
