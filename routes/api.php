@@ -22,10 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // QR Scanner API routes
 Route::middleware([])->prefix('qr-scanner')->group(function () {
     Route::post('/process-scan', [QrScannerController::class, 'processScan'])->name('api.qr-scanner.process-scan');
-    Route::get('/test', function () {
-        return response()->json([
-            'message' => 'QR Scanner API is working',
-            'user' => \Illuminate\Support\Facades\Auth::user()?->name
-        ]);
-    })->name('api.qr-scanner.test');
 });
