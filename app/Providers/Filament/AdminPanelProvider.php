@@ -33,6 +33,8 @@ use CharrafiMed\GlobalSearchModal\GlobalSearchModalPlugin;
 use Filament\Widgets\Widget;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Outerweb\FilamentTranslatableFields\Filament\Plugins\FilamentTranslatableFieldsPlugin;
+use Filament\Support\Facades\FilamentView;
+use Illuminate\Support\Facades\Blade;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -119,31 +121,11 @@ class AdminPanelProvider extends PanelProvider
             ]);
     }
 
-    // public function boot(): void
-    // {
-    //     Filament::serving(function () {
-    //         Filament::registerNavigationGroups([
-    //             NavigationGroup::make()
-    //                 ->collapsible(false)
-    //                 ->label(__('panel/nav.groups.event_management')),
-
-    //             NavigationGroup::make()
-    //                 ->collapsible(false)
-    //                 ->label(__('panel/nav.groups.management')),
-
-    //             NavigationGroup::make()
-    //                 ->collapsible(false)
-    //                 ->label(__('panel/nav.groups.articles')),
-
-    //             NavigationGroup::make()
-    //                 ->collapsible(false)
-    //                 ->label(__('panel/nav.groups.users'))
-    //                 ->icon('heroicon-o-users'),
-
-    //             NavigationGroup::make()
-    //                 ->collapsible(false)
-    //                 ->label(__("panel/nav.groups.settings")),
-    //         ]);
-    //     });
-    // }
+    public function boot(): void
+    {
+        FilamentView::registerRenderHook(
+            'panels::head.end',
+            fn(): string => Blade::render('<meta name="csrf-token" content="{{ csrf_token() }}">')
+        );
+    }
 }

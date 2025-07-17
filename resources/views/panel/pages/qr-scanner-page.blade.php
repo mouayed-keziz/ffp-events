@@ -4,8 +4,8 @@
             @include('panel.components.scanner.qr-scanner')
         </div>
 
-        <div>
-            <x-scanner.result-state :state="$resultState" :errorMessage="$errorMessage" :successBlocks="$resultBlocks"
+        <div id="scan-results-container">
+            <x-scanner.result-state state="empty" errorMessage="" :successBlocks="[]"
                 title="{{ __('panel/scanner.results_section_title') }}"
                 description="View detailed information about scanned badges" icon="heroicon-o-clipboard-document-list" />
         </div>
