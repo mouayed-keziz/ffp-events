@@ -21,11 +21,24 @@ class QrScannerService
     /**
      * Build success result response
      */
-    public function buildSuccessResult(CheckInOutAction $action, string $badgeCode, string $scanUser): array
-    {
+    public function buildSuccessResult(
+        CheckInOutAction $action,
+        string $badgeCode,
+        string $scanUser,
+        ?string $badgeName = null,
+        ?string $badgePosition = null,
+        ?string $badgeCompany = null,
+        ?string $badgeEmail = null
+    ): array {
         $time = now()->format('Y-m-d H:i:s');
         $isCheckin = $action === CheckInOutAction::CHECK_IN;
         $statusText = $action->getLabel();
+
+        // Use real badge data if available, otherwise fallback to defaults
+        $name = $badgeName ?? 'Ahmed Ben Salah';
+        $position = $badgePosition ?? 'Senior Developer';
+        $company = $badgeCompany ?? 'Tech Solutions Inc.';
+        $email = $badgeEmail ?? 'ahmed@example.com';
 
         return [
             'state' => 'success',
@@ -49,15 +62,23 @@ class QrScannerService
                 ],
                 [
                     'label' => __('panel/scanner.name'),
-                    'data' => 'Ahmed Ben Salah',
+                    'data' => $name,
                     'icon' => 'heroicon-o-user',
                     'style' => 'info',
                     'type' => 'badge',
                     'layout' => 'grid'
                 ],
                 [
+                    'label' => __('panel/scanner.email'),
+                    'data' => $email,
+                    'icon' => 'heroicon-o-envelope',
+                    'style' => 'info',
+                    'type' => 'badge',
+                    'layout' => 'grid'
+                ],
+                [
                     'label' => __('panel/scanner.position'),
-                    'data' => 'Senior Developer',
+                    'data' => $position,
                     'icon' => 'heroicon-o-briefcase',
                     'style' => 'info',
                     'type' => 'badge',
@@ -65,7 +86,7 @@ class QrScannerService
                 ],
                 [
                     'label' => __('panel/scanner.company'),
-                    'data' => 'Tech Solutions Inc.',
+                    'data' => $company,
                     'icon' => 'heroicon-o-building-office',
                     'style' => 'default',
                     'type' => 'badge',

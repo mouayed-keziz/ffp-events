@@ -39,7 +39,9 @@ class ViewVisitorSubmission extends ViewRecord
         $visitorSubmission = VisitorSubmission::query()
             ->where('id', $visitorSubmissionId)
             ->where('event_announcement_id', $eventAnnouncementId)
+            ->with("badge")
             ->firstOrFail();
+        $badge = $visitorSubmission->badge;
 
         return $visitorSubmission;
     }
