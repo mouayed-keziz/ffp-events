@@ -5,11 +5,9 @@
         </div>
 
         <div>
-            @include('panel.components.scanner.qr-results', [
-                'lastScannedCode' => $lastScannedCode,
-                'scannedAt' => $scannedAt,
-                'scanUser' => $scanUser,
-            ])
+            <x-scanner.result-state :state="$resultState" :errorMessage="$errorMessage" :successBlocks="$resultBlocks"
+                title="{{ __('panel/scanner.results_section_title') }}"
+                description="View detailed information about scanned badges" icon="heroicon-o-clipboard-document-list" />
         </div>
     </div>
 </x-filament::page>

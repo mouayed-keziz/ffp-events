@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Enums\Role;
 use App\Filament\Resources\VisitorResource\Widgets\UserStats;
 use App\Filament\Widgets\GeneralStatsOverview;
 use App\Filament\Widgets\VisitorSubmissionsPerEventChart;
@@ -39,7 +40,9 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->default()
-            // ->topNavigation()
+            ->topNavigation(function () {
+                return Auth::user()->hasRole([Role::HOSTESS->value]);
+            })
             // ->sidebarWidth('20rem')
             ->sidebarFullyCollapsibleOnDesktop()
             // ->sidebarCollapsibleOnDesktop()
@@ -48,7 +51,9 @@ class AdminPanelProvider extends PanelProvider
             ->spa(true)
             ->login()
             // ->profile(isSimple: false)
-            ->databaseNotifications()
+            ->databaseNotifications(function () {
+                return !Auth::user()->hasRole([Role::HOSTESS->value]);
+            })
             ->databaseNotificationsPolling("30s")
             ->databaseTransactions()
             ->brandLogo(fn() => view('panel.brand-logo'))

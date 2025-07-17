@@ -2,17 +2,34 @@
 <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm">
     <!-- Header -->
     <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-        <div class="flex items-center space-x-3">
-            <div class="flex-shrink-0">
-                <x-heroicon-o-identification class="h-6 w-6 text-gray-400 dark:text-gray-500" />
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="flex-shrink-0">
+                    <x-heroicon-o-identification class="h-6 w-6 text-gray-400 dark:text-gray-500" />
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+                        {{ __('panel/scanner.scanner_section_title') }}
+                    </h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        {{-- {{ __('panel/scanner.scanner_description') }} --}}
+                    </p>
+                </div>
             </div>
-            <div>
-                <h3 class="text-lg font-medium text-gray-900 dark:text-white">
-                    {{ __('panel/scanner.scanner_section_title') }}
-                </h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400">
-                    {{ __('panel/scanner.scanner_description') }}
-                </p>
+
+            <!-- Action Toggle -->
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-gray-600 dark:text-gray-400">
+                    {{ __('panel/scanner.current_action') }}:
+                </span>
+                <button type="button" wire:click="toggleAction"
+                    class="fi-btn fi-btn-size-sm inline-flex items-center gap-x-2 rounded-lg px-3 py-1.5 text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-colors text-white
+                    {{ $currentAction->value === 'check_in'
+                        ? 'bg-blue-600 hover:bg-blue-500 focus-visible:outline-blue-600 dark:bg-blue-500 dark:hover:bg-blue-400'
+                        : 'bg-orange-600 hover:bg-orange-500 focus-visible:outline-orange-600 dark:bg-orange-500 dark:hover:bg-orange-400' }}">
+                    <x-dynamic-component :component="$currentAction->getIcon()" class="h-4 w-4" />
+                    {{ $currentAction->getLabel() }}
+                </button>
             </div>
         </div>
     </div>
@@ -37,8 +54,14 @@
     </div>
 </div>
 
+@push('styles')
+    <style>
+        #qr-reader video {
+            transform: scaleX(-1);
+        }
+    </style>
+@endpush
 @push('scripts')
-    <!-- Include the HTML5 QR Code library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
 
     <script>
@@ -99,12 +122,13 @@
                 // Create scanner instance with square aspect ratio and larger QR box
                 html5QrcodeScanner = new Html5QrcodeScanner(
                     "qr-reader", {
-                        fps: 10,
-                        // qrbox: 150, // Larger square QR detection box
-                        // aspect video
+                        fps: 5,
+                        qrbox: 150, // Larger square QR detection box
                         aspectRatio: 16 / 9, // Wider aspect ratio for camera
                         rememberLastUsedCamera: true,
                         supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+                        // revert the camera horizentally
+
                     }
                 );
 
