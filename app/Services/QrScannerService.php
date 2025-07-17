@@ -7,22 +7,9 @@ use App\Enums\CheckInOutAction;
 class QrScannerService
 {
     /**
-     * Process QR code scan and return result data
-     */
-    public function processScan(string $qrData, CheckInOutAction $action, string $scanUser): array
-    {
-        // Demo logic: Check for specific demo case
-        if (trim(strtolower($qrData)) === 'http://en.m.wikipedia.org') {
-            return $this->buildSuccessResult($action, $qrData, $scanUser);
-        }
-
-        return $this->buildErrorResult('Access Denied: Invalid badge detected');
-    }
-
-    /**
      * Build error result response
      */
-    private function buildErrorResult(string $message): array
+    public function buildErrorResult(string $message): array
     {
         return [
             'state' => 'error',
@@ -34,7 +21,7 @@ class QrScannerService
     /**
      * Build success result response
      */
-    private function buildSuccessResult(CheckInOutAction $action, string $badgeCode, string $scanUser): array
+    public function buildSuccessResult(CheckInOutAction $action, string $badgeCode, string $scanUser): array
     {
         $time = now()->format('Y-m-d H:i:s');
         $isCheckin = $action === CheckInOutAction::CHECK_IN;

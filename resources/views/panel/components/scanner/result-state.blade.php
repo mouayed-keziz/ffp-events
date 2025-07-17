@@ -37,7 +37,10 @@
             @if ($state === 'success' && !empty($successBlocks))
                 <!-- Success State with Custom Blocks -->
                 <div class="h-full flex flex-col space-y-4 overflow-y-auto">
-                    <x-scanner.result-grid :blocks="$successBlocks" />
+
+                    @include('panel.components.scanner.result-grid', [
+                        'blocks' => $successBlocks,
+                    ])
                 </div>
             @elseif ($state === 'error')
                 <!-- Error State -->

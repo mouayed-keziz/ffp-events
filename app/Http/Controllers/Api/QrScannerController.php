@@ -36,12 +36,18 @@ class QrScannerController extends Controller
         }
 
         try {
-            // Process scan
-            $result = $this->qrScannerService->processScan(
-                $request->input('qr_data'),
-                CheckInOutAction::from($request->input('action')),
-                Auth::user()->name ?? 'Unknown'
-            );
+            $qrData = $request->input('qr_data');
+            $action = CheckInOutAction::from($request->input('action'));
+            $scanUser = Auth::user()->name ?? 'Unknown';
+
+            // Business Logic: Decide if scan is valid or not
+            if (trim(strtolower($qrData)) === 'http://en.m.wikipedia.org') {
+                // Valid badge - build success result
+                $result = $this->qrScannerService->buildSuccessResult($action, $qrData, $scanUser);
+            } else {
+                // Invalid badge - build error result
+                $result = $this->qrScannerService->buildErrorResult('Access Denied: Invalid badge detected');
+            }
 
             return response()->json([
                 'success' => true,

@@ -45,7 +45,6 @@ Route::middleware('local_middleware')->group(function () {
         Route::get('/event/{id}', [EventController::class, 'Event'])->name('event_details');
 
         Route::get('/event/{id}/visit', [EventController::class, 'VisitEvent'])->name('visit_event')->middleware("is_visitor");
-        // Route::get('/event/{id}/visit-event-form-submitted', [EventController::class, 'VisitFormSubmitted'])->name('visit_event_form_submitted')->middleware("is_visitor");
         Route::get('/event/{id}/visit-confirmation', [EventController::class, 'VisitFormSubmitted'])->name('visit_event_form_submitted')->middleware("is_visitor");
         Route::get('/event/{id}/download-badge', [EventController::class, 'DownloadVisitorBadge'])->name('download_visitor_badge')->middleware("is_visitor");
         Route::middleware("is_exhibitor")->group(function () {
@@ -82,14 +81,11 @@ Route::middleware('local_middleware')->group(function () {
     });
 });
 
-// Badge routes
-// hello world
-Route::get('/badge-preview', [BadgeController::class, 'show'])->name('badge.preview');
+// Route::get('/badge-preview', [BadgeController::class, 'show'])->name('badge.preview');
 Route::get('/exhibitor/events/{event}/submissions/{submission}/badges/download/{zipPath}', [BadgeController::class, 'downloadBadgesZip'])
     ->middleware('auth:exhibitor')
     ->name('exhibitor.badges.download');
 
-// Clear badge redirect session route
 Route::post('/clear-badge-redirect-session', function () {
     session()->forget('badge_download_redirect');
     return response()->json(['success' => true]);
