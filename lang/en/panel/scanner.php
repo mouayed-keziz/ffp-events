@@ -24,8 +24,20 @@ return [
     'attendance_status' => 'Attendance Status',
     'badge_code' => 'Badge Code',
     'name' => 'Name',
+    'email' => 'Email',
     'position' => 'Position',
     'company' => 'Company',
     'status' => 'Status',
     'scanner_user' => 'Scanner User',
+
+    // Error messages
+    'badge_not_found' => 'Access Denied: Badge not found',
+    'badge_not_associated' => 'Access Denied: Badge is not associated with any event',
+    'not_assigned_to_event' => 'Access denied: You are not assigned to this event',
+
+    // Status messages
+    'successfully_checked_in' => 'Successfully checked in',
+    'already_checked_in' => 'Already checked in - no action needed',
+    'successfully_checked_out' => 'Successfully checked out',
+    'not_checked_in' => 'Not currently checked in - no action needed',
 ];

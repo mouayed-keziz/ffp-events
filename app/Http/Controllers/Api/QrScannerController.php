@@ -44,13 +44,14 @@ class QrScannerController extends Controller
             $qrData = $request->input('qr_data');
             $action = CheckInOutAction::from($request->input('action'));
             $hostessUser = Auth::user();
+
             $scanUser = $hostessUser->name ?? 'Unknown';
 
             // Find badge by code (qr_data contains the badge code)
             $badge = Badge::where('code', $qrData)->first();
 
             if (!$badge) {
-                $result = $this->qrScannerService->buildErrorResult('Access Denied: Badge not found');
+                $result = $this->qrScannerService->buildErrorResult(__('panel/scanner.badge_not_found'));
                 return response()->json([
                     'success' => true,
                     'data' => $result
@@ -76,7 +77,7 @@ class QrScannerController extends Controller
             }
 
             if (!$event || !$eventSubmission) {
-                $result = $this->qrScannerService->buildErrorResult('Access Denied: Badge is not associated with any event');
+                $result = $this->qrScannerService->buildErrorResult(__('panel/scanner.badge_not_associated'));
                 return response()->json([
                     'success' => true,
                     'data' => $result
@@ -85,17 +86,44 @@ class QrScannerController extends Controller
 
             // Check if the hostess is assigned to this event
             if (!$hostessUser->assignedEvents()->where('event_announcements.id', $event->id)->exists()) {
-                $result = $this->qrScannerService->buildErrorResult('Access denied: You are not assigned to this event');
+                $result = $this->qrScannerService->buildErrorResult(__('panel/scanner.not_assigned_to_event'));
                 return response()->json([
                     'success' => true,
                     'data' => $result
                 ]);
             }
 
-            // Process check-in/check-out logic
-            DB::transaction(function () use ($badge, $action, $event, $hostessUser) {
-                $this->processCheckAction($badge, $action, $event->id, $hostessUser);
-            });
+            // Check current attendance status before processing
+            $currentAttendee = CurrentAttendee::where('badge_id', $badge->id)
+                ->where('event_announcement_id', $event->id)
+                ->first();
+
+            // Determine if action will result in a state change
+            $willChangeState = false;
+            $statusMessage = '';
+
+            if ($action === CheckInOutAction::CHECK_IN) {
+                if (!$currentAttendee) {
+                    $willChangeState = true;
+                    $statusMessage = __('panel/scanner.successfully_checked_in');
+                } else {
+                    $statusMessage = __('panel/scanner.already_checked_in');
+                }
+            } else { // CHECK_OUT
+                if ($currentAttendee) {
+                    $willChangeState = true;
+                    $statusMessage = __('panel/scanner.successfully_checked_out');
+                } else {
+                    $statusMessage = __('panel/scanner.not_checked_in');
+                }
+            }
+
+            // Process check-in/check-out logic only if state will change
+            if ($willChangeState) {
+                DB::transaction(function () use ($badge, $action, $event, $hostessUser) {
+                    $this->processCheckAction($badge, $action, $event->id, $hostessUser);
+                });
+            }
 
             // Build success result with real badge data
             $result = $this->qrScannerService->buildSuccessResult(
@@ -105,7 +133,8 @@ class QrScannerController extends Controller
                 $badge->name,
                 $badge->position,
                 $badge->company,
-                $badge->email
+                $badge->email,
+                $statusMessage
             );
 
             return response()->json([
@@ -135,27 +164,15 @@ class QrScannerController extends Controller
     {
         $now = now();
 
-        // Create badge check log
-        BadgeCheckLog::create([
-            'event_announcement_id' => $eventId,
-            'badge_id' => $badge->id,
-            'checked_by_user_id' => $hostessUser->id,
-            'action' => $action,
-            'action_time' => $now,
-            'badge_code' => $badge->code,
-            'badge_name' => $badge->name,
-            'badge_email' => $badge->email,
-            'badge_position' => $badge->position,
-            'badge_company' => $badge->company,
-        ]);
-
         // Handle current attendee record
         $currentAttendee = CurrentAttendee::where('badge_id', $badge->id)
             ->where('event_announcement_id', $eventId)
             ->first();
 
+        $shouldRecordAction = false;
+
         if ($action === CheckInOutAction::CHECK_IN) {
-            // Check-in: Create or update current attendee record
+            // Check-in: Only proceed if person is not already checked in
             if (!$currentAttendee) {
                 CurrentAttendee::create([
                     'event_announcement_id' => $eventId,
@@ -168,18 +185,32 @@ class QrScannerController extends Controller
                     'badge_position' => $badge->position,
                     'badge_company' => $badge->company,
                 ]);
-            } else {
-                // Update existing record (re-check-in)
-                $currentAttendee->update([
-                    'checked_in_at' => $now,
-                    'checked_in_by_user_id' => $hostessUser->id,
-                ]);
+                $shouldRecordAction = true; // Record log only when state changes
             }
+            // If already checked in, do nothing (no duplicate check-in)
         } else {
-            // Check-out: Remove current attendee record
+            // Check-out: Only proceed if person is currently checked in
             if ($currentAttendee) {
                 $currentAttendee->delete();
+                $shouldRecordAction = true; // Record log only when state changes
             }
+            // If not checked in, do nothing (no duplicate check-out)
+        }
+
+        // Create badge check log only when there's an actual state change
+        if ($shouldRecordAction) {
+            BadgeCheckLog::create([
+                'event_announcement_id' => $eventId,
+                'badge_id' => $badge->id,
+                'checked_by_user_id' => $hostessUser->id,
+                'action' => $action,
+                'action_time' => $now,
+                'badge_code' => $badge->code,
+                'badge_name' => $badge->name,
+                'badge_email' => $badge->email,
+                'badge_position' => $badge->position,
+                'badge_company' => $badge->company,
+            ]);
         }
     }
 }

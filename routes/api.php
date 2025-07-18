@@ -18,8 +18,3 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-// QR Scanner API routes
-Route::middleware([])->prefix('qr-scanner')->group(function () {
-    Route::post('/process-scan', [QrScannerController::class, 'processScan'])->name('api.qr-scanner.process-scan');
-});

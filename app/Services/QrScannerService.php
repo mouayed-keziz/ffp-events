@@ -28,17 +28,24 @@ class QrScannerService
         ?string $badgeName = null,
         ?string $badgePosition = null,
         ?string $badgeCompany = null,
-        ?string $badgeEmail = null
+        ?string $badgeEmail = null,
+        ?string $statusMessage = null
     ): array {
         $time = now()->format('Y-m-d H:i:s');
         $isCheckin = $action === CheckInOutAction::CHECK_IN;
-        $statusText = $action->getLabel();
+        $statusText = $statusMessage ?? $action->getLabel();
 
         // Use real badge data if available, otherwise fallback to defaults
         $name = $badgeName ?? 'Ahmed Ben Salah';
         $position = $badgePosition ?? 'Senior Developer';
         $company = $badgeCompany ?? 'Tech Solutions Inc.';
         $email = $badgeEmail ?? 'ahmed@example.com';
+
+        // Determine style based on whether action was taken
+        $actionTaken = $statusMessage === null ||
+            str_contains(strtolower($statusMessage), 'successfully');
+        $headerStyle = $actionTaken ? 'highlight' : 'warning';
+        $headerIcon = $actionTaken ? 'heroicon-s-check-circle' : 'heroicon-s-exclamation-triangle';
 
         return [
             'state' => 'success',
@@ -47,8 +54,8 @@ class QrScannerService
                 [
                     'label' => __('panel/scanner.attendance_status'),
                     'data' => $statusText . ' at ' . $time,
-                    'icon' => 'heroicon-s-check-circle',
-                    'style' => 'highlight',
+                    'icon' => $headerIcon,
+                    'style' => $headerStyle,
                     'type' => 'card',
                     'layout' => 'full'
                 ],
@@ -95,7 +102,7 @@ class QrScannerService
                 ],
                 [
                     'label' => __('panel/scanner.status'),
-                    'data' => '<span class="inline-flex items-center rounded-full bg-' . ($isCheckin ? 'green' : 'yellow') . '-100 dark:bg-' . ($isCheckin ? 'green' : 'yellow') . '-900/30 px-2 py-1 text-xs font-medium text-' . ($isCheckin ? 'green' : 'yellow') . '-800 dark:text-' . ($isCheckin ? 'green' : 'yellow') . '-300">' . $statusText . '</span>',
+                    'data' => '<span class="inline-flex items-center rounded-full bg-' . ($isCheckin ? 'green' : 'yellow') . '-100 dark:bg-' . ($isCheckin ? 'green' : 'yellow') . '-900/30 px-2 py-1 text-xs font-medium text-' . ($isCheckin ? 'green' : 'yellow') . '-800 dark:text-' . ($isCheckin ? 'green' : 'yellow') . '-300">' . $action->getLabel() . '</span>',
                     'icon' => $action->getIcon(),
                     'style' => $isCheckin ? 'success' : 'warning',
                     'type' => 'badge',

@@ -24,8 +24,20 @@ return [
     'attendance_status' => 'Statut de Présence',
     'badge_code' => 'Code du Badge',
     'name' => 'Nom',
+    'email' => 'Email',
     'position' => 'Poste',
     'company' => 'Entreprise',
     'status' => 'Statut',
     'scanner_user' => 'Utilisateur du Scanner',
+
+    // Error messages
+    'badge_not_found' => 'Accès refusé : Badge non trouvé',
+    'badge_not_associated' => 'Accès refusé : Le badge n\'est associé à aucun événement',
+    'not_assigned_to_event' => 'Accès refusé : Vous n\'êtes pas assigné à cet événement',
+
+    // Status messages
+    'successfully_checked_in' => 'Enregistrement d\'entrée réussi',
+    'already_checked_in' => 'Déjà enregistré à l\'entrée - aucune action nécessaire',
+    'successfully_checked_out' => 'Enregistrement de sortie réussi',
+    'not_checked_in' => 'Actuellement non enregistré - aucune action nécessaire',
 ];

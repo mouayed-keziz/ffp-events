@@ -31,7 +31,12 @@ The QR Scanner system has been updated to handle real badge check-in and check-o
 
 ## API Endpoint
 
-### POST `/api/qr-scanner/process-scan`
+### POST `/admin/qr-scanner/process-scan`
+
+**Authentication:** Session-based authentication (via Laravel web middleware)
+- Route is protected by `auth:web` middleware
+- Uses the same session authentication as the Filament admin panel
+- No API tokens required
 
 **Request Parameters:**
 - `qr_data` (required): The badge code from the QR scan

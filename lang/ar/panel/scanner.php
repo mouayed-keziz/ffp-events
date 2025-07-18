@@ -24,8 +24,20 @@ return [
     'attendance_status' => 'حالة الحضور',
     'badge_code' => 'رمز الشارة',
     'name' => 'الاسم',
+    'email' => 'البريد الإلكتروني',
     'position' => 'المنصب',
     'company' => 'الشركة',
     'status' => 'الحالة',
     'scanner_user' => 'مستخدم الماسح',
+
+    // Error messages
+    'badge_not_found' => 'الوصول مرفوض: الشارة غير موجودة',
+    'badge_not_associated' => 'الوصول مرفوض: الشارة غير مرتبطة بأي حدث',
+    'not_assigned_to_event' => 'الوصول مرفوض: أنت غير مخصص لهذا الحدث',
+
+    // Status messages
+    'successfully_checked_in' => 'تم تسجيل الدخول بنجاح',
+    'already_checked_in' => 'تم تسجيل الدخول مسبقاً - لا حاجة لإجراء',
+    'successfully_checked_out' => 'تم تسجيل الخروج بنجاح',
+    'not_checked_in' => 'غير مسجل حالياً - لا حاجة لإجراء',
 ];

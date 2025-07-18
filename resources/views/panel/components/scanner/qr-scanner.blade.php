@@ -59,7 +59,7 @@
     </style>
 @endpush
 @push('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+    <script src="/js/html5-qrcode.min.js"></script>
 
     <script>
         let html5QrcodeScanner = null;
@@ -120,7 +120,7 @@
             try {
                 console.log('Processing scan result:', qrData);
 
-                const response = await fetch('/api/qr-scanner/process-scan', {
+                const response = await fetch('/admin/qr-scanner/process-scan', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

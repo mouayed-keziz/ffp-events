@@ -35,6 +35,9 @@ Livewire::setUpdateRoute(function ($handle) {
 
 Route::prefix('admin')->middleware(['auth:web'])->group(function () {
     Route::get('exhibitor-submissions/{record}/download-invoice', [\App\Http\Controllers\Admin\ExhibitorSubmissionController::class, 'downloadInvoice'])->name('admin.exhibitor_submissions.download_invoice');
+
+    // QR Scanner API routes for admin panel
+    Route::post('qr-scanner/process-scan', [\App\Http\Controllers\Api\QrScannerController::class, 'processScan'])->name('admin.qr-scanner.process-scan');
 });
 Route::middleware('local_middleware')->group(function () {
     Route::view("/notifications", "website.pages.notifications")->name("notifications")->middleware("is_authenticated");
