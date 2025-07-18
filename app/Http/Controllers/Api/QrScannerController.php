@@ -29,7 +29,8 @@ class QrScannerController extends Controller
         // Validation
         $validator = Validator::make($request->all(), [
             'qr_data' => 'required|string',
-            'action' => 'required|string|in:check_in,check_out'
+            'action' => 'required|string|in:check_in,check_out',
+            'locale' => 'nullable|string|in:en,fr,ar'
         ]);
 
         if ($validator->fails()) {
@@ -43,7 +44,11 @@ class QrScannerController extends Controller
         try {
             $qrData = $request->input('qr_data');
             $action = CheckInOutAction::from($request->input('action'));
+            $locale = $request->input('locale', 'en');
             $hostessUser = Auth::user();
+
+            // Set application locale for this request
+            app()->setLocale($locale);
 
             $scanUser = $hostessUser->name ?? 'Unknown';
 

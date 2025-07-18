@@ -65,9 +65,13 @@
         let html5QrcodeScanner = null;
         let scanning = false;
         let currentAction = 'check_in'; // check_in or check_out
+        let lastScannedCode = null; // Track last scanned code
+        let scanCooldown = false; // Prevent rapid scanning
+        const SCAN_COOLDOWN_MS = 3000; // 3 seconds between scans of the same code
 
-        // Get CSRF token for API calls
+        // Get CSRF token and locale for API calls
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+        const currentLocale = document.documentElement.lang || 'en';
 
         function updateUI() {
             const startBtn = document.getElementById('startBtn');
@@ -117,6 +121,21 @@
         }
 
         async function processScanResult(qrData) {
+            // Prevent rapid scanning of the same code
+            if (scanCooldown || lastScannedCode === qrData) {
+                console.log('Scan cooldown active or duplicate scan, ignoring:', qrData);
+                return;
+            }
+
+            // Set cooldown and track last scanned code
+            lastScannedCode = qrData;
+            scanCooldown = true;
+
+            setTimeout(() => {
+                scanCooldown = false;
+                lastScannedCode = null;
+            }, SCAN_COOLDOWN_MS);
+
             try {
                 console.log('Processing scan result:', qrData);
 
@@ -129,7 +148,8 @@
                     },
                     body: JSON.stringify({
                         qr_data: qrData,
-                        action: currentAction
+                        action: currentAction,
+                        locale: currentLocale
                     })
                 });
 
