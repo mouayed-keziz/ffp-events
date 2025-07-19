@@ -21,8 +21,8 @@ enum CheckInOutAction: string implements HasLabel, HasColor, HasIcon
     public function getColor(): string | array | null
     {
         return match ($this) {
-            self::CHECK_IN =>  'primary',
-            self::CHECK_OUT =>  'info',
+            self::CHECK_IN =>  'success',
+            self::CHECK_OUT =>  'danger',
         };
     }
 

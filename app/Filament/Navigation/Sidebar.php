@@ -4,6 +4,11 @@ namespace App\Filament\Navigation;
 
 class Sidebar
 {
+    const MY_EVENT = [
+        'icon' => 'heroicon-o-calendar-days',
+        'sort' => 100,
+        'group' => '',
+    ];
     const EVENT_ANNOUNCEMENT = [
         'icon' => 'heroicon-o-megaphone',
         'sort' => 1,
