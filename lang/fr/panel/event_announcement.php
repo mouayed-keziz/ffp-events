@@ -43,6 +43,8 @@ return [
         "manage_exhibitor_post_payment_forms" => "Gérer les formulaires post-paiement",
         "manage_visitor_submissions" => "Inscriptions Visiteurs",
         "manage_exhibitor_submissions" => "Inscriptions Exposants",
+        "manage_current_attendees" => "Participants Actuels",
+        "manage_badge_check_logs" => "Journaux de Vérification des Badges",
         'duplicate' => 'Dupliquer',
         'delete' => 'Supprimer l\'annonce',
         'view' => 'Détails de l\'annonce',
@@ -92,6 +94,7 @@ return [
         'event_management' => 'Gestion des Événements',
         'form_management' => 'Gestion des Formulaires',
         'registrations' => 'Gestion des Inscriptions',
+        'attendance' => 'Gestion de la Présence',
     ],
     'stats' => [
         'total_events' => 'Total des événements',

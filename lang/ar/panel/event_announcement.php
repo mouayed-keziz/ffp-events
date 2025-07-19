@@ -44,6 +44,8 @@ return [
         "manage_exhibitor_post_payment_forms" => "إدارة إستبيانات العارضين بعد الدفع",
         "manage_visitor_submissions" => "تسجيلات الزوار",
         "manage_exhibitor_submissions" => "تسجيلات العارضين",
+        "manage_current_attendees" => "الحضور الحاليون",
+        "manage_badge_check_logs" => "سجلات فحص الشارات",
         'duplicate' => 'نسخ',
         'delete' => 'حذف الإعلان',
         'view' => 'تفاصيل الإعلان',
@@ -93,6 +95,7 @@ return [
         'event_management' => 'إدارة الفعاليات',
         'form_management' => 'إدارة النماذج',
         'registrations' => 'إدارة التسجيلات',
+        'attendance' => 'إدارة الحضور',
     ],
     'stats' => [
         'total_events' => 'إجمالي الفعاليات',

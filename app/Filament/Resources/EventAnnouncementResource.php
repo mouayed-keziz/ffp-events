@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\Concerns\Translatable;
 use Guava\FilamentNestedResources\Ancestor;
 use Guava\FilamentNestedResources\Concerns\NestedResource;
+use Illuminate\Support\Facades\Auth;
 
 class EventAnnouncementResource extends Resource
 {
@@ -67,6 +68,7 @@ class EventAnnouncementResource extends Resource
         $EVENT_MANAGEMENT = __('panel/event_announcement.sidebar_groups.event_management');
         $FORM_MANAGEMENT = __('panel/event_announcement.sidebar_groups.form_management');
         $REGISTRATION_MANAGEMENT = __('panel/event_announcement.sidebar_groups.registrations');
+        $ATTENDANCE_MANAGEMENT = __('panel/event_announcement.sidebar_groups.attendance');
         return FilamentPageSidebar::make()
             ->setTitle("{$record->title}")
             ->setDescription("{$record->description}")
@@ -82,7 +84,7 @@ class EventAnnouncementResource extends Resource
                 PageNavigationItem::make(__('panel/event_announcement.actions.edit'))
                     ->url(fn() => static::getUrl('edit', ['record' => $record->id]))
                     ->icon('heroicon-o-pencil')
-                    ->hidden(fn() => !auth()->user()->hasRole(Role::SUPER_ADMIN->value))
+                    ->hidden(fn() => !Auth::user()?->hasRole(Role::SUPER_ADMIN->value))
                     ->group($EVENT_MANAGEMENT)
                     ->isActiveWhen(
                         fn() =>
@@ -91,7 +93,7 @@ class EventAnnouncementResource extends Resource
                 PageNavigationItem::make(__('panel/event_announcement.actions.edit_terms'))
                     ->url(fn() => static::getUrl('edit-terms', ['record' => $record->id]))
                     ->icon('heroicon-o-document-text')
-                    ->hidden(fn() => !auth()->user()->hasRole(Role::SUPER_ADMIN->value))
+                    ->hidden(fn() => !Auth::user()?->hasRole(Role::SUPER_ADMIN->value))
                     ->group($EVENT_MANAGEMENT)
                     ->isActiveWhen(
                         fn() =>
@@ -100,7 +102,7 @@ class EventAnnouncementResource extends Resource
                 PageNavigationItem::make(__('panel/event_announcement.actions.edit_badge_templates'))
                     ->url(fn() => static::getUrl('edit-badge-templates', ['record' => $record->id]))
                     ->icon('heroicon-o-identification')
-                    ->hidden(fn() => !auth()->user()->hasRole(Role::SUPER_ADMIN->value))
+                    ->hidden(fn() => !Auth::user()?->hasRole(Role::SUPER_ADMIN->value))
                     ->group($EVENT_MANAGEMENT)
                     ->isActiveWhen(
                         fn() =>
@@ -109,7 +111,7 @@ class EventAnnouncementResource extends Resource
                 PageNavigationItem::make(__('panel/event_announcement.actions.edit_visitor_form'))
                     ->url(fn() => static::getUrl('edit-visitor-form', ['record' => $record->id]))
                     ->icon('heroicon-o-clipboard-document-check')
-                    ->hidden(fn() => !auth()->user()->hasRole(Role::SUPER_ADMIN->value))
+                    ->hidden(fn() => !Auth::user()?->hasRole(Role::SUPER_ADMIN->value))
                     ->group($FORM_MANAGEMENT)
                     ->isActiveWhen(
                         fn() =>
@@ -118,14 +120,14 @@ class EventAnnouncementResource extends Resource
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_forms'))
                     ->url(fn() => static::getUrl('exhibitor-forms', ['record' => $record->id]))
                     ->icon('heroicon-o-clipboard-document-list')
-                    ->hidden(fn() => !auth()->user()->hasRole(Role::SUPER_ADMIN->value))
+                    ->hidden(fn() => !Auth::user()?->hasRole(Role::SUPER_ADMIN->value))
                     ->group($FORM_MANAGEMENT)
                     ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementExhibitorForms::getRouteName()])),
 
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_post_payment_forms'))
                     ->url(fn() => static::getUrl('exhibitor-post-payment-forms', ['record' => $record->id]))
                     ->icon('heroicon-o-clipboard-document-list')
-                    ->hidden(fn() => !auth()->user()->hasRole(Role::SUPER_ADMIN->value))
+                    ->hidden(fn() => !Auth::user()?->hasRole(Role::SUPER_ADMIN->value))
                     ->group($FORM_MANAGEMENT)
                     ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementExhibitorPostPaymentForms::getRouteName()])),
 
@@ -140,6 +142,20 @@ class EventAnnouncementResource extends Resource
                     ->icon('heroicon-o-user-group')
                     ->group($REGISTRATION_MANAGEMENT)
                     ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementExhibitorSubmissions::getRouteName()])),
+
+                PageNavigationItem::make(__('panel/event_announcement.actions.manage_current_attendees'))
+                    ->url(fn() => static::getUrl('current-attendees', ['record' => $record->id]))
+                    ->icon('heroicon-o-user-group')
+                    ->hidden(fn() => !Auth::user()?->hasRole(Role::SUPER_ADMIN->value))
+                    ->group($ATTENDANCE_MANAGEMENT)
+                    ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementCurrentAttendees::getRouteName()])),
+
+                PageNavigationItem::make(__('panel/event_announcement.actions.manage_badge_check_logs'))
+                    ->url(fn() => static::getUrl('badge-check-logs', ['record' => $record->id]))
+                    ->icon('heroicon-o-clipboard-document-list')
+                    ->hidden(fn() => !Auth::user()?->hasRole(Role::SUPER_ADMIN->value))
+                    ->group($ATTENDANCE_MANAGEMENT)
+                    ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementBadgeCheckLogs::getRouteName()])),
             ]);
     }
 
@@ -165,9 +181,13 @@ class EventAnnouncementResource extends Resource
             'visitorSubmissions.create' => Pages\CreateEventAnnouncementVisitorSubmission::route('/{record}/visitor-submissions/create'),
             'visitor-submission.view' => Pages\ViewVisitorSubmission::route('/{record}/visitor-submissions/{visitorSubmission}'),
 
-            // New routes for visitor submissions
+            // New routes for exhibitor submissions
             'exhibitor-submissions' => Pages\ManageEventAnnouncementExhibitorSubmissions::route('/{record}/exhibitor-submissions'),
             // 'exhibitor-submission.view' => Pages\ViewExhibitorSubmission::route('/{record}/exhibitor-submissions/{exhibitorSubmission}'),
+
+            // New routes for current attendees and badge check logs
+            'current-attendees' => Pages\ManageEventAnnouncementCurrentAttendees::route('/{record}/current-attendees'),
+            'badge-check-logs' => Pages\ManageEventAnnouncementBadgeCheckLogs::route('/{record}/badge-check-logs'),
         ];
     }
 

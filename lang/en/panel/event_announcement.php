@@ -43,6 +43,8 @@ return [
         "manage_exhibitor_post_payment_forms" => "Manage Post-Payment Forms",
         "manage_visitor_submissions" => "Visitor Registrations",
         "manage_exhibitor_submissions" => "Exhibitor Registrations",
+        "manage_current_attendees" => "Current Attendees",
+        "manage_badge_check_logs" => "Badge Check Logs",
         'duplicate' => 'Duplicate',
         'delete' => 'Delete Announcement',
         'view' => 'Announcement Details',
@@ -92,6 +94,7 @@ return [
         'event_management' => 'Event Management',
         'form_management' => 'Form Management',
         'registrations' => 'Registration Management',
+        'attendance' => 'Attendance Management',
     ],
     'stats' => [
         'total_events' => 'Total Events',

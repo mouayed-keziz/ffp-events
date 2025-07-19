@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Resources\Concerns\Translatable;
 use Illuminate\Support\Facades\Auth;
+use App\Enums\Role;
 
 class MyEventResource extends Resource
 {
@@ -27,6 +28,16 @@ class MyEventResource extends Resource
     protected static ?string $navigationIcon = Sidebar::MY_EVENT['icon'];
 
     protected static ?int $navigationSort = Sidebar::MY_EVENT['sort'];
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::user()?->hasRole(Role::HOSTESS->value) ?? false;
+    }
+
+    public static function canAccess(): bool
+    {
+        return Auth::user()?->hasRole(Role::HOSTESS->value) ?? false;
+    }
 
     public static function getNavigationGroup(): ?string
     {
