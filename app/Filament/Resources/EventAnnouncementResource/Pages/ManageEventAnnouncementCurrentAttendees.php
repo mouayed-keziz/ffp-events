@@ -80,9 +80,9 @@ class ManageEventAnnouncementCurrentAttendees extends ManageRelatedRecords
                     ->label(__('panel/my_event.relation_managers.current_attendees.filters.checked_in_date'))
                     ->form([
                         Forms\Components\DatePicker::make('from_date')
-                            ->label('From Date'),
+                            ->label(__('panel/my_event.relation_managers.current_attendees.filters.from_date')),
                         Forms\Components\DatePicker::make('to_date')
-                            ->label('To Date'),
+                            ->label(__('panel/my_event.relation_managers.current_attendees.filters.to_date')),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
@@ -100,7 +100,7 @@ class ManageEventAnnouncementCurrentAttendees extends ManageRelatedRecords
                     ->label(__('panel/my_event.relation_managers.current_attendees.filters.company'))
                     ->form([
                         Forms\Components\TextInput::make('company_name')
-                            ->label('Company Name'),
+                            ->label(__('panel/my_event.relation_managers.current_attendees.filters.company_name')),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query->when(
@@ -113,7 +113,7 @@ class ManageEventAnnouncementCurrentAttendees extends ManageRelatedRecords
                     ->label(__('panel/my_event.relation_managers.current_attendees.filters.position'))
                     ->form([
                         Forms\Components\TextInput::make('position_name')
-                            ->label('Position'),
+                            ->label(__('panel/my_event.relation_managers.current_attendees.filters.position_name')),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query->when(
@@ -124,7 +124,7 @@ class ManageEventAnnouncementCurrentAttendees extends ManageRelatedRecords
             ])
             ->headerActions([
                 Tables\Actions\ExportAction::make()
-                    ->label('Export Current Attendees')
+                    ->label(__('panel/my_event.relation_managers.current_attendees.actions.export'))
                     ->icon('heroicon-o-arrow-down-tray')
                     ->exporter(CurrentAttendeesExporter::class),
             ])

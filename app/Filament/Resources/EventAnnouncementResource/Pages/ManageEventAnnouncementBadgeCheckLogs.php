@@ -60,13 +60,13 @@ class ManageEventAnnouncementBadgeCheckLogs extends ManageRelatedRecords
 
                 Tables\Columns\BadgeColumn::make('action')
                     ->label(__('panel/my_event.relation_managers.badge_check_logs.columns.action'))
-                    ->colors([
-                        'success' => CheckInOutAction::CHECK_IN,
-                        'danger' => CheckInOutAction::CHECK_OUT,
-                    ])
-                    ->formatStateUsing(function ($state) {
-                        return $state ? $state->value : '';
-                    })
+                    // ->colors([
+                    //     'success' => CheckInOutAction::CHECK_IN,
+                    //     'danger' => CheckInOutAction::CHECK_OUT,
+                    // ])
+                    // ->formatStateUsing(function ($state) {
+                    //     return $state ? $state->value : '';
+                    // })
                     ->sortable()
                     ->toggleable(),
 
@@ -85,8 +85,8 @@ class ManageEventAnnouncementBadgeCheckLogs extends ManageRelatedRecords
                 Tables\Filters\SelectFilter::make('action')
                     ->label(__('panel/my_event.relation_managers.badge_check_logs.filters.action'))
                     ->options([
-                        CheckInOutAction::CHECK_IN->value => 'Check In',
-                        CheckInOutAction::CHECK_OUT->value => 'Check Out',
+                        CheckInOutAction::CHECK_IN->value => __('panel/my_event.relation_managers.badge_check_logs.actions.check_in'),
+                        CheckInOutAction::CHECK_OUT->value => __('panel/my_event.relation_managers.badge_check_logs.actions.check_out'),
                     ])
                     ->attribute('action'),
 
@@ -94,9 +94,9 @@ class ManageEventAnnouncementBadgeCheckLogs extends ManageRelatedRecords
                     ->label(__('panel/my_event.relation_managers.badge_check_logs.filters.action_date'))
                     ->form([
                         Forms\Components\DatePicker::make('from_date')
-                            ->label('From Date'),
+                            ->label(__('panel/my_event.relation_managers.badge_check_logs.filters.from_date')),
                         Forms\Components\DatePicker::make('to_date')
-                            ->label('To Date'),
+                            ->label(__('panel/my_event.relation_managers.badge_check_logs.filters.to_date')),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
@@ -114,7 +114,7 @@ class ManageEventAnnouncementBadgeCheckLogs extends ManageRelatedRecords
                     ->label(__('panel/my_event.relation_managers.badge_check_logs.filters.company'))
                     ->form([
                         Forms\Components\TextInput::make('company_name')
-                            ->label('Company Name'),
+                            ->label(__('panel/my_event.relation_managers.badge_check_logs.filters.company_name')),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query->when(
@@ -124,10 +124,10 @@ class ManageEventAnnouncementBadgeCheckLogs extends ManageRelatedRecords
                     }),
 
                 Tables\Filters\Filter::make('checked_by')
-                    ->label('Checked By')
+                    ->label(__('panel/my_event.relation_managers.badge_check_logs.filters.checked_by'))
                     ->form([
                         Forms\Components\Select::make('checked_by_user_id')
-                            ->label('User')
+                            ->label(__('panel/my_event.relation_managers.badge_check_logs.filters.user'))
                             ->relationship('checkedByUser', 'name')
                             ->searchable()
                             ->preload(),
@@ -141,7 +141,7 @@ class ManageEventAnnouncementBadgeCheckLogs extends ManageRelatedRecords
             ])
             ->headerActions([
                 Tables\Actions\ExportAction::make()
-                    ->label('Export Badge Check Logs')
+                    ->label(__('panel/my_event.relation_managers.badge_check_logs.actions.export'))
                     ->icon('heroicon-o-arrow-down-tray')
                     ->exporter(BadgeCheckLogsExporter::class),
             ])
