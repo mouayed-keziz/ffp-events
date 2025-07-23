@@ -14,5 +14,6 @@ return [
     'plan_tier' => [
         'see_more' => 'See more',
         'see_less' => 'See less',
+        'clear_selection' => 'Clear selection',
     ],
 ];

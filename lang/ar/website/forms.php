@@ -14,5 +14,6 @@ return [
     'plan_tier' => [
         'see_more' => 'عرض المزيد',
         'see_less' => 'عرض أقل',
+        'clear_selection' => 'إلغاء التحديد',
     ],
 ];

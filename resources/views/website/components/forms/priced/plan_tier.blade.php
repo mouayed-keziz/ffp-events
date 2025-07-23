@@ -154,6 +154,26 @@ $chevronClass = $dir === 'rtl' ? 'ms-1' : 'me-1';
                         </div>
                     @endforeach
                 </div>
+
+                {{-- Clear Selection Action --}}
+                @php
+                    $hasSelectedPlan = false;
+                    foreach (data_get($this, 'formData.' . $answerPath . '.plans', []) as $planData) {
+                        if (!empty($planData['selected']) && $planData['selected'] === true) {
+                            $hasSelectedPlan = true;
+                            break;
+                        }
+                    }
+                @endphp
+
+                @if ($hasSelectedPlan && !$disabled)
+                    <div class="mt-4 text-start">
+                        <button type="button" wire:click="updatePlanSelection('{{ $answerPath }}', null)"
+                            class="text-sm text-primary hover:text-primary/80 underline font-medium transition-colors">
+                            {{ __('website/forms.plan_tier.clear_selection') }}
+                        </button>
+                    </div>
+                @endif
             @else
                 <div class="text-gray-500 text-center py-4">
                     {{ __('No plans available') }}
