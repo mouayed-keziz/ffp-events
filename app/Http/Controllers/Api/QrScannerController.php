@@ -47,9 +47,9 @@ class QrScannerController extends Controller
             $qrData = $request->input('qr_data');
             $action = CheckInOutAction::from($request->input('action'));
             $locale = $request->input('locale', 'en');
-            // $hostessUser = Auth::user();
+            $hostessUser = Auth::user();
 
-            $hostessUser = User::where('email', 'hostess@ffp-events.com')->first();
+            // $hostessUser = User::where('email', 'hostess@ffp-events.com')->first();
 
             // Set application locale for this request
             app()->setLocale($locale);
@@ -225,11 +225,11 @@ class QrScannerController extends Controller
                 // Calculate and update total time spent
                 $currentAttendee->updateTimeSpentOnCheckout();
 
-                // Switch status to outside
+                // Switch status to outside but preserve last_check_in_at
                 $currentAttendee->update([
                     'status' => AttendeeStatus::OUTSIDE,
                     'total_time_spent_inside' => $currentAttendee->total_time_spent_inside,
-                    'last_check_in_at' => null, // Clear last check-in time
+                    // Keep last_check_in_at to show when they last checked in
                 ]);
                 $shouldRecordAction = true;
             }

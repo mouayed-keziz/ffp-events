@@ -24,6 +24,12 @@ class CurrentAttendeesExporter extends Exporter
                 ->label('Position'),
             ExportColumn::make('checked_in_at')
                 ->label('Checked In At'),
+            ExportColumn::make('status')
+                ->label('Status'),
+            ExportColumn::make('last_check_in_at')
+                ->label('Last Check In At'),
+            ExportColumn::make('formatted_total_time_spent')
+                ->label('Total Time Spent'),
             ExportColumn::make('checkedInByUser.name')
                 ->label('Checked In By'),
         ];

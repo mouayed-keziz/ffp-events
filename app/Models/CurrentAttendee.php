@@ -74,10 +74,10 @@ class CurrentAttendee extends Model
 
                 // If currently inside, add time from last check-in till now
                 if ($this->status === AttendeeStatus::INSIDE && $this->last_check_in_at) {
-                    $currentSessionTime = now()->diffInMinutes($this->last_check_in_at);
+                    $currentSessionTime = $this->last_check_in_at->diffInMinutes(now());
                     $totalTime += $currentSessionTime;
                 }
-
+                $totalTime = intval($totalTime);
                 return $totalTime;
             }
         );
@@ -91,14 +91,20 @@ class CurrentAttendee extends Model
         return Attribute::make(
             get: function () {
                 $totalMinutes = $this->total_time_spent_with_current;
+                // total minutes should be a number without decimal part
+                $totalMinutes = intval($totalMinutes);
+                if ($totalMinutes <= 0) {
+                    return "0 " . __('panel/scanner.min');
+                }
+
                 $hours = intval($totalMinutes / 60);
                 $minutes = $totalMinutes % 60;
 
                 if ($hours > 0) {
-                    return "{$hours}h {$minutes}m";
+                    return "{$hours}h {$minutes}" . __('panel/scanner.min');
                 }
 
-                return "{$minutes}m";
+                return "{$totalMinutes} " . __('panel/scanner.min');
             }
         );
     }
@@ -111,7 +117,7 @@ class CurrentAttendee extends Model
     public function updateTimeSpentOnCheckout(): void
     {
         if ($this->status === AttendeeStatus::INSIDE && $this->last_check_in_at) {
-            $sessionTime = now()->diffInMinutes($this->last_check_in_at);
+            $sessionTime = $this->last_check_in_at->diffInMinutes(now());
             $this->total_time_spent_inside = ($this->total_time_spent_inside ?? 0) + $sessionTime;
         }
     }

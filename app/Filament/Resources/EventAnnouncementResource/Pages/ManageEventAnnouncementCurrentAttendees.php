@@ -83,6 +83,9 @@ class ManageEventAnnouncementCurrentAttendees extends ManageRelatedRecords
                 Tables\Columns\TextColumn::make("total_time_spent_inside")
                     ->sortable()
                     ->toggleable()
+                    ->formatStateUsing(function ($state, $record) {
+                        return $record->formatted_total_time_spent;
+                    })
                     ->label(__("panel/scanner.time_spent")),
 
                 Tables\Columns\TextColumn::make('checkedInByUser.name')

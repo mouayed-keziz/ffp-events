@@ -48,5 +48,6 @@ return [
     ],
 
     'last_check_in_at' => 'Dernière Enregistrement à l\'Entrée',
+    'min' => 'min',
 
 ];

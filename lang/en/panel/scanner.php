@@ -49,4 +49,5 @@ return [
     ],
 
     'last_check_in_at' => 'Last Check In At',
+    'min' => 'min',
 ];
