@@ -29,6 +29,7 @@ return [
     'company' => 'Company',
     'status' => 'Status',
     'scanner_user' => 'Scanner User',
+    'time_spent' => 'Total Time Spent',
 
     // Error messages
     'badge_not_found' => 'Access Denied: Badge not found',
@@ -40,4 +41,12 @@ return [
     'already_checked_in' => 'Already checked in - no action needed',
     'successfully_checked_out' => 'Successfully checked out',
     'not_checked_in' => 'Not currently checked in - no action needed',
+
+
+    'attende_status' => [
+        'inside' => "Inside",
+        'outside' => "Outside",
+    ],
+
+    'last_check_in_at' => 'Last Check In At',
 ];

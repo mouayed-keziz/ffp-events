@@ -29,7 +29,8 @@ class QrScannerService
         ?string $badgePosition = null,
         ?string $badgeCompany = null,
         ?string $badgeEmail = null,
-        ?string $statusMessage = null
+        ?string $statusMessage = null,
+        ?string $totalTimeSpent = null
     ): array {
         $time = now()->format('Y-m-d H:i:s');
         $isCheckin = $action === CheckInOutAction::CHECK_IN;
@@ -47,76 +48,90 @@ class QrScannerService
         $headerStyle = $actionTaken ? 'highlight' : 'warning';
         $headerIcon = $actionTaken ? 'heroicon-s-check-circle' : 'heroicon-s-exclamation-triangle';
 
+        $resultBlocks = [
+            [
+                'label' => __('panel/scanner.attendance_status'),
+                'data' => $statusText . ' at ' . $time,
+                'icon' => $headerIcon,
+                'style' => $headerStyle,
+                'type' => 'card',
+                'layout' => 'full'
+            ],
+            [
+                'label' => __('panel/scanner.badge_code'),
+                'data' => $badgeCode,
+                'icon' => 'heroicon-o-qr-code',
+                'style' => 'default',
+                'type' => 'raw',
+                'layout' => 'full'
+            ],
+            [
+                'label' => __('panel/scanner.name'),
+                'data' => $name,
+                'icon' => 'heroicon-o-user',
+                'style' => 'info',
+                'type' => 'badge',
+                'layout' => 'grid'
+            ],
+            [
+                'label' => __('panel/scanner.email'),
+                'data' => $email,
+                'icon' => 'heroicon-o-envelope',
+                'style' => 'info',
+                'type' => 'badge',
+                'layout' => 'grid'
+            ],
+            [
+                'label' => __('panel/scanner.position'),
+                'data' => $position,
+                'icon' => 'heroicon-o-briefcase',
+                'style' => 'info',
+                'type' => 'badge',
+                'layout' => 'grid'
+            ],
+            [
+                'label' => __('panel/scanner.company'),
+                'data' => $company,
+                'icon' => 'heroicon-o-building-office',
+                'style' => 'default',
+                'type' => 'badge',
+                'layout' => 'grid',
+                'colSpan' => 2
+            ],
+            [
+                'label' => __('panel/scanner.status'),
+                'data' => '<span class="inline-flex items-center rounded-full bg-' . ($isCheckin ? 'green' : 'yellow') . '-100 dark:bg-' . ($isCheckin ? 'green' : 'yellow') . '-900/30 px-2 py-1 text-xs font-medium text-' . ($isCheckin ? 'green' : 'yellow') . '-800 dark:text-' . ($isCheckin ? 'green' : 'yellow') . '-300">' . $action->getLabel() . '</span>',
+                'icon' => $action->getIcon(),
+                'style' => $isCheckin ? 'success' : 'warning',
+                'type' => 'badge',
+                'layout' => 'grid'
+            ],
+            [
+                'label' => __('panel/scanner.scanner_user'),
+                'data' => $scanUser,
+                'icon' => 'heroicon-o-user-circle',
+                'style' => 'default',
+                'type' => 'badge',
+                'layout' => 'grid'
+            ]
+        ];
+
+        // Add time spent block if provided
+        if ($totalTimeSpent) {
+            $resultBlocks[] = [
+                'label' => __('panel/scanner.time_spent'),
+                'data' => $totalTimeSpent,
+                'icon' => 'heroicon-o-clock',
+                'style' => 'info',
+                'type' => 'badge',
+                'layout' => 'full'
+            ];
+        }
+
         return [
             'state' => 'success',
             'error_message' => '',
-            'result_blocks' => [
-                [
-                    'label' => __('panel/scanner.attendance_status'),
-                    'data' => $statusText . ' at ' . $time,
-                    'icon' => $headerIcon,
-                    'style' => $headerStyle,
-                    'type' => 'card',
-                    'layout' => 'full'
-                ],
-                [
-                    'label' => __('panel/scanner.badge_code'),
-                    'data' => $badgeCode,
-                    'icon' => 'heroicon-o-qr-code',
-                    'style' => 'default',
-                    'type' => 'raw',
-                    'layout' => 'full'
-                ],
-                [
-                    'label' => __('panel/scanner.name'),
-                    'data' => $name,
-                    'icon' => 'heroicon-o-user',
-                    'style' => 'info',
-                    'type' => 'badge',
-                    'layout' => 'grid'
-                ],
-                [
-                    'label' => __('panel/scanner.email'),
-                    'data' => $email,
-                    'icon' => 'heroicon-o-envelope',
-                    'style' => 'info',
-                    'type' => 'badge',
-                    'layout' => 'grid'
-                ],
-                [
-                    'label' => __('panel/scanner.position'),
-                    'data' => $position,
-                    'icon' => 'heroicon-o-briefcase',
-                    'style' => 'info',
-                    'type' => 'badge',
-                    'layout' => 'grid'
-                ],
-                [
-                    'label' => __('panel/scanner.company'),
-                    'data' => $company,
-                    'icon' => 'heroicon-o-building-office',
-                    'style' => 'default',
-                    'type' => 'badge',
-                    'layout' => 'grid',
-                    'colSpan' => 2
-                ],
-                [
-                    'label' => __('panel/scanner.status'),
-                    'data' => '<span class="inline-flex items-center rounded-full bg-' . ($isCheckin ? 'green' : 'yellow') . '-100 dark:bg-' . ($isCheckin ? 'green' : 'yellow') . '-900/30 px-2 py-1 text-xs font-medium text-' . ($isCheckin ? 'green' : 'yellow') . '-800 dark:text-' . ($isCheckin ? 'green' : 'yellow') . '-300">' . $action->getLabel() . '</span>',
-                    'icon' => $action->getIcon(),
-                    'style' => $isCheckin ? 'success' : 'warning',
-                    'type' => 'badge',
-                    'layout' => 'grid'
-                ],
-                [
-                    'label' => __('panel/scanner.scanner_user'),
-                    'data' => $scanUser,
-                    'icon' => 'heroicon-o-user-circle',
-                    'style' => 'default',
-                    'type' => 'badge',
-                    'layout' => 'grid'
-                ]
-            ]
+            'result_blocks' => $resultBlocks
         ];
     }
 }

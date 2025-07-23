@@ -29,6 +29,7 @@ return [
     'company' => 'الشركة',
     'status' => 'الحالة',
     'scanner_user' => 'مستخدم الماسح',
+    'time_spent' => 'إجمالي الوقت المقضي',
 
     // Error messages
     'badge_not_found' => 'الوصول مرفوض: الشارة غير موجودة',
@@ -40,4 +41,12 @@ return [
     'already_checked_in' => 'تم تسجيل الدخول مسبقاً - لا حاجة لإجراء',
     'successfully_checked_out' => 'تم تسجيل الخروج بنجاح',
     'not_checked_in' => 'غير مسجل حالياً - لا حاجة لإجراء',
+
+
+    'attende_status' => [
+        'inside' => "بالداخل",
+        'outside' => "بالخارج",
+    ],
+
+    'last_check_in_at' =>  'آخر تسجيل دخول في',
 ];

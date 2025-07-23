@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\AttendeeStatus;
 use App\Enums\CheckInOutAction;
 use App\Http\Controllers\Controller;
 use App\Models\Badge;
 use App\Models\BadgeCheckLog;
 use App\Models\CurrentAttendee;
 use App\Models\EventAnnouncement;
+use App\Models\User;
 use App\Services\QrScannerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,7 +47,9 @@ class QrScannerController extends Controller
             $qrData = $request->input('qr_data');
             $action = CheckInOutAction::from($request->input('action'));
             $locale = $request->input('locale', 'en');
-            $hostessUser = Auth::user();
+            // $hostessUser = Auth::user();
+
+            $hostessUser = User::where('email', 'hostess@ffp-events.com')->first();
 
             // Set application locale for this request
             app()->setLocale($locale);
@@ -108,14 +112,14 @@ class QrScannerController extends Controller
             $statusMessage = '';
 
             if ($action === CheckInOutAction::CHECK_IN) {
-                if (!$currentAttendee) {
+                if (!$currentAttendee || $currentAttendee->status === AttendeeStatus::OUTSIDE) {
                     $willChangeState = true;
                     $statusMessage = __('panel/scanner.successfully_checked_in');
                 } else {
                     $statusMessage = __('panel/scanner.already_checked_in');
                 }
             } else { // CHECK_OUT
-                if ($currentAttendee) {
+                if ($currentAttendee && $currentAttendee->status === AttendeeStatus::INSIDE) {
                     $willChangeState = true;
                     $statusMessage = __('panel/scanner.successfully_checked_out');
                 } else {
@@ -130,6 +134,16 @@ class QrScannerController extends Controller
                 });
             }
 
+            // Get updated current attendee data for response
+            $updatedCurrentAttendee = CurrentAttendee::where('badge_id', $badge->id)
+                ->where('event_announcement_id', $event->id)
+                ->first();
+
+            $totalTimeSpent = null;
+            if ($updatedCurrentAttendee) {
+                $totalTimeSpent = $updatedCurrentAttendee->formatted_total_time_spent;
+            }
+
             // Build success result with real badge data
             $result = $this->qrScannerService->buildSuccessResult(
                 $action,
@@ -139,7 +153,8 @@ class QrScannerController extends Controller
                 $badge->position,
                 $badge->company,
                 $badge->email,
-                $statusMessage
+                $statusMessage,
+                $totalTimeSpent
             );
 
             return response()->json([
@@ -177,8 +192,9 @@ class QrScannerController extends Controller
         $shouldRecordAction = false;
 
         if ($action === CheckInOutAction::CHECK_IN) {
-            // Check-in: Only proceed if person is not already checked in
+            // Check-in: Create new record or switch status to inside
             if (!$currentAttendee) {
+                // Create new record
                 CurrentAttendee::create([
                     'event_announcement_id' => $eventId,
                     'badge_id' => $badge->id,
@@ -189,17 +205,35 @@ class QrScannerController extends Controller
                     'badge_email' => $badge->email,
                     'badge_position' => $badge->position,
                     'badge_company' => $badge->company,
+                    'status' => AttendeeStatus::INSIDE,
+                    'total_time_spent_inside' => 0,
+                    'last_check_in_at' => $now,
                 ]);
-                $shouldRecordAction = true; // Record log only when state changes
+                $shouldRecordAction = true;
+            } elseif ($currentAttendee->status === AttendeeStatus::OUTSIDE) {
+                // Switch status to inside
+                $currentAttendee->update([
+                    'status' => AttendeeStatus::INSIDE,
+                    'last_check_in_at' => $now,
+                ]);
+                $shouldRecordAction = true;
             }
-            // If already checked in, do nothing (no duplicate check-in)
+            // If already inside, do nothing (no duplicate check-in)
         } else {
-            // Check-out: Only proceed if person is currently checked in
-            if ($currentAttendee) {
-                $currentAttendee->delete();
-                $shouldRecordAction = true; // Record log only when state changes
+            // Check-out: Switch status to outside (don't delete the record)
+            if ($currentAttendee && $currentAttendee->status === AttendeeStatus::INSIDE) {
+                // Calculate and update total time spent
+                $currentAttendee->updateTimeSpentOnCheckout();
+
+                // Switch status to outside
+                $currentAttendee->update([
+                    'status' => AttendeeStatus::OUTSIDE,
+                    'total_time_spent_inside' => $currentAttendee->total_time_spent_inside,
+                    'last_check_in_at' => null, // Clear last check-in time
+                ]);
+                $shouldRecordAction = true;
             }
-            // If not checked in, do nothing (no duplicate check-out)
+            // If not checked in or already outside, do nothing
         }
 
         // Create badge check log only when there's an actual state change

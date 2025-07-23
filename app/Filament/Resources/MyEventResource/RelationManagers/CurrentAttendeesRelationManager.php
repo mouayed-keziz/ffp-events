@@ -66,6 +66,21 @@ class CurrentAttendeesRelationManager extends RelationManager
                     ->sortable()
                     ->toggleable(),
 
+                Tables\Columns\TextColumn::make("status")
+                    ->badge()
+                    ->label(__("panel/scanner.attendance_status")),
+
+                Tables\Columns\TextColumn::make("last_check_in_at")
+                    ->placeholder("-")
+                    ->sortable()
+                    ->toggleable()
+                    ->label(__("panel/scanner.last_check_in_at")),
+
+                Tables\Columns\TextColumn::make("total_time_spent_inside")
+                    ->sortable()
+                    ->toggleable()
+                    ->label(__("panel/scanner.time_spent")),
+
                 Tables\Columns\TextColumn::make('checkedInByUser.name')
                     ->label(__('panel/my_event.relation_managers.current_attendees.columns.checked_in_by_user'))
                     ->sortable()

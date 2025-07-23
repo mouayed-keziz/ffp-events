@@ -29,6 +29,7 @@ return [
     'company' => 'Entreprise',
     'status' => 'Statut',
     'scanner_user' => 'Utilisateur du Scanner',
+    'time_spent' => 'Temps Total Passé',
 
     // Error messages
     'badge_not_found' => 'Accès refusé : Badge non trouvé',
@@ -40,4 +41,12 @@ return [
     'already_checked_in' => 'Déjà enregistré à l\'entrée - aucune action nécessaire',
     'successfully_checked_out' => 'Enregistrement de sortie réussi',
     'not_checked_in' => 'Actuellement non enregistré - aucune action nécessaire',
+
+    'attende_status' => [
+        'inside' => "À l'intérieur",
+        'outside' => "À l'extérieur",
+    ],
+
+    'last_check_in_at' => 'Dernière Enregistrement à l\'Entrée',
+
 ];
