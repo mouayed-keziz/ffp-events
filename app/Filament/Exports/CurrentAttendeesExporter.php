@@ -25,6 +25,7 @@ class CurrentAttendeesExporter extends Exporter
             ExportColumn::make('checked_in_at')
                 ->label('Checked In At'),
             ExportColumn::make('status')
+                ->formatStateUsing(fn($state) => $state ? $state->value : '')
                 ->label('Status'),
             ExportColumn::make('last_check_in_at')
                 ->label('Last Check In At'),
