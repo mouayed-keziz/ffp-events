@@ -10,12 +10,17 @@ return [
         'anonymous_email' => 'Email anonyme',
         'anonymous_email_help' => 'Adresse e-mail pour les soumissions anonymes (quand aucun compte visiteur n\'est lié)',
         'status' => 'Statut',
+        'submission_type' => 'Type de Soumission',
         'created_at' => 'Créé Le',
     ],
     'status' => [
         'pending' => 'En Attente',
         'approved' => 'Approuvé',
         'rejected' => 'Rejeté',
+    ],
+    'submission_type' => [
+        'authenticated' => 'Utilisateurs Authentifiés',
+        'anonymous' => 'Soumissions Anonymes',
     ],
     'sections' => [
         'submission_answers' => 'Réponses d\'Inscription',

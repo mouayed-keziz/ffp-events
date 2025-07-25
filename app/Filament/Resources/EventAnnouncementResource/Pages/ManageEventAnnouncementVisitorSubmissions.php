@@ -13,6 +13,7 @@ use Guava\FilamentNestedResources\Concerns\NestedPage;
 use Guava\FilamentNestedResources\Concerns\NestedRelationManager;
 use App\Filament\Resources\EventAnnouncementResource\Widgets\EventExhibitorSubmissionsChart;
 use App\Filament\Resources\EventAnnouncementResource\Widgets\EventVisitorSubmissionsChart;
+use Illuminate\Database\Eloquent\Builder;
 
 class ManageEventAnnouncementVisitorSubmissions extends ManageRelatedRecords
 {
@@ -48,7 +49,7 @@ class ManageEventAnnouncementVisitorSubmissions extends ManageRelatedRecords
             ->recordTitleAttribute('id')
             ->columns([
                 Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('visitor.email')
+                Tables\Columns\TextColumn::make('displayName')
                     ->searchable()
                     ->sortable()
                     ->label(__("panel/visitor_submissions.fields.visitor")),
@@ -61,6 +62,21 @@ class ManageEventAnnouncementVisitorSubmissions extends ManageRelatedRecords
                     ->label(__("panel/visitor_submissions.fields.created_at")),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('submission_type')
+                    ->options([
+                        'authenticated' => __("panel/visitor_submissions.submission_type.authenticated"),
+                        'anonymous' => __("panel/visitor_submissions.submission_type.anonymous"),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['value'] === 'authenticated',
+                            fn(Builder $query) => $query->whereNotNull('visitor_id'),
+                        )->when(
+                            $data['value'] === 'anonymous',
+                            fn(Builder $query) => $query->whereNull('visitor_id'),
+                        );
+                    })
+                    ->label(__("panel/visitor_submissions.fields.submission_type")),
                 Tables\Filters\SelectFilter::make('status')
                     ->options([
                         'pending' => __("panel/visitor_submissions.status.pending"),

@@ -29,12 +29,15 @@ return [
     'position_placeholder' => 'اختر منصبك',
     'email' => 'عنوان البريد الإلكتروني',
     'email_placeholder' => 'your.email@example.com',
+    'name' => 'الاسم',
+    'name_placeholder' => 'اسمك الكامل',
     'continue_registration' => 'إكمال التسجيل',
     'cancel' => 'إلغاء',
     'company_required' => 'حقل الشركة مطلوب.',
     'position_required' => 'حقل المنصب مطلوب.',
     'email_required' => 'حقل البريد الإلكتروني مطلوب.',
     'email_invalid' => 'يرجى إدخال عنوان بريد إلكتروني صحيح.',
+    'name_required' => 'حقل الاسم مطلوب.',
 
     // Anonymous registration
     'anonymous_registration' => 'تسجيل زائر مجهول',

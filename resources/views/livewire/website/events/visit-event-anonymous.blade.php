@@ -23,6 +23,7 @@ new class extends Component {
     public string $badgeCompany = '';
     public string $badgePosition = '';
     public string $badgeEmail = '';
+    public string $badgeName = '';
     public array $availableJobs = [];
 
     public function mount(EventAnnouncement $event)
@@ -81,6 +82,7 @@ new class extends Component {
         $this->badgeCompany = '';
         $this->badgePosition = '';
         $this->badgeEmail = '';
+        $this->badgeName = '';
     }
 
     public function submitWithBadgeInfo()
@@ -88,11 +90,13 @@ new class extends Component {
         // Validate badge information including email for anonymous submissions
         $this->validate(
             [
+                'badgeName' => 'required|string|max:255',
                 'badgeCompany' => 'required|string|max:255',
                 'badgePosition' => 'required|string',
                 'badgeEmail' => 'required|email',
             ],
             [
+                'badgeName.required' => __('website/visit-event.name_required'),
                 'badgeCompany.required' => __('website/visit-event.company_required'),
                 'badgePosition.required' => __('website/visit-event.position_required'),
                 'badgeEmail.required' => __('website/visit-event.email_required'),
@@ -103,7 +107,7 @@ new class extends Component {
         $actions = new VisitEventFormActions();
 
         // Save the form submission with badge information and email for anonymous user
-        $success = $actions->saveAnonymousFormSubmission($this->event, $this->formData, $this->badgeCompany, $this->badgePosition, $this->badgeEmail);
+        $success = $actions->saveAnonymousFormSubmission($this->event, $this->formData, $this->badgeCompany, $this->badgePosition, $this->badgeEmail, $this->badgeName);
 
         if ($success) {
             // Get the latest anonymous submission for this event
@@ -198,6 +202,22 @@ new class extends Component {
                 </p>
 
                 <form wire:submit.prevent="submitWithBadgeInfo">
+                    {{-- Name Input for Anonymous Users --}}
+                    <div class="form-control w-full mb-4">
+                        <label class="label">
+                            <span class="label-text">{{ __('website/visit-event.name') }} <span
+                                    class="text-red-500">*</span></span>
+                        </label>
+                        <input type="text" wire:model="badgeName"
+                            placeholder="{{ __('website/visit-event.name_placeholder') }}"
+                            class="input input-bordered w-full @error('badgeName') input-error @enderror" required />
+                        @error('badgeName')
+                            <label class="label">
+                                <span class="label-text-alt text-error">{{ $message }}</span>
+                            </label>
+                        @enderror
+                    </div>
+
                     {{-- Email Input for Anonymous Users --}}
                     <div class="form-control w-full mb-4">
                         <label class="label">

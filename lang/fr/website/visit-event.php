@@ -29,12 +29,15 @@ return [
     'position_placeholder' => 'Sélectionnez votre fonction',
     'email' => 'Adresse e-mail',
     'email_placeholder' => 'votre.email@exemple.com',
+    'name' => 'Nom',
+    'name_placeholder' => 'Votre nom complet',
     'continue_registration' => 'Finaliser l\'inscription',
     'cancel' => 'Annuler',
     'company_required' => 'Le champ entreprise est obligatoire.',
     'position_required' => 'Le champ fonction est obligatoire.',
     'email_required' => 'Le champ e-mail est obligatoire.',
     'email_invalid' => 'Veuillez saisir une adresse e-mail valide.',
+    'name_required' => 'Le champ nom est obligatoire.',
 
     // Anonymous registration
     'anonymous_registration' => 'Inscription Visiteur Anonyme',

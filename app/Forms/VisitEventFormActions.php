@@ -225,7 +225,7 @@ class VisitEventFormActions extends BaseFormActions
     /**
      * Save anonymous form submission with badge information and email
      */
-    public function saveAnonymousFormSubmission(EventAnnouncement $event, array $formData, string $badgeCompany = '', string $badgePosition = '', string $anonymousEmail = ''): bool
+    public function saveAnonymousFormSubmission(EventAnnouncement $event, array $formData, string $badgeCompany = '', string $badgePosition = '', string $anonymousEmail = '', string $badgeName = ''): bool
     {
         try {
             // Process the form data (handle file uploads, translatable fields, etc.)
@@ -258,7 +258,7 @@ class VisitEventFormActions extends BaseFormActions
             }
 
             // Generate a badge for the anonymous visitor submission
-            $badge = $this->generateBadgeForAnonymousSubmission($event, $submission, $processedData, $badgeCompany, $badgePosition, $anonymousEmail);
+            $badge = $this->generateBadgeForAnonymousSubmission($event, $submission, $processedData, $badgeCompany, $badgePosition, $anonymousEmail, $badgeName);
 
             if ($badge) {
                 Log::info("Badge generated for anonymous visitor: {$anonymousEmail}");
@@ -266,6 +266,7 @@ class VisitEventFormActions extends BaseFormActions
                 // Get the current locale for localized notification
                 $locale = App::getLocale();
 
+                Log::error("hna rana hna notification hbb");
                 // Send email notification to anonymous user
                 $this->sendAnonymousNotification($event, $submission, $anonymousEmail, $locale);
                 Log::info("Anonymous visitor notification sent to: {$anonymousEmail} with locale: {$locale}");
@@ -346,7 +347,7 @@ class VisitEventFormActions extends BaseFormActions
     /**
      * Generate a badge for an anonymous visitor submission
      */
-    protected function generateBadgeForAnonymousSubmission(EventAnnouncement $event, VisitorSubmission $submission, array $processedData, string $badgeCompany = '', string $badgePosition = '', string $anonymousEmail = ''): ?Badge
+    protected function generateBadgeForAnonymousSubmission(EventAnnouncement $event, VisitorSubmission $submission, array $processedData, string $badgeCompany = '', string $badgePosition = '', string $anonymousEmail = '', string $badgeName = ''): ?Badge
     {
         try {
             // Get the badge template path from the event announcement
@@ -356,8 +357,8 @@ class VisitEventFormActions extends BaseFormActions
                 return null;
             }
 
-            // For anonymous submissions, use 'Anonymous Visitor' as name
-            $name = 'Anonymous Visitor';
+            // For anonymous submissions, use provided name or default to 'Anonymous Visitor'
+            $name = $badgeName ?: 'Anonymous Visitor';
             $email = $anonymousEmail;
             // Generate QR code data (random unique code)
             $qrData = Str::uuid()->toString();
@@ -384,7 +385,11 @@ class VisitEventFormActions extends BaseFormActions
 
             // Create a badge record
             $badge = Badge::create([
-                'qr_data' => $qrData,
+                'code' => $qrData,
+                'name' => $name,
+                'email' => $email,
+                'company' => $badgeCompany,
+                'position' => $badgePosition, // Store the French job title
                 'visitor_submission_id' => $submission->id
             ]);
 
@@ -412,16 +417,15 @@ class VisitEventFormActions extends BaseFormActions
     protected function sendAnonymousNotification(EventAnnouncement $event, VisitorSubmission $submission, string $email, string $locale): void
     {
         try {
-            // Create a simple anonymous mail notification
             $anonymousMail = new \App\Mail\Visitor\AnonymousVisitorEventRegistrationSuccessfulMail(
                 $event,
                 $submission,
                 $email,
                 $locale
             );
-
             \Illuminate\Support\Facades\Mail::to($email)->send($anonymousMail);
         } catch (\Exception $e) {
+            Log::info("mouayed 4");
             Log::error("Error sending anonymous notification: " . $e->getMessage());
         }
     }

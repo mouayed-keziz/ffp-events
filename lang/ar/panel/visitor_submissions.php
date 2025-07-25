@@ -10,12 +10,17 @@ return [
         'anonymous_email' => 'البريد الإلكتروني المجهول',
         'anonymous_email_help' => 'عنوان البريد الإلكتروني للتسجيلات المجهولة (عندما لا يكون هناك حساب زائر مربوط)',
         'status' => 'الحالة',
+        'submission_type' => 'نوع التسجيل',
         'created_at' => 'تم الإنشاء في',
     ],
     'status' => [
         'pending' => 'قيد الانتظار',
         'approved' => 'مقبول',
         'rejected' => 'مرفوض',
+    ],
+    'submission_type' => [
+        'authenticated' => 'المستخدمون المسجلون',
+        'anonymous' => 'التسجيلات المجهولة',
     ],
     'sections' => [
         'submission_answers' => 'إجابات التسجيل',

@@ -10,12 +10,17 @@ return [
         'anonymous_email' => 'Anonymous Email',
         'anonymous_email_help' => 'Email address for anonymous submissions (when no visitor account is linked)',
         'status' => 'Status',
+        'submission_type' => 'Submission Type',
         'created_at' => 'Created At',
     ],
     'status' => [
         'pending' => 'Pending',
         'approved' => 'Approved',
         'rejected' => 'Rejected',
+    ],
+    'submission_type' => [
+        'authenticated' => 'Authenticated Users',
+        'anonymous' => 'Anonymous Submissions',
     ],
     'sections' => [
         'submission_answers' => 'Registration Answers',

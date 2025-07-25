@@ -142,6 +142,22 @@ class VisitorSubmissionResource extends Resource
                         'rejected' => __("panel/visitor_submissions.status.rejected"),
                     ])
                     ->label(__("panel/visitor_submissions.fields.status")),
+
+                Tables\Filters\SelectFilter::make('submission_type')
+                    ->options([
+                        'authenticated' => __("panel/visitor_submissions.submission_type.authenticated"),
+                        'anonymous' => __("panel/visitor_submissions.submission_type.anonymous"),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query->when(
+                            $data['value'] === 'authenticated',
+                            fn(Builder $query) => $query->whereNotNull('visitor_id'),
+                        )->when(
+                            $data['value'] === 'anonymous',
+                            fn(Builder $query) => $query->whereNull('visitor_id'),
+                        );
+                    })
+                    ->label(__("panel/visitor_submissions.fields.submission_type")),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

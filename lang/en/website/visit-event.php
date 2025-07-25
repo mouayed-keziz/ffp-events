@@ -29,12 +29,15 @@ return [
     'position_placeholder' => 'Select your position',
     'email' => 'Email Address',
     'email_placeholder' => 'your.email@example.com',
+    'name' => 'Name',
+    'name_placeholder' => 'Your full name',
     'continue_registration' => 'Complete Registration',
     'cancel' => 'Cancel',
     'company_required' => 'The company field is required.',
     'position_required' => 'The position field is required.',
     'email_required' => 'The email field is required.',
     'email_invalid' => 'Please enter a valid email address.',
+    'name_required' => 'The name field is required.',
 
     // Anonymous registration
     'anonymous_registration' => 'Anonymous Visitor Registration',
