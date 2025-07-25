@@ -19,6 +19,7 @@ class VisitorSubmission extends Model implements HasMedia
         'event_announcement_id',
         'answers',
         'status',
+        'anonymous_email', // Add field for anonymous email
     ];
 
     protected $casts = [
@@ -27,7 +28,11 @@ class VisitorSubmission extends Model implements HasMedia
     ];
     public function getRecordTitleAttribute()
     {
-        return __("panel/visitor_submissions.single") . " - " . $this->visitor->name;
+        if ($this->visitor) {
+            return __("panel/visitor_submissions.single") . " - " . $this->visitor->name;
+        } else {
+            return __("panel/visitor_submissions.single") . " - " . ($this->anonymous_email ?? 'Anonymous');
+        }
     }
     public function getRecordLinkAttribute()
     {
@@ -38,7 +43,31 @@ class VisitorSubmission extends Model implements HasMedia
      */
     public function visitor(): BelongsTo
     {
-        return $this->belongsTo(Visitor::class);
+        return $this->belongsTo(Visitor::class)->withDefault();
+    }
+
+    /**
+     * Helper method to get the email for this submission (either from visitor or anonymous)
+     */
+    public function getEmailAttribute(): ?string
+    {
+        return $this->visitor ? $this->visitor->email : $this->anonymous_email;
+    }
+
+    /**
+     * Helper method to get the name for this submission (either from visitor or use a default)
+     */
+    public function getNameAttribute(): ?string
+    {
+        return $this->visitor ? $this->visitor->name : 'Anonymous Visitor';
+    }
+
+    /**
+     * Check if this is an anonymous submission
+     */
+    public function isAnonymous(): bool
+    {
+        return $this->visitor_id === null;
     }
 
     /**

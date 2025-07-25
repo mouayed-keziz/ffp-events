@@ -11,6 +11,8 @@ return [
     'email' => 'Email',
     'phone' => 'Tél',
     'visit' => 'VISITER',
+    'visit_anonymous' => 'VISITER (ANONYME)',
+    'visit_with_account' => 'VISITER (CONNEXION)',
     'exhibit_and_sponsor' => 'EXPOSER ET SPONSORISER',
     'goback' => 'Retourner',
     'countdown' => [

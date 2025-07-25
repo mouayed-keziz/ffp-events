@@ -11,6 +11,8 @@ return [
     'email' => 'البريد الإلكتروني',
     'phone' => 'الهاتف',
     'visit' => 'زيارة',
+    'visit_anonymous' => 'زيارة (مجهول)',
+    'visit_with_account' => 'زيارة (تسجيل دخول)',
     'exhibit_and_sponsor' => 'عارض وراعي',
     'goback' => 'عودة',
     'countdown' => [

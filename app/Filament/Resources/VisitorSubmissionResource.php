@@ -77,10 +77,15 @@ class VisitorSubmissionResource extends Resource
 
                 Forms\Components\Select::make('visitor_id')
                     ->relationship('visitor', 'email')
-                    ->required()
                     ->searchable()
                     ->preload()
                     ->label(__("panel/visitor_submissions.fields.visitor")),
+
+                Forms\Components\TextInput::make('anonymous_email')
+                    ->email()
+                    ->label(__("panel/visitor_submissions.fields.anonymous_email"))
+                    ->helperText(__("panel/visitor_submissions.fields.anonymous_email_help"))
+                    ->visible(fn($get) => empty($get('visitor_id'))),
 
                 Forms\Components\Select::make('status')
                     ->options([
@@ -105,10 +110,13 @@ class VisitorSubmissionResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\TextColumn::make('visitor.email')
+                Tables\Columns\TextColumn::make('email')
                     ->searchable()
                     ->sortable()
-                    ->label(__("panel/visitor_submissions.fields.visitor")),
+                    ->label(__("panel/visitor_submissions.fields.email"))
+                    ->getStateUsing(fn($record) => $record->visitor ? $record->visitor->email : $record->anonymous_email)
+                    ->badge()
+                    ->color(fn($record) => $record->visitor ? 'success' : 'info'),
                 Tables\Columns\TextColumn::make('eventAnnouncement.title')
                     ->searchable()
                     ->sortable()

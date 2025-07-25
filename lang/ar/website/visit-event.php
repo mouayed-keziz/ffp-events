@@ -22,14 +22,26 @@ return [
     // Badge information popup
     'badge_info_title' => 'معلومات الشارة الخاصة بك',
     'badge_info_description' => 'لإكمال تسجيلك، يرجى تقديم المعلومات التالية التي ستظهر على شارتك.',
+    'badge_info_description_anonymous' => 'لإكمال تسجيلك، يرجى تقديم عنوان بريدك الإلكتروني والمعلومات التالية التي ستظهر على شارتك. سنرسل لك رسالة تأكيد بالبريد الإلكتروني مع شارتك.',
     'company' => 'الشركة',
     'company_placeholder' => 'اسم شركتك',
     'position' => 'المنصب',
     'position_placeholder' => 'اختر منصبك',
+    'email' => 'عنوان البريد الإلكتروني',
+    'email_placeholder' => 'your.email@example.com',
     'continue_registration' => 'إكمال التسجيل',
     'cancel' => 'إلغاء',
     'company_required' => 'حقل الشركة مطلوب.',
     'position_required' => 'حقل المنصب مطلوب.',
+    'email_required' => 'حقل البريد الإلكتروني مطلوب.',
+    'email_invalid' => 'يرجى إدخال عنوان بريد إلكتروني صحيح.',
+
+    // Anonymous registration
+    'anonymous_registration' => 'تسجيل زائر مجهول',
+    'anonymous_fill_form_instruction' => 'أنت تسجل كزائر مجهول. سنرسل لك رسالة تأكيد بالبريد الإلكتروني عند التسجيل بنجاح.',
+    'anonymous_registration_success' => 'تم التسجيل بنجاح!',
+    'anonymous_registration_success_message' => 'شكرًا لك على التسجيل! لقد أرسلنا رسالة تأكيد بالبريد الإلكتروني مع شارتك إلى عنوان البريد الإلكتروني الذي قدمته.',
+    'back_to_event' => 'العودة إلى الحدث',
 
     // Success page
     'registration_success' => 'تهانينا، لقد تم تسجيلك كزائر في :event',

@@ -66,6 +66,23 @@ class EventController extends Controller
         }
     }
 
+    public static function VisitEventAnonymous($id)
+    {
+        $event = EventAnnouncement::find($id);
+        if (!$event) {
+            return redirect()->route('events');
+        }
+
+        if ($event->is_visitor_registration_open) {
+            return view('website.pages.events.visit-event-anonymous', [
+                'event' => $event
+            ]);
+        } else {
+            dd("here");
+            return redirect()->route('events');
+        }
+    }
+
     public function VisitFormSubmitted($id)
     {
         $event = EventAnnouncement::find($id);
@@ -79,6 +96,18 @@ class EventController extends Controller
         return view("website.pages.events.visit-event-form-submitted", [
             'event' => $event,
             'submission' => $visitorSubmission
+        ]);
+    }
+
+    public function VisitAnonymousFormSubmitted($id)
+    {
+        $event = EventAnnouncement::find($id);
+        if (!$event) {
+            return redirect()->route('events');
+        }
+
+        return view("website.pages.events.visit-event-anonymous-form-submitted", [
+            'event' => $event
         ]);
     }
 

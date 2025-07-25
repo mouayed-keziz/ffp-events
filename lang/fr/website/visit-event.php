@@ -22,14 +22,26 @@ return [
     // Badge information popup
     'badge_info_title' => 'Informations pour votre badge',
     'badge_info_description' => 'Pour finaliser votre inscription, veuillez renseigner les informations suivantes qui apparaîtront sur votre badge.',
+    'badge_info_description_anonymous' => 'Pour finaliser votre inscription, veuillez renseigner votre adresse e-mail et les informations suivantes qui apparaîtront sur votre badge. Nous vous enverrons un e-mail de confirmation avec votre badge.',
     'company' => 'Entreprise',
     'company_placeholder' => 'Nom de votre entreprise',
     'position' => 'Fonction',
     'position_placeholder' => 'Sélectionnez votre fonction',
+    'email' => 'Adresse e-mail',
+    'email_placeholder' => 'votre.email@exemple.com',
     'continue_registration' => 'Finaliser l\'inscription',
     'cancel' => 'Annuler',
     'company_required' => 'Le champ entreprise est obligatoire.',
     'position_required' => 'Le champ fonction est obligatoire.',
+    'email_required' => 'Le champ e-mail est obligatoire.',
+    'email_invalid' => 'Veuillez saisir une adresse e-mail valide.',
+
+    // Anonymous registration
+    'anonymous_registration' => 'Inscription Visiteur Anonyme',
+    'anonymous_fill_form_instruction' => 'Vous vous inscrivez en tant que visiteur anonyme. Nous vous enverrons un e-mail de confirmation lors de votre inscription réussie.',
+    'anonymous_registration_success' => 'Inscription Terminée !',
+    'anonymous_registration_success_message' => 'Merci de vous être inscrit ! Nous avons envoyé un e-mail de confirmation avec votre badge à l\'adresse e-mail que vous avez fournie.',
+    'back_to_event' => 'Retour à l\'événement',
 
     // Success page
     'registration_success' => 'Félicitations, vous êtes inscrits comme visiteur de :event',

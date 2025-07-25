@@ -101,4 +101,33 @@ class VisitorSubmissionActivity
             ->withProperties(array_merge($baseProperties, $properties ?? []))
             ->log('Visitor registered attendance');
     }
+
+    /**
+     * Log an anonymous visitor submission creation event.
+     *
+     * @param Model|null $submission
+     * @param array|null $properties
+     * @return void
+     */
+    public static function logAnonymousCreate(?Model $submission, ?array $properties = []): void
+    {
+        if ($submission === null) {
+            return;
+        }
+
+        $baseProperties = [
+            'email' => $submission->anonymous_email,
+            'submission_id' => $submission->id,
+            'event_id' => $submission->event_announcement_id,
+            'event_title' => $submission->eventAnnouncement->title ?? null,
+            'is_anonymous' => true,
+        ];
+
+        activity()
+            ->useLog(LogName::VisitorSubmissions->value)
+            ->event(LogEvent::VisitorSubmitted->value)
+            ->performedOn($submission)
+            ->withProperties(array_merge($baseProperties, $properties ?? []))
+            ->log('Anonymous visitor registered attendance');
+    }
 }

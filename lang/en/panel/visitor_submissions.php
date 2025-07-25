@@ -7,6 +7,8 @@ return [
         'event_announcement' => 'Event Announcement',
         'visitor' => 'Visitor',
         'email' => 'Email',
+        'anonymous_email' => 'Anonymous Email',
+        'anonymous_email_help' => 'Email address for anonymous submissions (when no visitor account is linked)',
         'status' => 'Status',
         'created_at' => 'Created At',
     ],

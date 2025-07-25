@@ -11,6 +11,8 @@ return [
     'email' => 'Email',
     'phone' => 'Phone',
     'visit' => 'VISIT',
+    'visit_anonymous' => 'VISIT (ANONYMOUS)',
+    'visit_with_account' => 'VISIT (LOGIN)',
     'exhibit_and_sponsor' => 'EXHIBIT AND SPONSOR',
     'goback' => 'Go Back',
     'countdown' => [
