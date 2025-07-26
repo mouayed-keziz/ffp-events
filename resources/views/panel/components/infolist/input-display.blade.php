@@ -34,7 +34,9 @@
                 @break
 
                 @case('number')
-                    <div>{{ is_numeric($value) ? number_format($value, is_float($value) ? 2 : 0) : $value }}</div>
+                    <div>
+                        {{ is_array($value) ? implode(', ', $value) : (is_numeric($value) ? number_format($value, is_float($value) ? 2 : 0) : $value) }}
+                    </div>
                 @break
 
                 @default
