@@ -41,7 +41,8 @@
                 @break
 
                 @default
-                    <div>{{ $value }}</div>
+                    {{ json_encode($value) }}
+                    {{-- <div>{{ $value }}</div> --}}
             @endswitch
         @endif
     </div>
