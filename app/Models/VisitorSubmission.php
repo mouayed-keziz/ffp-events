@@ -72,7 +72,7 @@ class VisitorSubmission extends Model implements HasMedia
     public function getDisplayNameAttribute(): string
     {
         if (!$this->isAnonymous()) {
-            return $this->visitor->email;
+            return $this->visitor->email ? $this->visitor->email : "deleted visitor";
         } else {
             if ($this->anonymous_email) {
                 return "(anonymos) " . $this->anonymous_email;
