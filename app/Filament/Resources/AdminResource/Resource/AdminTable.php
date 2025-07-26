@@ -57,7 +57,7 @@ class AdminTable
                     ->tooltip(fn($state) => $state ? $state->format('Y-m-d H:i:s') : null),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                // Tables\Filters\TrashedFilter::make(),
                 // All filters removed as requested
             ])
             // ->filtersFormColumns(3)

@@ -98,7 +98,7 @@ class AdminResource extends Resource
             //     $query->whereIn('name', ['admin', 'super_admin']);
             // })
             ->withoutGlobalScopes([
-                SoftDeletingScope::class,
+                // SoftDeletingScope::class,
             ]);
     }
 }
