@@ -266,7 +266,6 @@ class VisitEventFormActions extends BaseFormActions
                 // Get the current locale for localized notification
                 $locale = App::getLocale();
 
-                Log::error("hna rana hna notification hbb");
                 // Send email notification to anonymous user
                 $this->sendAnonymousNotification($event, $submission, $anonymousEmail, $locale);
                 Log::info("Anonymous visitor notification sent to: {$anonymousEmail} with locale: {$locale}");
@@ -425,7 +424,6 @@ class VisitEventFormActions extends BaseFormActions
             );
             \Illuminate\Support\Facades\Mail::to($email)->send($anonymousMail);
         } catch (\Exception $e) {
-            Log::info("mouayed 4");
             Log::error("Error sending anonymous notification: " . $e->getMessage());
         }
     }
