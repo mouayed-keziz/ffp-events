@@ -96,8 +96,8 @@ class BadgeCheckLogsRelationManager extends RelationManager
                 Tables\Filters\SelectFilter::make('action')
                     ->label(__('panel/my_event.relation_managers.badge_check_logs.filters.action'))
                     ->options([
-                        CheckInOutAction::CHECK_IN->value => 'Check In',
-                        CheckInOutAction::CHECK_OUT->value => 'Check Out',
+                        CheckInOutAction::CHECK_IN->value => CheckInOutAction::CHECK_IN->getLabel(),
+                        CheckInOutAction::CHECK_OUT->value => CheckInOutAction::CHECK_OUT->getLabel(),
                     ])
                     ->attribute('action'),
 

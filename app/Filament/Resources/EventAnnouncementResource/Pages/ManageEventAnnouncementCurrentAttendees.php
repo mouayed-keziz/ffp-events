@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 
+use App\Enums\AttendeeStatus;
 use App\Filament\Exports\CurrentAttendeesExporter;
 use App\Filament\Resources\EventAnnouncementResource;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
@@ -94,6 +95,13 @@ class ManageEventAnnouncementCurrentAttendees extends ManageRelatedRecords
                     ->toggleable(),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('action')
+                    ->label(__('panel/scanner.attendance_status'))
+                    ->options([
+                        AttendeeStatus::INSIDE->value => AttendeeStatus::INSIDE->getLabel(),
+                        AttendeeStatus::OUTSIDE->value => AttendeeStatus::OUTSIDE->getLabel(),
+                    ])
+                    ->attribute('status'),
                 Tables\Filters\Filter::make('checked_in_date')
                     ->label(__('panel/my_event.relation_managers.current_attendees.filters.checked_in_date'))
                     ->form([

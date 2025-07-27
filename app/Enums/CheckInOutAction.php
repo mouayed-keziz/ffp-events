@@ -14,8 +14,8 @@ enum CheckInOutAction: string implements HasLabel, HasColor, HasIcon
     public function getLabel(): ?string
     {
         return match ($this) {
-            self::CHECK_IN => 'Check In',
-            self::CHECK_OUT => 'Check Out',
+            self::CHECK_IN => __('panel/my_event.relation_managers.badge_check_logs.actions.check_in'),
+            self::CHECK_OUT => __('panel/my_event.relation_managers.badge_check_logs.actions.check_out'),
         };
     }
     public function getColor(): string | array | null

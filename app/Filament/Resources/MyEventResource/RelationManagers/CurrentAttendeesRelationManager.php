@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\MyEventResource\RelationManagers;
 
+use App\Enums\AttendeeStatus;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -96,6 +97,13 @@ class CurrentAttendeesRelationManager extends RelationManager
                 //     ->toggleable(),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('action')
+                    ->label(__('panel/scanner.attendance_status'))
+                    ->options([
+                        AttendeeStatus::INSIDE->value => AttendeeStatus::INSIDE->getLabel(),
+                        AttendeeStatus::OUTSIDE->value => AttendeeStatus::OUTSIDE->getLabel(),
+                    ])
+                    ->attribute('status'),
                 Tables\Filters\Filter::make('checked_in_date')
                     ->label(__('panel/my_event.relation_managers.current_attendees.filters.checked_in_date'))
                     ->form([
