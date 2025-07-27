@@ -25,6 +25,15 @@ class ManageEventAnnouncementCurrentAttendees extends ManageRelatedRecords
     protected static string $relationship = 'currentAttendees';
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+    public function getBreadcrumbs(): array
+    {
+        return [
+            static::getResource()::getUrl() => __('panel/breadcrumbs.events'),
+            static::getResource()::getUrl("view", ["record" => $this->getRecord()]) => $this->getRecord()->name ?? $this->getRecord()->title,
+            __('panel/breadcrumbs.current_participants'),
+        ];
+    }
+
     public static function getNavigationLabel(): string
     {
         return __('panel/my_event.relation_managers.current_attendees.title');

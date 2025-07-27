@@ -11,6 +11,7 @@ use Filament\Resources\Pages\ViewRecord;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
 use Filament\Infolists\Infolist;
 use Guava\FilamentNestedResources\Concerns\NestedPage;
+use Filament\Facades\Filament;
 
 class ViewEventAnnouncement extends ViewRecord
 {
@@ -19,6 +20,15 @@ class ViewEventAnnouncement extends ViewRecord
     use ViewRecord\Concerns\Translatable;
 
     protected static string $resource = EventAnnouncementResource::class;
+
+    public function getBreadcrumbs(): array
+    {
+        return [
+            static::getResource()::getUrl() => __('panel/breadcrumbs.events'),
+            static::getResource()::getUrl("view", ["record" => $this->getRecord()]) => $this->getRecord()->name ?? $this->getRecord()->title,
+            __('panel/breadcrumbs.view_announcement'),
+        ];
+    }
 
     protected function getHeaderActions(): array
     {

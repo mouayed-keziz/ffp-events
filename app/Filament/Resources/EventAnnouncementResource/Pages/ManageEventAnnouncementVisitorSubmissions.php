@@ -33,6 +33,15 @@ class ManageEventAnnouncementVisitorSubmissions extends ManageRelatedRecords
     protected static string $relationship = 'visitorSubmissions';
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-check';
 
+    public function getBreadcrumbs(): array
+    {
+        return [
+            static::getResource()::getUrl() => __('panel/breadcrumbs.events'),
+            static::getResource()::getUrl("view", ["record" => $this->getRecord()]) => $this->getRecord()->name ?? $this->getRecord()->title,
+            __('panel/breadcrumbs.visitor_registrations'),
+        ];
+    }
+
     public static function getNavigationLabel(): string
     {
         return __("panel/visitor_submissions.plural");

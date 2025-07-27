@@ -28,6 +28,15 @@ class ManageEventAnnouncementExhibitorPostPaymentForms extends ManageRelatedReco
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public function getBreadcrumbs(): array
+    {
+        return [
+            static::getResource()::getUrl() => __('panel/breadcrumbs.events'),
+            static::getResource()::getUrl("view", ["record" => $this->getRecord()]) => $this->getRecord()->name ?? $this->getRecord()->title,
+            __('panel/breadcrumbs.manage_exhibitor_post_payment_forms'),
+        ];
+    }
+
     public static function canAccess(array $parameters = []): bool
     {
         return auth()->user()->hasRole(Role::SUPER_ADMIN->value);

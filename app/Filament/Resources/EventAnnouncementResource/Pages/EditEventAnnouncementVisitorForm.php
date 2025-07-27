@@ -30,6 +30,15 @@ class EditEventAnnouncementVisitorForm extends EditRecord
         return auth()->user()->hasRole(Role::SUPER_ADMIN->value);
     }
 
+    public function getBreadcrumbs(): array
+    {
+        return [
+            static::getResource()::getUrl() => __('panel/breadcrumbs.events'),
+            static::getResource()::getUrl("view", ["record" => $this->getRecord()]) => $this->getRecord()->name ?? $this->getRecord()->title,
+            __('panel/breadcrumbs.update_visitor_forms'),
+        ];
+    }
+
 
     public function form(Form $form): Form
     {

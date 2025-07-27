@@ -26,9 +26,13 @@ class EditEventAnnouncementBadgeTemplates extends EditRecord
 
     protected static string $resource = EventAnnouncementResource::class;
 
-    public function getBreadcrumb(): string
+    public function getBreadcrumbs(): array
     {
-        return __('panel/event_announcement.actions.edit_badge_templates');
+        return [
+            static::getResource()::getUrl() => __('panel/breadcrumbs.events'),
+            static::getResource()::getUrl("view", ["record" => $this->getRecord()]) => $this->getRecord()->name ?? $this->getRecord()->title,
+            __('panel/breadcrumbs.update_badge_models'),
+        ];
     }
 
     public function form(Form $form): Form

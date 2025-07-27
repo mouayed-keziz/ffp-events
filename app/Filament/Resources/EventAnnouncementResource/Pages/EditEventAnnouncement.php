@@ -17,6 +17,15 @@ class EditEventAnnouncement extends EditRecord
 
     protected static string $resource = EventAnnouncementResource::class;
 
+    public function getBreadcrumbs(): array
+    {
+        return [
+            static::getResource()::getUrl() => __('panel/breadcrumbs.events'),
+            static::getResource()::getUrl("edit", ["record" => $this->getRecord()]) => $this->getRecord()->name ?? $this->getRecord()->title,
+            __('panel/breadcrumbs.update_announcement'),
+        ];
+    }
+
     protected function getHeaderActions(): array
     {
         return [
