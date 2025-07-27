@@ -31,6 +31,23 @@
         </div>
     </div>
 
+    <!-- Camera Selection Section -->
+    <div id="cameraSelection"
+        class="hidden border-b border-gray-200 dark:border-gray-700 px-3 sm:px-6 py-2 sm:py-3 bg-gray-50 dark:bg-gray-800/50">
+        <div class="flex items-center gap-2 sm:gap-3">
+            <div class="flex items-center gap-2">
+                <x-heroicon-o-camera class="h-4 w-4 text-gray-400 dark:text-gray-500" />
+                <label for="cameraSelect" class="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Camera:
+                </label>
+            </div>
+            <select id="cameraSelect"
+                class="flex-1 max-w-xs text-xs sm:text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-2 py-1.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="">Select Camera</option>
+            </select>
+        </div>
+    </div>
+
     <!-- Scanner Container with taller aspect ratio on mobile -->
     <div class="p-3 sm:p-6">
         <div class="aspect-square sm:aspect-video w-full">
@@ -69,6 +86,8 @@
         let lastScannedCode = null; // Track last scanned code
         let scanCooldown = false; // Prevent rapid scanning
         const SCAN_COOLDOWN_MS = 3000; // 3 seconds between scans of the same code
+        let availableCameras = []; // Store available cameras
+        let selectedCameraId = null; // Currently selected camera
 
         // Get CSRF token and locale for API calls
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -113,6 +132,100 @@
                 }
 
                 actionLabel.textContent = isCheckIn ? 'Check In' : 'Check Out';
+            }
+        }
+
+        // Get available cameras and populate camera selection dropdown
+        async function initializeCameras() {
+            try {
+                // Check if Html5Qrcode is available, if not try to wait for it
+                if (typeof Html5Qrcode === 'undefined') {
+                    console.log('Html5Qrcode not available, trying to access from window...');
+
+                    // Try to get it from window object
+                    if (window.Html5Qrcode) {
+                        window.Html5Qrcode = window.Html5Qrcode;
+                    } else {
+                        console.log('Html5Qrcode not found, will try again when starting scanner');
+                        return;
+                    }
+                }
+
+                const devices = await Html5Qrcode.getCameras();
+                availableCameras = devices;
+
+                const cameraSelect = document.getElementById('cameraSelect');
+                const cameraSelection = document.getElementById('cameraSelection');
+
+                if (!cameraSelect || !cameraSelection) return;
+
+                // Clear existing options
+                cameraSelect.innerHTML = '<option value="">Select Camera</option>';
+
+                if (devices && devices.length > 0) {
+                    // Show camera selection if we have cameras
+                    cameraSelection.classList.remove('hidden');
+
+                    devices.forEach((device, index) => {
+                        const option = document.createElement('option');
+                        option.value = device.id;
+                        option.textContent = device.label || `Camera ${index + 1}`;
+                        cameraSelect.appendChild(option);
+                    });
+
+                    // Set default camera (prefer back camera on mobile)
+                    const backCamera = devices.find(device =>
+                        device.label && device.label.toLowerCase().includes('back')
+                    );
+
+                    if (backCamera) {
+                        selectedCameraId = backCamera.id;
+                        cameraSelect.value = backCamera.id;
+                    } else if (devices.length > 0) {
+                        selectedCameraId = devices[0].id;
+                        cameraSelect.value = devices[0].id;
+                    }
+
+                    console.log('Available cameras:', devices);
+                    console.log('Selected camera:', selectedCameraId);
+                } else {
+                    cameraSelection.classList.add('hidden');
+                    console.log('No cameras found');
+                }
+
+            } catch (error) {
+                console.error('Error getting cameras:', error);
+                const cameraSelection = document.getElementById('cameraSelection');
+                if (cameraSelection) {
+                    cameraSelection.classList.add('hidden');
+                }
+
+                // Try to get cameras permissions and retry
+                try {
+                    await navigator.mediaDevices.getUserMedia({
+                        video: true
+                    });
+                    setTimeout(() => initializeCameras(), 1000);
+                } catch (permissionError) {
+                    console.error('Camera permission denied:', permissionError);
+                }
+            }
+        }
+
+        // Handle camera selection change
+        function onCameraChange() {
+            const cameraSelect = document.getElementById('cameraSelect');
+            if (cameraSelect) {
+                selectedCameraId = cameraSelect.value;
+                console.log('Camera changed to:', selectedCameraId);
+
+                // If scanner is running, restart it with new camera
+                if (scanning && html5QrcodeScanner) {
+                    stopScanner();
+                    setTimeout(() => {
+                        startScanner();
+                    }, 100);
+                }
             }
         }
 
@@ -393,6 +506,11 @@
                 return;
             }
 
+            // Initialize cameras if not done already
+            if (availableCameras.length === 0) {
+                initializeCameras();
+            }
+
             scanning = true;
             updateUI();
 
@@ -413,22 +531,35 @@
             }
 
             try {
-                isMobile = window.innerWidth < 640;
-                html5QrcodeScanner = new Html5QrcodeScanner(
-                    "qr-reader", {
-                        fps: 5,
-                        qrbox: 150,
-                        aspectRatio: isMobile ? '1' : (16 / 9),
-                        rememberLastUsedCamera: true,
-                        supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+                const isMobile = window.innerWidth < 640;
 
-                    }
-                );
+                // Scanner configuration
+                const config = {
+                    fps: 5,
+                    qrbox: 150,
+                    aspectRatio: isMobile ? 1 : (16 / 9),
+                    rememberLastUsedCamera: true,
+                    supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
+                };
+
+                // Add camera constraint if a specific camera is selected
+                if (selectedCameraId) {
+                    config.videoConstraints = {
+                        deviceId: {
+                            exact: selectedCameraId
+                        }
+                    };
+                    console.log('Using selected camera:', selectedCameraId);
+                } else {
+                    console.log('Using default camera selection');
+                }
+
+                html5QrcodeScanner = new Html5QrcodeScanner("qr-reader", config);
 
                 // Render the scanner
                 html5QrcodeScanner.render(onScanSuccess, onScanError);
 
-                console.log('QR scanner started successfully');
+                console.log('QR scanner started successfully with camera:', selectedCameraId || 'default');
 
             } catch (error) {
                 console.error('Error starting scanner:', error);
@@ -469,6 +600,18 @@
             if (actionToggle) {
                 actionToggle.addEventListener('click', toggleAction);
             }
+
+            // Set up camera selection event listener
+            const cameraSelect = document.getElementById('cameraSelect');
+            if (cameraSelect) {
+                cameraSelect.addEventListener('change', onCameraChange);
+            }
+
+            // Initialize cameras when the page loads
+            // Wait a bit to ensure Html5Qrcode library is loaded
+            setTimeout(() => {
+                initializeCameras();
+            }, 500);
         });
     </script>
 @endpush
