@@ -1,48 +1,49 @@
 <!-- Scanner Container with Border -->
 <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm">
     <!-- Header -->
-    <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
+    <div class="border-b border-gray-200 dark:border-gray-700 px-3 sm:px-6 py-3 sm:py-4">
         <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-2 sm:space-x-3">
                 <div class="flex-shrink-0">
-                    <x-heroicon-o-identification class="h-6 w-6 text-gray-400 dark:text-gray-500" />
+                    <x-heroicon-o-identification class="h-5 w-5 sm:h-6 sm:w-6 text-gray-400 dark:text-gray-500" />
                 </div>
                 <div>
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+                    <h3 class="text-base sm:text-lg font-medium text-gray-900 dark:text-white">
                         {{ __('panel/scanner.scanner_section_title') }}
                     </h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                    <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                         {{-- {{ __('panel/scanner.scanner_description') }} --}}
                     </p>
                 </div>
             </div>
 
             <!-- Action Toggle -->
-            <div class="flex items-center gap-2">
-                <span class="text-sm text-gray-600 dark:text-gray-400">
+            <div class="flex items-center gap-1 sm:gap-2">
+                <span class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 hidden sm:inline">
                     {{ __('panel/scanner.current_action') }}:
                 </span>
                 <button type="button" id="actionToggle"
-                    class="fi-btn fi-btn-size-sm inline-flex items-center gap-x-2 rounded-lg px-3 py-1.5 text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-colors text-white bg-blue-600 hover:bg-blue-500 focus-visible:outline-blue-600 dark:bg-blue-500 dark:hover:bg-blue-400">
-                    <x-heroicon-m-check-circle class="h-4 w-4" />
+                    class="fi-btn fi-btn-size-sm inline-flex items-center gap-x-1 sm:gap-x-2 rounded-lg px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-colors text-white bg-blue-600 hover:bg-blue-500 focus-visible:outline-blue-600 dark:bg-blue-500 dark:hover:bg-blue-400">
+                    <x-heroicon-m-check-circle class="h-3 w-3 sm:h-4 sm:w-4" />
                     <span id="actionLabel">Check In</span>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- Scanner Container with same aspect ratio as results -->
-    <div class="p-6">
-        <div class="aspect-video w-full">
+    <!-- Scanner Container with taller aspect ratio on mobile -->
+    <div class="p-3 sm:p-6">
+        <div class="aspect-square sm:aspect-video w-full">
             <div class="relative w-full h-full">
                 <div id="qr-reader" class="w-full h-full rounded-lg overflow-hidden"></div>
                 <div id="placeholder"
                     class="absolute inset-0 rounded-lg flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-800">
-                    <x-heroicon-o-identification class="w-20 h-20 text-gray-300 dark:text-gray-600 mb-4" />
-                    <p class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                    <x-heroicon-o-identification
+                        class="w-16 h-16 sm:w-20 sm:h-20 text-gray-300 dark:text-gray-600 mb-3 sm:mb-4" />
+                    <p class="text-sm sm:text-lg font-medium text-gray-900 dark:text-white mb-1 sm:mb-2">
                         {{ __('panel/scanner.scanner_placeholder') }}
                     </p>
-                    <p class="text-sm text-gray-500 dark:text-gray-400 text-center max-w-xs">
+                    <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center max-w-xs px-2">
                         Use the "Start Scanner" button to begin scanning badges
                     </p>
                 </div>
@@ -97,7 +98,7 @@
                 const isCheckIn = currentAction === 'check_in';
 
                 // Update button appearance
-                actionToggle.className = `fi-btn fi-btn-size-sm inline-flex items-center gap-x-2 rounded-lg px-3 py-1.5 text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-colors text-white ${
+                actionToggle.className = `fi-btn fi-btn-size-sm inline-flex items-center gap-x-1 sm:gap-x-2 rounded-lg px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-colors text-white ${
                     isCheckIn 
                         ? 'bg-blue-600 hover:bg-blue-500 focus-visible:outline-blue-600 dark:bg-blue-500 dark:hover:bg-blue-400'
                         : 'bg-orange-600 hover:bg-orange-500 focus-visible:outline-orange-600 dark:bg-orange-500 dark:hover:bg-orange-400'
@@ -107,8 +108,8 @@
                 const icon = actionToggle.querySelector('svg');
                 if (icon) {
                     icon.outerHTML = isCheckIn ?
-                        '<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.236 4.53L7.73 10.146a.75.75 0 00-1.06 1.061l2.03 2.03a.75.75 0 001.137-.089l3.857-5.401z" clip-rule="evenodd"></path></svg>' :
-                        '<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd"></path></svg>';
+                        '<svg class="h-3 w-3 sm:h-4 sm:w-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.236 4.53L7.73 10.146a.75.75 0 00-1.06 1.061l2.03 2.03a.75.75 0 001.137-.089l3.857-5.401z" clip-rule="evenodd"></path></svg>' :
+                        '<svg class="h-3 w-3 sm:h-4 sm:w-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd"></path></svg>';
                 }
 
                 actionLabel.textContent = isCheckIn ? 'Check In' : 'Check Out';
@@ -212,21 +213,21 @@
 
             let html = `
                 <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm">
-                    <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-                        <div class="flex items-center space-x-3">
+                    <div class="border-b border-gray-200 dark:border-gray-700 px-3 sm:px-6 py-3 sm:py-4">
+                        <div class="flex items-center space-x-2 sm:space-x-3">
                             <div class="flex-shrink-0">
-                                <svg class="h-6 w-6 text-gray-400 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="h-5 w-5 sm:h-6 sm:w-6 text-gray-400 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-lg font-medium text-gray-900 dark:text-white">Scan Results</h3>
+                                <h3 class="text-base sm:text-lg font-medium text-gray-900 dark:text-white">Scan Results</h3>
                             </div>
                         </div>
                     </div>
-                    <div class="p-6">
-                        <div class="aspect-video w-full">
-                            <div class="h-full flex flex-col space-y-4 overflow-y-auto">
+                    <div class="p-3 sm:p-6">
+                        <div class="aspect-square sm:aspect-video w-full">
+                            <div class="h-full flex flex-col space-y-2 sm:space-y-4 overflow-y-auto">
             `;
 
             // Add full-width blocks
@@ -236,7 +237,7 @@
 
             // Add grid blocks
             if (gridBlocks.length > 0) {
-                html += '<div class="grid grid-cols-2 gap-3">';
+                html += '<div class="grid grid-cols-2 gap-2 sm:gap-3">';
                 gridBlocks.forEach(block => {
                     html += buildBlockHTML(block, false);
                 });
@@ -291,7 +292,7 @@
             };
 
             const colSpanClass = (block.colSpan === 2) ? 'col-span-2' : '';
-            const baseClasses = 'rounded-lg p-3';
+            const baseClasses = 'rounded-lg p-2 sm:p-3';
             const styleClass = styleClasses[block.style] || styleClasses['default'];
 
             const iconClass = iconColorClasses[block.style] || iconColorClasses['default'];
@@ -300,17 +301,17 @@
 
             return `
                 <div class="${baseClasses} ${styleClass} ${colSpanClass}">
-                    <div class="${block.style === 'highlight' ? 'flex items-center space-x-3' : 'flex items-start space-x-2'}">
+                    <div class="${block.style === 'highlight' ? 'flex items-center space-x-2 sm:space-x-3' : 'flex items-start space-x-1 sm:space-x-2'}">
                         <div class="flex-shrink-0">
-                            <svg class="${block.style === 'highlight' ? 'h-6 w-6' : 'h-4 w-4 mt-0.5'} ${iconClass}" fill="currentColor" viewBox="0 0 20 20">
+                            <svg class="${block.style === 'highlight' ? 'h-5 w-5 sm:h-6 sm:w-6' : 'h-3 w-3 sm:h-4 sm:w-4 mt-0.5'} ${iconClass}" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.236 4.53L7.73 10.146a.75.75 0 00-1.06 1.061l2.03 2.03a.75.75 0 001.137-.089l3.857-5.401z" clip-rule="evenodd"></path>
                             </svg>
                         </div>
                         <div class="min-w-0 flex-1">
-                            <p class="${block.style === 'highlight' ? 'text-sm font-medium' : 'text-xs font-medium'} ${labelClass} ${block.style === 'highlight' ? 'mb-0' : 'mb-1'}">
+                            <p class="${block.style === 'highlight' ? 'text-xs sm:text-sm font-medium' : 'text-xs font-medium'} ${labelClass} ${block.style === 'highlight' ? 'mb-0' : 'mb-1'}">
                                 ${block.label}
                             </p>
-                            <div class="${block.style === 'highlight' ? 'text-sm' : 'text-xs'} ${dataClass} ${block.style === 'highlight' ? 'truncate' : ''}">
+                            <div class="${block.style === 'highlight' ? 'text-xs sm:text-sm' : 'text-xs'} ${dataClass} ${block.style === 'highlight' ? 'truncate' : ''}">
                                 ${block.data}
                             </div>
                         </div>
@@ -322,26 +323,26 @@
         function buildErrorResultHTML(errorMessage) {
             return `
                 <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm">
-                    <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-                        <div class="flex items-center space-x-3">
+                    <div class="border-b border-gray-200 dark:border-gray-700 px-3 sm:px-6 py-3 sm:py-4">
+                        <div class="flex items-center space-x-2 sm:space-x-3">
                             <div class="flex-shrink-0">
-                                <svg class="h-6 w-6 text-gray-400 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="h-5 w-5 sm:h-6 sm:w-6 text-gray-400 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-lg font-medium text-gray-900 dark:text-white">Scan Results</h3>
+                                <h3 class="text-base sm:text-lg font-medium text-gray-900 dark:text-white">Scan Results</h3>
                             </div>
                         </div>
                     </div>
-                    <div class="p-6">
-                        <div class="aspect-video w-full">
+                    <div class="p-3 sm:p-6">
+                        <div class="aspect-square sm:aspect-video w-full">
                             <div class="h-full flex flex-col items-center justify-center text-center">
-                                <svg class="w-16 h-16 text-red-400 dark:text-red-500 mb-4" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="w-12 h-12 sm:w-16 sm:h-16 text-red-400 dark:text-red-500 mb-3 sm:mb-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
                                 </svg>
-                                <h4 class="text-lg font-medium text-red-900 dark:text-red-300 mb-2">Scan Error</h4>
-                                <p class="text-sm text-red-600 dark:text-red-400 max-w-xs">${errorMessage || 'An error occurred while processing the badge'}</p>
+                                <h4 class="text-sm sm:text-lg font-medium text-red-900 dark:text-red-300 mb-1 sm:mb-2">Scan Error</h4>
+                                <p class="text-xs sm:text-sm text-red-600 dark:text-red-400 max-w-xs px-2">${errorMessage || 'An error occurred while processing the badge'}</p>
                             </div>
                         </div>
                     </div>
@@ -352,26 +353,26 @@
         function buildEmptyResultHTML() {
             return `
                 <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm">
-                    <div class="border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-                        <div class="flex items-center space-x-3">
+                    <div class="border-b border-gray-200 dark:border-gray-700 px-3 sm:px-6 py-3 sm:py-4">
+                        <div class="flex items-center space-x-2 sm:space-x-3">
                             <div class="flex-shrink-0">
-                                <svg class="h-6 w-6 text-gray-400 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="h-5 w-5 sm:h-6 sm:w-6 text-gray-400 dark:text-gray-500" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="text-lg font-medium text-gray-900 dark:text-white">Scan Results</h3>
+                                <h3 class="text-base sm:text-lg font-medium text-gray-900 dark:text-white">Scan Results</h3>
                             </div>
                         </div>
                     </div>
-                    <div class="p-6">
-                        <div class="aspect-video w-full">
+                    <div class="p-3 sm:p-6">
+                        <div class="aspect-square sm:aspect-video w-full">
                             <div class="h-full flex flex-col items-center justify-center text-center">
-                                <svg class="w-16 h-16 text-gray-300 dark:text-gray-600 mb-4" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 dark:text-gray-600 mb-3 sm:mb-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M1 11.27c0-.246.033-.492.099-.73l1.523-5.521A2.75 2.75 0 015.273 3h9.454a2.75 2.75 0 012.651 2.019l1.523 5.52c.066.239.099.485.099.731V15a2 2 0 01-2 2H3a2 2 0 01-2-2v-3.73zm3.068-5.852A.75.75 0 014.818 5h10.364a.75.75 0 01.75.418l1.452 5.265c.015.055-.006.101-.04.101H2.656c-.034 0-.055-.046-.04-.101L4.068 5.418z" clip-rule="evenodd"></path>
                                 </svg>
-                                <h4 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No badges scanned yet</h4>
-                                <p class="text-sm text-gray-500 dark:text-gray-400 max-w-xs">Start scanning to see badge information here</p>
+                                <h4 class="text-sm sm:text-lg font-medium text-gray-900 dark:text-white mb-1 sm:mb-2">No badges scanned yet</h4>
+                                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 max-w-xs px-2">Start scanning to see badge information here</p>
                             </div>
                         </div>
                     </div>
@@ -412,15 +413,14 @@
             }
 
             try {
-                // Create scanner instance with square aspect ratio and larger QR box
+                isMobile = window.innerWidth < 640;
                 html5QrcodeScanner = new Html5QrcodeScanner(
                     "qr-reader", {
                         fps: 5,
-                        qrbox: 150, // Larger square QR detection box
-                        aspectRatio: 16 / 9, // Wider aspect ratio for camera
+                        qrbox: 150,
+                        aspectRatio: isMobile ? '1' : (16 / 9),
                         rememberLastUsedCamera: true,
                         supportedScanTypes: [Html5QrcodeScanType.SCAN_TYPE_CAMERA],
-                        // revert the camera horizentally
 
                     }
                 );
