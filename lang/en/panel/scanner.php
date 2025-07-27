@@ -9,6 +9,7 @@ return [
     'start_scanner' => 'Start Scanner',
     'stop_scanner' => 'Stop Scanner',
     'scanner_placeholder' => 'Start scanning to detect badge QR codes',
+    'scanner_hint' => "Use the \"Start Scanner\" button to begin scanning badges",
     'last_scanned_result' => 'Last Scanned Badge',
     'scan_data' => 'Badge Data',
     'scanned_at' => 'Scanned At',

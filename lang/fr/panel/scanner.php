@@ -9,6 +9,7 @@ return [
     'start_scanner' => 'Démarrer le Scanner',
     'stop_scanner' => 'Arrêter le Scanner',
     'scanner_placeholder' => 'Commencez à scanner pour détecter les codes QR des badges',
+    'scanner_hint' => "Utilisez le bouton \"Démarrer le Scanner\" pour commencer à scanner les badges",
     'last_scanned_result' => 'Dernier Badge Scanné',
     'scan_data' => 'Données du Badge',
     'scanned_at' => 'Scanné à',

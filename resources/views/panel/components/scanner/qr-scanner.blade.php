@@ -39,12 +39,12 @@
                 <div id="placeholder"
                     class="absolute inset-0 rounded-lg flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-800">
                     <x-heroicon-o-identification
-                        class="w-16 h-16 sm:w-20 sm:h-20 text-gray-300 dark:text-gray-600 mb-3 sm:mb-4" />
+                        class="w-16 h-16 sm:w-20 sm:h-20 text-gray- 300 dark:text-gray-600 mb-3 sm:mb-4" />
                     <p class="text-sm sm:text-lg font-medium text-gray-900 dark:text-white mb-1 sm:mb-2">
                         {{ __('panel/scanner.scanner_placeholder') }}
                     </p>
                     <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center max-w-xs px-2">
-                        Use the "Start Scanner" button to begin scanning badges
+                        {{ __('panel/scanner.scanner_hint') }}
                     </p>
                 </div>
             </div>

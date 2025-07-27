@@ -9,6 +9,7 @@ return [
     'start_scanner' => 'تشغيل الماسح',
     'stop_scanner' => 'إيقاف الماسح',
     'scanner_placeholder' => 'ابدأ المسح لاكتشاف رموز QR على الشارات',
+    'scanner_hint' => "استخدم زر \"تشغيل الماسح\" لبدء مسح الشارات",
     'last_scanned_result' => 'آخر شارة تم مسحها',
     'scan_data' => 'بيانات الشارة',
     'scanned_at' => 'تم المسح في',
