@@ -109,7 +109,7 @@ class EventAnnouncementInfolist
                                             ->boolean(),
                                     ])
                                     ->columns(1)
-                                    ->placeholder('No extra links'),
+                                    ->placeholder(__('panel/event_announcement.empty_states.extra_links')),
                             ]),
                     ]),
             ]);

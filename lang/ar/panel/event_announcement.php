@@ -72,7 +72,10 @@ return [
         'content' => 'لا يوجد محتوى',
         'location' => 'لم يتم تحديد الموقع',
         'photo' => 'لا توجد صورة',
-        'deleted_at' => 'غير محذوف',
+        'empty_states' => [
+            'deleted_at' => 'غير محذوف',
+            'extra_links' => 'لا توجد روابط إضافية',
+        ],
     ],
     'modals' => [
         'duplicate' => [

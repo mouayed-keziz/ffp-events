@@ -72,6 +72,7 @@ return [
         'location' => 'No location specified',
         'photo' => 'No image',
         'deleted_at' => 'Not deleted',
+        'extra_links' => 'No extra links',
     ],
     'modals' => [
         'duplicate' => [
