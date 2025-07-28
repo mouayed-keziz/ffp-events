@@ -108,7 +108,7 @@ class EventAnnouncementInfolist
                                             ->label(__('panel/event_announcement.fields.link_active'))
                                             ->boolean(),
                                     ])
-                                    ->columns(3)
+                                    ->columns(1)
                                     ->placeholder('No extra links'),
                             ]),
                     ]),
