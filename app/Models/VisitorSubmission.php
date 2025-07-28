@@ -43,7 +43,8 @@ class VisitorSubmission extends Model implements HasMedia
      */
     public function visitor(): BelongsTo
     {
-        return $this->belongsTo(Visitor::class)->withDefault();
+        return $this->belongsTo(Visitor::class)->withTrashed()->withDefault();
+        // return $this->belongsTo(Visitor::class)->withDefault();
     }
 
     /**
