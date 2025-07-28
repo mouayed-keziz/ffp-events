@@ -61,6 +61,22 @@ class VisitorSubmissionExporter extends Exporter
                 ->label('Badge ID')
                 ->state(fn(VisitorSubmission $record) => $record->badge?->id),
 
+            ExportColumn::make('badge_name')
+                ->label('Badge Name')
+                ->state(fn(VisitorSubmission $record) => $record->badge?->name),
+
+            ExportColumn::make('badge_email')
+                ->label('Badge Email')
+                ->state(fn(VisitorSubmission $record) => $record->badge?->email),
+
+            ExportColumn::make('badge_position')
+                ->label('Badge Position')
+                ->state(fn(VisitorSubmission $record) => $record->badge?->position),
+
+            ExportColumn::make('badge_company')
+                ->label('Badge Company')
+                ->state(fn(VisitorSubmission $record) => $record->badge?->company),
+
             // Media attachments count
             // ExportColumn::make('attachments_count')
             //     ->label('Number of Attachments')
