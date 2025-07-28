@@ -9,7 +9,7 @@ trait HasVisitorSubmissionExportedAttributes
      */
     public function getExportVisitorNameAttribute(): string
     {
-        if (!$this->isAnonymous()) {
+        if (!$this->isAnonymous() && $this->visitor) {
             return $this->visitor->name ?? 'N/A';
         }
 
@@ -21,13 +21,12 @@ trait HasVisitorSubmissionExportedAttributes
      */
     public function getExportVisitorEmailAttribute(): ?string
     {
-        if (!$this->isAnonymous()) {
+        if (!$this->isAnonymous() && $this->visitor) {
             return $this->visitor->email;
         }
 
         return $this->anonymous_email;
     }
-
     /**
      * Get the submission type for export
      */

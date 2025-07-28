@@ -27,6 +27,21 @@ class VisitorSubmission extends Model implements HasMedia
         'answers' => 'array',
         'status' => SubmissionStatus::class
     ];
+
+    protected $appends = [
+        'export_visitor_name',
+        'export_visitor_email',
+        'export_submission_type',
+        'export_status',
+        'export_has_badge',
+        'export_badge_id',
+        'export_badge_name',
+        'export_badge_email',
+        'export_badge_position',
+        'export_badge_company',
+        'export_attachments_count',
+        'export_formatted_answers',
+    ];
     public function getRecordTitleAttribute()
     {
         if ($this->visitor) {
