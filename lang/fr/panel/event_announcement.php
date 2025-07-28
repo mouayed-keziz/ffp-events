@@ -29,6 +29,10 @@ return [
         'contact_email' => 'Email du contact',
         'contact_phone_number' => 'Téléphone du contact',
         'currencies' => 'Devises',
+        'extra_links' => 'Liens Supplémentaires',
+        'link_label' => 'Libellé du Lien',
+        'link_url' => 'URL du Lien',
+        'link_active' => 'Actif',
     ],
     'filters' => [
         'trashed' => 'Supprimé',
@@ -88,6 +92,7 @@ return [
         'dates_location' => 'Calendrier et Lieu',
         'contact_currencies' => 'Coordonnées et Options de Paiement',
         'media' => 'Ressources Médias',
+        'extra_links' => 'Liens Supplémentaires',
     ],
     'sidebar_groups' => [
         'general' => 'Général',

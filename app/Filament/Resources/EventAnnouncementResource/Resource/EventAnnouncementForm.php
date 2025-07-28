@@ -153,6 +153,32 @@ class EventAnnouncementForm
                                 ->directory('event-announcements')
                                 ->label(__('panel/event_announcement.fields.image')),
                         ]),
+                    // Extra Links
+                    Forms\Components\Tabs\Tab::make(__('panel/event_announcement.tabs.extra_links'))
+                        ->columns(1)
+                        ->schema([
+                            Forms\Components\Repeater::make('extra_links')
+                                ->label(__('panel/event_announcement.fields.extra_links'))
+                                ->schema([
+                                    Forms\Components\TextInput::make('label')
+                                        ->label(__('panel/event_announcement.fields.link_label'))
+                                        ->required()
+                                        ->translatable(),
+                                    Forms\Components\TextInput::make('url')
+                                        ->label(__('panel/event_announcement.fields.link_url'))
+                                        ->required()
+                                        ->url(),
+                                    Forms\Components\Toggle::make('active')
+                                        ->label(__('panel/event_announcement.fields.link_active'))
+                                        ->default(true)
+                                        ->required(),
+                                ])
+                                ->columns(1)
+                                ->defaultItems(0)
+                                ->addActionLabel(__('Add Link'))
+                                ->reorderable()
+                                ->collapsible(),
+                        ]),
                 ]),
         ]);
     }

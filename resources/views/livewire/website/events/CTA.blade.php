@@ -150,5 +150,17 @@ new class extends Component {
                 {{ __('website/event.exhibit_and_sponsor') }}
             </a>
         @endif
+
+        {{-- Extra Links --}}
+        @if ($event->extra_links && count($event->extra_links) > 0)
+            @foreach ($event->extra_links as $link)
+                @if ($link['active'] ?? false)
+                    <a href="{{ $link['url'] }}" target="_blank"
+                        class="btn btn-sm rounded-md text-sm font-semibold btn-outline border-base-200 border-2 normal-case">
+                        {{ $link['label'][$locale] ?? ($link['label']['en'] ?? ($link['label'] ?? 'Link')) }}
+                    </a>
+                @endif
+            @endforeach
+        @endif
     </div>
 </div>

@@ -92,6 +92,25 @@ class EventAnnouncementInfolist
                                     ->circular()
                                     ->placeholder(__('panel/event_announcement.empty_states.photo')),
                             ]),
+                        // Extra Links Tab
+                        Tabs\Tab::make(__('panel/event_announcement.tabs.extra_links'))
+                            ->schema([
+                                Infolists\Components\RepeatableEntry::make('extra_links')
+                                    ->label(__('panel/event_announcement.fields.extra_links'))
+                                    ->schema([
+                                        Infolists\Components\TextEntry::make('label')
+                                            ->label(__('panel/event_announcement.fields.link_label')),
+                                        Infolists\Components\TextEntry::make('url')
+                                            ->label(__('panel/event_announcement.fields.link_url'))
+                                            ->formatStateUsing(fn($state) => $state ? $state : 'No URL')
+                                            ->url(fn($state) => $state),
+                                        Infolists\Components\IconEntry::make('active')
+                                            ->label(__('panel/event_announcement.fields.link_active'))
+                                            ->boolean(),
+                                    ])
+                                    ->columns(3)
+                                    ->placeholder('No extra links'),
+                            ]),
                     ]),
             ]);
     }

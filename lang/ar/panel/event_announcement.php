@@ -30,6 +30,10 @@ return [
         'contact_email' => 'البريد الإلكتروني لجهة الاتصال',
         'contact_phone_number' => 'رقم هاتف جهة الاتصال',
         'currencies' => 'العملات',
+        'extra_links' => 'روابط إضافية',
+        'link_label' => 'عنوان الرابط',
+        'link_url' => 'الرابط',
+        'link_active' => 'نشط',
     ],
     'filters' => [
         'trashed' => 'محذوف',
@@ -89,6 +93,7 @@ return [
         'dates_location' => 'الجدول الزمني والمكان',
         'contact_currencies' => 'معلومات الاتصال وخيارات الدفع',
         'media' => 'الملفات الإعلامية',
+        'extra_links' => 'روابط إضافية',
     ],
     'sidebar_groups' => [
         'general' => 'عام',

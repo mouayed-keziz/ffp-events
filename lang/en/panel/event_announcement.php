@@ -29,6 +29,10 @@ return [
         'contact_email' => 'Contact Email',
         'contact_phone_number' => 'Contact Phone Number',
         'currencies' => 'Currencies',
+        'extra_links' => 'Extra Links',
+        'link_label' => 'Link Label',
+        'link_url' => 'Link URL',
+        'link_active' => 'Active',
     ],
     'filters' => [
         'trashed' => 'Trashed',
@@ -88,6 +92,7 @@ return [
         'dates_location' => 'Schedule & Venue',
         'contact_currencies' => 'Contact Information & Payment Options',
         'media' => 'Media Assets',
+        'extra_links' => 'Extra Links',
     ],
     'sidebar_groups' => [
         'general' => 'General',

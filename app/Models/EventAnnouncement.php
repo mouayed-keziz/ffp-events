@@ -36,6 +36,7 @@ class EventAnnouncement extends Model implements HasMedia
         'website_url',
         'contact',
         'currencies',
+        'extra_links',
     ];
 
 
@@ -51,6 +52,7 @@ class EventAnnouncement extends Model implements HasMedia
         'website_url'                     => 'string',
         'contact'                         => 'array',
         'currencies'                      => 'array',
+        'extra_links'                     => 'array',
     ];
 
     protected static function boot()
