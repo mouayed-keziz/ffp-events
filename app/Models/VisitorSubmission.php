@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\SubmissionStatus;
 use App\Traits\HasSubmissionLabelAnswers;
+use App\Traits\HasVisitorSubmissionExportedAttributes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +13,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class VisitorSubmission extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, HasSubmissionLabelAnswers;
+    use HasFactory, InteractsWithMedia, HasSubmissionLabelAnswers, HasVisitorSubmissionExportedAttributes;
 
     protected $fillable = [
         'visitor_id',

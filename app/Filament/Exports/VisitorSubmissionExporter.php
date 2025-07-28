@@ -33,54 +33,43 @@ class VisitorSubmissionExporter extends Exporter
             ExportColumn::make('id')
                 ->label('ID'),
 
-            ExportColumn::make('visitor.name')
-                ->label('Visitor Name')
-                ->state(fn(VisitorSubmission $record) => (!$record->isAnonymous()) ? $record->visitor->name : ($record->badge?->name ?? 'N/A')),
+            ExportColumn::make('export_visitor_name')
+                ->label('Visitor Name'),
 
-            ExportColumn::make('visitor.email')
-                ->label('Visitor Email')
-                ->state(fn(VisitorSubmission $record) => (!$record->isAnonymous()) ? $record->visitor->email : $record->anonymous_email),
+            ExportColumn::make('export_visitor_email')
+                ->label('Visitor Email'),
 
-            ExportColumn::make('submission_type')
-                ->label('Submission Type')
-                ->state(fn(VisitorSubmission $record) => $record->isAnonymous() ? 'Anonymous' : 'Authenticated'),
+            ExportColumn::make('export_submission_type')
+                ->label('Submission Type'),
 
             ExportColumn::make('eventAnnouncement.title')
                 ->label('Event Title'),
 
-            ExportColumn::make('status')
-                ->label('Status')
-                ->state(fn(VisitorSubmission $record) => $record->status ? $record->status->value : null),
+            ExportColumn::make('export_status')
+                ->label('Status'),
 
             // Badge information
-            ExportColumn::make('has_badge')
-                ->label('Has Badge')
-                ->state(fn(VisitorSubmission $record) => $record->badge ? 'Yes' : 'No'),
+            ExportColumn::make('export_has_badge')
+                ->label('Has Badge'),
 
-            ExportColumn::make('badge_id')
-                ->label('Badge ID')
-                ->state(fn(VisitorSubmission $record) => $record->badge?->id),
+            ExportColumn::make('export_badge_id')
+                ->label('Badge ID'),
 
-            ExportColumn::make('badge_name')
-                ->label('Badge Name')
-                ->state(fn(VisitorSubmission $record) => $record->badge?->name),
+            ExportColumn::make('export_badge_name')
+                ->label('Badge Name'),
 
-            ExportColumn::make('badge_email')
-                ->label('Badge Email')
-                ->state(fn(VisitorSubmission $record) => $record->badge?->email),
+            ExportColumn::make('export_badge_email')
+                ->label('Badge Email'),
 
-            ExportColumn::make('badge_position')
-                ->label('Badge Position')
-                ->state(fn(VisitorSubmission $record) => $record->badge?->position),
+            ExportColumn::make('export_badge_position')
+                ->label('Badge Position'),
 
-            ExportColumn::make('badge_company')
-                ->label('Badge Company')
-                ->state(fn(VisitorSubmission $record) => $record->badge?->company),
+            ExportColumn::make('export_badge_company')
+                ->label('Badge Company'),
 
             // Media attachments count
-            // ExportColumn::make('attachments_count')
-            //     ->label('Number of Attachments')
-            //     ->state(fn(VisitorSubmission $record) => $record->getMedia('attachments')->count()),
+            ExportColumn::make('export_attachments_count')
+                ->label('Number of Attachments'),
 
             ExportColumn::make('created_at')
                 ->label('Submitted At'),
@@ -88,19 +77,16 @@ class VisitorSubmissionExporter extends Exporter
             ExportColumn::make('updated_at')
                 ->label('Last Updated'),
 
-            // New formatted answers column
-            ExportColumn::make('formatted_answers')
-                ->label('Formatted Answers')
-                ->state(fn(VisitorSubmission $record) => $record->getFormattedAnswersJsonAttribute()),
+            // Formatted answers column
+            ExportColumn::make('export_formatted_answers')
+                ->label('Formatted Answers'),
 
-            // Commented out original JSON columns
-            // ExportColumn::make('answers_json')
-            //     ->label('Answers (JSON)')
-            //     ->state(fn(VisitorSubmission $record) => json_encode($record->answers)),
+            // Optional JSON columns (uncomment if needed)
+            // ExportColumn::make('export_answers_json')
+            //     ->label('Answers (JSON)'),
 
-            // ExportColumn::make('answers_json_readable')
-            //     ->label('Answers (JSON - Readable)')
-            //     ->state(fn(VisitorSubmission $record) => json_encode($record->answers, JSON_UNESCAPED_UNICODE)),
+            // ExportColumn::make('export_answers_json_readable')
+            //     ->label('Answers (JSON - Readable)'),
         ];
     }
 
