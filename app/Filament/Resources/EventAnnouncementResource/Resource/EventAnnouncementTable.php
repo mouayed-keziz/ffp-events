@@ -19,7 +19,7 @@ class EventAnnouncementTable
             ->defaultSort('created_at', 'desc')
             ->headerActions([
                 Tables\Actions\ExportAction::make()
-                    // ->label(__("panel/logs.actions.export.label"))
+                    // ->label(__("panel/logs/actions.export.label"))
                     ->icon('heroicon-o-arrow-down-tray')
                     ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
                     ->exporter(EventAnnouncementExporter::class)
@@ -95,27 +95,48 @@ class EventAnnouncementTable
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Action::make('duplicate')
-                    ->label(__('panel/event_announcement.actions.duplicate'))
-                    ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
-                    ->icon('heroicon-o-document-duplicate')
-                    ->color('success')
-                    ->requiresConfirmation()
-                    ->modalHeading(fn(EventAnnouncement $record) => __('panel/event_announcement.modals.duplicate.heading', ['title' => $record->title]))
-                    ->modalDescription(__('panel/event_announcement.modals.duplicate.description'))
-                    ->modalSubmitActionLabel(__('panel/event_announcement.modals.duplicate.submit'))
-                    ->action(function (EventAnnouncement $record): void {
-                        // Create a new event announcement
-                        $newEventAnnouncement = $record->duplicate();
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\EditAction::make(),
+                    Action::make('duplicate')
+                        ->label(__('panel/event_announcement.actions.duplicate'))
+                        ->visible(fn() => auth()->user()->hasRole(Role::SUPER_ADMIN->value))
+                        ->icon('heroicon-o-document-duplicate')
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->modalHeading(fn(EventAnnouncement $record) => __('panel/event_announcement.modals.duplicate.heading', ['title' => $record->title]))
+                        ->modalDescription(__('panel/event_announcement.modals.duplicate.description'))
+                        ->modalSubmitActionLabel(__('panel/event_announcement.modals.duplicate.submit'))
+                        ->action(function (EventAnnouncement $record): void {
+                            // Create a new event announcement
+                            $newEventAnnouncement = $record->duplicate();
 
-                        // Notification of success
-                        \Filament\Notifications\Notification::make()
-                            ->title(__('panel/event_announcement.notifications.duplicated.title'))
-                            ->success()
-                            ->body(__('panel/event_announcement.notifications.duplicated.body'))
-                            ->send();
-                    }),
+                            // Notification of success
+                            \Filament\Notifications\Notification::make()
+                                ->title(__('panel/event_announcement.notifications.duplicated.title'))
+                                ->success()
+                                ->body(__('panel/event_announcement.notifications.duplicated.body'))
+                                ->send();
+                        }),
+                    Action::make('copy_anonymous_link')
+                        ->label(__('panel/event_announcement.actions.copy_anonymous_link'))
+                        ->icon('heroicon-o-link')
+                        ->color('info')
+                        ->action(function ($livewire, EventAnnouncement $record): void {
+                            $url = route('visit_event_anonymous', ['id' => $record->id]);
+
+                            $livewire->js(
+                                'window.navigator.clipboard.writeText("' . $url . '");'
+                            );
+
+                            \Filament\Notifications\Notification::make()
+                                ->title(__('panel/event_announcement.notifications.link_copied.title'))
+                                ->body(__('panel/event_announcement.notifications.link_copied.body'))
+                                ->success()
+                                ->send();
+                        }),
+                ])
+                    ->icon('heroicon-m-ellipsis-horizontal')
+                    ->tooltip(__('panel/event_announcement.actions.more_actions')),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

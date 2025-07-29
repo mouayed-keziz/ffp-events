@@ -54,6 +54,8 @@ return [
         'view' => 'Announcement Details',
         'restore' => 'Restore Announcement',
         'force_delete' => 'Force Delete Announcement',
+        'copy_anonymous_link' => 'Copy Anonymous Registration Link',
+        'more_actions' => 'More Actions',
     ],
     'badge_templates' => [
         'section_title' => 'Badge Templates',
@@ -85,6 +87,10 @@ return [
         'duplicated' => [
             'title' => 'Event Duplicated',
             'body' => 'The event has been successfully duplicated.',
+        ],
+        'link_copied' => [
+            'title' => 'Link Copied',
+            'body' => 'Anonymous registration link has been copied to clipboard.',
         ],
     ],
     'cloned' => '(cloned)',

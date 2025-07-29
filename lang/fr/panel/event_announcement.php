@@ -54,6 +54,8 @@ return [
         'view' => 'Détails de l\'annonce',
         'restore' => 'Restaurer l\'annonce',
         'force_delete' => 'Supprimer définitivement l\'annonce',
+        'copy_anonymous_link' => 'Copier le lien d\'inscription anonyme',
+        'more_actions' => 'Plus d\'actions',
     ],
     'badge_templates' => [
         'section_title' => 'Modèles de badges',
@@ -85,6 +87,10 @@ return [
         'duplicated' => [
             'title' => 'Événement dupliqué',
             'body' => 'L\'événement a été dupliqué avec succès.',
+        ],
+        'link_copied' => [
+            'title' => 'Lien copié',
+            'body' => 'Le lien d\'inscription anonyme a été copié dans le presse-papiers.',
         ],
     ],
     'cloned' => '(cloné)',
