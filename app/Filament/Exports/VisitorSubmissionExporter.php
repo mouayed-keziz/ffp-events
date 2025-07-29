@@ -41,8 +41,9 @@ class VisitorSubmissionExporter extends Exporter
                 ->label('Visitor Email')
                 ->state(fn(VisitorSubmission $record) => (!$record->isAnonymous()) ? $record->visitor->email : $record->anonymous_email),
 
-            ExportColumn::make('submission_type')
-                ->label('Submission Type'),
+            ExportColumn::make('type')
+                ->label('Submission Type')
+                ->state(fn(VisitorSubmission $record) => $record->isAnonymous() ? 'Anonyme' : 'Authentifié'),
 
             ExportColumn::make('eventAnnouncement.title')
                 ->label('Event Title'),
