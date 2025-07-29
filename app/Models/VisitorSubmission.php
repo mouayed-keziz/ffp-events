@@ -70,15 +70,19 @@ class VisitorSubmission extends Model implements HasMedia
     {
         return $this->visitor_id === null;
     }
+    public function getSubmissionTypeAttribute(): string
+    {
+        return $this->isAnonymous() ? 'Anonyme' : 'Authentifié';
+    }
     public function getDisplayNameAttribute(): string
     {
         if (!$this->isAnonymous()) {
-            return $this->visitor->email ? $this->visitor->email : "deleted visitor";
+            return $this->visitor->email ? $this->visitor->email : "visiteur supprimé";
         } else {
             if ($this->anonymous_email) {
-                return "(anonymos) " . $this->anonymous_email;
+                return "(anonyme) " . $this->anonymous_email;
             } else {
-                return 'Anonymous';
+                return 'Anonyme';
             }
         }
     }
