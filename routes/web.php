@@ -41,48 +41,48 @@ Route::prefix('admin')->middleware(['auth:web'])->group(function () {
 });
 Route::middleware('local_middleware')->group(function () {
     Route::view("/notifications", "website.pages.notifications")->name("notifications")->middleware("is_authenticated");
-    Route::get("/profile",  [ProfileController::class, 'MyProfile'])->name("my-profile")->middleware("is_authenticated");
-    Route::get("/subscriptions",  [ProfileController::class, 'MySubscriptions'])->name("my-subscriptions")->middleware("is_authenticated");
+    Route::get("/profil",  [ProfileController::class, 'MyProfile'])->name("my-profile")->middleware("is_authenticated");
+    Route::get("/mes-inscriptions",  [ProfileController::class, 'MySubscriptions'])->name("my-subscriptions")->middleware("is_authenticated");
     Route::prefix("")->group(function () {
         Route::get('/', [EventController::class, 'Events'])->name('events');
-        Route::get('/event/{slug}', [EventController::class, 'Event'])->name('event_details');
+        Route::get('/evenement/{slug}', [EventController::class, 'Event'])->name('event_details');
 
-        Route::get('/event/{slug}/visit-event', [EventController::class, 'VisitEvent'])->name('visit_event')->middleware("is_visitor");
-        Route::get('/event/{slug}/visit', [EventController::class, 'VisitEventAnonymous'])->name('visit_event_anonymous');
-        Route::get('/event/{slug}/visit-confirmation', [EventController::class, 'VisitFormSubmitted'])->name('visit_event_form_submitted')->middleware("is_visitor");
-        Route::get('/event/{slug}/visit-anonymous-confirmation', [EventController::class, 'VisitAnonymousFormSubmitted'])->name('visit_event_anonymous_form_submitted');
-        Route::get('/event/{slug}/download-badge', [EventController::class, 'DownloadVisitorBadge'])->name('download_visitor_badge')->middleware("is_visitor");
+        Route::get('/evenement/{slug}/visiter-evenement', [EventController::class, 'VisitEvent'])->name('visit_event')->middleware("is_visitor");
+        Route::get('/evenement/{slug}/visiter', [EventController::class, 'VisitEventAnonymous'])->name('visit_event_anonymous');
+        Route::get('/evenement/{slug}/confirmation-visite', [EventController::class, 'VisitFormSubmitted'])->name('visit_event_form_submitted')->middleware("is_visitor");
+        Route::get('/evenement/{slug}/confirmation-visite-anonyme', [EventController::class, 'VisitAnonymousFormSubmitted'])->name('visit_event_anonymous_form_submitted');
+        Route::get('/evenement/{slug}/telecharger-badge', [EventController::class, 'DownloadVisitorBadge'])->name('download_visitor_badge')->middleware("is_visitor");
         Route::middleware("is_exhibitor")->group(function () {
-            Route::get("/event/{slug}/terms-and-conditions", [EventController::class, 'TermsAndConditions'])->name('event_terms_and_conditions');
-            Route::get('/event/{slug}/exhibit', [EventController::class, 'ExhibitEvent'])->name('exhibit_event')->middleware("is_exhibitor");
-            Route::get("/event/{slug}/info-validation", [EventController::class, 'InfoValidation'])->name('info_validation');
-            Route::get("/event/{slug}/submission", [EventController::class, 'ViewExhibitorAnswers'])->name('view_exhibitor_answers');
-            Route::get("/event/{slug}/download-invoice", [EventController::class, 'DownloadInvoice'])->name('download_invoice');
-            Route::get("/event/{slug}/upload-payment-proof", [EventController::class, 'UploadPaymentProof'])->name('upload_payment_proof');
-            Route::get("/event/{slug}/payment-validation", [EventController::class, 'PaymentValidation'])->name('payment_validation');
-            Route::get("/event/{slug}/post-exhibition", [EventController::class, 'PostExhibitEvent'])->name('post_exhibit_event');
-            Route::get("/event/{slug}/manage-badges", [EventController::class, 'ManageExhibitorBadges'])->name('manage_exhibitor_badges');
+            Route::get("/evenement/{slug}/conditions-generales", [EventController::class, 'TermsAndConditions'])->name('event_terms_and_conditions');
+            Route::get('/evenement/{slug}/exposer', [EventController::class, 'ExhibitEvent'])->name('exhibit_event')->middleware("is_exhibitor");
+            Route::get("/evenement/{slug}/validation-info", [EventController::class, 'InfoValidation'])->name('info_validation');
+            Route::get("/evenement/{slug}/soumission", [EventController::class, 'ViewExhibitorAnswers'])->name('view_exhibitor_answers');
+            Route::get("/evenement/{slug}/telecharger-facture", [EventController::class, 'DownloadInvoice'])->name('download_invoice');
+            Route::get("/evenement/{slug}/telecharger-preuve-paiement", [EventController::class, 'UploadPaymentProof'])->name('upload_payment_proof');
+            Route::get("/evenement/{slug}/validation-paiement", [EventController::class, 'PaymentValidation'])->name('payment_validation');
+            Route::get("/evenement/{slug}/post-exposition", [EventController::class, 'PostExhibitEvent'])->name('post_exhibit_event');
+            Route::get("/evenement/{slug}/gerer-badges", [EventController::class, 'ManageExhibitorBadges'])->name('manage_exhibitor_badges');
         });
     });
 
-    Route::prefix("auth")->group(function () {
+    Route::prefix("authentification")->group(function () {
         Route::middleware("is_guest")->group(function () {
-            Route::get('/login', [AuthController::class, 'LogIn'])->name('signin');
-            Route::redirect("/redirect-login", '/auth/login')->name("login");
-            Route::get('/register', [AuthController::class, 'Register'])->name('register');
-            Route::get('/forgot-password', [AuthController::class, 'RestoreAccount'])->name('restore-account');
-            Route::get('/email-sent', [AuthController::class, 'EmailSent'])->name('email-sent');
-            Route::get('/reset-password', [AuthController::class, 'ResetPassword'])->name('reset-password');
+            Route::get('/connexion', [AuthController::class, 'LogIn'])->name('signin');
+            Route::redirect("/redirection-connexion", '/authentification/connexion')->name("login");
+            Route::get('/inscription', [AuthController::class, 'Register'])->name('register');
+            Route::get('/mot-de-passe-oublie', [AuthController::class, 'RestoreAccount'])->name('restore-account');
+            Route::get('/email-envoye', [AuthController::class, 'EmailSent'])->name('email-sent');
+            Route::get('/reinitialiser-mot-de-passe', [AuthController::class, 'ResetPassword'])->name('reset-password');
         });
     });
 
     Route::prefix("")->group(function () {
         Route::get('/articles', [GuestController::class, 'Articles'])->name('articles');
         Route::get('/article/{slug}', [GuestController::class, 'Article'])->name('article');
-        Route::get("/terms", [GuestController::class, 'Terms'])->name('terms');
-        Route::get("/redirect-to-ffp-events", [GuestController::class, 'RedirectToFFPEvents'])->name('redirect_to_ffp_events');
-        Route::get("/redirect-to-ffp-events-contact", [GuestController::class, 'RedirectToFFPEventsContact'])->name('redirect_to_ffp_events_contact');
-        Route::get('/verify-email-change', [ProfileController::class, 'verifyEmailChange'])->name('verify-email-change');
+        Route::get("/conditions", [GuestController::class, 'Terms'])->name('terms');
+        Route::get("/redirection-vers-ffp-evenements", [GuestController::class, 'RedirectToFFPEvents'])->name('redirect_to_ffp_events');
+        Route::get("/redirection-vers-ffp-evenements-contact", [GuestController::class, 'RedirectToFFPEventsContact'])->name('redirect_to_ffp_events_contact');
+        Route::get('/verifier-changement-email', [ProfileController::class, 'verifyEmailChange'])->name('verify-email-change');
     });
 });
 
@@ -95,3 +95,6 @@ Route::post('/clear-badge-redirect-session', function () {
     session()->forget('badge_download_redirect');
     return response()->json(['success' => true]);
 })->middleware('auth:exhibitor')->name('clear.badge.redirect.session');
+
+// Import old English routes that redirect to new French routes
+require __DIR__ . '/old_redirect.php';
