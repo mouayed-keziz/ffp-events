@@ -47,8 +47,8 @@ Route::middleware('local_middleware')->group(function () {
         Route::get('/', [EventController::class, 'Events'])->name('events');
         Route::get('/event/{id}', [EventController::class, 'Event'])->name('event_details');
 
-        Route::get('/event/{id}/visit', [EventController::class, 'VisitEvent'])->name('visit_event')->middleware("is_visitor");
-        Route::get('/event/{id}/visit-anonymous', [EventController::class, 'VisitEventAnonymous'])->name('visit_event_anonymous');
+        Route::get('/event/{id}/visit-event', [EventController::class, 'VisitEvent'])->name('visit_event')->middleware("is_visitor");
+        Route::get('/event/{id}/visit', [EventController::class, 'VisitEventAnonymous'])->name('visit_event_anonymous');
         Route::get('/event/{id}/visit-confirmation', [EventController::class, 'VisitFormSubmitted'])->name('visit_event_form_submitted')->middleware("is_visitor");
         Route::get('/event/{id}/visit-anonymous-confirmation', [EventController::class, 'VisitAnonymousFormSubmitted'])->name('visit_event_anonymous_form_submitted');
         Route::get('/event/{id}/download-badge', [EventController::class, 'DownloadVisitorBadge'])->name('download_visitor_badge')->middleware("is_visitor");
