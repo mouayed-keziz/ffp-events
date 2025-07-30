@@ -122,7 +122,7 @@ class EventAnnouncementTable
                         ->icon('heroicon-o-link')
                         ->color('info')
                         ->action(function ($livewire, EventAnnouncement $record): void {
-                            $url = route('visit_event_anonymous', ['id' => $record->id]);
+                            $url = route('visit_event_anonymous', ['slug' => $record->slug]);
 
                             $livewire->js(
                                 'window.navigator.clipboard.writeText("' . $url . '");'
