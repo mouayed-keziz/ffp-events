@@ -8,6 +8,7 @@ return [
     'fields' => [
         'event' => 'الحدث',
         'title' => 'العنوان',
+        'slug' => 'الرابط المختصر',
         'content' => 'المحتوى',
         'terms' => 'الشروط',
         'description' => 'الوصف',

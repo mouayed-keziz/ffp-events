@@ -7,6 +7,7 @@ return [
     ],
     'fields' => [
         'title' => 'Titre',
+        'slug' => 'Slug',
         'description' => 'Description',
         'content' => 'Contenu',
         'terms' => 'Termes',

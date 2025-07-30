@@ -23,6 +23,7 @@ class EventAnnouncement extends Model implements HasMedia
 
     protected $fillable = [
         'title',
+        'slug',
         'description',
         'terms',
         'content',

@@ -23,7 +23,44 @@ class EventAnnouncementForm
                                 ->required()
                                 ->maxLength(255)
                                 ->label(__('panel/event_announcement.fields.title'))
-                                ->translatable(),
+                                ->translatable()
+                                ->live(onBlur: true)
+                                ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, $state) {
+                                    // Auto-generate slug from French title when title changes
+                                    $frenchTitle = null;
+
+                                    // Handle both array (translatable) and string states
+                                    if (is_array($state) && isset($state['fr'])) {
+                                        $frenchTitle = $state['fr'];
+                                    } else {
+                                        $frenchTitle = $get('title.fr');
+                                    }
+
+                                    if ($frenchTitle && empty($get('slug'))) {
+                                        $set('slug', \Illuminate\Support\Str::slug($frenchTitle));
+                                    }
+                                }),
+                            Forms\Components\TextInput::make('slug')
+                                ->required()
+                                ->maxLength(255)
+                                ->unique(ignoreRecord: true)
+                                ->label(__('panel/event_announcement.fields.slug'))
+                                ->suffixAction(
+                                    Forms\Components\Actions\Action::make('generate')
+                                        ->icon('heroicon-m-arrow-path')
+                                        ->action(function (Forms\Get $get, Forms\Set $set) {
+                                            $frenchTitle = $get('title.fr');
+                                            if ($frenchTitle) {
+                                                $set('slug', \Illuminate\Support\Str::slug($frenchTitle));
+                                            } else {
+                                                // Fallback: try to get from title if it exists
+                                                $title = $get('title');
+                                                if (is_array($title) && isset($title['fr'])) {
+                                                    $set('slug', \Illuminate\Support\Str::slug($title['fr']));
+                                                }
+                                            }
+                                        })
+                                ),
                             Forms\Components\Textarea::make('description')
                                 ->label(__('panel/event_announcement.fields.description'))
                                 ->translatable(),

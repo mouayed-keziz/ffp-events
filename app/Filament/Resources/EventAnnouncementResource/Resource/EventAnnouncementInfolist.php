@@ -23,6 +23,12 @@ class EventAnnouncementInfolist
 
                                 Infolists\Components\TextEntry::make('title')
                                     ->label(__('panel/event_announcement.fields.title')),
+                                Infolists\Components\TextEntry::make('slug')
+                                    ->label(__('panel/event_announcement.fields.slug'))
+                                    ->copyable()
+                                    ->copyMessage('Slug copied to clipboard')
+                                    ->badge()
+                                    ->color('gray'),
                                 Infolists\Components\TextEntry::make('description')
                                     ->label(__('panel/event_announcement.fields.description'))
                                     ->markdown()
