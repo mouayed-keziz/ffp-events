@@ -100,7 +100,7 @@ class ManageEventAnnouncementVisitorSubmissions extends ManageRelatedRecords
                     ->options([
                         'event_id' => $this->getOwnerRecord()->id,
                     ])
-                    // ->disabled(true)
+                    ->disabled(true)
                     // ->label(__('Export Visitor Submissions'))
                     ->icon('heroicon-o-arrow-down-tray')
                 // ->color('success'),
