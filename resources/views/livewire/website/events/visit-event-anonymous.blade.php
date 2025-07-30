@@ -37,7 +37,7 @@ new class extends Component {
 
         // Redirect to event page if no visitor form available
         if (empty($this->formData)) {
-            return redirect()->route('event_details', ['id' => $this->event->id]);
+            return redirect()->route('event_details', ['slug' => $this->event->slug]);
         }
     }
 

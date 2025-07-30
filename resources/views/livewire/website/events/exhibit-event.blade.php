@@ -35,7 +35,7 @@ new class extends Component {
 
         // Redirect to event details page if no forms available
         if (empty($this->formData) || $this->totalSteps === 0) {
-            return redirect()->route('event_details', ['id' => $this->event->id]);
+            return redirect()->route('event_details', ['slug' => $this->event->slug]);
         }
     }
 

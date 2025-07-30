@@ -19,9 +19,9 @@ class EventController extends Controller
         ]);
     }
 
-    public static function Event($id)
+    public static function Event($slug)
     {
-        $event = EventAnnouncement::find($id);
+        $event = EventAnnouncement::where('slug', $slug)->first();
         if (!$event) {
             return redirect()->route('events');
         }
@@ -37,7 +37,7 @@ class EventController extends Controller
             $visitor_submission = $user->submissions()->where('event_announcement_id', $event->id)->first();
         }
 
-        $relatedEvents = EventAnnouncement::where('id', '!=', $id)->inRandomOrder()->limit(4)->get();
+        $relatedEvents = EventAnnouncement::where('id', '!=', $event->id)->inRandomOrder()->limit(4)->get();
         return view('website.pages.events.event', [
             'event' => $event,
             'relatedEvents' => $relatedEvents,
@@ -46,16 +46,16 @@ class EventController extends Controller
         ]);
     }
 
-    public static function VisitEvent($id)
+    public static function VisitEvent($slug)
     {
-        $event = EventAnnouncement::find($id);
+        $event = EventAnnouncement::where('slug', $slug)->first();
         if (!$event) {
             return redirect()->route('events');
         }
         $visitorSubmission = Auth('visitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
 
         if ($visitorSubmission) {
-            return redirect()->route('visit_event_form_submitted', ['id' => $event->id]);
+            return redirect()->route('visit_event_form_submitted', ['slug' => $event->slug]);
         }
         if ($event->is_visitor_registration_open) {
             return view('website.pages.events.visit-event', [
@@ -66,9 +66,9 @@ class EventController extends Controller
         }
     }
 
-    public static function VisitEventAnonymous($id)
+    public static function VisitEventAnonymous($slug)
     {
-        $event = EventAnnouncement::find($id);
+        $event = EventAnnouncement::where('slug', $slug)->first();
         if (!$event) {
             return redirect()->route('events');
         }
@@ -83,15 +83,15 @@ class EventController extends Controller
         }
     }
 
-    public function VisitFormSubmitted($id)
+    public function VisitFormSubmitted($slug)
     {
-        $event = EventAnnouncement::find($id);
+        $event = EventAnnouncement::where('slug', $slug)->first();
         if (!$event) {
             return redirect()->route('events');
         }
         $visitorSubmission = Auth('visitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
         if (!$visitorSubmission) {
-            return redirect()->route('visit_event', ['id' => $event->id]);
+            return redirect()->route('visit_event', ['slug' => $event->slug]);
         }
         return view("website.pages.events.visit-event-form-submitted", [
             'event' => $event,
@@ -99,9 +99,9 @@ class EventController extends Controller
         ]);
     }
 
-    public function VisitAnonymousFormSubmitted($id)
+    public function VisitAnonymousFormSubmitted($slug)
     {
-        $event = EventAnnouncement::find($id);
+        $event = EventAnnouncement::where('slug', $slug)->first();
         if (!$event) {
             return redirect()->route('events');
         }
@@ -111,15 +111,15 @@ class EventController extends Controller
         ]);
     }
 
-    public static function ExhibitEvent($id)
+    public static function ExhibitEvent($slug)
     {
-        $event = EventAnnouncement::find($id);
+        $event = EventAnnouncement::where('slug', $slug)->first();
         if (!$event) {
             return redirect()->route('events');
         }
         $exhibitor_submission = Auth('exhibitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
         if ($exhibitor_submission) {
-            return redirect()->route('view_exhibitor_answers', ['id' => $event->id]);
+            return redirect()->route('view_exhibitor_answers', ['slug' => $event->slug]);
         }
         if ($event->is_exhibitor_registration_open) {
             return view('website.pages.events.exhibit-event', [
@@ -130,36 +130,36 @@ class EventController extends Controller
         }
     }
 
-    public static function InfoValidation($id)
+    public static function InfoValidation($slug)
     {
-        $event = EventAnnouncement::find($id);
+        $event = EventAnnouncement::where('slug', $slug)->first();
         if (!$event) {
             return redirect()->route('events');
         }
         $exhibitor_submission = Auth('exhibitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
         if (!$exhibitor_submission) {
-            return redirect()->route('exhibit_event', ['id' => $event->id]);
+            return redirect()->route('exhibit_event', ['slug' => $event->slug]);
         }
         if ($exhibitor_submission->isEditable) {
-            return redirect()->route('exhibit_event', ['id' => $event->id]);
+            return redirect()->route('exhibit_event', ['slug' => $event->slug]);
         }
         if ($exhibitor_submission->canDownloadInvoice) {
-            return redirect()->route('post_exhibit_event', ['id' => $event->id]);
+            return redirect()->route('post_exhibit_event', ['slug' => $event->slug]);
         }
         return view('website.pages.events.info-validation', [
             'event' => $event
         ]);
     }
 
-    public static function ViewExhibitorAnswers($id)
+    public static function ViewExhibitorAnswers($slug)
     {
-        $event = EventAnnouncement::find($id);
+        $event = EventAnnouncement::where('slug', $slug)->first();
         if (!$event) {
             return redirect()->route('events');
         }
         $exhibitor_submission = Auth('exhibitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
         if (!$exhibitor_submission) {
-            return redirect()->route('exhibit_event', ['id' => $event->id]);
+            return redirect()->route('exhibit_event', ['slug' => $event->slug]);
         }
         return view('website.pages.events.view-exhibitor-answers', [
             'event' => $event,
@@ -167,18 +167,18 @@ class EventController extends Controller
         ]);
     }
 
-    public function DownloadInvoice($id)
+    public function DownloadInvoice($slug)
     {
-        $event = EventAnnouncement::find($id);
+        $event = EventAnnouncement::where('slug', $slug)->first();
         if (!$event) {
             return redirect()->route('events');
         }
         $exhibitor_submission = Auth('exhibitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
         if (!$exhibitor_submission) {
-            return redirect()->route('exhibit_event', ['id' => $event->id]);
+            return redirect()->route('exhibit_event', ['slug' => $event->slug]);
         }
         if (!$exhibitor_submission->canDownloadInvoice) {
-            return redirect()->route('event_details', ['id' => $event->id]);
+            return redirect()->route('event_details', ['slug' => $event->slug]);
         }
 
         // Log invoice download activity
@@ -201,15 +201,15 @@ class EventController extends Controller
         //     'submission' => $exhibitor_submission
         // ]);
     }
-    public function UploadPaymentProof($id)
+    public function UploadPaymentProof($slug)
     {
-        $event = EventAnnouncement::find($id);
+        $event = EventAnnouncement::where('slug', $slug)->first();
         if (!$event) {
             return redirect()->route('events');
         }
         $exhibitor_submission = Auth('exhibitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
         if (!$exhibitor_submission) {
-            return redirect()->route('exhibit_event', ['id' => $event->id]);
+            return redirect()->route('exhibit_event', ['slug' => $event->slug]);
         }
         return view('website.pages.events.upload-payment-proof', [
             'event' => $event,
@@ -217,33 +217,33 @@ class EventController extends Controller
         ]);
     }
 
-    public static function PaymentValidation($id)
+    public static function PaymentValidation($slug)
     {
-        $event = EventAnnouncement::find($id);
+        $event = EventAnnouncement::where('slug', $slug)->first();
         if (!$event) {
             return redirect()->route('events');
         }
         $exhibitor_submission = Auth('exhibitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
         if (!$exhibitor_submission) {
-            return redirect()->route('exhibit_event', ['id' => $event->id]);
+            return redirect()->route('exhibit_event', ['slug' => $event->slug]);
         }
         return view('website.pages.events.payment-validation', [
             'event' => $event
         ]);
     }
 
-    public function PostExhibitEvent($id)
+    public function PostExhibitEvent($slug)
     {
-        $event = EventAnnouncement::find($id);
+        $event = EventAnnouncement::where('slug', $slug)->first();
         if (!$event) {
             return redirect()->route('events');
         }
         $exhibitor_submission = Auth('exhibitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
         if (!$exhibitor_submission) {
-            return redirect()->route('exhibit_event', ['id' => $event->id]);
+            return redirect()->route('exhibit_event', ['slug' => $event->slug]);
         }
         if (!$exhibitor_submission->canFillPostForms || !$event->exhibitorPostPaymentForms) {
-            return redirect()->route("event_details", ['id' => $event->id]);
+            return redirect()->route("event_details", ['slug' => $event->slug]);
         }
         return view('website.pages.events.post-exhibit-event', [
             'event' => $event,
@@ -251,9 +251,9 @@ class EventController extends Controller
         ]);
     }
 
-    public static function TermsAndConditions($id)
+    public static function TermsAndConditions($slug)
     {
-        $event = EventAnnouncement::find($id);
+        $event = EventAnnouncement::where('slug', $slug)->first();
         if (!$event) {
             return redirect()->route('events');
         }
@@ -262,9 +262,9 @@ class EventController extends Controller
         ]);
     }
 
-    public function DownloadVisitorBadge($id)
+    public function DownloadVisitorBadge($slug)
     {
-        $event = EventAnnouncement::find($id);
+        $event = EventAnnouncement::where('slug', $slug)->first();
         if (!$event) {
             return redirect()->route('events');
         }
@@ -272,7 +272,7 @@ class EventController extends Controller
         // Get visitor submission
         $visitorSubmission = Auth('visitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
         if (!$visitorSubmission) {
-            return redirect()->route('visit_event', ['id' => $event->id]);
+            return redirect()->route('visit_event', ['slug' => $event->slug]);
         }
 
         // Check if the submission has a badge
@@ -304,22 +304,22 @@ class EventController extends Controller
         );
     }
 
-    public function ManageExhibitorBadges($id)
+    public function ManageExhibitorBadges($slug)
     {
-        $event = EventAnnouncement::find($id);
+        $event = EventAnnouncement::where('slug', $slug)->first();
         if (!$event) {
             return redirect()->route('events');
         }
 
         $exhibitor_submission = Auth('exhibitor')->user()->submissions()->where('event_announcement_id', $event->id)->first();
         if (!$exhibitor_submission) {
-            return redirect()->route('exhibit_event', ['id' => $event->id]);
+            return redirect()->route('exhibit_event', ['slug' => $event->slug]);
         }
 
         // Check if submission status is partly paid or fully paid
         if (!($exhibitor_submission->status === \App\Enums\ExhibitorSubmissionStatus::PARTLY_PAYED ||
             $exhibitor_submission->status === \App\Enums\ExhibitorSubmissionStatus::FULLY_PAYED)) {
-            return redirect()->route('event_details', ['id' => $event->id]);
+            return redirect()->route('event_details', ['slug' => $event->slug]);
         }
 
         return view('website.pages.events.manage-exhibitor-badges', [

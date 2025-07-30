@@ -76,13 +76,13 @@ class EventAnnouncementResource extends Resource
             ->sidebarNavigation()
             ->setNavigationItems([
                 PageNavigationItem::make(__('panel/event_announcement.actions.view'))
-                    ->url(fn() => static::getUrl('view', ['record' => $record->id]))
+                    ->url(fn() => static::getUrl('view', ['record' => $record->slug]))
                     ->icon('heroicon-o-eye')
                     ->isActiveWhen(fn() =>
                     request()->routeIs(Pages\ViewEventAnnouncement::getRouteName())),
 
                 PageNavigationItem::make(__('panel/event_announcement.actions.edit'))
-                    ->url(fn() => static::getUrl('edit', ['record' => $record->id]))
+                    ->url(fn() => static::getUrl('edit', ['record' => $record->slug]))
                     ->icon('heroicon-o-pencil')
                     ->hidden(fn() => !Auth::user()?->hasRole(Role::SUPER_ADMIN->value))
                     ->group($EVENT_MANAGEMENT)
@@ -91,7 +91,7 @@ class EventAnnouncementResource extends Resource
                         request()->routeIs(Pages\EditEventAnnouncement::getRouteName())
                     ),
                 PageNavigationItem::make(__('panel/event_announcement.actions.edit_terms'))
-                    ->url(fn() => static::getUrl('edit-terms', ['record' => $record->id]))
+                    ->url(fn() => static::getUrl('edit-terms', ['record' => $record->slug]))
                     ->icon('heroicon-o-document-text')
                     ->hidden(fn() => !Auth::user()?->hasRole(Role::SUPER_ADMIN->value))
                     ->group($EVENT_MANAGEMENT)
@@ -100,7 +100,7 @@ class EventAnnouncementResource extends Resource
                         request()->routeIs(Pages\EditEventAnnouncementTerms::getRouteName())
                     ),
                 PageNavigationItem::make(__('panel/event_announcement.actions.edit_badge_templates'))
-                    ->url(fn() => static::getUrl('edit-badge-templates', ['record' => $record->id]))
+                    ->url(fn() => static::getUrl('edit-badge-templates', ['record' => $record->slug]))
                     ->icon('heroicon-o-identification')
                     ->hidden(fn() => !Auth::user()?->hasRole(Role::SUPER_ADMIN->value))
                     ->group($EVENT_MANAGEMENT)
@@ -109,7 +109,7 @@ class EventAnnouncementResource extends Resource
                         request()->routeIs(Pages\EditEventAnnouncementBadgeTemplates::getRouteName())
                     ),
                 PageNavigationItem::make(__('panel/event_announcement.actions.edit_visitor_form'))
-                    ->url(fn() => static::getUrl('edit-visitor-form', ['record' => $record->id]))
+                    ->url(fn() => static::getUrl('edit-visitor-form', ['record' => $record->slug]))
                     ->icon('heroicon-o-clipboard-document-check')
                     ->hidden(fn() => !Auth::user()?->hasRole(Role::SUPER_ADMIN->value))
                     ->group($FORM_MANAGEMENT)
@@ -118,40 +118,40 @@ class EventAnnouncementResource extends Resource
                         request()->routeIs(Pages\EditEventAnnouncementVisitorForm::getRouteName())
                     ),
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_forms'))
-                    ->url(fn() => static::getUrl('exhibitor-forms', ['record' => $record->id]))
+                    ->url(fn() => static::getUrl('exhibitor-forms', ['record' => $record->slug]))
                     ->icon('heroicon-o-clipboard-document-list')
                     ->hidden(fn() => !Auth::user()?->hasRole(Role::SUPER_ADMIN->value))
                     ->group($FORM_MANAGEMENT)
                     ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementExhibitorForms::getRouteName()])),
 
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_post_payment_forms'))
-                    ->url(fn() => static::getUrl('exhibitor-post-payment-forms', ['record' => $record->id]))
+                    ->url(fn() => static::getUrl('exhibitor-post-payment-forms', ['record' => $record->slug]))
                     ->icon('heroicon-o-clipboard-document-list')
                     ->hidden(fn() => !Auth::user()?->hasRole(Role::SUPER_ADMIN->value))
                     ->group($FORM_MANAGEMENT)
                     ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementExhibitorPostPaymentForms::getRouteName()])),
 
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_visitor_submissions'))
-                    ->url(fn() => static::getUrl('visitor-submissions', ['record' => $record->id]))
+                    ->url(fn() => static::getUrl('visitor-submissions', ['record' => $record->slug]))
                     ->icon('heroicon-o-user-group')
                     ->group($REGISTRATION_MANAGEMENT)
                     ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementVisitorSubmissions::getRouteName()])),
 
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_submissions'))
-                    ->url(fn() => static::getUrl('exhibitor-submissions', ['record' => $record->id]))
+                    ->url(fn() => static::getUrl('exhibitor-submissions', ['record' => $record->slug]))
                     ->icon('heroicon-o-user-group')
                     ->group($REGISTRATION_MANAGEMENT)
                     ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementExhibitorSubmissions::getRouteName()])),
 
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_current_attendees'))
-                    ->url(fn() => static::getUrl('current-attendees', ['record' => $record->id]))
+                    ->url(fn() => static::getUrl('current-attendees', ['record' => $record->slug]))
                     ->icon('heroicon-o-user-group')
                     ->hidden(fn() => !Auth::user()?->hasRole(Role::SUPER_ADMIN->value))
                     ->group($ATTENDANCE_MANAGEMENT)
                     ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementCurrentAttendees::getRouteName()])),
 
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_badge_check_logs'))
-                    ->url(fn() => static::getUrl('badge-check-logs', ['record' => $record->id]))
+                    ->url(fn() => static::getUrl('badge-check-logs', ['record' => $record->slug]))
                     ->icon('heroicon-o-clipboard-document-list')
                     ->hidden(fn() => !Auth::user()?->hasRole(Role::SUPER_ADMIN->value))
                     ->group($ATTENDANCE_MANAGEMENT)

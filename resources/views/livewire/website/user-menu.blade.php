@@ -104,8 +104,11 @@ new class extends Component {
     {
         $this->markAsRead($notificationId);
 
-        // Redirect to the event page
-        $this->redirect(route('event_details', ['id' => $eventId]));
+        // Get the event to use its slug
+        $event = \App\Models\EventAnnouncement::find($eventId);
+        if ($event) {
+            $this->redirect(route('event_details', ['slug' => $event->slug]));
+        }
     }
 
     public function logout(): void

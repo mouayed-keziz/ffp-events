@@ -8,7 +8,7 @@
 <div class="bg-white rounded-xl overflow-hidden shadow-sm py-2 relative">
     <pre>
 </pre>
-    <a href="{{ route('event_details', ['id' => $event['id']]) }}" class="absolute inset-0 z-0"></a>
+    <a href="{{ route('event_details', ['slug' => $event['slug']]) }}" class="absolute inset-0 z-0"></a>
     <div class="grid md:grid-cols-2 gap-0 relative pointer-events-none">
         <div class="p-6 space-y-4 md:order-1 order-2">
             <h3 class="text-xl font-bold">{{ $event['title'] }}</h3>
@@ -46,7 +46,7 @@
                         ((!Auth::guard('visitor')->check() && !Auth::guard('exhibitor')->check()) ||
                             (Auth::guard('visitor')->check() && !empty($event->visitorForm->sections))))
                     <a href="{{ Auth::guard('web')->check() || Auth::guard('exhibitor')->check() || Auth::guard('visitor')->check()
-                        ? route('event_details', ['id' => $event['id']])
+                        ? route('event_details', ['slug' => $event['slug']])
                         : route('signin') }}"
                         class="btn text-[1rem] font-bold btn-outline border-base-200 border-2 flex-1 normal-case">
                         {{ __('website/home.events.visit') }}
@@ -62,7 +62,7 @@
                     (!Auth::guard('visitor')->check() && !Auth::guard('exhibitor')->check()) ||
                         (Auth::guard('exhibitor')->check() && !empty($event->exhibitorForms->toArray())))
                     <a href="{{ Auth::guard('web')->check() || Auth::guard('exhibitor')->check() || Auth::guard('visitor')->check()
-                        ? route('event_details', ['id' => $event['id']])
+                        ? route('event_details', ['slug' => $event['slug']])
                         : route('signin') }}"
                         class="btn text-[1rem] font-bold btn-primary flex-1 normal-case">
                         {{ __('website/home.events.exhibit') }}

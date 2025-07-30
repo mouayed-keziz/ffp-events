@@ -88,7 +88,7 @@ new class extends Component {
             $this->loadBadges();
 
             // Redirect to event details page after saving
-            return redirect()->route('event_details', ['id' => $this->event->id]);
+            return redirect()->route('event_details', ['slug' => $this->event->slug]);
         } else {
             session()->flash('error', __('website/manage-badges.badges_save_error'));
         }
@@ -118,7 +118,7 @@ new class extends Component {
                 'event' => $this->event->id,
                 'submission' => $this->submission->id,
                 'zipPath' => basename($zipPath),
-                'redirect_to' => route('event_details', ['id' => $this->event->id]),
+                'redirect_to' => route('event_details', ['slug' => $this->event->slug]),
             ]);
         } else {
             session()->flash('error', __('website/manage-badges.badges_save_error'));

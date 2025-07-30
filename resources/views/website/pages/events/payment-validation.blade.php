@@ -41,7 +41,7 @@
                             class="btn font-semibold btn-sm rounded-md btn-outline border-base-200 border-2">
                             {{ __('website/exhibit-event.review_answers') }}
                         </a>
-                        <a href="{{ route('event_details', ['id' => $event->id]) }}"
+                        <a href="{{ route('event_details', ['slug' => $event->slug]) }}"
                             class="btn font-semibold btn-sm rounded-md btn-primary">
                             {{ __('website/exhibit-event.return_to_event') }}
                         </a>

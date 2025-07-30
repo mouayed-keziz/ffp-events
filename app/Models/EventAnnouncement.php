@@ -66,9 +66,18 @@ class EventAnnouncement extends Model implements HasMedia
     {
         return __("panel/event_announcement.resource.label") . " - " . $this->title;
     }
+
     public function getRecordLinkAttribute()
     {
         return route('filament.admin.resources.event-announcements.view', ['record' => $this->id]);
+    }
+
+    /**
+     * Get the route key for the model.
+     */
+    public function getRouteKeyName()
+    {
+        return 'slug';
     }
 
     public function registerMediaCollections(): void

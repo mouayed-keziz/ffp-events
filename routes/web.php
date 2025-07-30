@@ -45,23 +45,23 @@ Route::middleware('local_middleware')->group(function () {
     Route::get("/subscriptions",  [ProfileController::class, 'MySubscriptions'])->name("my-subscriptions")->middleware("is_authenticated");
     Route::prefix("")->group(function () {
         Route::get('/', [EventController::class, 'Events'])->name('events');
-        Route::get('/event/{id}', [EventController::class, 'Event'])->name('event_details');
+        Route::get('/event/{slug}', [EventController::class, 'Event'])->name('event_details');
 
-        Route::get('/event/{id}/visit-event', [EventController::class, 'VisitEvent'])->name('visit_event')->middleware("is_visitor");
-        Route::get('/event/{id}/visit', [EventController::class, 'VisitEventAnonymous'])->name('visit_event_anonymous');
-        Route::get('/event/{id}/visit-confirmation', [EventController::class, 'VisitFormSubmitted'])->name('visit_event_form_submitted')->middleware("is_visitor");
-        Route::get('/event/{id}/visit-anonymous-confirmation', [EventController::class, 'VisitAnonymousFormSubmitted'])->name('visit_event_anonymous_form_submitted');
-        Route::get('/event/{id}/download-badge', [EventController::class, 'DownloadVisitorBadge'])->name('download_visitor_badge')->middleware("is_visitor");
+        Route::get('/event/{slug}/visit-event', [EventController::class, 'VisitEvent'])->name('visit_event')->middleware("is_visitor");
+        Route::get('/event/{slug}/visit', [EventController::class, 'VisitEventAnonymous'])->name('visit_event_anonymous');
+        Route::get('/event/{slug}/visit-confirmation', [EventController::class, 'VisitFormSubmitted'])->name('visit_event_form_submitted')->middleware("is_visitor");
+        Route::get('/event/{slug}/visit-anonymous-confirmation', [EventController::class, 'VisitAnonymousFormSubmitted'])->name('visit_event_anonymous_form_submitted');
+        Route::get('/event/{slug}/download-badge', [EventController::class, 'DownloadVisitorBadge'])->name('download_visitor_badge')->middleware("is_visitor");
         Route::middleware("is_exhibitor")->group(function () {
-            Route::get("/event/{id}/terms-and-conditions", [EventController::class, 'TermsAndConditions'])->name('event_terms_and_conditions');
-            Route::get('/event/{id}/exhibit', [EventController::class, 'ExhibitEvent'])->name('exhibit_event')->middleware("is_exhibitor");
-            Route::get("/event/{id}/info-validation", [EventController::class, 'InfoValidation'])->name('info_validation');
-            Route::get("/event/{id}/submission", [EventController::class, 'ViewExhibitorAnswers'])->name('view_exhibitor_answers');
-            Route::get("/event/{id}/download-invoice", [EventController::class, 'DownloadInvoice'])->name('download_invoice');
-            Route::get("/event/{id}/upload-payment-proof", [EventController::class, 'UploadPaymentProof'])->name('upload_payment_proof');
-            Route::get("/event/{id}/payment-validation", [EventController::class, 'PaymentValidation'])->name('payment_validation');
-            Route::get("/event/{id}/post-exhibition", [EventController::class, 'PostExhibitEvent'])->name('post_exhibit_event');
-            Route::get("/event/{id}/manage-badges", [EventController::class, 'ManageExhibitorBadges'])->name('manage_exhibitor_badges');
+            Route::get("/event/{slug}/terms-and-conditions", [EventController::class, 'TermsAndConditions'])->name('event_terms_and_conditions');
+            Route::get('/event/{slug}/exhibit', [EventController::class, 'ExhibitEvent'])->name('exhibit_event')->middleware("is_exhibitor");
+            Route::get("/event/{slug}/info-validation", [EventController::class, 'InfoValidation'])->name('info_validation');
+            Route::get("/event/{slug}/submission", [EventController::class, 'ViewExhibitorAnswers'])->name('view_exhibitor_answers');
+            Route::get("/event/{slug}/download-invoice", [EventController::class, 'DownloadInvoice'])->name('download_invoice');
+            Route::get("/event/{slug}/upload-payment-proof", [EventController::class, 'UploadPaymentProof'])->name('upload_payment_proof');
+            Route::get("/event/{slug}/payment-validation", [EventController::class, 'PaymentValidation'])->name('payment_validation');
+            Route::get("/event/{slug}/post-exhibition", [EventController::class, 'PostExhibitEvent'])->name('post_exhibit_event');
+            Route::get("/event/{slug}/manage-badges", [EventController::class, 'ManageExhibitorBadges'])->name('manage_exhibitor_badges');
         });
     });
 
