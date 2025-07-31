@@ -5,6 +5,7 @@ use App\Http\Controllers\Website\EventController;
 use App\Http\Controllers\Website\AuthController;
 use App\Http\Controllers\Website\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Models\EventAnnouncement;
 
 // Redirect old English routes to new French routes
 Route::middleware('local_middleware')->group(function () {
@@ -18,7 +19,128 @@ Route::middleware('local_middleware')->group(function () {
         return redirect('/mes-inscriptions', 301);
     });
 
-    // Event Routes
+    // OLD ENGLISH ROUTES WITH IDs (redirect to new French slug-based routes)
+    Route::get('/event/{id}', function ($id) {
+        $event = EventAnnouncement::find($id);
+        if ($event) {
+            return redirect("/evenement/{$event->slug}", 301);
+        }
+        return redirect('/', 301);
+    })->where('id', '[0-9]+');
+
+    Route::get('/event/{id}/visit-event', function ($id) {
+        $event = EventAnnouncement::find($id);
+        if ($event) {
+            return redirect("/evenement/{$event->slug}/visiter-evenement", 301);
+        }
+        return redirect('/', 301);
+    })->where('id', '[0-9]+');
+
+    Route::get('/event/{id}/visit', function ($id) {
+        $event = EventAnnouncement::find($id);
+        if ($event) {
+            return redirect("/evenement/{$event->slug}/visiter", 301);
+        }
+        return redirect('/', 301);
+    })->where('id', '[0-9]+');
+
+    Route::get('/event/{id}/visit-confirmation', function ($id) {
+        $event = EventAnnouncement::find($id);
+        if ($event) {
+            return redirect("/evenement/{$event->slug}/confirmation-visite", 301);
+        }
+        return redirect('/', 301);
+    })->where('id', '[0-9]+');
+
+    Route::get('/event/{id}/visit-anonymous-confirmation', function ($id) {
+        $event = EventAnnouncement::find($id);
+        if ($event) {
+            return redirect("/evenement/{$event->slug}/confirmation-visite-anonyme", 301);
+        }
+        return redirect('/', 301);
+    })->where('id', '[0-9]+');
+
+    Route::get('/event/{id}/download-badge', function ($id) {
+        $event = EventAnnouncement::find($id);
+        if ($event) {
+            return redirect("/evenement/{$event->slug}/telecharger-badge", 301);
+        }
+        return redirect('/', 301);
+    })->where('id', '[0-9]+');
+
+    Route::get('/event/{id}/terms-and-conditions', function ($id) {
+        $event = EventAnnouncement::find($id);
+        if ($event) {
+            return redirect("/evenement/{$event->slug}/conditions-generales", 301);
+        }
+        return redirect('/', 301);
+    })->where('id', '[0-9]+');
+
+    Route::get('/event/{id}/exhibit', function ($id) {
+        $event = EventAnnouncement::find($id);
+        if ($event) {
+            return redirect("/evenement/{$event->slug}/exposer", 301);
+        }
+        return redirect('/', 301);
+    })->where('id', '[0-9]+');
+
+    Route::get('/event/{id}/info-validation', function ($id) {
+        $event = EventAnnouncement::find($id);
+        if ($event) {
+            return redirect("/evenement/{$event->slug}/validation-info", 301);
+        }
+        return redirect('/', 301);
+    })->where('id', '[0-9]+');
+
+    Route::get('/event/{id}/submission', function ($id) {
+        $event = EventAnnouncement::find($id);
+        if ($event) {
+            return redirect("/evenement/{$event->slug}/soumission", 301);
+        }
+        return redirect('/', 301);
+    })->where('id', '[0-9]+');
+
+    Route::get('/event/{id}/download-invoice', function ($id) {
+        $event = EventAnnouncement::find($id);
+        if ($event) {
+            return redirect("/evenement/{$event->slug}/telecharger-facture", 301);
+        }
+        return redirect('/', 301);
+    })->where('id', '[0-9]+');
+
+    Route::get('/event/{id}/upload-payment-proof', function ($id) {
+        $event = EventAnnouncement::find($id);
+        if ($event) {
+            return redirect("/evenement/{$event->slug}/telecharger-preuve-paiement", 301);
+        }
+        return redirect('/', 301);
+    })->where('id', '[0-9]+');
+
+    Route::get('/event/{id}/payment-validation', function ($id) {
+        $event = EventAnnouncement::find($id);
+        if ($event) {
+            return redirect("/evenement/{$event->slug}/validation-paiement", 301);
+        }
+        return redirect('/', 301);
+    })->where('id', '[0-9]+');
+
+    Route::get('/event/{id}/post-exhibition', function ($id) {
+        $event = EventAnnouncement::find($id);
+        if ($event) {
+            return redirect("/evenement/{$event->slug}/post-exposition", 301);
+        }
+        return redirect('/', 301);
+    })->where('id', '[0-9]+');
+
+    Route::get('/event/{id}/manage-badges', function ($id) {
+        $event = EventAnnouncement::find($id);
+        if ($event) {
+            return redirect("/evenement/{$event->slug}/gerer-badges", 301);
+        }
+        return redirect('/', 301);
+    })->where('id', '[0-9]+');
+
+    // ENGLISH ROUTES WITH SLUGS (redirect to new French slug-based routes)
     Route::get('/event/{slug}', function ($slug) {
         return redirect("/evenement/{$slug}", 301);
     });
