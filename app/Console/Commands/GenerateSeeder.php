@@ -26,10 +26,10 @@ class GenerateSeeder extends Command
     public function handle()
     {
         $this->call('iseed', [
-            'tables' => 'users,categories,event_announcements,articles,article_category,activity_log,roles,permissions,model_has_permissions,model_has_roles,role_has_permissions,notifications,settings,visitor_forms,products,exhibitor_forms,exhibitors,visitors,visitor_submissions,exhibitor_submissions,plan_tiers,plans',
+            'tables' => 'activity_log,article_category,articles,badge_check_logs,badges,banners,categories,current_attendees,event_announcement_user,event_announcements,exhibitor_forms,exhibitor_payment_slices,exhibitor_post_payment_forms,exhibitor_submissions,exhibitors,exports,failed_import_rows,imports,laravisits,media,model_has_permissions,model_has_roles,notifications,permissions,plan_tiers,plans,products,role_has_permissions,roles,settings,shares,telescope_entries,telescope_entries_tags,telescope_monitoring,users,visitor_forms,visitor_submissions,visitors',
             '--clean' => true,
             '--force' => true,
-            '--classnameprefix' => 'Iseed', // all generated classes will share this prefix
+            '--classnameprefix' => 'BACKUP', // all generated classes will share this prefix
         ]);
     }
 }

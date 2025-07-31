@@ -22,32 +22,5 @@ class DatabaseSeeder extends Seeder
             // AdminSeeder::class,
             // EventAnnouncementSeeder::class,
         ]);
-
-
-        // $this->call(IseedUsersTableSeeder::class);
-        // // $this->call(IseedExhibitorsTableSeeder::class);
-        // // $this->call(IseedVisitorsTableSeeder::class);
-
-        // $this->call(IseedRolesTableSeeder::class);
-        // $this->call(IseedPermissionsTableSeeder::class);
-        // $this->call(IseedModelHasPermissionsTableSeeder::class);
-        // $this->call(IseedModelHasRolesTableSeeder::class);
-        // $this->call(IseedRoleHasPermissionsTableSeeder::class);
-        // // $this->call(IseedNotificationsTableSeeder::class);
-
-        // // $this->call(IseedEventAnnouncementsTableSeeder::class);
-        // // $this->call(IseedVisitorFormsTableSeeder::class);
-        // // $this->call(IseedProductsTableSeeder::class);
-        // // $this->call(IseedExhibitorFormsTableSeeder::class);
-
-        // // $this->call(IseedCategoriesTableSeeder::class);
-        // $this->call(IseedArticlesTableSeeder::class);
-        // $this->call(IseedArticleCategoryTableSeeder::class);
-
-        // // $this->call(IseedActivityLogTableSeeder::class);
-
-        // // $this->call(IseedSettingsTableSeeder::class);
-        // // $this->call(IseedVisitorSubmissionsTableSeeder::class);
-        // // $this->call(IseedExhibitorSubmissionsTableSeeder::class);
     }
 }
