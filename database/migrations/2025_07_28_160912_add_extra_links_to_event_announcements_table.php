@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('event_announcements', function (Blueprint $table) {
-            $table->json('extra_links')->default('[]')->after('currencies');
+            $table->json('extra_links')->after('currencies');
         });
     }
 
