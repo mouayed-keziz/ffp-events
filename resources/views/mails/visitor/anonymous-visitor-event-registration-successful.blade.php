@@ -18,7 +18,7 @@
         {{ __('emails/visitor-registration-successful.subject', ['event_name' => $event->getTranslation('title', $locale)], $locale) }}
     </div>
     <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation"
-        style="border-width:1px;border-style:solid;border-color:rgb(234,234,234);border-radius:0.25rem;margin-top:40px;margin-bottom:40px;margin-left:auto;margin-right:auto;padding:20px;max-width:465px; background-color: #fff;">
+        style="border-width:1px;border-style:solid;border-color:rgb(234,234,234);border-radius:0.25rem;margin-top:40px;margin-bottom:40px;margin-left:auto;margin-right:auto;padding:30px;max-width:465px; background-color: #fff;">
         <tbody>
             <tr style="width:100%">
                 <td>
@@ -39,9 +39,9 @@
                         style="color:rgb(0,0,0);font-size:24px;font-weight:400;text-align:center;padding:0px;margin-top:30px;margin-bottom:30px;margin-left:0px;margin-right:0px">
                         {{ __('emails/visitor-registration-successful.subject', ['event_name' => $event->getTranslation('title', $locale)], $locale) }}
                     </h1>
-                    <p style="color:rgb(0,0,0);font-size:14px;line-height:24px;margin:16px 0">
+                    {{-- <p style="color:rgb(0,0,0);font-size:14px;line-height:24px;margin:16px 0">
                         {{ __('emails/visitor-registration-successful.greeting', ['name' => 'Anonymous Visitor'], $locale) }}
-                    </p>
+                    </p> --}}
                     <p style="color:rgb(0,0,0);font-size:14px;line-height:24px;margin:16px 0">
                         {{ __('emails/visitor-registration-successful.approval_notice', ['event_name' => $event->getTranslation('title', $locale)], $locale) }}
                     </p>
