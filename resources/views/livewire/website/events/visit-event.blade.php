@@ -55,7 +55,16 @@ new class extends Component {
 
     public function updateSelectOption($answerPath, $selectedValue)
     {
-        $this->formData = FormFieldActions::updateOptionSelection($this->formData, $answerPath, $selectedValue);
+        // Handle custom inline badge select locally
+        if (str_starts_with($answerPath, 'badge.')) {
+            $options = data_get($this->formData, $answerPath . '.options', []);
+            foreach ($options as $idx => $opt) {
+                $options[$idx]['selected'] = ($opt['value'] ?? null) === $selectedValue;
+            }
+            data_set($this->formData, $answerPath . '.options', $options);
+        } else {
+            $this->formData = FormFieldActions::updateOptionSelection($this->formData, $answerPath, $selectedValue);
+        }
 
         // Dispatch a browser event to inform Alpine.js of the change
         $this->dispatch('selectedchanged', [
@@ -85,19 +94,30 @@ new class extends Component {
 
     public function submitWithBadgeInfo()
     {
-        // Validate badge information
+        // Validate full form: event form data + badge info
+        $actions = new VisitEventFormActions();
+        $validation = $actions->getValidationRules($this->event);
+        $this->validate($validation['rules'], [], $validation['attributes']);
+
+        // Validate badge data stored in formData
         $this->validate(
             [
-                'badgeCompany' => 'required|string|max:255',
-                'badgePosition' => 'required|string',
+                'formData.badge.company' => 'required|string|max:255',
             ],
             [
-                'badgeCompany.required' => __('website/visit-event.company_required'),
-                'badgePosition.required' => __('website/visit-event.position_required'),
+                'formData.badge.company.required' => __('website/visit-event.company_required'),
             ],
         );
 
-        $actions = new VisitEventFormActions();
+        // Sync inline badge fields from formData to props
+        $this->badgeCompany = data_get($this->formData, 'badge.company', '');
+        // Extract selected position from options
+        $selected = collect(data_get($this->formData, 'badge.position.options', []))->firstWhere('selected', true);
+        $this->badgePosition = $selected['value'] ?? '';
+        if (empty($this->badgePosition)) {
+            $this->addError('formData.badge.position', __('website/visit-event.position_required'));
+            return;
+        }
 
         // The badgePosition already contains the French job title since we store 'fr' value in the select
         // Save the form submission with badge information
@@ -112,7 +132,7 @@ new class extends Component {
             \App\Activity\VisitorSubmissionActivity::logCreate($user, $submission);
 
             $this->formSubmitted = true;
-            $this->redirect(route('visit_event_form_submitted', $this->event->id));
+            $this->redirect(route('visit_event_form_submitted', ['slug' => $this->event->slug]));
             $this->successMessage = __('website/visit-event.form_success');
         } else {
             session()->flash('error', __('website/visit-event.form_error'));
@@ -138,8 +158,35 @@ new class extends Component {
             <p class="text-gray-600">{{ __('website/visit-event.fill_form_instruction') }}</p>
         </div> --}}
 
-        <form wire:submit.prevent="submitForm">
+        <form wire:submit.prevent="submitWithBadgeInfo">
             @if ($event->visitorForm)
+                {{-- Inline Badge Information Fields (moved from modal) using shared components --}}
+                @php
+                    $badgeCompanyField = [
+                        'label' => [app()->getLocale() => __('website/visit-event.company')],
+                        'required' => true,
+                        'type' => 'text',
+                    ];
+                    $jobOptions = array_map(fn($job) => ['option' => $job], $availableJobs);
+                    $badgePositionField = [
+                        'label' => [app()->getLocale() => __('website/visit-event.position')],
+                        'required' => true,
+                        'options' => $jobOptions,
+                    ];
+                @endphp
+                <div class="grid grid-cols-1 gap-4 mb-6">
+                    @include('website.components.forms.input.text-input', [
+                        'data' => $badgeCompanyField,
+                        'answerPath' => 'badge.company',
+                        'disabled' => false,
+                    ])
+                    @include('website.components.forms.multiple.select', [
+                        'data' => $badgePositionField,
+                        'answerPath' => 'badge.position',
+                        'disabled' => false,
+                    ])
+                </div>
+
                 @foreach ($event->visitorForm->sections as $sectionIndex => $section)
                     @include('website.components.forms.input.section_title', [
                         'title' => $section['title'][app()->getLocale()] ?? $section['title']['fr'],
@@ -188,64 +235,5 @@ new class extends Component {
         </form>
     @endif
 
-    {{-- Badge Information Modal --}}
-    @if ($showBadgeInfoModal)
-        <div class="modal modal-open">
-            <div class="modal-box w-11/12 max-w-md">
-                <h3 class="font-bold text-lg mb-4">{{ __('website/visit-event.badge_info_title') }}</h3>
-                <p class="text-sm text-gray-600 mb-6">{{ __('website/visit-event.badge_info_description') }}</p>
-
-                <form wire:submit.prevent="submitWithBadgeInfo">
-                    {{-- Company Input --}}
-                    <div class="form-control w-full mb-4">
-                        <label class="label">
-                            <span class="label-text">{{ __('website/visit-event.company') }} <span
-                                    class="text-red-500">*</span></span>
-                        </label>
-                        <input type="text" wire:model="badgeCompany"
-                            placeholder="{{ __('website/visit-event.company_placeholder') }}"
-                            class="input input-bordered w-full @error('badgeCompany') input-error @enderror" required />
-                        @error('badgeCompany')
-                            <label class="label">
-                                <span class="label-text-alt text-error">{{ $message }}</span>
-                            </label>
-                        @enderror
-                    </div>
-
-                    {{-- Position Select --}}
-                    <div class="form-control w-full mb-6">
-                        <label class="label">
-                            <span class="label-text">{{ __('website/visit-event.position') }} <span
-                                    class="text-red-500">*</span></span>
-                        </label>
-                        <select wire:model="badgePosition"
-                            class="select select-bordered w-full @error('badgePosition') select-error @enderror"
-                            required>
-                            <option value="">{{ __('website/visit-event.position_placeholder') }}</option>
-                            @foreach ($availableJobs as $job)
-                                <option value="{{ $job['fr'] }}">{{ $job[app()->getLocale()] ?? $job['fr'] }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('badgePosition')
-                            <label class="label">
-                                <span class="label-text-alt text-error">{{ $message }}</span>
-                            </label>
-                        @enderror
-                    </div>
-
-                    {{-- Modal Actions --}}
-                    <div class="modal-action">
-                        <button type="button" wire:click="cancelBadgeInfo" class="btn btn-ghost">
-                            {{ __('website/visit-event.cancel') }}
-                        </button>
-                        <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
-                            <span wire:loading class="loading loading-spinner loading-sm"></span>
-                            <span>{{ __('website/visit-event.continue_registration') }}</span>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    @endif
+    {{-- Modal removed: badge fields are now inline at the top of the form --}}
 </div>
