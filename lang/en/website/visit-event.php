@@ -30,6 +30,8 @@ return [
     'email' => 'Email Address',
     'email_placeholder' => 'your.email@example.com',
     'name' => 'Name',
+    'first_name' => 'First name',
+    'last_name' => 'Last name',
     'name_placeholder' => 'Your full name',
     'continue_registration' => 'Complete Registration',
     'cancel' => 'Cancel',

@@ -102,28 +102,23 @@ new class extends Component {
         $this->validate($validation['rules'], [], $validation['attributes']);
 
         // Validate badge information stored in formData
-        $this->validate(
-            [
-                'formData.badge.name' => 'required|string|max:255',
-                'formData.badge.company' => 'required|string|max:255',
-                'formData.badge.email' => 'required|email',
-            ],
-            [
-                'formData.badge.name.required' => __('website/visit-event.name_required'),
-                'formData.badge.company.required' => __('website/visit-event.company_required'),
-                'formData.badge.email.required' => __('website/visit-event.email_required'),
-                'formData.badge.email.email' => __('website/visit-event.email_invalid'),
-            ],
-        );
+        $this->validate([
+            'formData.badge.first_name' => 'required|string|max:255',
+            'formData.badge.last_name' => 'required|string|max:255',
+            'formData.badge.company' => 'required|string|max:255',
+            'formData.badge.email' => 'required|email',
+        ]);
 
         // Sync badge fields from formData to props and ensure position selected
-        $this->badgeName = data_get($this->formData, 'badge.name', '');
+        $first = data_get($this->formData, 'badge.first_name', '');
+        $last = data_get($this->formData, 'badge.last_name', '');
+        $this->badgeName = trim($first . ' ' . $last);
         $this->badgeEmail = data_get($this->formData, 'badge.email', '');
         $this->badgeCompany = data_get($this->formData, 'badge.company', '');
         $selected = collect(data_get($this->formData, 'badge.position.options', []))->firstWhere('selected', true);
         $this->badgePosition = $selected['value'] ?? '';
         if (empty($this->badgePosition)) {
-            $this->addError('formData.badge.position', __('website/visit-event.position_required'));
+            $this->addError('formData.badge.position', 'Le poste est requis');
             return;
         }
 
@@ -167,56 +162,125 @@ new class extends Component {
 
         <form wire:submit.prevent="submitWithBadgeInfo">
             @if ($event->visitorForm)
-                {{-- Inline Badge Information Fields (moved from modal) using shared components --}}
-                @php
-                    $badgeNameField = [
-                        'label' => [app()->getLocale() => __('website/visit-event.name')],
-                        'required' => true,
-                        'type' => 'text',
-                    ];
-                    $badgeEmailField = [
-                        'label' => [app()->getLocale() => __('website/visit-event.email')],
-                        'required' => true,
-                        'type' => 'email',
-                    ];
-                    $badgeCompanyField = [
-                        'label' => [app()->getLocale() => __('website/visit-event.company')],
-                        'required' => true,
-                        'type' => 'text',
-                    ];
-                    $jobOptions = array_map(fn($job) => ['option' => $job], $availableJobs);
-                    $badgePositionField = [
-                        'label' => [app()->getLocale() => __('website/visit-event.position')],
-                        'required' => true,
-                        'options' => $jobOptions,
-                    ];
-                @endphp
-                <div class="grid grid-cols-1 gap-4 mb-6">
-                    @include('website.components.forms.input.text-input', [
-                        'data' => $badgeNameField,
-                        'answerPath' => 'badge.name',
-                        'disabled' => false,
-                    ])
-                    @include('website.components.forms.input.email-input', [
-                        'data' => $badgeEmailField,
-                        'answerPath' => 'badge.email',
-                        'disabled' => false,
-                    ])
-                    @include('website.components.forms.input.text-input', [
-                        'data' => $badgeCompanyField,
-                        'answerPath' => 'badge.company',
-                        'disabled' => false,
-                    ])
-                    @include('website.components.forms.multiple.select', [
-                        'data' => $badgePositionField,
-                        'answerPath' => 'badge.position',
-                        'disabled' => false,
-                    ])
-                </div>
+                @php $hasSections = !empty($event->visitorForm->sections); @endphp
+                @if (!$hasSections)
+                    @php
+                        $badgeFirstNameField = [
+                            'label' => [app()->getLocale() => __('website/visit-event.first_name')],
+                            'required' => true,
+                            'type' => 'text',
+                        ];
+                        $badgeLastNameField = [
+                            'label' => [app()->getLocale() => __('website/visit-event.last_name')],
+                            'required' => true,
+                            'type' => 'text',
+                        ];
+                        $badgeEmailField = [
+                            'label' => [app()->getLocale() => __('website/visit-event.email')],
+                            'required' => true,
+                            'type' => 'email',
+                        ];
+                        $badgeCompanyField = [
+                            'label' => [app()->getLocale() => __('website/visit-event.company')],
+                            'required' => true,
+                            'type' => 'text',
+                        ];
+                        $jobOptions = array_map(fn($job) => ['option' => $job], $availableJobs);
+                        $badgePositionField = [
+                            'label' => [app()->getLocale() => __('website/visit-event.position')],
+                            'required' => true,
+                            'options' => $jobOptions,
+                        ];
+                    @endphp
+                    <div class="grid grid-cols-1 gap-4 mb-6">
+                        @include('website.components.forms.input.text-input', [
+                            'data' => $badgeFirstNameField,
+                            'answerPath' => 'badge.first_name',
+                            'disabled' => false,
+                        ])
+                        @include('website.components.forms.input.text-input', [
+                            'data' => $badgeLastNameField,
+                            'answerPath' => 'badge.last_name',
+                            'disabled' => false,
+                        ])
+                        @include('website.components.forms.input.email-input', [
+                            'data' => $badgeEmailField,
+                            'answerPath' => 'badge.email',
+                            'disabled' => false,
+                        ])
+                        @include('website.components.forms.input.text-input', [
+                            'data' => $badgeCompanyField,
+                            'answerPath' => 'badge.company',
+                            'disabled' => false,
+                        ])
+                        @include('website.components.forms.multiple.select', [
+                            'data' => $badgePositionField,
+                            'answerPath' => 'badge.position',
+                            'disabled' => false,
+                        ])
+                    </div>
+                @endif
                 @foreach ($event->visitorForm->sections as $sectionIndex => $section)
                     @include('website.components.forms.input.section_title', [
                         'title' => $section['title'][app()->getLocale()] ?? $section['title']['fr'],
                     ])
+                    @if ($sectionIndex === 0)
+                        @php
+                            $badgeFirstNameField = [
+                                'label' => [app()->getLocale() => __('website/visit-event.first_name')],
+                                'required' => true,
+                                'type' => 'text',
+                            ];
+                            $badgeLastNameField = [
+                                'label' => [app()->getLocale() => __('website/visit-event.last_name')],
+                                'required' => true,
+                                'type' => 'text',
+                            ];
+                            $badgeEmailField = [
+                                'label' => [app()->getLocale() => __('website/visit-event.email')],
+                                'required' => true,
+                                'type' => 'email',
+                            ];
+                            $badgeCompanyField = [
+                                'label' => [app()->getLocale() => __('website/visit-event.company')],
+                                'required' => true,
+                                'type' => 'text',
+                            ];
+                            $jobOptions = array_map(fn($job) => ['option' => $job], $availableJobs);
+                            $badgePositionField = [
+                                'label' => [app()->getLocale() => __('website/visit-event.position')],
+                                'required' => true,
+                                'options' => $jobOptions,
+                            ];
+                        @endphp
+                        <div class="grid grid-cols-1 gap-4 mb-6">
+                            @include('website.components.forms.input.text-input', [
+                                'data' => $badgeFirstNameField,
+                                'answerPath' => 'badge.first_name',
+                                'disabled' => false,
+                            ])
+                            @include('website.components.forms.input.text-input', [
+                                'data' => $badgeLastNameField,
+                                'answerPath' => 'badge.last_name',
+                                'disabled' => false,
+                            ])
+                            @include('website.components.forms.input.email-input', [
+                                'data' => $badgeEmailField,
+                                'answerPath' => 'badge.email',
+                                'disabled' => false,
+                            ])
+                            @include('website.components.forms.input.text-input', [
+                                'data' => $badgeCompanyField,
+                                'answerPath' => 'badge.company',
+                                'disabled' => false,
+                            ])
+                            @include('website.components.forms.multiple.select', [
+                                'data' => $badgePositionField,
+                                'answerPath' => 'badge.position',
+                                'disabled' => false,
+                            ])
+                        </div>
+                    @endif
 
                     @foreach ($section['fields'] as $fieldIndex => $field)
                         @php

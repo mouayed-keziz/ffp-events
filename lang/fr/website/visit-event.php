@@ -30,6 +30,8 @@ return [
     'email' => 'Adresse e-mail',
     'email_placeholder' => 'votre.email@exemple.com',
     'name' => 'Nom',
+    'first_name' => 'Prénom',
+    'last_name' => 'Nom',
     'name_placeholder' => 'Votre nom complet',
     'continue_registration' => 'Finaliser l\'inscription',
     'cancel' => 'Annuler',

@@ -30,6 +30,8 @@ return [
     'email' => 'عنوان البريد الإلكتروني',
     'email_placeholder' => 'your.email@example.com',
     'name' => 'الاسم',
+    'first_name' => 'الاسم الأول',
+    'last_name' => 'اسم العائلة',
     'name_placeholder' => 'اسمك الكامل',
     'continue_registration' => 'إكمال التسجيل',
     'cancel' => 'إلغاء',

@@ -160,37 +160,67 @@ new class extends Component {
 
         <form wire:submit.prevent="submitWithBadgeInfo">
             @if ($event->visitorForm)
-                {{-- Inline Badge Information Fields (moved from modal) using shared components --}}
-                @php
-                    $badgeCompanyField = [
-                        'label' => [app()->getLocale() => __('website/visit-event.company')],
-                        'required' => true,
-                        'type' => 'text',
-                    ];
-                    $jobOptions = array_map(fn($job) => ['option' => $job], $availableJobs);
-                    $badgePositionField = [
-                        'label' => [app()->getLocale() => __('website/visit-event.position')],
-                        'required' => true,
-                        'options' => $jobOptions,
-                    ];
-                @endphp
-                <div class="grid grid-cols-1 gap-4 mb-6">
-                    @include('website.components.forms.input.text-input', [
-                        'data' => $badgeCompanyField,
-                        'answerPath' => 'badge.company',
-                        'disabled' => false,
-                    ])
-                    @include('website.components.forms.multiple.select', [
-                        'data' => $badgePositionField,
-                        'answerPath' => 'badge.position',
-                        'disabled' => false,
-                    ])
-                </div>
+                @php $hasSections = !empty($event->visitorForm->sections); @endphp
+                @if (!$hasSections)
+                    @php
+                        $badgeCompanyField = [
+                            'label' => [app()->getLocale() => __('website/visit-event.company')],
+                            'required' => true,
+                            'type' => 'text',
+                        ];
+                        $jobOptions = array_map(fn($job) => ['option' => $job], $availableJobs);
+                        $badgePositionField = [
+                            'label' => [app()->getLocale() => __('website/visit-event.position')],
+                            'required' => true,
+                            'options' => $jobOptions,
+                        ];
+                    @endphp
+                    <div class="grid grid-cols-1 gap-4 mb-6">
+                        @include('website.components.forms.input.text-input', [
+                            'data' => $badgeCompanyField,
+                            'answerPath' => 'badge.company',
+                            'disabled' => false,
+                        ])
+                        @include('website.components.forms.multiple.select', [
+                            'data' => $badgePositionField,
+                            'answerPath' => 'badge.position',
+                            'disabled' => false,
+                        ])
+                    </div>
+                @endif
 
                 @foreach ($event->visitorForm->sections as $sectionIndex => $section)
                     @include('website.components.forms.input.section_title', [
                         'title' => $section['title'][app()->getLocale()] ?? $section['title']['fr'],
                     ])
+
+                    @if ($sectionIndex === 0)
+                        @php
+                            $badgeCompanyField = [
+                                'label' => [app()->getLocale() => __('website/visit-event.company')],
+                                'required' => true,
+                                'type' => 'text',
+                            ];
+                            $jobOptions = array_map(fn($job) => ['option' => $job], $availableJobs);
+                            $badgePositionField = [
+                                'label' => [app()->getLocale() => __('website/visit-event.position')],
+                                'required' => true,
+                                'options' => $jobOptions,
+                            ];
+                        @endphp
+                        <div class="grid grid-cols-1 gap-4 mb-6">
+                            @include('website.components.forms.input.text-input', [
+                                'data' => $badgeCompanyField,
+                                'answerPath' => 'badge.company',
+                                'disabled' => false,
+                            ])
+                            @include('website.components.forms.multiple.select', [
+                                'data' => $badgePositionField,
+                                'answerPath' => 'badge.position',
+                                'disabled' => false,
+                            ])
+                        </div>
+                    @endif
 
                     @foreach ($section['fields'] as $fieldIndex => $field)
                         @php
