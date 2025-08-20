@@ -30,7 +30,7 @@
                             {{ __('website/visit-event.go_to_home') }}
                         </a>
                         @if (isset($submission) && $submission->badge && $submission->badge->getFirstMedia('image'))
-                            <a href="{{ route('download_visitor_badge', ['id' => $event->id]) }}"
+                            <a href="{{ route('download_visitor_badge', ['slug' => $event->slug]) }}"
                                 class="btn font-semibold btn-sm rounded-md btn-primary">
                                 {{ __('website/visit-event.download_badge') }}
                             </a>

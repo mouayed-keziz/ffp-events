@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class EventAnnouncement extends Model implements HasMedia
 {
@@ -196,7 +197,8 @@ class EventAnnouncement extends Model implements HasMedia
 
         // Set the cloned titles
         $clone->setTranslations('title', $titleTranslations);
-
+        // generate slug based on the new french title
+        $clone->slug = Str::slug($titleTranslations['fr'] ?? '', '-');
         // Save the clone to create a new record
         $clone->push();
 
