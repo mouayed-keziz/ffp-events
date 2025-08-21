@@ -590,28 +590,43 @@
             }
         }
 
-        // Initialize UI on page load
-        document.addEventListener('DOMContentLoaded', function() {
+        // Robust initialization (Filament/Livewire pages may load after DOMContentLoaded has fired)
+        function initScannerUI() {
+            // Prevent double init
+            if (window.__qrScannerInitialized) return;
+            window.__qrScannerInitialized = true;
+
             updateUI();
             updateActionButton();
 
-            // Set up action toggle event listener
             const actionToggle = document.getElementById('actionToggle');
-            if (actionToggle) {
+            if (actionToggle && !actionToggle.dataset.listenerAttached) {
                 actionToggle.addEventListener('click', toggleAction);
+                actionToggle.dataset.listenerAttached = 'true';
             }
 
-            // Set up camera selection event listener
             const cameraSelect = document.getElementById('cameraSelect');
-            if (cameraSelect) {
+            if (cameraSelect && !cameraSelect.dataset.listenerAttached) {
                 cameraSelect.addEventListener('change', onCameraChange);
+                cameraSelect.dataset.listenerAttached = 'true';
             }
 
-            // Initialize cameras when the page loads
-            // Wait a bit to ensure Html5Qrcode library is loaded
-            setTimeout(() => {
-                initializeCameras();
-            }, 500);
-        });
+            setTimeout(() => initializeCameras(), 500);
+        }
+
+        // Initialize immediately if DOM is already ready, else wait
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initScannerUI);
+        } else {
+            initScannerUI();
+        }
+
+        // Also hook into Livewire navigation (if Livewire is present) to re-init after page changes
+        if (window.Livewire) {
+            document.addEventListener('livewire:navigated', () => {
+                window.__qrScannerInitialized = false; // allow re-init after navigation
+                initScannerUI();
+            });
+        }
     </script>
 @endpush
