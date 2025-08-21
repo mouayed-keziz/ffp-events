@@ -37,7 +37,7 @@
                     </p>
 
                     <div class="w-full flex justify-start items-center gap-2 mt-8">
-                        <a href="{{ route('view_exhibitor_answers', ['id' => $event->id]) }}"
+                        <a href="{{ route('view_exhibitor_answers', ['slug' => $event->slug]) }}"
                             class="btn font-semibold btn-sm rounded-md btn-outline border-base-200 border-2">
                             {{ __('website/exhibit-event.review_answers') }}
                         </a>

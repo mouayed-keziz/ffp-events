@@ -78,10 +78,10 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <a href="{{ route('upload_payment_proof', ['id' => $event->id]) }}"
+                                    <a href="{{ route('upload_payment_proof', ['slug' => $event->slug]) }}"
                                         style="background-color:#EB7530;border-radius:0.25rem;color:rgb(255,255,255);font-size:12px;font-weight:600;text-decoration-line:none;text-align:center;padding-left:1.25rem;padding-right:1.25rem;padding-top:0.75rem;padding-bottom:0.75rem;line-height:100%;text-decoration:none;display:inline-block;max-width:100%;mso-padding-alt:0px;padding:12px 20px 12px 20px"
                                         target="_blank"><span><!--[if mso]><i style="mso-font-width:500%;mso-text-raise:18" hidden>&#8202;&#8202;</i><![endif]--></span><span
-                                            style="max-width:100%;display:inline-block;line-height:120%;mso-padding-alt:0px;mso-text-raise:9px">{{ __('emails/exhibitor-subsequent-payment-rejected.link_text', ['event_page_link' => route('upload_payment_proof', ['id' => $event->id])]) }}</span><span><!--[if mso]><i style="mso-font-width:500%" hidden>&#8202;&#8202;&#8203;</i><![endif]--></span></a>
+                                            style="max-width:100%;display:inline-block;line-height:120%;mso-padding-alt:0px;mso-text-raise:9px">{{ __('emails/exhibitor-subsequent-payment-rejected.link_text', ['event_page_link' => route('upload_payment_proof', ['slug' => $event->slug])]) }}</span><span><!--[if mso]><i style="mso-font-width:500%" hidden>&#8202;&#8202;&#8203;</i><![endif]--></span></a>
                                 </td>
                             </tr>
                         </tbody>
