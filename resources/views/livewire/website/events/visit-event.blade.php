@@ -175,7 +175,7 @@ new class extends Component {
                             'options' => $jobOptions,
                         ];
                     @endphp
-                    <div class="grid grid-cols-1 gap-4 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                         @include('website.components.forms.input.text-input', [
                             'data' => $badgeCompanyField,
                             'answerPath' => 'badge.company',
@@ -208,7 +208,7 @@ new class extends Component {
                                 'options' => $jobOptions,
                             ];
                         @endphp
-                        <div class="grid grid-cols-1 gap-4 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                             @include('website.components.forms.input.text-input', [
                                 'data' => $badgeCompanyField,
                                 'answerPath' => 'badge.company',
@@ -222,25 +222,42 @@ new class extends Component {
                         </div>
                     @endif
 
-                    @foreach ($section['fields'] as $fieldIndex => $field)
-                        @php
-                            $answerPath = "{$sectionIndex}.fields.{$fieldIndex}.answer";
-                        @endphp
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach ($section['fields'] as $fieldIndex => $field)
+                            @php
+                                $answerPath = "{$sectionIndex}.fields.{$fieldIndex}.answer";
+                                $fieldType =
+                                    $field['type'] ?? ($field['field_type'] ?? ($field['data']['type'] ?? null));
+                                $paragraphIndicators = [
+                                    $field['input_type'] ?? null,
+                                    $field['subtype'] ?? null,
+                                    $field['style'] ?? null,
+                                    $field['variant'] ?? null,
+                                    $field['mode'] ?? null,
+                                    $field['data']['input_type'] ?? null,
+                                ];
+                                $isParagraphInput =
+                                    $fieldType === 'input' && in_array('paragraph', $paragraphIndicators, true);
+                                $fullWidthTypes = ['checkbox', 'radio', 'upload'];
+                                $isFullWidth = in_array($fieldType, $fullWidthTypes, true) || $isParagraphInput;
+                            @endphp
+                            <div class="{{ $isFullWidth ? 'md:col-span-2' : '' }}">
+                                @include('website.components.forms.fields', [
+                                    'fields' => [$field],
+                                    'answerPath' => $answerPath,
+                                ])
 
-                        @include('website.components.forms.fields', [
-                            'fields' => [$field],
-                            'answerPath' => $answerPath,
-                        ])
+                                @error("formData.{$sectionIndex}.fields.{$fieldIndex}.answer")
+                                    <div class="text-error text-sm mt-1">{{ $message }}</div>
+                                @enderror
 
-                        @error("formData.{$sectionIndex}.fields.{$fieldIndex}.answer")
-                            <div class="text-error text-sm mt-1">{{ $message }}</div>
-                        @enderror
-
-                        {{-- Debug information to help troubleshoot --}}
-                        @include('website.components.forms.debug-path', [
-                            'answerPath' => $answerPath,
-                        ])
-                    @endforeach
+                                {{-- Debug information to help troubleshoot --}}
+                                @include('website.components.forms.debug-path', [
+                                    'answerPath' => $answerPath,
+                                ])
+                            </div>
+                        @endforeach
+                    </div>
 
                     <div class="h-8"></div>
                 @endforeach
