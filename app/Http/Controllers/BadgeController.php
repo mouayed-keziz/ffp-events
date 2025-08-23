@@ -70,6 +70,36 @@ class BadgeController extends Controller
     }
 
     /**
+     * Display a generated badge preview placed on a blank A4 and cropped to top-left quarter.
+     * Optional query params: name, job, company, qr_data (all optional; defaults applied).
+     */
+    public function showBlank(Request $request)
+    {
+        $data = [
+            'name' => $request->query('name', 'Sample Name'),
+            'job' => $request->query('job', 'Sample Job Title'),
+            'company' => $request->query('company', 'Sample Company'),
+            'qr_data' => $request->query('qr_data', 'SAMPLE:' . Str::uuid()),
+        ];
+
+        $generatedImage = BadgeService::generateBadgePreviewOnBlank($data);
+
+        if (!$generatedImage) {
+            return Response::make('Failed to generate blank badge preview.', 500);
+        }
+
+        try {
+            $imageData = $generatedImage->toPng();
+            return Response::make($imageData)->header('Content-Type', 'image/png');
+        } catch (\Exception $e) {
+            Log::error('Failed to encode blank badge preview image.', [
+                'error' => $e->getMessage(),
+            ]);
+            return Response::make('Failed to encode blank badge image.', 500);
+        }
+    }
+
+    /**
      * Download badges zip file
      *
      * @param Request $request

@@ -2,25 +2,26 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Endroid\QrCode\Color\Color;
 use App\Models\EventAnnouncement;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\View;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 // Intervention Image v3 Imports
-use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Interfaces\ImageInterface;
-use Intervention\Image\Typography\FontFactory;
+use Endroid\QrCode\Builder\Builder;
+use Illuminate\Support\Facades\Log;
+use Endroid\QrCode\Writer\PngWriter;
+use Illuminate\Support\Facades\View;
 
 // Endroid QR Code Imports (using Builder with constructor)
-use Endroid\QrCode\Builder\Builder;
-use Endroid\QrCode\Color\Color;
+use Intervention\Image\ImageManager;
 use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\RoundBlockSizeMode;
-use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\Typography\FontFactory;
+use Intervention\Image\Interfaces\ImageInterface;
 
 class BadgeService
 {
@@ -260,6 +261,62 @@ class BadgeService
             \Illuminate\Support\Facades\Log::error('Failed to generate badge with CSS: ' . $e->getMessage(), [
                 'exception' => $e,
                 'data' => $data
+            ]);
+            return null;
+        }
+    }
+
+    /**
+     * Create a blank white A4 portrait PNG file and return its filesystem path.
+     * Dimensions chosen are 2480x3508 (300 DPI) with ~1.414 aspect ratio.
+     *
+     * @return string Path to generated blank PNG file.
+     */
+    public static function createBlankA4Template(): string
+    {
+        $width = 1240;  // A4 @ 150dpi width (kept consistent with previous edit)
+        $height = 1754; // A4 @ 150dpi height
+
+        $publicPath = public_path('blank_a4.png');
+
+        if (!file_exists($publicPath)) {
+            // Create once and persist
+            $im = imagecreatetruecolor($width, $height);
+            $white = imagecolorallocate($im, 255, 255, 255);
+            imagefilledrectangle($im, 0, 0, $width, $height, $white);
+            imagepng($im, $publicPath);
+            imagedestroy($im);
+        }
+
+        return $publicPath;
+    }
+
+    /**
+     * Generate a badge preview on a freshly created blank A4 template and optionally crop
+     * to the top-left quarter (where the existing layout places the content).
+     * Re-uses existing generateBadgePreview logic without modifying original features.
+     *
+     * @param array $data Badge data (name, job, company, qr_data)
+     * @param bool $crop Whether to crop the final image to the top-left quarter
+     * @return ImageInterface|null
+     */
+    public static function generateBadgePreviewOnBlank(array $data, bool $crop = true): ?ImageInterface
+    {
+        try {
+            $blankPath = self::createBlankA4Template();
+            $image = self::generateBadgePreview($blankPath, $data);
+            if (!$image) {
+                return null;
+            }
+            if ($crop) {
+                return $image;
+            }
+
+            return $image;
+        } catch (\Throwable $e) {
+            Log::error('Failed to generate badge preview on blank A4', [
+                'exception' => $e,
+                'data' => $data,
             ]);
             return null;
         }

@@ -86,7 +86,6 @@ Route::middleware('local_middleware')->group(function () {
     });
 });
 
-// Route::get('/badge-preview', [BadgeController::class, 'show'])->name('badge.preview');
 Route::get('/exhibitor/events/{event}/submissions/{submission}/badges/download/{zipPath}', [BadgeController::class, 'downloadBadgesZip'])
     ->middleware('auth:exhibitor')
     ->name('exhibitor.badges.download');
@@ -96,5 +95,7 @@ Route::post('/clear-badge-redirect-session', function () {
     return response()->json(['success' => true]);
 })->middleware('auth:exhibitor')->name('clear.badge.redirect.session');
 
-// Import old English routes that redirect to new French routes
 require __DIR__ . '/old_redirect.php';
+
+// Route::get('/badge-preview', [BadgeController::class, 'show'])->name('badge.preview');
+// Route::get('/badge-preview/blank', [BadgeController::class, 'showBlank'])->name('badge.preview.blank');
