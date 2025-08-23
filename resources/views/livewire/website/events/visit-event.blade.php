@@ -193,22 +193,21 @@ new class extends Component {
                     @include('website.components.forms.input.section_title', [
                         'title' => $section['title'][app()->getLocale()] ?? $section['title']['fr'],
                     ])
-
-                    @if ($sectionIndex === 0)
-                        @php
-                            $badgeCompanyField = [
-                                'label' => [app()->getLocale() => __('website/visit-event.company')],
-                                'required' => true,
-                                'type' => 'text',
-                            ];
-                            $jobOptions = array_map(fn($job) => ['option' => $job], $availableJobs);
-                            $badgePositionField = [
-                                'label' => [app()->getLocale() => __('website/visit-event.position')],
-                                'required' => true,
-                                'options' => $jobOptions,
-                            ];
-                        @endphp
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @if ($sectionIndex === 0)
+                            @php
+                                $badgeCompanyField = [
+                                    'label' => [app()->getLocale() => __('website/visit-event.company')],
+                                    'required' => true,
+                                    'type' => 'text',
+                                ];
+                                $jobOptions = array_map(fn($job) => ['option' => $job], $availableJobs);
+                                $badgePositionField = [
+                                    'label' => [app()->getLocale() => __('website/visit-event.position')],
+                                    'required' => true,
+                                    'options' => $jobOptions,
+                                ];
+                            @endphp
                             @include('website.components.forms.input.text-input', [
                                 'data' => $badgeCompanyField,
                                 'answerPath' => 'badge.company',
@@ -219,10 +218,7 @@ new class extends Component {
                                 'answerPath' => 'badge.position',
                                 'disabled' => false,
                             ])
-                        </div>
-                    @endif
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @endif
                         @foreach ($section['fields'] as $fieldIndex => $field)
                             @php
                                 $answerPath = "{$sectionIndex}.fields.{$fieldIndex}.answer";
@@ -238,7 +234,7 @@ new class extends Component {
                                 ];
                                 $isParagraphInput =
                                     $fieldType === 'input' && in_array('paragraph', $paragraphIndicators, true);
-                                $fullWidthTypes = ['checkbox', 'radio', 'upload', 'select'];
+                                $fullWidthTypes = ['checkbox', 'radio', 'upload'];
                                 $isFullWidth = in_array($fieldType, $fullWidthTypes, true) || $isParagraphInput;
                             @endphp
                             <div class="{{ $isFullWidth ? 'md:col-span-2' : '' }}">
