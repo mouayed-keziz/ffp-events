@@ -300,7 +300,7 @@ class BadgeService
      * @param bool $crop Whether to crop the final image to the top-left quarter
      * @return ImageInterface|null
      */
-    public static function generateBadgePreviewOnBlank(array $data, bool $crop = true): ?ImageInterface
+    public static function generateBadgePreviewOnBlank(array $data): ?ImageInterface
     {
         try {
             $blankPath = self::createBlankA4Template();
@@ -308,10 +308,6 @@ class BadgeService
             if (!$image) {
                 return null;
             }
-            if ($crop) {
-                return $image;
-            }
-
             return $image;
         } catch (\Throwable $e) {
             Log::error('Failed to generate badge preview on blank A4', [
