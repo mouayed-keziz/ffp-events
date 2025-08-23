@@ -300,7 +300,7 @@ new class extends Component {
                                 ];
                                 $isParagraphInput =
                                     $fieldType === 'input' && in_array('paragraph', $paragraphIndicators, true);
-                                $fullWidthTypes = ['checkbox', 'radio', 'upload'];
+                                $fullWidthTypes = ['checkbox', 'radio', 'upload', 'select'];
                                 $isFullWidth = in_array($fieldType, $fullWidthTypes, true) || $isParagraphInput;
                             @endphp
                             <div class="{{ $isFullWidth ? 'md:col-span-2' : '' }}">
