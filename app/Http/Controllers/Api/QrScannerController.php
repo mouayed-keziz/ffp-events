@@ -10,11 +10,13 @@ use App\Models\BadgeCheckLog;
 use App\Models\CurrentAttendee;
 use App\Models\EventAnnouncement;
 use App\Models\User;
+use App\Services\BadgeService;
 use App\Services\QrScannerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class QrScannerController extends Controller
@@ -250,6 +252,116 @@ class QrScannerController extends Controller
                 'badge_position' => $badge->position,
                 'badge_company' => $badge->company,
             ]);
+        }
+    }
+
+    /**
+     * Download badge for a successfully scanned badge
+     */
+    public function downloadBadge(Request $request)
+    {
+        // Validation
+        $validator = Validator::make($request->all(), [
+            'badge_code' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid request data',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $badgeCode = $request->input('badge_code');
+            $hostessUser = Auth::user();
+
+            // Find badge by code
+            $badge = Badge::where('code', $badgeCode)->first();
+
+            if (!$badge) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Badge not found'
+                ], 404);
+            }
+
+            // Determine event from badge's submission to verify hostess access
+            $event = null;
+            if ($badge->visitor_submission_id) {
+                $visitorSubmission = $badge->visitorSubmission;
+                if ($visitorSubmission && $visitorSubmission->eventAnnouncement) {
+                    $event = $visitorSubmission->eventAnnouncement;
+                }
+            } elseif ($badge->exhibitor_submission_id) {
+                $exhibitorSubmission = $badge->exhibitorSubmission;
+                if ($exhibitorSubmission && $exhibitorSubmission->eventAnnouncement) {
+                    $event = $exhibitorSubmission->eventAnnouncement;
+                }
+            }
+
+            if (!$event) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Badge is not associated with any event'
+                ], 404);
+            }
+
+            // Check if the hostess is assigned to this event
+            if (!$hostessUser->assignedEvents()->where('event_announcements.id', $event->id)->exists()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Access denied: You are not assigned to this event'
+                ], 403);
+            }
+
+            // Generate badge using the exact badge data
+            $badgeData = [
+                'name' => $badge->name,
+                'job' => $badge->position,
+                'company' => $badge->company,
+                'qr_data' => $badge->code,
+            ];
+
+            $generatedImage = BadgeService::generateBadgePreviewOnBlank($badgeData);
+
+            if (!$generatedImage) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to generate badge'
+                ], 500);
+            }
+
+            try {
+                $imageData = $generatedImage->toPng();
+                $filename = 'badge_' . $badge->code . '.png';
+
+                return Response::make($imageData)
+                    ->header('Content-Type', 'image/png')
+                    ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+            } catch (\Exception $e) {
+                Log::error('Failed to encode badge image for download.', [
+                    'badge_code' => $badgeCode,
+                    'error' => $e->getMessage(),
+                ]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to encode badge image'
+                ], 500);
+            }
+        } catch (\Exception $e) {
+            Log::error('Badge Download Error: ' . $e->getMessage(), [
+                'badge_code' => $request->input('badge_code'),
+                'user' => Auth::id(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to download badge',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }

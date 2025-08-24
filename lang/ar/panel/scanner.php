@@ -32,6 +32,9 @@ return [
     'scanner_user' => 'مستخدم الماسح',
     'time_spent' => 'إجمالي الوقت المقضي',
 
+    // Actions
+    'download_badge' => 'تحميل الشارة',
+
     // Error messages
     'badge_not_found' => 'الوصول مرفوض: الشارة غير موجودة',
     'badge_not_associated' => 'الوصول مرفوض: الشارة غير مرتبطة بأي حدث',

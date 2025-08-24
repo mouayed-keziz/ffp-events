@@ -71,7 +71,8 @@ class QrScannerService
                 'icon' => 'heroicon-o-user',
                 'style' => 'info',
                 'type' => 'badge',
-                'layout' => 'grid'
+                'layout' => 'grid',
+                'colSpan' => 2
             ],
             [
                 'label' => __('panel/scanner.email'),
@@ -79,7 +80,8 @@ class QrScannerService
                 'icon' => 'heroicon-o-envelope',
                 'style' => 'info',
                 'type' => 'badge',
-                'layout' => 'grid'
+                'layout' => 'grid',
+                'colSpan' => 2
             ],
             [
                 'label' => __('panel/scanner.position'),
@@ -87,7 +89,8 @@ class QrScannerService
                 'icon' => 'heroicon-o-briefcase',
                 'style' => 'info',
                 'type' => 'badge',
-                'layout' => 'grid'
+                'layout' => 'grid',
+                'colSpan' => 2
             ],
             [
                 'label' => __('panel/scanner.company'),
@@ -127,6 +130,17 @@ class QrScannerService
                 'layout' => 'full'
             ];
         }
+
+        // Add download badge link for successful scans
+        $resultBlocks[] = [
+            'label' => __('panel/scanner.download_badge'),
+            'data' => $badgeCode, // We'll use this data for the download action
+            'icon' => 'heroicon-o-arrow-down-tray',
+            'style' => 'info',
+            'type' => 'badge', // Changed from action to badge to display as link
+            'layout' => 'full',
+            'action' => 'download-badge' // Action identifier
+        ];
 
         return [
             'state' => 'success',

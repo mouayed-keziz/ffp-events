@@ -32,6 +32,9 @@ return [
     'scanner_user' => 'Utilisateur du Scanner',
     'time_spent' => 'Temps Total Passé',
 
+    // Actions
+    'download_badge' => 'Télécharger le Badge',
+
     // Error messages
     'badge_not_found' => 'Accès refusé : Badge non trouvé',
     'badge_not_associated' => 'Accès refusé : Le badge n\'est associé à aucun événement',

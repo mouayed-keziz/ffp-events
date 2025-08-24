@@ -404,6 +404,7 @@
                 'default': 'text-gray-600 dark:text-gray-300'
             };
 
+            const widthClass = isFullWidth ? 'w-full' : '';
             const colSpanClass = (block.colSpan === 2) ? 'col-span-2' : '';
             const baseClasses = 'rounded-lg p-2 sm:p-3';
             const styleClass = styleClasses[block.style] || styleClasses['default'];
@@ -411,6 +412,27 @@
             const iconClass = iconColorClasses[block.style] || iconColorClasses['default'];
             const labelClass = labelColorClasses[block.style] || labelColorClasses['default'];
             const dataClass = dataColorClasses[block.style] || dataColorClasses['default'];
+
+            // Check if this is an action block
+            if (block.type === 'action') {
+                return `
+                    <div class="${baseClasses} ${styleClass} ${widthClass} ${colSpanClass}">
+                        <div class="flex items-center space-x-2 sm:space-x-3">
+                            <div class="flex-shrink-0">
+                                ${getIconSvg(block.icon, iconClass)}
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <button 
+                                    onclick="handleAction('${block.action}', '${block.data}')"
+                                    class="fi-btn fi-btn-size-sm inline-flex items-center gap-x-2 rounded-lg bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                                    ${getIconSvg(block.icon, 'text-white', 'h-4 w-4')}
+                                    ${block.label}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
 
             return `
                 <div class="${baseClasses} ${styleClass} ${colSpanClass}">
@@ -425,12 +447,93 @@
                                 ${block.label}
                             </p>
                             <div class="${block.style === 'highlight' ? 'text-xs sm:text-sm' : 'text-xs'} ${dataClass} ${block.style === 'highlight' ? 'truncate' : ''}">
-                                ${block.data}
+                                ${block.action ? `<a href="#" onclick="handleAction('${block.action}', '${block.data}'); return false;" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline">${block.data}</a>` : block.data}
                             </div>
                         </div>
                     </div>
                 </div>
             `;
+        }
+
+        function getIconSvg(iconName, colorClass = '', sizeClass = 'h-4 w-4') {
+            if (!iconName) return '';
+
+            const iconMap = {
+                'heroicon-s-check-circle': '<svg class="' + sizeClass + ' ' + colorClass +
+                    '" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.236 4.53L7.73 10.146a.75.75 0 00-1.06 1.061l2.03 2.03a.75.75 0 001.137-.089l3.857-5.401z" clip-rule="evenodd"></path></svg>',
+                'heroicon-o-arrow-down-tray': '<svg class="' + sizeClass + ' ' + colorClass +
+                    '" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"></path></svg>',
+                'heroicon-o-qr-code': '<svg class="' + sizeClass + ' ' + colorClass +
+                    '" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.75 6.75h.75v.75h-.75v-.75zM6.75 16.5h.75v.75h-.75v-.75zM16.5 6.75h.75v.75h-.75v-.75zM13.5 13.5h.75v.75h-.75v-.75zM13.5 19.5h.75v.75h-.75v-.75zM19.5 13.5h.75v.75h-.75v-.75zM19.5 19.5h.75v.75h-.75v-.75zM16.5 16.5h.75v.75h-.75v-.75z"></path></svg>',
+                'heroicon-o-user': '<svg class="' + sizeClass + ' ' + colorClass +
+                    '" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>'
+            };
+
+            return iconMap[iconName] || '';
+        }
+
+        // Handle action button clicks
+        async function handleAction(actionType, actionData) {
+            if (actionType === 'download-badge') {
+                await downloadBadge(actionData);
+            }
+        }
+
+        // Download badge function
+        async function downloadBadge(badgeCode) {
+            try {
+                console.log('Downloading badge for code:', badgeCode);
+
+                const response = await fetch('/admin/qr-scanner/download-badge', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        badge_code: badgeCode
+                    })
+                });
+
+                if (response.ok) {
+                    // Check if the response is JSON (error) or binary (file)
+                    const contentType = response.headers.get('Content-Type');
+
+                    if (contentType && contentType.includes('application/json')) {
+                        // Handle JSON error response
+                        const result = await response.json();
+                        console.error('Badge download failed:', result);
+                        alert('Failed to download badge: ' + (result.message || 'Unknown error'));
+                    } else {
+                        // Handle binary file response
+                        const blob = await response.blob();
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.style.display = 'none';
+                        a.href = url;
+                        a.download = 'badge_' + badgeCode + '.png';
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                        console.log('Badge downloaded successfully');
+                    }
+                } else {
+                    // Handle HTTP error
+                    try {
+                        const result = await response.json();
+                        console.error('Badge download failed:', result);
+                        alert('Failed to download badge: ' + (result.message || 'Unknown error'));
+                    } catch (e) {
+                        console.error('Badge download failed with status:', response.status);
+                        alert('Failed to download badge. Please try again.');
+                    }
+                }
+            } catch (error) {
+                console.error('Error downloading badge:', error);
+                alert('Network error occurred while downloading badge');
+            }
         }
 
         function buildErrorResultHTML(errorMessage) {

@@ -32,6 +32,9 @@ return [
     'scanner_user' => 'Scanner User',
     'time_spent' => 'Total Time Spent',
 
+    // Actions
+    'download_badge' => 'Download Badge',
+
     // Error messages
     'badge_not_found' => 'Access Denied: Badge not found',
     'badge_not_associated' => 'Access Denied: Badge is not associated with any event',
