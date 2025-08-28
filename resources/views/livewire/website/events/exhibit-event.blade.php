@@ -72,7 +72,7 @@ new class extends Component {
             \App\Activity\ExhibitorSubmissionActivity::logCreate($user, $submission);
 
             // Instead of showing success message, redirect to info validation
-            return redirect()->route('info_validation', ['id' => $this->event->id]);
+            return redirect()->route('info_validation', ['slug' => $this->event->slug]);
         } else {
             session()->flash('error', 'An error occurred while submitting the form. Please try again.');
         }

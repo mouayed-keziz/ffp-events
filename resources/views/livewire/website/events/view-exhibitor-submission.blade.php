@@ -63,7 +63,7 @@ new class extends Component {
 
         // Use the new updateExistingSubmission method
         if ($this->disabled) {
-            return redirect()->route('info_validation', ['id' => $this->event->id]);
+            return redirect()->route('info_validation', ['slug' => $this->event->slug]);
         }
         $success = $actions->updateExistingSubmission($this->submission, $this->formData);
 
@@ -102,7 +102,7 @@ new class extends Component {
                 \Illuminate\Support\Facades\Log::info("Admin notification sent to: {$admin->email} for submission update");
             }
 
-            return redirect()->route('info_validation', ['id' => $this->event->id]);
+            return redirect()->route('info_validation', ['slug' => $this->event->slug]);
         } else {
             session()->flash('error', 'An error occurred while updating the form. Please try again.');
         }
