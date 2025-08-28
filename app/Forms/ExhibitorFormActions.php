@@ -155,8 +155,8 @@ class ExhibitorFormActions extends BaseFormActions
                     }
 
                     // Then process file uploads specifically
-                    if (isset($field['type']) && $field['type'] === FormField::UPLOAD->value && isset($field['answer'])) {
-                        if ($field['answer'] instanceof TemporaryUploadedFile) {
+                    if (isset($field['type']) && $field['type'] === FormField::UPLOAD->value) {
+                        if (isset($field['answer']) && $field['answer'] instanceof TemporaryUploadedFile) {
                             // Generate unique identifier for the file
                             $fileId = (string) Str::uuid();
 
@@ -169,6 +169,12 @@ class ExhibitorFormActions extends BaseFormActions
 
                             // Replace the file in form data with the identifier
                             $processedFormData[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'] = $fileId;
+                        } elseif (!isset($field['answer']) || $field['answer'] === null || $field['answer'] === '') {
+                            // File was removed - set answer to null
+                            $processedFormData[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'] = null;
+                        } elseif (is_string($field['answer'])) {
+                            // Keep existing file UUID - no change
+                            $processedFormData[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'] = $field['answer'];
                         }
                     }
                 }
@@ -317,7 +323,7 @@ class ExhibitorFormActions extends BaseFormActions
                 foreach ($form['sections'] as $sectionIndex => $section) {
                     if (isset($answers[$formIndex]['sections'][$sectionIndex])) {
                         foreach ($section['fields'] as $fieldIndex => $field) {
-                            // For file uploads, check if file exists in the media library
+                            // For file uploads, check if file exists in the media library and enhance with file info
                             if (
                                 $field['type'] === FormField::UPLOAD->value &&
                                 isset($answers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'])
@@ -325,17 +331,25 @@ class ExhibitorFormActions extends BaseFormActions
 
                                 $fileId = $answers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'];
 
-                                // Check if this fileId exists in the media library
-                                $mediaExists = $submission->getMedia('attachments')
+                                // Find the media file by fileId
+                                $media = $submission->getMedia('attachments')
                                     ->filter(function (Media $media) use ($fileId) {
                                         return isset($media->custom_properties['fileId']) &&
                                             $media->custom_properties['fileId'] === $fileId;
                                     })
-                                    ->isNotEmpty();
+                                    ->first();
 
-                                // Only set the answer if the file exists
-                                if ($mediaExists) {
+                                // Only set the answer if the file exists, and include file metadata
+                                if ($media) {
                                     $formStructure[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'] = $fileId;
+                                    $formStructure[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['existing_file'] = [
+                                        'fileId' => $fileId,
+                                        'fileName' => $media->file_name,
+                                        'fileUrl' => $media->getUrl(),
+                                        'fileSize' => $media->size,
+                                        'mimeType' => $media->mime_type,
+                                        'uploadedAt' => $media->created_at->format('Y-m-d H:i:s')
+                                    ];
                                 }
                             }
                             // For all other field types, just copy the answers over
@@ -367,10 +381,11 @@ class ExhibitorFormActions extends BaseFormActions
             $processedData = $processResult['processedData'];
             $filesToProcess = $processResult['filesToProcess'];
 
-            // Track fileIds being replaced so we can remove old files later
-            $replacedFileIds = [];
+            // Track fileIds for removal and replacement
+            $filesToRemove = [];
+            $fileIdMap = []; // Old fileId => New fileId mapping
 
-            // Find and mark file replacements
+            // Find file changes
             foreach ($processedData as $formIndex => $form) {
                 if (!isset($form['sections'])) continue;
 
@@ -379,44 +394,44 @@ class ExhibitorFormActions extends BaseFormActions
 
                     foreach ($section['fields'] as $fieldIndex => $field) {
                         // Only interested in upload fields
-                        if ($field['type'] !== FormField::UPLOAD->value || !isset($field['answer'])) continue;
+                        if ($field['type'] !== FormField::UPLOAD->value) continue;
 
-                        // Check if this is a new file (UUID from processFormDataForSubmission)
-                        if (is_string($field['answer']) && Str::isUuid($field['answer'])) {
-                            // Check if there was a previous file for this field position in the original answers
-                            $oldAnswers = $submission->answers;
+                        // Get the old answer from the existing submission
+                        $oldAnswers = $submission->answers;
+                        $oldFileId = $oldAnswers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'] ?? null;
 
-                            if (isset($oldAnswers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'])) {
-                                $oldFileId = $oldAnswers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'];
-                                $replacedFileIds[] = $oldFileId;
+                        // Check what's happening with this field
+                        $newAnswer = $field['answer'] ?? null;
+
+                        if (empty($newAnswer) && !empty($oldFileId)) {
+                            // File was removed - mark for deletion
+                            $filesToRemove[] = $oldFileId;
+                        } elseif (is_string($newAnswer) && Str::isUuid($newAnswer) && $newAnswer !== $oldFileId) {
+                            // File was replaced - mark old for removal and track new
+                            if (!empty($oldFileId)) {
+                                $filesToRemove[] = $oldFileId;
                             }
+                            $fileIdMap[$oldFileId] = $newAnswer;
                         }
+                        // If $newAnswer === $oldFileId, no change - keep existing file
                     }
                 }
             }
 
-            // Update the submission with the new answers
-            $submission->answers = array_values($processedData);
-            $submission->total_prices = $processedData['total_prices'] ?? null;
-            $submission->status = SubmissionStatus::PENDING->value;
-            $submission->edit_deadline = null;
-            $submission->update_requested_at = null;
-            $submission->save();
-
-
-            // Remove media that's been replaced
-            if (!empty($replacedFileIds)) {
+            // Remove old media files
+            if (!empty($filesToRemove)) {
                 $submission->getMedia('attachments')
-                    ->filter(function (Media $media) use ($replacedFileIds) {
+                    ->filter(function (Media $media) use ($filesToRemove) {
                         return isset($media->custom_properties['fileId']) &&
-                            in_array($media->custom_properties['fileId'], $replacedFileIds);
+                            in_array($media->custom_properties['fileId'], $filesToRemove);
                     })
                     ->each(function (Media $media) {
+                        Log::info("Removing old media file: {$media->id} with fileId: {$media->custom_properties['fileId']}");
                         $media->delete();
                     });
             }
 
-            // Process new files using Media Library
+            // Add new media files
             foreach ($filesToProcess as $fileInfo) {
                 $media = $submission->addMedia($fileInfo['file']->getRealPath())
                     ->usingFileName($fileInfo['file']->getClientOriginalName())
@@ -428,6 +443,14 @@ class ExhibitorFormActions extends BaseFormActions
                     ->toMediaCollection('attachments');
                 Log::info("Media added to updated submission: {$media->id} with fileId: {$fileInfo['fileId']}");
             }
+
+            // Update the submission with the new answers
+            $submission->answers = array_values($processedData);
+            $submission->total_prices = $processedData['total_prices'] ?? null;
+            $submission->status = SubmissionStatus::PENDING->value;
+            $submission->edit_deadline = null;
+            $submission->update_requested_at = null;
+            $submission->save();
 
             Log::info("Exhibitor Submission updated: {$submission->id}");
             return true;
@@ -548,24 +571,32 @@ class ExhibitorFormActions extends BaseFormActions
                 foreach ($form['sections'] as $sectionIndex => $section) {
                     if (isset($answers[$formIndex]['sections'][$sectionIndex])) {
                         foreach ($section['fields'] as $fieldIndex => $field) {
-                            // For file uploads, check if file exists in the media library
+                            // For file uploads, check if file exists in the media library and enhance with file info
                             if (
                                 $field['type'] === FormField::UPLOAD->value &&
                                 isset($answers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'])
                             ) {
                                 $fileId = $answers[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'];
 
-                                // Check if this fileId exists in the media library
-                                $mediaExists = $submission->getMedia('post_attachments')
+                                // Find the media file by fileId
+                                $media = $submission->getMedia('post_attachments')
                                     ->filter(function (Media $media) use ($fileId) {
                                         return isset($media->custom_properties['fileId']) &&
                                             $media->custom_properties['fileId'] === $fileId;
                                     })
-                                    ->isNotEmpty();
+                                    ->first();
 
-                                // Only set the answer if the file exists
-                                if ($mediaExists) {
+                                // Only set the answer if the file exists, and include file metadata
+                                if ($media) {
                                     $formStructure[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['answer'] = $fileId;
+                                    $formStructure[$formIndex]['sections'][$sectionIndex]['fields'][$fieldIndex]['existing_file'] = [
+                                        'fileId' => $fileId,
+                                        'fileName' => $media->file_name,
+                                        'fileUrl' => $media->getUrl(),
+                                        'fileSize' => $media->size,
+                                        'mimeType' => $media->mime_type,
+                                        'uploadedAt' => $media->created_at->format('Y-m-d H:i:s')
+                                    ];
                                 }
                             }
                             // For all other field types, just copy the answers over

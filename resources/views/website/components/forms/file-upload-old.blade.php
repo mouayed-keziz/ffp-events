@@ -26,7 +26,6 @@
         disabled: {{ $disabled ? 'true' : 'false' }},
         existingFile: @js($existingFile),
         showingExistingFile: @js(!empty($existingFile)),
-        updateMode: false,
     
         getFileTypeMessage() {
             if (this.fileType === '{{ \App\Enums\FileUploadType::IMAGE }}') {
@@ -69,9 +68,9 @@
     
                 if (this.isValidFileType(droppedFile)) {
                     this.file = droppedFile;
-                    this.updateMode = false;
                 } else {
                     this.fileTypeError = true;
+                    // Clear the input
                     this.$refs.fileInput.value = '';
                 }
             }
@@ -86,10 +85,11 @@
     
                 if (this.isValidFileType(selectedFile)) {
                     this.file = selectedFile;
-                    this.updateMode = false;
                 } else {
                     this.fileTypeError = true;
+                    // Clear the input
                     e.target.value = '';
+                    // Also clear the Livewire model
                     @this.set('formData.{{ $answerPath }}', null);
                 }
             }
@@ -99,26 +99,24 @@
             if (this.disabled) return;
             this.file = null;
             this.showingExistingFile = false;
-            this.updateMode = false;
             this.$refs.fileInput.value = '';
             @this.set('formData.{{ $answerPath }}', null);
         },
-    
+
         startUpdate() {
             if (this.disabled) return;
             this.showingExistingFile = false;
-            this.updateMode = true;
             this.file = null;
             this.$refs.fileInput.value = '';
+            // Clear the existing file but don't set to null yet - user might cancel
             this.$nextTick(() => {
                 this.triggerFileDialog();
             });
         },
-    
+
         cancelUpdate() {
             if (this.disabled) return;
             this.showingExistingFile = true;
-            this.updateMode = false;
             this.file = null;
             this.$refs.fileInput.value = '';
         }
@@ -128,15 +126,15 @@
             x-ref="fileInput" class="hidden" @change="handleFileChange($event)"
             @if ($data['required'] ?? false) required @endif {{ $disabled ? 'disabled' : '' }} />
 
-        <!-- Drop zone - only show when no existing file or in update mode -->
-        <div x-show="!showingExistingFile || updateMode" @click="!disabled && triggerFileDialog()"
+        <div @click="!disabled && (!showingExistingFile || !existingFile) && triggerFileDialog()"
             @dragover.prevent="!disabled && (dragActive = true)" @dragleave.prevent="dragActive = false"
             @drop="!disabled && handleDrop($event)"
             :class="{
                 'border-2 border-primary': dragActive && !disabled,
                 'border-2 border-error': fileTypeError,
                 'opacity-60 cursor-not-allowed hover:bg-base-100/50': disabled,
-                'hover:bg-base-100 cursor-pointer': !disabled
+                'hover:bg-base-100 cursor-pointer': !disabled && (!showingExistingFile || !existingFile),
+                'hidden': showingExistingFile && existingFile && !file
             }"
             class="w-full p-8 md:p-0 aspect-[3] bg-base-100/50 border border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center transition-all">
 
@@ -162,8 +160,8 @@
         </div>
 
         <div x-show="!fileTypeError">
-            <!-- Show existing file if present and not in update mode -->
-            <template x-if="existingFile && showingExistingFile && !file && !updateMode">
+            <!-- Show existing file if present and no new file selected -->
+            <template x-if="existingFile && showingExistingFile && !file">
                 <div
                     class="flex justify-between items-center gap-4 my-2 py-2 px-4 rounded-btn font-semibold bg-green-50 border border-green-200">
                     <div class="flex items-center gap-4">
@@ -178,45 +176,57 @@
                         </div>
                     </div>
                     <div class="flex gap-2">
-                        <a :href="existingFile?.fileUrl" target="_blank" class="btn btn-sm btn-outline btn-info">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
-                                </path>
-                            </svg>
-                            {{ __('website/forms.file_upload.view') }}
-                        </a>
                         @if (!$disabled)
-                            <button type="button" @click="startUpdate()" class="btn btn-sm btn-outline">
+                            <a :href="existingFile?.fileUrl" target="_blank" class="btn btn-sm btn-outline btn-info">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
                                     </path>
                                 </svg>
-                                {{ __('website/forms.file_upload.update') }}
+                                {{ __('website/forms.file_upload.view') }}
+                            </a>
+                            <button type="button" @click="replaceExistingFile()" class="btn btn-sm btn-outline">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                                </svg>
+                                {{ __('website/forms.file_upload.replace') }}
                             </button>
+                            <button type="button" @click="removeFile()" class="btn btn-sm btn-outline btn-error">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                {{ __('website/forms.file_upload.remove') }}
+                            </button>
+                        @else
+                            <a :href="existingFile?.fileUrl" target="_blank" class="btn btn-sm btn-outline btn-info">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14">
+                                    </path>
+                                </svg>
+                                {{ __('website/forms.file_upload.view') }}
+                            </a>
                         @endif
                     </div>
                 </div>
             </template>
 
-            <!-- Show update mode when no file is selected but update was initiated -->
-            <template x-if="updateMode && !file && existingFile">
-                <div
-                    class="flex justify-between items-center gap-4 my-2 py-2 px-4 rounded-btn font-semibold bg-yellow-50 border border-yellow-200">
+            <!-- Show update mode when no existing file is being shown and no new file is selected -->
+            <template x-if="!showingExistingFile && !file && existingFile">
+                <div class="flex justify-between items-center gap-4 my-2 py-2 px-4 rounded-btn font-semibold bg-yellow-50 border border-yellow-200">
                     <div class="flex items-center gap-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-6 h-6 text-yellow-600">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-yellow-600">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                         </svg>
                         <div>
                             <p class="text-yellow-800">{{ __('website/forms.file_upload.update_mode') }}</p>
-                            <p class="text-xs text-yellow-600">
-                                {{ __('website/forms.file_upload.select_new_or_cancel') }}</p>
+                            <p class="text-xs text-yellow-600">{{ __('website/forms.file_upload.select_new_or_cancel') }}</p>
                         </div>
                     </div>
-                    <button type="button" @click="cancelUpdate()" class="btn btn-sm btn-outline btn-secondary">
+                    <button type="button" @click="cancelUpdate()"
+                        class="btn btn-sm btn-outline btn-secondary">
                         {{ __('website/forms.file_upload.cancel') }}
                     </button>
                 </div>
@@ -237,14 +247,13 @@
                         </svg>
                         <div>
                             <p x-text="'• ' + file?.name" :class="{ 'text-gray-500': disabled }"></p>
-                            <p class="text-xs text-blue-600"
-                                x-text="existingFile ? '{{ __('website/forms.file_upload.replacing_file') }}' : '{{ __('website/forms.file_upload.new_file') }}'">
-                            </p>
+                            <p class="text-xs text-blue-600" x-text="existingFile ? '{{ __('website/forms.file_upload.replacing_file') }}' : '{{ __('website/forms.file_upload.new_file') }}'"></p>
                         </div>
                     </div>
                     <div class="flex gap-2">
                         <template x-if="existingFile">
-                            <button type="button" @click="cancelUpdate()" class="btn btn-sm btn-outline btn-secondary">
+                            <button type="button" @click="cancelUpdate()"
+                                class="btn btn-sm btn-outline btn-secondary">
                                 {{ __('website/forms.file_upload.cancel') }}
                             </button>
                         </template>
@@ -254,8 +263,8 @@
                                 'btn-disabled bg-gray-200 border-gray-300': disabled
                             }"
                             class="btn btn-square btn-sm p-1">
-                            <svg class="text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <svg class="text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>

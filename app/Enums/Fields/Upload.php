@@ -5,6 +5,7 @@ namespace App\Enums\Fields;
 use App\Enums\FileUploadType;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use App\Models\VisitorSubmission;
+use App\Models\ExhibitorSubmission;
 use Filament\Infolists\Components\Group;
 use Filament\Infolists\Components\TextEntry;
 use Illuminate\Support\Facades\App;
@@ -30,6 +31,16 @@ class Upload
         }
         if (isset($field['data']['file_type'])) {
             $fieldData['data']['file_type'] = $field['data']['file_type'];
+        }
+
+        // Preserve existing file information if present
+        if (isset($field['existing_file'])) {
+            $fieldData['existing_file'] = $field['existing_file'];
+        }
+
+        // If there's an answer (fileId), preserve it
+        if (isset($field['answer']) && !empty($field['answer'])) {
+            $fieldData['answer'] = $field['answer'];
         }
 
         return $fieldData;
@@ -102,14 +113,14 @@ class Upload
      * @param array $field The field definition with type, data and answer
      * @param string $label The field label
      * @param mixed $answer The field answer value (fileId)
-     * @param VisitorSubmission|null $visitorSubmission The visitor submission model
+     * @param VisitorSubmission|ExhibitorSubmission|null $submission The submission model
      * @return Group|TextEntry Component suitable for displaying in an Infolist
      */
-    public static function createDisplayComponent(array $field, string $label, $answer, $visitorSubmission = null): Group
+    public static function createDisplayComponent(array $field, string $label, $answer, $submission = null): Group
     {
-        // If no visitor submission was provided, try to find it
-        if (!$visitorSubmission) {
-            $visitorSubmission = self::findVisitorSubmission();
+        // If no submission was provided, try to find it
+        if (!$submission) {
+            $submission = self::findSubmission();
         }
 
         // Display title and description if present
@@ -149,8 +160,8 @@ class Upload
         // Prepare upload component state
         $uploadState = ['answer' => $answer];
 
-        // If no file has been uploaded or the visitor submission is not found
-        if (empty($answer) || !$visitorSubmission) {
+        // If no file has been uploaded or the submission is not found
+        if (empty($answer) || !$submission) {
             $components[] = \App\Infolists\Components\UploadEntry::make('upload')
                 ->label($label)
                 ->state($uploadState);
@@ -159,8 +170,11 @@ class Upload
         }
 
         try {
+            // Determine collection based on submission type
+            $collection = $submission instanceof ExhibitorSubmission ? 'attachments' : 'attachments';
+
             // Get the media directly from the attachments collection by fileId in custom properties
-            $media = $visitorSubmission->getMedia('attachments')->filter(function ($media) use ($answer) {
+            $media = $submission->getMedia($collection)->filter(function ($media) use ($answer) {
                 return isset($media->custom_properties['fileId']) && $media->custom_properties['fileId'] === $answer;
             })->first();
 
@@ -234,6 +248,19 @@ class Upload
     }
 
     /**
+     * Update field options based on selection
+     * 
+     * @param array $options Current options array (not used for upload fields)
+     * @param mixed $selectedValue Value to be selected (not used for upload fields)
+     * @return array Updated options (returns empty array as uploads don't have options)
+     */
+    public static function updateOptions(array $options, $selectedValue): array
+    {
+        // Upload fields don't have options to update
+        return [];
+    }
+
+    /**
      * Get label-answer pair for upload field
      *
      * @param array $field The field definition with type, data and answer
@@ -256,16 +283,15 @@ class Upload
     }
 
     /**
-     * Attempt to find the visitor submission from various sources in the request
+     * Attempt to find the submission from various sources in the request
      * 
-     * @return VisitorSubmission|null
+     * @return VisitorSubmission|ExhibitorSubmission|null
      */
-    protected static function findVisitorSubmission(): ?VisitorSubmission
+    protected static function findSubmission()
     {
         $route = request()->route();
 
         // Try to get the visitor submission from the route parameters
-        // URL pattern: /admin/event-announcements/{record}/visitor-submissions/{visitorSubmission}
         $visitorSubmissionId = $route->parameter('visitorSubmission');
         if ($visitorSubmissionId) {
             $visitorSubmission = VisitorSubmission::find($visitorSubmissionId);
@@ -274,19 +300,40 @@ class Upload
             }
         }
 
-        // If we're on a page that uses Livewire and the visitor submission is available in the component
+        // Try to get the exhibitor submission from the route parameters
+        $exhibitorSubmissionId = $route->parameter('exhibitorSubmission');
+        if ($exhibitorSubmissionId) {
+            $exhibitorSubmission = ExhibitorSubmission::find($exhibitorSubmissionId);
+            if ($exhibitorSubmission) {
+                return $exhibitorSubmission;
+            }
+        }
+
+        // If we're on a page that uses Livewire and the submission is available in the component
         if (method_exists($route->getController(), 'getRecord')) {
-            $visitorSubmission = $route->getController()->getRecord();
-            if ($visitorSubmission instanceof VisitorSubmission) {
-                return $visitorSubmission;
+            $submission = $route->getController()->getRecord();
+            if ($submission instanceof VisitorSubmission || $submission instanceof ExhibitorSubmission) {
+                return $submission;
             }
         }
 
         // Check if we have an existing record property from a Livewire component
-        if (request()->has('record') && request()->route('record') instanceof VisitorSubmission) {
-            return request()->route('record');
+        $record = request()->route('record');
+        if ($record instanceof VisitorSubmission || $record instanceof ExhibitorSubmission) {
+            return $record;
         }
 
         return null;
+    }
+
+    /**
+     * Attempt to find the visitor submission from various sources in the request (legacy method)
+     * 
+     * @return VisitorSubmission|null
+     */
+    protected static function findVisitorSubmission(): ?VisitorSubmission
+    {
+        $submission = self::findSubmission();
+        return $submission instanceof VisitorSubmission ? $submission : null;
     }
 }

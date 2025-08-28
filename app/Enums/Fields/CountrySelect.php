@@ -196,6 +196,20 @@ class CountrySelect
     }
 
     /**
+     * Update field options based on selection
+     * 
+     * @param array $options Current options array (not used for country select)
+     * @param mixed $selectedValue Value to be selected
+     * @return array Updated options (returns empty array as countries are loaded dynamically)
+     */
+    public static function updateOptions(array $options, $selectedValue): array
+    {
+        // Country select doesn't use static options - countries are loaded dynamically
+        // So we just return an empty array since the selection will be handled in processFieldAnswer
+        return [];
+    }
+
+    /**
      * Get label-answer pair for country select field
      *
      * @param array $field The field definition with type, data and answer
