@@ -4,6 +4,7 @@ namespace App\Activity;
 
 use App\Enums\LogEvent;
 use App\Enums\LogName;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Model;
 
 class ExhibitorSubmissionActivity
@@ -536,5 +537,51 @@ class ExhibitorSubmissionActivity
             ->performedOn($submission)
             ->withProperties(array_merge($baseProperties, $properties ?? []))
             ->log('Admin denied update request');
+    }
+
+    /**
+     * Send a Meta Pixel CompleteRegistration event for exhibitor flows.
+     * Mirrors the payload logic in MetaPixelTest command but runs silently.
+     */
+    public static function sendMetaPixelCompleteRegistration(
+        ?string $clientIp,
+        ?string $firstName,
+        ?string $lastName,
+        ?string $email,
+        ?string $phone = null,
+        ?string $testEventCode = null
+    ): void {
+        try {
+            $pixelId = config('meta_pixel.pixel_id');
+            $accessToken = config('meta_pixel.access_token');
+
+            if (empty($pixelId) || empty($accessToken)) {
+                return; // Missing config, skip silently
+            }
+
+            $payload = [
+                'data' => [[
+                    'event_name' => 'Inscription Exposant',
+                    'event_time' => time(),
+                    'action_source' => 'website',
+                    'user_data' => array_filter([
+                        'em' => $email ? hash('sha256', strtolower($email)) : null,
+                        'ph' => $phone ? hash('sha256', $phone) : null,
+                        'fn' => $firstName ? hash('sha256', strtolower($firstName)) : null,
+                        'ln' => $lastName ? hash('sha256', strtolower($lastName)) : null,
+                        'client_ip_address' => $clientIp,
+                    ]),
+                ]],
+                'access_token' => $accessToken,
+            ];
+
+            if (!empty($testEventCode)) {
+                $payload['test_event_code'] = $testEventCode;
+            }
+
+            Http::post("https://graph.facebook.com/v18.0/{$pixelId}/events", $payload);
+        } catch (\Throwable $e) {
+            // Swallow all errors; function must not error
+        }
     }
 }

@@ -70,6 +70,14 @@ new class extends Component {
 
             // Log the exhibitor submission
             \App\Activity\ExhibitorSubmissionActivity::logCreate($user, $submission);
+            // Prepare Meta Pixel args; later call the method
+            $clientIp = request()->ip();
+            $firstName = $user->first_name ?? (str_contains($user->name ?? '', ' ') ? explode(' ', $user->name, 2)[0] : $user->name ?? null);
+            $lastName = $user->last_name ?? (str_contains($user->name ?? '', ' ') ? explode(' ', $user->name, 2)[1] : null);
+            $email = $user->email ?? null;
+            $phone = $user->phone ?? null;
+            \App\Activity\ExhibitorSubmissionActivity::sendMetaPixelCompleteRegistration($clientIp, $firstName, $lastName, $email, $phone);
+            // dd($clientIp, $firstName, $lastName, $email, $phone);
 
             // Instead of showing success message, redirect to info validation
             return redirect()->route('info_validation', ['slug' => $this->event->slug]);

@@ -131,7 +131,15 @@ new class extends Component {
 
             // Log the anonymous visitor submission
             \App\Activity\VisitorSubmissionActivity::logAnonymousCreate($submission);
-
+            // Collect Meta Pixel args then dd them; later call the method
+            $clientIp = request()->ip();
+            $fullName = $this->badgeName;
+            $firstName = $fullName ? explode(' ', $fullName, 2)[0] : null;
+            $lastName = $fullName ? explode(' ', $fullName, 2)[1] ?? null : null;
+            $email = $this->badgeEmail;
+            $phone = null; // anonymous flow has no phone
+            \App\Activity\VisitorSubmissionActivity::sendMetaPixelCompleteRegistrationAnonymous($clientIp, $firstName, $lastName, $email, $phone);
+            // dd($clientIp, $firstName, $lastName, $email, $phone);
             $this->formSubmitted = true;
             $this->redirect(route('visit_event_anonymous_form_submitted', ['slug' => $this->event->slug]));
             $this->successMessage = __('website/visit-event.form_success');
