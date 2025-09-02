@@ -225,6 +225,7 @@ class VisitorSubmissionActivity
             }
 
             $response = Http::post("https://graph.facebook.com/v18.0/{$pixelId}/events", $payload);
+            dd($response);
             if ($response->successful()) {
                 Log::error('visitor anonymos : Response: ' . $response->body());
             } else {
