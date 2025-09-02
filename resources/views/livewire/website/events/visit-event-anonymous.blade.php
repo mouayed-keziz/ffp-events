@@ -138,6 +138,7 @@ new class extends Component {
             $lastName = $fullName ? explode(' ', $fullName, 2)[1] ?? null : null;
             $email = $this->badgeEmail;
             $phone = null; // anonymous flow has no phone
+            dd('here');
             \App\Activity\VisitorSubmissionActivity::sendMetaPixelCompleteRegistrationAnonymous($clientIp, $firstName, $lastName, $email, $phone);
             // dd($clientIp, $firstName, $lastName, $email, $phone);
             $this->formSubmitted = true;
