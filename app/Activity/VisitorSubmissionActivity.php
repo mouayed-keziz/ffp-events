@@ -234,7 +234,6 @@ class VisitorSubmissionActivity
             }
         } catch (\Throwable $e) {
             // Swallow all errors
-            dd($e);
         }
     }
 }
