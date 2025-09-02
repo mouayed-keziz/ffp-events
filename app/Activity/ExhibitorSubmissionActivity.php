@@ -6,6 +6,7 @@ use App\Enums\LogEvent;
 use App\Enums\LogName;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class ExhibitorSubmissionActivity
 {
@@ -579,7 +580,13 @@ class ExhibitorSubmissionActivity
                 $payload['test_event_code'] = $testEventCode;
             }
 
-            Http::post("https://graph.facebook.com/v18.0/{$pixelId}/events", $payload);
+            $response = Http::post("https://graph.facebook.com/v18.0/{$pixelId}/events", $payload);
+            if ($response->successful()) {
+                Log::error('exhibitor : Response: ' . $response->body());
+            } else {
+                Log::error('exhibitor : Error occurred: HTTP ' . $response->status());
+                Log::error('Response: ' . $response->body());
+            }
         } catch (\Throwable $e) {
             // Swallow all errors; function must not error
         }

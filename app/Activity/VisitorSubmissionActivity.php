@@ -6,6 +6,7 @@ use App\Enums\LogEvent;
 use App\Enums\LogName;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class VisitorSubmissionActivity
 {
@@ -172,7 +173,13 @@ class VisitorSubmissionActivity
                 $payload['test_event_code'] = $testEventCode;
             }
 
-            Http::post("https://graph.facebook.com/v18.0/{$pixelId}/events", $payload);
+            $response = Http::post("https://graph.facebook.com/v18.0/{$pixelId}/events", $payload);
+            if ($response->successful()) {
+                Log::error('visitor : Response: ' . $response->body());
+            } else {
+                Log::error('visitor : Error occurred: HTTP ' . $response->status());
+                Log::error('Response: ' . $response->body());
+            }
         } catch (\Throwable $e) {
             // Swallow all errors; function must not error
         }
@@ -217,7 +224,13 @@ class VisitorSubmissionActivity
                 $payload['test_event_code'] = $testEventCode;
             }
 
-            Http::post("https://graph.facebook.com/v18.0/{$pixelId}/events", $payload);
+            $response = Http::post("https://graph.facebook.com/v18.0/{$pixelId}/events", $payload);
+            if ($response->successful()) {
+                Log::error('visitor anonymos : Response: ' . $response->body());
+            } else {
+                Log::error('visitor anonymos : Error occurred: HTTP ' . $response->status());
+                Log::error('Response: ' . $response->body());
+            }
         } catch (\Throwable $e) {
             // Swallow all errors
         }
