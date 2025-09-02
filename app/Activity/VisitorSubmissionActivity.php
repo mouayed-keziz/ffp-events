@@ -197,6 +197,7 @@ class VisitorSubmissionActivity
         ?string $testEventCode = null
     ): void {
         try {
+            Log::error("here sendMetaPixelCompleteRegistrationAnonymous");
             $pixelId = config('meta_pixel.pixel_id');
             $accessToken = config('meta_pixel.access_token');
 
@@ -225,7 +226,6 @@ class VisitorSubmissionActivity
             }
 
             $response = Http::post("https://graph.facebook.com/v18.0/{$pixelId}/events", $payload);
-            dd($response);
             if ($response->successful()) {
                 Log::error('visitor anonymos : Response: ' . $response->body());
             } else {
