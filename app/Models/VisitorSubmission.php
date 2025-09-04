@@ -52,7 +52,7 @@ class VisitorSubmission extends Model implements HasMedia
      */
     public function getEmailAttribute(): ?string
     {
-        return $this->visitor ? $this->visitor->email : $this->anonymous_email;
+        return $this->visitor && $this->visitor->exists ? $this->visitor->email : $this->anonymous_email;
     }
 
     /**

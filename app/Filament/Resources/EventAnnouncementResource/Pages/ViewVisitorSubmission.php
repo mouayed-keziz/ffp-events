@@ -26,6 +26,16 @@ class ViewVisitorSubmission extends ViewRecord
 
     protected static string $view = 'panel.resources.view-visitor-submission';
 
+    public function getBreadcrumbs(): array
+    {
+        return [
+            static::getResource()::getUrl() => __('panel/breadcrumbs.events'),
+            static::getResource()::getUrl("view", ["record" => $this->getRecord()->eventAnnouncement]) => $this->getRecord()->eventAnnouncement->name ?? $this->getRecord()->eventAnnouncement->title,
+            static::getResource()::getUrl("visitor-submissions", ["record" => $this->getRecord()->eventAnnouncement]) => __('panel/visitor_submissions.plural'),
+            $this->getRecord()->email ??  __('panel/visitor_submissions.single'),
+        ];
+    }
+
     /**
      * Get a fresh instance of the model represented by the resource.
      */
@@ -76,8 +86,9 @@ class ViewVisitorSubmission extends ViewRecord
         // Visitor details tab components
         $visitorDetailsComponents = [
             \Filament\Infolists\Components\TextEntry::make('visitor.name')
+                ->placeholder("(anonymous)")
                 ->label(__('panel/visitor_submissions.fields.visitor')),
-            \Filament\Infolists\Components\TextEntry::make('visitor.email')
+            \Filament\Infolists\Components\TextEntry::make('email')
                 ->label(__('panel/visitor_submissions.fields.email', ['default' => 'Email'])),
             \Filament\Infolists\Components\TextEntry::make('status')
                 ->label(__('panel/visitor_submissions.fields.status'))

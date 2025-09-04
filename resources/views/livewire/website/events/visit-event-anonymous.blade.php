@@ -219,8 +219,8 @@ new class extends Component {
             setInterval(syncFbCookies, 5000);
         })()">
 
-            <input class="input m-1" wire:model="fbc" id="fbc">
-            <input class="input m-1" wire:model="fbp" id="fbp">
+            <input type="hidden" wire:model="fbc" id="fbc">
+            <input type="hidden" wire:model="fbp" id="fbp">
 
             @if ($event->visitorForm)
                 @php $hasSections = !empty($event->visitorForm->sections); @endphp
