@@ -171,24 +171,54 @@ new class extends Component {
             <p class="text-sm">{{ __('website/visit-event.anonymous_fill_form_instruction') }}</p>
         </div> --}}
 
-        <form class="" wire:submit.prevent="submitWithBadgeInfo" x-data x-init="(() => {
+        <form wire:submit.prevent="submitWithBadgeInfo" x-data x-init="(() => {
+            // Helper to get cookie
             let getCookie = (name) => {
                 let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
                 return match ? match[2] : null;
             };
         
-            let syncFbCookies = () => {
-                let fbc = getCookie('_fbc') ?? '_fbc test';
-                let fbp = getCookie('_fbp') ?? '_fbp test';
-        
-                console.table({ fbc, fbp });
-                if (fbc) $wire.$set('fbc', fbc);
-                if (fbp) $wire.$set('fbp', fbp);
+            // Helper to set cookie (expire in 90 days)
+            let setCookie = (name, value) => {
+                let d = new Date();
+                d.setTime(d.getTime() + (90 * 24 * 60 * 60 * 1000));
+                document.cookie = name + '=' + encodeURIComponent(value) + ';path=/;expires=' + d.toUTCString();
             };
         
+            let syncFbCookies = () => {
+                // Parse fbclid from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const fbclid = urlParams.get('fbclid');
+        
+                let fbc = getCookie('_fbc');
+                let fbp = getCookie('_fbp');
+        
+                // Generate fbc if fbclid is present
+                if (fbclid) {
+                    const timestamp = Math.floor(Date.now() / 1000);
+                    fbc = `fb.1.${timestamp}.${fbclid}`;
+                    setCookie('_fbc', fbc);
+                }
+        
+                // Generate fbp if missing
+                if (!fbp) {
+                    const randomId = Math.floor(Math.random() * 1e10);
+                    fbp = `fb.1.${Math.floor(Date.now() / 1000)}.${randomId}`;
+                    setCookie('_fbp', fbp);
+                }
+        
+                // Push to Livewire
+                $wire.$set('fbc', fbc || null);
+                $wire.$set('fbp', fbp || null);
+            };
+        
+            // Run once on init
             syncFbCookies();
+        
+            // Optional: keep in sync if user navigates without reload
             setInterval(syncFbCookies, 5000);
         })()">
+
             <input class="input m-1" wire:model="fbc" id="fbc">
             <input class="input m-1" wire:model="fbp" id="fbp">
 
