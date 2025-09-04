@@ -581,12 +581,6 @@ class ExhibitorSubmissionActivity
             }
 
             $response = Http::post("https://graph.facebook.com/v18.0/{$pixelId}/events", $payload);
-            if ($response->successful()) {
-                Log::error('exhibitor : Response: ' . $response->body());
-            } else {
-                Log::error('exhibitor : Error occurred: HTTP ' . $response->status());
-                Log::error('Response: ' . $response->body());
-            }
         } catch (\Throwable $e) {
             // Swallow all errors; function must not error
         }

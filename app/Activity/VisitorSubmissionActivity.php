@@ -174,12 +174,6 @@ class VisitorSubmissionActivity
             }
 
             $response = Http::post("https://graph.facebook.com/v18.0/{$pixelId}/events", $payload);
-            if ($response->successful()) {
-                Log::error('visitor : Response: ' . $response->body());
-            } else {
-                Log::error('visitor : Error occurred: HTTP ' . $response->status());
-                Log::error('Response: ' . $response->body());
-            }
         } catch (\Throwable $e) {
             // Swallow all errors; function must not error
         }
@@ -194,10 +188,11 @@ class VisitorSubmissionActivity
         ?string $lastName,
         ?string $email,
         ?string $phone = null,
-        ?string $testEventCode = null
+        ?string $testEventCode = null,
+        ?string $fbc = null,
+        ?string $fbp = null
     ): void {
         try {
-            Log::error("here sendMetaPixelCompleteRegistrationAnonymous");
             $pixelId = config('meta_pixel.pixel_id');
             $accessToken = config('meta_pixel.access_token');
 
@@ -216,6 +211,8 @@ class VisitorSubmissionActivity
                         'fn' => $firstName ? hash('sha256', strtolower($firstName)) : null,
                         'ln' => $lastName ? hash('sha256', strtolower($lastName)) : null,
                         'client_ip_address' => $clientIp,
+                        'fbc' => $fbc,
+                        'fbp' => $fbp,
                     ]),
                 ]],
                 'access_token' => $accessToken,
@@ -226,12 +223,6 @@ class VisitorSubmissionActivity
             }
 
             $response = Http::post("https://graph.facebook.com/v18.0/{$pixelId}/events", $payload);
-            if ($response->successful()) {
-                Log::error('visitor anonymos : Response: ' . $response->body());
-            } else {
-                Log::error('visitor anonymos : Error occurred: HTTP ' . $response->status());
-                Log::error('Response: ' . $response->body());
-            }
         } catch (\Throwable $e) {
             // Swallow all errors
         }

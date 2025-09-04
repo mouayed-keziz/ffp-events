@@ -12,6 +12,9 @@ new class extends Component {
     use WithFileUploads;
     use HasFormFieldUpdates;
 
+    public ?string $fbc = null;
+    public ?string $fbp = null;
+
     // Event and form data
     public EventAnnouncement $event;
     public array $formData = [];
@@ -138,7 +141,7 @@ new class extends Component {
             $lastName = $fullName ? explode(' ', $fullName, 2)[1] ?? null : null;
             $email = $this->badgeEmail;
             $phone = null; // anonymous flow has no phone
-            \App\Activity\VisitorSubmissionActivity::sendMetaPixelCompleteRegistrationAnonymous($clientIp, $firstName, $lastName, $email, $phone);
+            \App\Activity\VisitorSubmissionActivity::sendMetaPixelCompleteRegistrationAnonymous($clientIp, $firstName, $lastName, $email, $phone, null, $this->fbc, $this->fbp);
             // dd($clientIp, $firstName, $lastName, $email, $phone);
             $this->formSubmitted = true;
             $this->redirect(route('visit_event_anonymous_form_submitted', ['slug' => $this->event->slug]));
@@ -168,7 +171,27 @@ new class extends Component {
             <p class="text-sm">{{ __('website/visit-event.anonymous_fill_form_instruction') }}</p>
         </div> --}}
 
-        <form class="" wire:submit.prevent="submitWithBadgeInfo">
+        <form class="" wire:submit.prevent="submitWithBadgeInfo" x-data x-init="(() => {
+            let getCookie = (name) => {
+                let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+                return match ? match[2] : null;
+            };
+        
+            let syncFbCookies = () => {
+                let fbc = getCookie('_fbc') ?? '_fbc test';
+                let fbp = getCookie('_fbp') ?? '_fbp test';
+        
+                console.table({ fbc, fbp });
+                if (fbc) $wire.$set('fbc', fbc);
+                if (fbp) $wire.$set('fbp', fbp);
+            };
+        
+            syncFbCookies();
+            setInterval(syncFbCookies, 5000);
+        })()">
+            <input class="input m-1" wire:model="fbc" id="fbc">
+            <input class="input m-1" wire:model="fbp" id="fbp">
+
             @if ($event->visitorForm)
                 @php $hasSections = !empty($event->visitorForm->sections); @endphp
                 @if (!$hasSections)
