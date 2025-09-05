@@ -34,17 +34,27 @@
     <!-- Camera Selection Section -->
     <div id="cameraSelection"
         class="hidden border-b border-gray-200 dark:border-gray-700 px-3 sm:px-6 py-2 sm:py-3 bg-gray-50 dark:bg-gray-800/50">
-        <div class="flex items-center gap-2 sm:gap-3">
-            <div class="flex items-center gap-2">
-                <x-heroicon-o-camera class="h-4 w-4 text-gray-400 dark:text-gray-500" />
-                <label for="cameraSelect" class="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Camera:
-                </label>
+        <div class="flex items-center justify-between gap-2 sm:gap-3">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <div class="flex items-center gap-2">
+                    <x-heroicon-o-camera class="h-4 w-4 text-gray-400 dark:text-gray-500" />
+                    <label for="cameraSelect" class="text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Camera:
+                    </label>
+                </div>
+                <select id="cameraSelect"
+                    class="flex-1 max-w-xs text-xs sm:text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-2 py-1.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="">Select Camera</option>
+                </select>
             </div>
-            <select id="cameraSelect"
-                class="flex-1 max-w-xs text-xs sm:text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white px-2 py-1.5 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                <option value="">Select Camera</option>
-            </select>
+
+            <div class="flex items-center">
+                <!-- Mirror Toggle Button (icon only) -->
+                <button type="button" id="mirrorToggle" aria-label="Toggle mirror"
+                    class="fi-btn fi-btn-size-sm inline-flex items-center rounded-lg px-2 py-1.5 text-xs font-semibold shadow-sm text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <x-heroicon-o-arrows-right-left class="h-4 w-4" />
+                </button>
+            </div>
         </div>
     </div>
 
@@ -71,7 +81,13 @@
 
 @push('styles')
     <style>
+        /* Default: not mirrored */
         #qr-reader video {
+            transform: scaleX(1);
+        }
+
+        /* Mirrored when the container has .mirrored */
+        #qr-reader.mirrored video {
             transform: scaleX(-1);
         }
     </style>
@@ -702,6 +718,12 @@
             updateUI();
             updateActionButton();
 
+            // Initialize mirror state (default to mirrored to match previous behavior)
+            const qrReaderEl = document.getElementById('qr-reader');
+            if (qrReaderEl && !qrReaderEl.classList.contains('mirrored')) {
+                qrReaderEl.classList.add('mirrored');
+            }
+
             const actionToggle = document.getElementById('actionToggle');
             if (actionToggle && !actionToggle.dataset.listenerAttached) {
                 actionToggle.addEventListener('click', toggleAction);
@@ -712,6 +734,16 @@
             if (cameraSelect && !cameraSelect.dataset.listenerAttached) {
                 cameraSelect.addEventListener('change', onCameraChange);
                 cameraSelect.dataset.listenerAttached = 'true';
+            }
+
+            const mirrorToggle = document.getElementById('mirrorToggle');
+            if (mirrorToggle && !mirrorToggle.dataset.listenerAttached) {
+                mirrorToggle.addEventListener('click', () => {
+                    const el = document.getElementById('qr-reader');
+                    if (!el) return;
+                    el.classList.toggle('mirrored');
+                });
+                mirrorToggle.dataset.listenerAttached = 'true';
             }
 
             setTimeout(() => initializeCameras(), 500);
