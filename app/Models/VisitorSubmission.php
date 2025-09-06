@@ -28,6 +28,7 @@ class VisitorSubmission extends Model implements HasMedia
     ];
     public function getRecordTitleAttribute()
     {
+        return "test";
         if ($this->isAnonymous()) {
             return __("panel/visitor_submissions.single") . " - " . $this->visitor->name;
         } else {
