@@ -101,6 +101,6 @@ class EventExhibitorSubmissionsChart extends ChartWidget
 
     protected function getType(): string
     {
-        return 'bar';
+        return 'line';
     }
 }
