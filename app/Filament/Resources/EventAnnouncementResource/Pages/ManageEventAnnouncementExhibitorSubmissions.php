@@ -56,6 +56,7 @@ class ManageEventAnnouncementExhibitorSubmissions extends ManageRelatedRecords
     {
         return $table
             ->recordTitleAttribute('id')
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 Tables\Columns\TextColumn::make('id'),
                 Tables\Columns\TextColumn::make('exhibitor.email')
