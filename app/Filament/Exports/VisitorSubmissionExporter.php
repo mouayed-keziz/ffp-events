@@ -2,7 +2,7 @@
 
 namespace App\Filament\Exports;
 
-use App\Filament\Exports\Traits\HasDynamicColumns;
+// use App\Filament\Exports\Traits\HasDynamicColumns;
 use App\Models\VisitorSubmission;
 use Filament\Actions\Exports\ExportColumn;
 use Filament\Actions\Exports\Exporter;
@@ -10,22 +10,22 @@ use Filament\Actions\Exports\Models\Export;
 
 class VisitorSubmissionExporter extends Exporter
 {
-    use HasDynamicColumns;
+    // use HasDynamicColumns;
 
     protected static ?string $model = VisitorSubmission::class;
     public static ?int $eventId = null;
 
-    protected function getDynamicColumns(?int $eventId): array
-    {
-        return [
-            //         // ExportColumn::make('visitor_special_col')
-            //         //     ->label('Visitor Special Column')
-            //         //     ->state(fn(VisitorSubmission $record) => "Special visitor data for event {$eventId}"),
-            //         // ExportColumn::make('visitor_event_info')
-            //         //     ->label('Visitor Event Info')
-            //         //     ->state(fn(VisitorSubmission $record) => "Visitor {$record->visitor->name} in event {$eventId}"),
-        ];
-    }
+    // protected function getDynamicColumns(?int $eventId): array
+    // {
+    //     return [
+    //         // ExportColumn::make('visitor_special_col')
+    //         //     ->label('Visitor Special Column')
+    //         //     ->state(fn(VisitorSubmission $record) => "Special visitor data for event {$eventId}"),
+    //         // ExportColumn::make('visitor_event_info')
+    //         //     ->label('Visitor Event Info')
+    //         //     ->state(fn(VisitorSubmission $record) => "Visitor {$record->visitor->name} in event {$eventId}"),
+    //     ];
+    // }
 
     public static function getColumns(): array
     {

@@ -2,7 +2,7 @@
 
 namespace App\Filament\Exports;
 
-use App\Filament\Exports\Traits\HasDynamicColumns;
+// use App\Filament\Exports\Traits\HasDynamicColumns;
 use App\Models\ExhibitorSubmission;
 use Filament\Actions\Exports\ExportColumn;
 use Filament\Actions\Exports\Exporter;
@@ -11,28 +11,28 @@ use Illuminate\Database\Eloquent\Model;
 
 class ExhibitorSubmissionExporter extends Exporter
 {
-    use HasDynamicColumns;
+    // use HasDynamicColumns;
 
     protected static ?string $model = ExhibitorSubmission::class;
     public static ?int $eventId = null;
 
-    protected function getDynamicColumns(?int $eventId): array
-    {
-        return [
-            // ExportColumn::make('exhibitor id')
-            //     ->label('exhibitor id')
-            //     ->state(fn(ExhibitorSubmission $record) => $record->exhibitor->id),
-            // ExportColumn::make('submission id')
-            //     ->label('submission id')
-            //     ->state(fn(ExhibitorSubmission $record) => $record->id),
-            // ExportColumn::make('json')
-            //     ->label('json answers')
-            //     ->state(fn(ExhibitorSubmission $record) => json_encode($record)),
-            // ExportColumn::make('created at')
-            //     ->label('created at')
-            //     ->state(fn(ExhibitorSubmission $record) => $record->created_at),
-        ];
-    }
+    // protected function getDynamicColumns(?int $eventId): array
+    // {
+    // return [
+    // ExportColumn::make('exhibitor id')
+    //     ->label('exhibitor id')
+    //     ->state(fn(ExhibitorSubmission $record) => $record->exhibitor->id),
+    // ExportColumn::make('submission id')
+    //     ->label('submission id')
+    //     ->state(fn(ExhibitorSubmission $record) => $record->id),
+    // ExportColumn::make('json')
+    //     ->label('json answers')
+    //     ->state(fn(ExhibitorSubmission $record) => json_encode($record)),
+    // ExportColumn::make('created at')
+    //     ->label('created at')
+    //     ->state(fn(ExhibitorSubmission $record) => $record->created_at),
+    // ];
+    // }
 
     public static function getColumns(): array
     {
