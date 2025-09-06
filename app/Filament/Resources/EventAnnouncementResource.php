@@ -134,12 +134,14 @@ class EventAnnouncementResource extends Resource
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_visitor_submissions'))
                     ->url(fn() => static::getUrl('visitor-submissions', ['record' => $record->slug]))
                     ->icon('heroicon-o-user-group')
+                    ->badge(fn() => $record->visitorSubmissions()->count() ?: null)
                     ->group($REGISTRATION_MANAGEMENT)
                     ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementVisitorSubmissions::getRouteName()])),
 
                 PageNavigationItem::make(__('panel/event_announcement.actions.manage_exhibitor_submissions'))
                     ->url(fn() => static::getUrl('exhibitor-submissions', ['record' => $record->slug]))
                     ->icon('heroicon-o-user-group')
+                    ->badge(fn() => $record->exhibitorSubmissions()->count() ?: null)
                     ->group($REGISTRATION_MANAGEMENT)
                     ->isActiveWhen(fn() => request()->routeIs([Pages\ManageEventAnnouncementExhibitorSubmissions::getRouteName()])),
 
