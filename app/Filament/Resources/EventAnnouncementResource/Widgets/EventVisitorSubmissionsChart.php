@@ -11,7 +11,7 @@ use Filament\Support\RawJs;
 class EventVisitorSubmissionsChart extends ChartWidget
 {
     public ?EventAnnouncement $record = null;
-    public ?string $filter = 'month'; // Added filter property
+    public ?string $filter = 'week'; // Added filter property
 
     protected static ?string $pollingInterval = '30s';
     protected static bool $isLazy = true;
