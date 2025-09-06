@@ -59,8 +59,13 @@ class ManageEventAnnouncementVisitorSubmissions extends ManageRelatedRecords
             ->columns([
                 Tables\Columns\TextColumn::make('id'),
                 Tables\Columns\TextColumn::make('displayName')
-                    ->searchable()
-                    ->sortable()
+                    ->searchable(query: function (Builder $query, string $search): Builder {
+                        return $query->where('anonymous_email', 'like', "%{$search}%")
+                            ->orWhereHas('visitor', function (Builder $q) use ($search): Builder {
+                                return $q->where('name', 'like', "%{$search}%")
+                                    ->orWhere('email', 'like', "%{$search}%");
+                            });
+                    })
                     ->label(__("panel/visitor_submissions.fields.visitor")),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
@@ -100,7 +105,7 @@ class ManageEventAnnouncementVisitorSubmissions extends ManageRelatedRecords
                     ->options([
                         'event_id' => $this->getOwnerRecord()->id,
                     ])
-                    ->disabled(true)
+                    ->disabled(false)
                     // ->label(__('Export Visitor Submissions'))
                     ->icon('heroicon-o-arrow-down-tray')
                 // ->color('success'),

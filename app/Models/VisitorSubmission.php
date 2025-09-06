@@ -60,7 +60,7 @@ class VisitorSubmission extends Model implements HasMedia
      */
     public function getNameAttribute(): ?string
     {
-        return $this->visitor ? $this->visitor->name : 'Anonymous Visitor';
+        return $this->visitor && $this->visitor->exists ? $this->visitor->name : 'Anonymous Visitor';
     }
 
     /**
