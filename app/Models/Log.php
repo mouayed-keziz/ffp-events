@@ -22,8 +22,16 @@ class Log extends Activity
         if ($this->subject === null) {
             return __('panel/logs.empty_states.deleted_record') . ' - id:' . $this->subject_id;
         }
-        return __('panel/logs.empty_states.deleted_record') . ' - id:' . $this->subject_id;
-        // return $this->subject->recordTitle;
+        if (method_exists($this->subject, 'getRecordTitleAttribute') || isset($this->subject->recordTitle)) {
+            return $this->subject->recordTitle;
+        }
+
+        if (isset($this->subject->name)) {
+            return $this->subject->name;
+        }
+
+        return class_basename($this->subject) . ':' . $this->subject->id;
+        // return __('panel/logs.empty_states.deleted_record') . ' - id:' . $this->subject_id;
     }
     public function getSubjectLinkAttribute()
     {
