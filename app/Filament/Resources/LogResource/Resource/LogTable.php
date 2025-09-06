@@ -57,8 +57,26 @@ class LogTable
                     }
                     return null;
                 }),
-            Tables\Columns\TextColumn::make('causer.roles.name')->badge()
+            Tables\Columns\TextColumn::make('causer_role')
+                ->badge()
                 ->toggleable()
+                ->state(function ($record) {
+                    if (!$record->causer) {
+                        return null;
+                    }
+
+                    $causerType = class_basename($record->causer_type);
+
+                    if ($causerType === 'User') {
+                        return $record->causer->roles->pluck('name')->implode(', ');
+                    } elseif ($causerType === 'Visitor') {
+                        return __("panel/visitors.resource.single");
+                    } elseif ($causerType === 'Exhibitor') {
+                        return __("panel/exhibitors.resource.single");
+                    }
+
+                    return null;
+                })
                 ->placeholder(__('panel/admins.empty_states.roles')),
 
             Tables\Columns\TextColumn::make('event')
