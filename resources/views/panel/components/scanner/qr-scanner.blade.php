@@ -74,6 +74,19 @@
                         {{ __('panel/scanner.scanner_hint') }}
                     </p>
                 </div>
+                <!-- Hidden input dedicated to USB-HID hardware scanners (keyboard emulation) -->
+                <input
+                    id="hardwareScannerInput"
+                    type="text"
+                    inputmode="text"
+                    autocomplete="off"
+                    autocapitalize="none"
+                    spellcheck="false"
+                    aria-hidden="true"
+                    tabindex="0"
+                    class="sr-only"
+                    style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0;"
+                />
             </div>
         </div>
     </div>
@@ -104,6 +117,10 @@
         const SCAN_COOLDOWN_MS = 3000; // 3 seconds between scans of the same code
         let availableCameras = []; // Store available cameras
         let selectedCameraId = null; // Currently selected camera
+    // Hardware scanner state
+    let hardwareScannerMode = false; // When true, camera scanning is bypassed
+    let hardwareInputEl = null; // The hidden input element
+    let hardwareFocusIntervalId = null; // Interval to keep focus when page is active
 
         // Get CSRF token and locale for API calls
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
@@ -134,7 +151,7 @@
 
                 // Update button appearance
                 actionToggle.className = `fi-btn fi-btn-size-sm inline-flex items-center gap-x-1 sm:gap-x-2 rounded-lg px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-colors text-white ${
-                    isCheckIn 
+                    isCheckIn
                         ? 'bg-blue-600 hover:bg-blue-500 focus-visible:outline-blue-600 dark:bg-blue-500 dark:hover:bg-blue-400'
                         : 'bg-orange-600 hover:bg-orange-500 focus-visible:outline-orange-600 dark:bg-orange-500 dark:hover:bg-orange-400'
                 }`;
@@ -230,6 +247,10 @@
 
         // Handle camera selection change
         function onCameraChange() {
+            if (hardwareScannerMode) {
+                console.log('Hardware scanner mode active — ignoring camera change.');
+                return;
+            }
             const cameraSelect = document.getElementById('cameraSelect');
             if (cameraSelect) {
                 selectedCameraId = cameraSelect.value;
@@ -438,7 +459,7 @@
                                 ${getIconSvg(block.icon, iconClass)}
                             </div>
                             <div class="min-w-0 flex-1">
-                                <button 
+                                <button
                                     onclick="handleAction('${block.action}', '${block.data}')"
                                     class="fi-btn fi-btn-size-sm inline-flex items-center gap-x-2 rounded-lg bg-blue-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
                                     ${getIconSvg(block.icon, 'text-white', 'h-4 w-4')}
@@ -615,6 +636,12 @@
         function startScanner() {
             console.log('Starting QR scanner...');
 
+            // If a hardware scanner has been used, bypass starting the camera
+            if (hardwareScannerMode) {
+                console.log('Hardware scanner mode active — camera scanner disabled.');
+                return;
+            }
+
             if (typeof Html5QrcodeScanner === 'undefined') {
                 console.error('Html5QrcodeScanner library not loaded!');
                 return;
@@ -709,6 +736,61 @@
             }
         }
 
+        // Setup the hidden input to capture hardware (USB-HID) scanner input
+        function setupHardwareScannerInput() {
+            hardwareInputEl = document.getElementById('hardwareScannerInput');
+            if (!hardwareInputEl) {
+                console.warn('hardwareScannerInput not found in DOM.');
+                return;
+            }
+
+            // Ensure event listener is attached once
+            if (!hardwareInputEl.dataset.listenerAttached) {
+                hardwareInputEl.addEventListener('keydown', (e) => {
+                    // Some scanners may send 'Enter' or 'NumpadEnter'
+                    if (e.key === 'Enter' || e.code === 'Enter' || e.code === 'NumpadEnter' || e.keyCode === 13) {
+                        e.preventDefault();
+                        const code = (hardwareInputEl.value || '').trim();
+                        // Clear immediately for next scan
+                        hardwareInputEl.value = '';
+                        if (!code) return;
+
+                        // Mark hardware mode and stop camera if running
+                        hardwareScannerMode = true;
+                        if (scanning && html5QrcodeScanner) {
+                            stopScanner();
+                        }
+                        console.log('Hardware scan detected, code:', code);
+                        processScanResult(code);
+
+                        // Keep focus for subsequent scans
+                        queueMicrotask(() => hardwareInputEl.focus());
+                    }
+                });
+                hardwareInputEl.dataset.listenerAttached = 'true';
+            }
+
+            // Keep the hidden input focused when page is visible
+            const ensureFocus = () => {
+                if (document.visibilityState === 'visible' && document.activeElement !== hardwareInputEl) {
+                    hardwareInputEl.focus({ preventScroll: true });
+                }
+            };
+
+            // Kick off focus now
+            ensureFocus();
+
+            // Set up interval if not already running
+            if (!hardwareFocusIntervalId) {
+                hardwareFocusIntervalId = setInterval(ensureFocus, 1000);
+            }
+
+            // Also re-focus on typical page events
+            window.addEventListener('focus', ensureFocus);
+            document.addEventListener('visibilitychange', ensureFocus);
+            document.addEventListener('click', ensureFocus, true);
+        }
+
         // Robust initialization (Filament/Livewire pages may load after DOMContentLoaded has fired)
         function initScannerUI() {
             // Prevent double init
@@ -723,6 +805,9 @@
             if (qrReaderEl && !qrReaderEl.classList.contains('mirrored')) {
                 qrReaderEl.classList.add('mirrored');
             }
+
+            // Initialize hardware scanner input
+            setupHardwareScannerInput();
 
             const actionToggle = document.getElementById('actionToggle');
             if (actionToggle && !actionToggle.dataset.listenerAttached) {
@@ -760,6 +845,8 @@
         if (window.Livewire) {
             document.addEventListener('livewire:navigated', () => {
                 window.__qrScannerInitialized = false; // allow re-init after navigation
+                // Re-init hardware scanner input and keep focus after navigation
+                setupHardwareScannerInput();
                 initScannerUI();
             });
         }
