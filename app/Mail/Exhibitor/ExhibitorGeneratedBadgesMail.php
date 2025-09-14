@@ -102,7 +102,7 @@ class ExhibitorGeneratedBadgesMail extends Mailable
             foreach ($this->badges as $badge) {
                 if ($badge->hasMedia('image')) {
                     $badgePath = $badge->getFirstMediaPath('image');
-                    $badgeFileName = "badge_{$badge->code}.pdf";
+                    $badgeFileName = "badge_{$badge->code}.png";
                     if (file_exists($badgePath)) {
                         $zip->addFile($badgePath, $badgeFileName);
                     }
