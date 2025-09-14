@@ -77,6 +77,47 @@ class ExhibitorGeneratedBadgesMail extends Mailable
     }
 
     /**
+     * Build a ZIP file containing PNG badge images, mirroring Volt logic.
+     *
+     * @param \Illuminate\Support\Collection $badges
+     * @return string Full path to the generated ZIP file
+     */
+    private function generateBadgesZip(Collection $badges): string
+    {
+        $zipFileName = 'badges_' . $this->submission->id . '_' . time() . '.zip';
+        $zipFilePath = storage_path('app/temp/' . $zipFileName);
+
+        if (!file_exists(storage_path('app/temp'))) {
+            mkdir(storage_path('app/temp'), 0755, true);
+        }
+
+        $zip = new ZipArchive();
+        if ($zip->open($zipFilePath, ZipArchive::CREATE) === true) {
+            foreach ($badges as $badge) {
+                if ($badge->hasMedia('image')) {
+                    $mediaItems = $badge->getMedia('image');
+                    $pngMedia = $mediaItems->first(function ($m) {
+                        $fileName = strtolower($m->file_name ?? '');
+                        $mime = strtolower($m->mime_type ?? '');
+                        return str_ends_with($fileName, '.png') || str_contains($mime, 'image/png');
+                    });
+
+                    $media = $pngMedia ?: $mediaItems->first();
+                    if ($media) {
+                        $badgePath = method_exists($media, 'getPath') ? $media->getPath() : $badge->getFirstMediaPath('image');
+                        if (is_string($badgePath) && file_exists($badgePath)) {
+                            $zip->addFile($badgePath, "badge_{$badge->code}.png");
+                        }
+                    }
+                }
+            }
+            $zip->close();
+        }
+
+        return $zipFilePath;
+    }
+
+    /**
      * Get the attachments for the message.
      *
      * @return array<int, \Illuminate\Mail\Mailables\Attachment>
@@ -88,43 +129,28 @@ class ExhibitorGeneratedBadgesMail extends Mailable
             return [];
         }
 
-        // Create a temporary zip file
-        $zipFileName = 'badges_' . $this->exhibitor->id . '_' . time() . '.zip';
-        $zipFilePath = storage_path('app/temp/' . $zipFileName);
+        // Build ZIP using the same logic as the Volt component
+        $zipFilePath = $this->generateBadgesZip($this->badges);
 
-        // Ensure the temp directory exists
-        if (!file_exists(storage_path('app/temp'))) {
-            mkdir(storage_path('app/temp'), 0755, true);
+        if (!file_exists($zipFilePath)) {
+            return [];
         }
 
-        $zip = new ZipArchive();
-        if ($zip->open($zipFilePath, ZipArchive::CREATE) === TRUE) {
-            foreach ($this->badges as $badge) {
-                if ($badge->hasMedia('image')) {
-                    $badgePath = $badge->getFirstMediaPath('image');
-                    $badgeFileName = "badge_{$badge->code}.png";
-                    if (file_exists($badgePath)) {
-                        $zip->addFile($badgePath, $badgeFileName);
-                    }
-                }
+        // Create an attachment from the zip file
+        $safeTitle = (string) $this->event->getTranslation('title', $this->locale);
+        $safeTitle = preg_replace('/[\\\/:*?"<>|]+/', '-', $safeTitle) ?: 'badges';
+
+        $attachment = Attachment::fromPath($zipFilePath)
+            ->as("badges_{$safeTitle}.zip")
+            ->withMime('application/zip');
+
+        // Delete the temporary zip file after sending
+        register_shutdown_function(function () use ($zipFilePath) {
+            if (file_exists($zipFilePath)) {
+                @unlink($zipFilePath);
             }
-            $zip->close();
+        });
 
-            // Create an attachment from the zip file
-            $attachment = Attachment::fromPath($zipFilePath)
-                ->as("badges_" . $this->event->getTranslation('title', $this->locale) . ".zip")
-                ->withMime('application/zip');
-
-            // Register a callback to delete the temporary zip file after sending
-            register_shutdown_function(function () use ($zipFilePath) {
-                if (file_exists($zipFilePath)) {
-                    unlink($zipFilePath);
-                }
-            });
-
-            return [$attachment];
-        }
-
-        return [];
+        return [$attachment];
     }
 }
