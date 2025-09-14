@@ -94,21 +94,23 @@ class ExhibitorGeneratedBadgesMail extends Mailable
         $zip = new ZipArchive();
         if ($zip->open($zipFilePath, ZipArchive::CREATE) === true) {
             foreach ($badges as $badge) {
-                if ($badge->hasMedia('image')) {
-                    $mediaItems = $badge->getMedia('image');
-                    $pngMedia = $mediaItems->first(function ($m) {
-                        $fileName = strtolower($m->file_name ?? '');
-                        $mime = strtolower($m->mime_type ?? '');
-                        return str_ends_with($fileName, '.png') || str_contains($mime, 'image/png');
-                    });
-
-                    $media = $pngMedia ?: $mediaItems->first();
-                    if ($media) {
-                        $badgePath = method_exists($media, 'getPath') ? $media->getPath() : $badge->getFirstMediaPath('image');
-                        if (is_string($badgePath) && file_exists($badgePath)) {
-                            $zip->addFile($badgePath, "badge_{$badge->code}.png");
-                        }
-                    }
+                if (!$badge->hasMedia('image')) {
+                    continue;
+                }
+                $mediaItems = $badge->getMedia('image');
+                $pngMedia = $mediaItems->first(function ($m) {
+                    $fileName = strtolower($m->file_name ?? '');
+                    $mime = strtolower($m->mime_type ?? '');
+                    return (is_string($fileName) && str_ends_with($fileName, '.png'))
+                        || (is_string($mime) && str_contains($mime, 'image/png'));
+                });
+                if (!$pngMedia) {
+                    // Skip non-PNG media to avoid PDFs in email ZIP
+                    continue;
+                }
+                $badgePath = method_exists($pngMedia, 'getPath') ? $pngMedia->getPath() : $badge->getFirstMediaPath('image');
+                if (is_string($badgePath) && file_exists($badgePath)) {
+                    $zip->addFile($badgePath, "badge_{$badge->code}.png");
                 }
             }
             $zip->close();
@@ -138,7 +140,11 @@ class ExhibitorGeneratedBadgesMail extends Mailable
 
         // Create an attachment from the zip file
         $safeTitle = (string) $this->event->getTranslation('title', $this->locale);
-        $safeTitle = preg_replace('/[\\\/:*?"<>|]+/', '-', $safeTitle) ?: 'badges';
+        // Replace forbidden filename characters with '-'
+        $safeTitle = str_replace(["\\", "/", ":", "*", "?", '"', "<", ">", "|"], '-', $safeTitle);
+        // Collapse duplicate dashes and trim
+        $safeTitle = trim(preg_replace('/-+/', '-', $safeTitle) ?? '', '-');
+        $safeTitle = $safeTitle !== '' ? $safeTitle : 'badges';
 
         $attachment = Attachment::fromPath($zipFilePath)
             ->as("badges_{$safeTitle}.zip")
