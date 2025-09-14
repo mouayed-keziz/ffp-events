@@ -87,7 +87,7 @@ Route::middleware('local_middleware')->group(function () {
     });
 });
 
-Route::get('/exhibitor/events/{event}/submissions/{submission}/badges/download/{zipPath}', [BadgeController::class, 'downloadBadgesZip'])
+Route::get('/exhibitor/events/{event:id}/submissions/{submission}/badges/download/{zipPath}', [BadgeController::class, 'downloadBadgesZip'])
     ->middleware('auth:exhibitor')
     ->name('exhibitor.badges.download');
 

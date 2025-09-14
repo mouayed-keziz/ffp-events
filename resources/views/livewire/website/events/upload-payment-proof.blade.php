@@ -87,7 +87,8 @@ new class extends Component {
             // Redirect to info validation page
             return redirect()
                 ->route('payment_validation', [
-                    'id' => $this->event->id,
+                    // 'id' => $this->event->id,
+                    'slug' => $this->event->slug,
                     // 'submission' => $this->submission->id,
                 ])
                 ->with('success', 'Preuve de paiement téléversée avec succès');
