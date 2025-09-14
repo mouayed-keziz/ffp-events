@@ -94,27 +94,21 @@ class ExhibitorGeneratedBadgesMail extends Mailable
         $zip = new ZipArchive();
         if ($zip->open($zipFilePath, ZipArchive::CREATE) === true) {
             foreach ($badges as $badge) {
-                if (!$badge->hasMedia('image')) {
-                    continue;
-                }
+                if ($badge->hasMedia('image')) {
+                    $mediaItems = $badge->getMedia('image');
+                    $pngMedia = $mediaItems->first(function ($m) {
+                        $fileName = strtolower($m->file_name ?? '');
+                        $mime = strtolower($m->mime_type ?? '');
+                        return str_ends_with($fileName, '.png') || str_contains($mime, 'image/png');
+                    });
 
-                $mediaItems = $badge->getMedia('image');
-                $pngMedia = $mediaItems->first(function ($m) {
-                    $fileName = strtolower($m->file_name ?? '');
-                    $mime = strtolower($m->mime_type ?? '');
-                    // Only accept explicit PNG
-                    return (is_string($fileName) && str_ends_with($fileName, '.png'))
-                        || (is_string($mime) && str_contains($mime, 'image/png'));
-                });
-
-                if (!$pngMedia) {
-                    // No PNG available: skip to avoid attaching PDFs
-                    continue;
-                }
-
-                $badgePath = method_exists($pngMedia, 'getPath') ? $pngMedia->getPath() : $badge->getFirstMediaPath('image');
-                if (is_string($badgePath) && file_exists($badgePath)) {
-                    $zip->addFile($badgePath, "badge_{$badge->code}.png");
+                    $media = $pngMedia ?: $mediaItems->first();
+                    if ($media) {
+                        $badgePath = method_exists($media, 'getPath') ? $media->getPath() : $badge->getFirstMediaPath('image');
+                        if (is_string($badgePath) && file_exists($badgePath)) {
+                            $zip->addFile($badgePath, "badge_{$badge->code}.png");
+                        }
+                    }
                 }
             }
             $zip->close();
