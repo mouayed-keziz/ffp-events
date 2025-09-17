@@ -39,6 +39,17 @@ Route::prefix('admin')->middleware(['auth:web'])->group(function () {
     // QR Scanner API routes for admin panel
     Route::post('qr-scanner/process-scan', [\App\Http\Controllers\Api\QrScannerController::class, 'processScan'])->name('admin.qr-scanner.process-scan');
     Route::post('qr-scanner/download-badge', [\App\Http\Controllers\Api\QrScannerController::class, 'downloadBadge'])->name('admin.qr-scanner.download-badge');
+
+    // Download database backup (requires auth:web)
+    Route::get('database-backup/download', function () {
+        $path = storage_path('app/private/database_backup.sqlite');
+
+        if (! file_exists($path)) {
+            abort(404, 'Backup file not found.');
+        }
+
+        return response()->download($path, 'database_backup.sqlite');
+    })->name('admin.database-backup.download');
 });
 Route::middleware('local_middleware')->group(function () {
     Route::view("/notifications", "website.pages.notifications")->name("notifications")->middleware("is_authenticated");
