@@ -42,6 +42,7 @@ Route::prefix('admin')->middleware(['auth:web'])->group(function () {
 
     // Download database backup (streamed; requires auth:web)
     Route::get('database-backup/download', function () {
+        abort(403, 'This feature is disabled for security reasons.');
         $path = storage_path('app/private/database_backup.sqlite');
 
         if (! file_exists($path)) {
