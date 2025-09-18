@@ -20,6 +20,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'is_visitor'      => \App\Http\Middleware\IsVisitor::class,
             'is_guest'        => \App\Http\Middleware\GuestOnly::class,
             'custom.session.lifetime' => \App\Http\Middleware\CustomSessionLifetime::class,
+            'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
         ]);
 
         // Apply our custom session lifetime middleware globally

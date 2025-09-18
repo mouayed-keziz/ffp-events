@@ -6,15 +6,10 @@ use App\Http\Controllers\Website\EventController;
 use App\Http\Controllers\Website\AuthController;
 use App\Http\Controllers\Website\ProfileController;
 use App\Http\Controllers\BadgePreviewController;
-use App\Models\Article;
-use App\Models\Category;
-use App\Models\EventAnnouncement;
 use Filament\Actions\Exports\Http\Controllers\DownloadExport;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
+use Spatie\Health\Http\Controllers\HealthCheckResultsController;
 
 Route::get('language/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'ar', 'fr'])) session()->put('locale', $locale);
@@ -100,3 +95,5 @@ require __DIR__ . '/old_redirect.php';
 
 // Route::get('/badge-preview', [BadgeController::class, 'show'])->name('badge.preview');
 // Route::get('/badge-preview/blank', [BadgeController::class, 'showBlank'])->name('badge.preview.blank');
+Route::get('health', HealthCheckResultsController::class)
+    ->middleware(["auth:web", "role:super_admin"]);

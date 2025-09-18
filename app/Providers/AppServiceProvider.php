@@ -8,6 +8,14 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use App\Constants\Countries;
 
+use Spatie\Health\Facades\Health;
+
+use Spatie\Health\Checks\Checks\DatabaseCheck;
+use Spatie\Health\Checks\Checks\DebugModeCheck;
+use Spatie\Health\Checks\Checks\EnvironmentCheck;
+use Spatie\Health\Checks\Checks\QueueCheck;
+use Spatie\Health\Checks\Checks\UsedDiskSpaceCheck;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -73,5 +81,11 @@ class AppServiceProvider extends ServiceProvider
 
             return true; // No selection is OK for optional fields
         });
+        Health::checks([
+            DatabaseCheck::new(),
+            DebugModeCheck::new(),
+            EnvironmentCheck::new(),
+            UsedDiskSpaceCheck::new(),
+        ]);
     }
 }

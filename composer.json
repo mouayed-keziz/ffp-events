@@ -41,6 +41,7 @@
         "outerweb/filament-translatable-fields": "^2.0",
         "spatie/filament-simple-stats": "^0.1.4",
         "spatie/laravel-activitylog": "^4.9",
+        "spatie/laravel-health": "^1.34",
         "spatie/laravel-medialibrary": "^11.10",
         "spatie/laravel-permission": "^6.10",
         "spatie/laravel-translatable": "^6.9",
