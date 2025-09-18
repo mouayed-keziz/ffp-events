@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
+use App\Checks\CpuUsageCheck;
+use App\Checks\MemoryUsageCheck;
 use Illuminate\Support\ServiceProvider;
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use App\Constants\Countries;
-
+use Spatie\CpuLoadHealthCheck\CpuLoadCheck;
 use Spatie\Health\Facades\Health;
 
 use Spatie\Health\Checks\Checks\DatabaseCheck;
@@ -15,6 +17,8 @@ use Spatie\Health\Checks\Checks\DebugModeCheck;
 use Spatie\Health\Checks\Checks\EnvironmentCheck;
 use Spatie\Health\Checks\Checks\QueueCheck;
 use Spatie\Health\Checks\Checks\UsedDiskSpaceCheck;
+use Spatie\Health\Checks\Checks\CacheCheck;
+use Spatie\Health\Checks\Checks\OptimizedAppCheck;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -82,10 +86,17 @@ class AppServiceProvider extends ServiceProvider
             return true; // No selection is OK for optional fields
         });
         Health::checks([
+            CpuUsageCheck::new(),
+            MemoryUsageCheck::new(),
+            UsedDiskSpaceCheck::new(),
+            CpuLoadCheck::new()
+                ->failWhenLoadIsHigherInTheLast5Minutes(1.5)  // warning threshold
+                ->failWhenLoadIsHigherInTheLast15Minutes(2.0), // fail threshold
             DatabaseCheck::new(),
+            CacheCheck::new(),
+            OptimizedAppCheck::new(),
             DebugModeCheck::new(),
             EnvironmentCheck::new(),
-            UsedDiskSpaceCheck::new(),
         ]);
     }
 }
