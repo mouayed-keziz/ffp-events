@@ -10,24 +10,33 @@ class MemoryUsageCheck extends Check
     public function run(): Result
     {
         $memoryUsagePercentage = $this->getMemoryUsagePercentage();
+        $usedGb = $this->getUsedMemory();
+        $totalGb = $this->getTotalMemory();
+
+        $summary = sprintf(
+            '%.2f GB / %.2f GB (%d%%)',
+            $usedGb,
+            $totalGb,
+            $memoryUsagePercentage
+        );
 
         $result = Result::make()
-            ->shortSummary("{$memoryUsagePercentage}%")
+            ->shortSummary($summary)
             ->meta([
                 'memory_usage_percentage' => $memoryUsagePercentage,
-                'memory_total_mb' => $this->getTotalMemory(),
-                'memory_used_mb' => $this->getUsedMemory(),
+                'memory_total_gb' => $totalGb,
+                'memory_used_gb' => $usedGb,
             ]);
 
         if ($memoryUsagePercentage > 90) {
-            return $result->failed("The server is almost out of memory ({$memoryUsagePercentage}% used)");
+            return $result->failed("The server is almost out of memory ({$summary})");
         }
 
         if ($memoryUsagePercentage > 70) {
-            return $result->warning("The server memory is getting high ({$memoryUsagePercentage}% used)");
+            return $result->warning("The server memory is getting high ({$summary})");
         }
 
-        return $result->ok("Memory usage is healthy ({$memoryUsagePercentage}% used)");
+        return $result->ok("Memory usage is healthy ({$summary})");
     }
 
     protected function getMemoryUsagePercentage(): int
@@ -42,22 +51,22 @@ class MemoryUsageCheck extends Check
         return (int) round(($used / $total) * 100);
     }
 
-    protected function getTotalMemory(): int
+    protected function getTotalMemory(): float
     {
         $memInfo = file_get_contents('/proc/meminfo');
         preg_match('/MemTotal:\s+(\d+)/', $memInfo, $matches);
 
-        return isset($matches[1]) ? (int) round($matches[1] / 1024) : 0; // in MB
+        return isset($matches[1]) ? round($matches[1] / 1024 / 1024, 2) : 0.0; // in GB
     }
 
-    protected function getUsedMemory(): int
+    protected function getUsedMemory(): float
     {
         $memInfo = file_get_contents('/proc/meminfo');
         preg_match('/MemAvailable:\s+(\d+)/', $memInfo, $matches);
 
-        $available = isset($matches[1]) ? (int) round($matches[1] / 1024) : 0; // in MB
+        $available = isset($matches[1]) ? round($matches[1] / 1024 / 1024, 2) : 0.0; // in GB
         $total = $this->getTotalMemory();
 
-        return $total - $available;
+        return round($total - $available, 2);
     }
 }
