@@ -29,14 +29,14 @@ class MemoryUsageCheck extends Check
             ]);
 
         if ($memoryUsagePercentage > 90) {
-            return $result->failed("The server is almost out of memory ({$summary})");
+            return $result->failed("The server is almost out of memory : {$summary}");
         }
 
         if ($memoryUsagePercentage > 70) {
-            return $result->warning("The server memory is getting high ({$summary})");
+            return $result->warning("The server memory is getting high : {$summary}");
         }
 
-        return $result->ok("Memory usage is healthy ({$summary})");
+        return $result->ok("Memory usage is healthy : {$summary}");
     }
 
     protected function getMemoryUsagePercentage(): int
