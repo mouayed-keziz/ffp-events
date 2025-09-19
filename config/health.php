@@ -129,7 +129,7 @@ return [
      * - light: light mode
      * - dark: dark mode
      */
-    'theme' => 'dark',
+    'theme' => 'light',
 
     /*
      * When enabled,  completed `HealthQueueJob`s will be displayed
