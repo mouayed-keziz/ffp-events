@@ -19,8 +19,8 @@ enum ExportType: string implements HasLabel, HasColor, HasIcon
     case Visitor = 'App\Filament\Exports\VisitorExporter';
     case ExhibitorSubmission = 'App\Filament\Exports\ExhibitorSubmissionExporter';
     case VisitorSubmission = 'App\Filament\Exports\VisitorSubmissionExporter';
-    case BadgeCheckLog = 'App\Filament\Exports\BadgeCheckLog';
-    case CurrentAttendee = 'App\Filament\Exports\CurrentAttendee';
+    case BadgeCheckLog = 'App\Filament\Exports\BadgeCheckLogsExporter';
+    case CurrentAttendee = 'App\Filament\Exports\CurrentAttendeesExporter';
 
     public function getLabel(): ?string
     {
