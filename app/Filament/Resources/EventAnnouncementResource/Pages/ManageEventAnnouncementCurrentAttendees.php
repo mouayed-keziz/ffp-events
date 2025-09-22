@@ -5,15 +5,22 @@ namespace App\Filament\Resources\EventAnnouncementResource\Pages;
 use App\Enums\AttendeeStatus;
 use App\Filament\Exports\CurrentAttendeesExporter;
 use App\Filament\Resources\EventAnnouncementResource;
+use App\Enums\CheckInOutAction;
+use App\Enums\Role;
+use App\Models\CurrentAttendee;
+use App\Models\BadgeCheckLog;
 use AymanAlhattami\FilamentPageWithSidebar\Traits\HasPageSidebar;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Notifications\Notification;
 use Guava\FilamentNestedResources\Concerns\NestedPage;
 use Guava\FilamentNestedResources\Concerns\NestedRelationManager;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class ManageEventAnnouncementCurrentAttendees extends ManageRelatedRecords
 {
@@ -162,6 +169,56 @@ class ManageEventAnnouncementCurrentAttendees extends ManageRelatedRecords
                     ->label(__('panel/my_event.relation_managers.current_attendees.actions.export'))
                     ->icon('heroicon-o-arrow-down-tray')
                     ->exporter(CurrentAttendeesExporter::class),
+                Tables\Actions\Action::make('adminCheckOutAll')
+                    ->label('Admin Checkout All Inside')
+                    ->icon('heroicon-o-arrow-uturn-left')
+                    ->color('warning')
+                    ->visible(fn() => Auth::user()->hasRole(Role::SUPER_ADMIN->value))
+                    ->requiresConfirmation()
+                    ->modalHeading('Admin Checkout All Inside')
+                    ->modalDescription('This will check out all attendees currently inside. Are you sure?')
+                    ->action(function () {
+                        $event = $this->getRecord();
+                        if (!$event) {
+                            return;
+                        }
+
+                        $eventId = $event->id;
+                        $userId = Auth::id();
+
+                        DB::transaction(function () use ($eventId, $userId) {
+                            CurrentAttendee::where('event_announcement_id', $eventId)
+                                ->where('status', AttendeeStatus::INSIDE)
+                                ->chunkById(500, function ($attendees) use ($eventId, $userId) {
+                                    foreach ($attendees as $attendee) {
+                                        // Update time spent before marking outside
+                                        $attendee->updateTimeSpentOnCheckout();
+                                        $attendee->status = AttendeeStatus::OUTSIDE;
+                                        $attendee->save();
+
+                                        BadgeCheckLog::create([
+                                            'event_announcement_id' => $eventId,
+                                            'badge_id' => $attendee->badge_id,
+                                            'checked_by_user_id' => $userId,
+                                            'action' => CheckInOutAction::ADMIN_CHECK_OUT,
+                                            'action_time' => now(),
+                                            'note' => 'Bulk admin checkout',
+                                            'badge_code' => $attendee->badge_code,
+                                            'badge_name' => $attendee->badge_name,
+                                            'badge_email' => $attendee->badge_email,
+                                            'badge_position' => $attendee->badge_position,
+                                            'badge_company' => $attendee->badge_company,
+                                        ]);
+                                    }
+                                });
+                        });
+
+                        Notification::make()
+                            ->title('All inside attendees checked out')
+                            ->success()
+                            ->send();
+                    })
+                    ->disabled(fn() => !CurrentAttendee::where('event_announcement_id', $this->getRecord()->id)->where('status', AttendeeStatus::INSIDE)->exists()),
             ])
             ->actions([
                 // No view action as requested
