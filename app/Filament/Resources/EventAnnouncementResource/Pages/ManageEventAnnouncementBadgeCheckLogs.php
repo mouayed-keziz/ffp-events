@@ -96,6 +96,7 @@ class ManageEventAnnouncementBadgeCheckLogs extends ManageRelatedRecords
                     ->options([
                         CheckInOutAction::CHECK_IN->value => CheckInOutAction::CHECK_IN->getLabel(),
                         CheckInOutAction::CHECK_OUT->value => CheckInOutAction::CHECK_OUT->getLabel(),
+                        CheckInOutAction::ADMIN_CHECK_OUT->value => CheckInOutAction::ADMIN_CHECK_OUT->getLabel(),
                     ])
                     ->attribute('action'),
 
