@@ -15,8 +15,8 @@ services:
         image: nginx:1.25
         container_name: ffp-nginx
         ports:
-            - "80:80"
-            - "443:443"
+            - "8080:80" # Host port 8080 → Container port 80
+            - "8443:443" # Host port 8443 → Container port 443 (optional, if you still want HTTPS)
         volumes:
             - ./app:/var/www/html
             - ./nginx/conf.d:/etc/nginx/conf.d
