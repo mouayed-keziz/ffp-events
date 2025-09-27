@@ -31,10 +31,10 @@ services:
         container_name: ffpevents-mysql
         restart: unless-stopped
         environment:
-            MYSQL_ROOT_PASSWORD: rootpass
+            MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: ffpeventsdb
             MYSQL_USER: laravel
-            MYSQL_PASSWORD: laravelpass
+            MYSQL_PASSWORD: FFPevents@2025
         ports:
             - "3306:3306"
         volumes:
