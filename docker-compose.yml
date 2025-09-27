@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: ffp-laravel-app
+        volumes:
+            - ./app:/var/www/html
+        networks:
+            - ffp_network
+
+    nginx:
+        image: nginx:1.25
+        container_name: ffp-nginx
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./app:/var/www/html
+            - ./nginx/conf.d:/etc/nginx/conf.d
+            - /etc/letsencrypt:/etc/letsencrypt:ro
+        depends_on:
+            - app
+        networks:
+            - ffp_network
+
+    mysql:
+        image: mysql:8.0
+        container_name: ffpevents-mysql
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: rootpass
+            MYSQL_DATABASE: ffpeventsdb
+            MYSQL_USER: laravel
+            MYSQL_PASSWORD: laravelpass
+        ports:
+            - "3306:3306"
+        volumes:
+            - mysql_data:/var/lib/mysql
+        networks:
+            - ffp_network
+
+networks:
+    ffp_network:
+
+volumes:
+    mysql_data:
