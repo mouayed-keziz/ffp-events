@@ -3,15 +3,26 @@ version: "3.9"
 services:
     app:
         build:
-        context: .
-        dockerfile: Dockerfile
+            context: .
+            dockerfile: Dockerfile
         container_name: ffp-laravel-app
         volumes:
             - .:/var/www/html
             - ~/ffp-events-live/storage:/var/www/html/storage
             - ~/ffp-events-live/public:/var/www/html/public
+        networks:
+            - ffp_network
+
+    nginx:
+        image: nginx:1.25
+        container_name: ffp-nginx
         ports:
-            - "9000:9000"
+            - "9000:80" # host:container (so you can curl localhost:9000)
+        volumes:
+            - .:/var/www/html
+            - ./nginx/conf.d:/etc/nginx/conf.d
+        depends_on:
+            - app
         networks:
             - ffp_network
 
