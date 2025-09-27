@@ -7,7 +7,7 @@ services:
             dockerfile: Dockerfile
         container_name: ffp-laravel-app
         volumes:
-            - ./app:/var/www/html
+            - .:/var/www/html
         networks:
             - ffp_network
 
@@ -18,7 +18,7 @@ services:
             - "8080:80" # Host port 8080 → Container port 80
             - "8443:443" # Host port 8443 → Container port 443 (optional, if you still want HTTPS)
         volumes:
-            - ./app:/var/www/html
+            - .:/var/www/html
             - ./nginx/conf.d:/etc/nginx/conf.d
             - /etc/letsencrypt:/etc/letsencrypt:ro
         depends_on:
